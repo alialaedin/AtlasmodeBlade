@@ -1,0 +1,41 @@
+.multiselect {
+  min-height: 32px;
+  font-size: 12px; 
+}
+
+.multiselect__placeholder {
+  margin-bottom: 0;
+}
+
+[dir=rtl] .multiselect__tags {
+  padding: 5px 9px 0 40px;
+  min-height: 32px;
+  font-size: 12px; 
+  border-color: #d3dfea;
+}
+
+.multiselect__tag {
+  margin: 0 0 0 4px;
+}
+
+.multiselect__single {
+  font-size: 12px;
+  margin-top: 2px;
+  padding-right: 1px;
+  margin-bottom: 0;
+}
+
+.multiselect__content {  
+  max-height: 200px;  
+}  
+
+.multiselect__option {
+  min-height: 24px;
+  line-height: 4px;
+}
+
+.multiselect__option::after {
+  line-height: 12px;
+  padding-top: 7px;
+  font-size: 10px;
+}
