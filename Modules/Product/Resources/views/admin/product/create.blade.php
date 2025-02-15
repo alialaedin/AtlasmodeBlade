@@ -9,910 +9,933 @@
 	]"/>
 </div>
 
-<div id="app">
-  <form id="MainForm" action="{{ route('admin.products.store') }}" method="POST">
-    @csrf
-    <div class="row">
-      <div class="col-xl-8">
+<div id="app" class="mb-5">
+	<div class="row">
+		<div class="col-xl-8">
 
-				{{-- product details --}}
-				<x-card>
-					<x-slot name="cardTitle">اطلاعات محصول</x-slot>
-					<x-slot name="cardBody">
+			{{-- product details --}}
+			<x-card>
+				<x-slot name="cardTitle">اطلاعات محصول</x-slot>
+				<x-slot name="cardBody">
 
-						{{-- title --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="product-title">نام محصول :<span class="text-danger">&starf;</span></label>
-							</div>
-							<div class="col-xl-10">
-								<input type="text" placeholder="نام محصول" class="form-control" v-model="product.title" id="product-title" required/>
+					{{-- title --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="product-title">نام محصول :<span class="text-danger">&starf;</span></label>
+						</div>
+						<div class="col-xl-10">
+							<input type="text" placeholder="نام محصول" class="form-control" v-model="product.title" id="product-title" required/>
+						</div>
+					</div>
+
+					{{-- quantity --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="product-quantity">موجودی :</label>
+						</div>
+						<div class="col-xl-10">
+							<input type="number" placeholder="موجودی" class="form-control" v-model="product.quantity" id="product-quantity"/>
+						</div>
+					</div>
+
+					{{-- barcode --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="product-barcode">بارکد :</label>
+						</div>
+						<div class="col-xl-10">
+							<input type="text" placeholder="بارکد" class="form-control" v-model="product.barcode" id="product-barcode"/>
+						</div>
+					</div>
+
+					{{-- SKU --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="product-SKU">SKU :</label>
+						</div>
+						<div class="col-xl-10">
+							<input type="text" placeholder="SKU" class="form-control" v-model="product.SKU" id="product-SKU"/>
+						</div>
+					</div>
+
+					{{-- categories --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="categories-select">
+								دسته بندی ها
+								<span class="text-danger">&starf;</span>
+							</label>
+						</div>
+						<div class="col-xl-10">
+							<multiselect
+								dir="rtl"
+								id="categories-select"
+								class="custom-multiselect"
+								v-model="product.categories"
+								label="title"
+								multiple
+								placeholder="انتخاب دسته بندی ها"
+								select-label="برای انتخاب دسته بندی کلیک کنید"
+								deselect-label="برای حذف دسته بندی کلیک کنید"
+								selected-label="انتخاب شده"
+								track-by="id"
+								:options="categories"
+								:close-on-select="false"
+								:searchable="true"
+								required
+							></multiselect>
+						</div>
+					</div>
+
+					{{-- brand --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="brand-select">برند</label>
+						</div>
+						<div class="col-xl-10">
+							<multiselect 
+								dir="rtl" 
+								id="brand-select" 
+								v-model="product.brand"
+								class="custom-multiselect"
+								label="name"
+								placeholder="انتخاب برند" 
+								:options="brands">
+							</multiselect>		
+						</div>
+					</div>
+
+					{{-- unint --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="unit-select">واحد :<span class="text-danger">&starf;</span></label>
+						</div>
+						<div class="col-xl-10">
+							<multiselect 
+								dir="rtl" 
+								id="unit-select" 
+								class="custom-multiselect"
+								v-model="product.unit"
+								placeholder="انتخاب واحد" 
+								label="name"
+								required
+								:options="units">
+							</multiselect>		
+						</div>
+					</div>
+
+					{{-- tags --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="tag-select">تگ ها</label>					
+						</div>
+						<div class="col-xl-10">
+							<multiselect 
+								dir="rtl" 
+								id="tags-select" 
+								class="custom-multiselect"
+								v-model="product.tags"
+								placeholder="انتخاب تگ ها" 
+								label="name"
+								:multiple="true"
+								track-by="id"
+								:close-on-select="false"
+								:options="tags">
+							</multiselect>	
+						</div>
+					</div>
+
+					{{-- image_alt --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-2">
+							<label for="product-image_alt">alt محصول :<span class="text-danger">&starf;</span></label>
+						</div>
+						<div class="col-xl-10">
+							<input type="text" placeholder="alt محصول" class="form-control" v-model="product.image_alt" id="product-image_alt"/>
+						</div>
+					</div>
+
+				</x-slot>
+			</x-card>
+
+			{{-- description --}}
+			<x-card>
+				<x-slot name="cardTitle">توضیحات محصول</x-slot>
+				<x-slot name="cardBody">
+
+					<div class="row">
+						<div class="col-12">
+							<div class="form-group">
+								<label for="product-short-description">توضیحات کوتاه</label>
+								<textarea id="product-short-description" rows="2" class="form-control" v-model="product.short_description"></textarea>
 							</div>
 						</div>
+						{{-- <div class="col-12">
+							<div class="form-group">
+								<label for="product-meta-description">توضیحات</label>
+								<textarea class="ckeditor form-control" id="product-description" v-model="product.description"></textarea>
+							</div>
+						</div> --}}
+					</div>
 
-						{{-- quantity --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="product-quantity">موجودی :</label>
-							</div>
-							<div class="col-xl-10">
-								<input type="number" placeholder="موجودی" class="form-control" v-model="product.quantity" id="product-quantity"/>
-							</div>
+				</x-slot>
+			</x-card>
+
+			{{-- varieties --}}
+			<x-card>
+				<x-slot name="cardTitle">تنوع‌ها</x-slot>
+				<x-slot name="cardOptions">
+					<div class="card-options">
+						<button 
+							type="button" 
+							data-toggle="modal"
+							data-target="#set-price-for-varieties"
+							:disabled="isVarietiesEmpty"
+							class="btn btn-sm btn-outline-info">
+							قیمت گذاری کلی
+						</button>
+					</div>
+				</x-slot>
+				<x-slot name="cardBody">
+
+					{{-- attributes select-box --}}
+					<div class="row align-items-center mb-3">
+						<div class="col-xl-2">
+							<label for="attributes-select">ویژگی‌ها <span class="text-danger">&starf;</span></label>
 						</div>
-
-						{{-- barcode --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="product-barcode">بارکد :</label>
-							</div>
-							<div class="col-xl-10">
-								<input type="text" placeholder="بارکد" class="form-control" v-model="product.barcode" id="product-barcode"/>
-							</div>
+						<div class="col-xl-10">
+							<multiselect
+								dir="rtl"
+								label="label"
+								track-by="id"
+								:options="uniqueAttributes"
+								v-model="product.attributes"
+								class="custom-multiselect"
+								id="attributes-select"
+								placeholder="انتخاب ویژگی ها"
+								:multiple="true"
+								:close-on-select="false"
+								required
+							></multiselect>
 						</div>
+					</div>
 
-						{{-- SKU --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="product-SKU">SKU :</label>
-							</div>
-							<div class="col-xl-10">
-								<input type="text" placeholder="SKU" class="form-control" v-model="product.SKU" id="product-SKU"/>
-							</div>
+					{{-- attribute values select-box --}}
+					<div class="row align-items-center my-2" v-for="(attribute, productAttributeIndex) in product.attributes" :key="productAttributeIndex">
+						<div class="col-xl-2">
+							<label :for="'attribute-select-' + productAttributeIndex">
+								ویژگی 
+								<b v-text="attribute.label"></b>
+								<span class="text-danger">&starf;</span>
+							</label>
 						</div>
-
-						{{-- categories --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="categories-select">
-									دسته بندی ها
-									<span class="text-danger">&starf;</span>
-								</label>
-							</div>
-							<div class="col-xl-10">
-								<multiselect
-									dir="rtl"
-									id="categories-select"
-									class="custom-multiselect"
-									v-model="product.categories"
-									label="title"
-									multiple
-									placeholder="انتخاب دسته بندی ها"
-									select-label="برای انتخاب دسته بندی کلیک کنید"
-									deselect-label="برای حذف دسته بندی کلیک کنید"
-									selected-label="انتخاب شده"
-									track-by="id"
-									:options="categories"
-									:close-on-select="false"
-									:searchable="true"
-									required
-								></multiselect>
-							</div>
+						<div class="col-xl-10">
+							<multiselect
+								:id="'attribute-select-' + productAttributeIndex"
+								dir="rtl"
+								label="value"
+								track-by="id"
+								class="custom-multiselect"
+								:taggable="attribute.type === 'text'"
+								v-model="product.attribute_values[attribute.id]"
+								@tag="(value) => addNewTag(value, attribute)"
+								@remove="clearVarietyValues()"
+								@select="clearVarietyValues()"
+								placeholder="انتخاب مقادیر ویژگی"
+								:multiple="true"
+								:close-on-select="attribute.type === 'text'"
+								:required="true"
+								:options="attributes.find(attr => attr.id === attribute.id).values"
+							></multiselect>
 						</div>
+					</div>
 
-						{{-- brand --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="brand-select">برند</label>
-							</div>
-							<div class="col-xl-10">
-								<multiselect 
-									dir="rtl" 
-									id="brand-select" 
-									v-model="product.brand"
-									class="custom-multiselect"
-									label="name"
-									placeholder="انتخاب برند" 
-									:options="brands">
-								</multiselect>		
-							</div>
-						</div>
+					{{-- varieties --}}
+					<div v-show="!isVarietiesEmpty" class="table-responsive mt-5">
+						<table class="table table-bordered text-nowrap text-center">
+							<thead class="border-top">
+								<tr>
+									<th>عنوان</th>
+									<th>قیمت</th>
+									<th>بارکد - SKU</th>
+									<th>موجودی</th>
+									<th>عملیات</th>
+								</tr>
+							</thead>
+							<tbody>
+								<template v-for="(attributes, index) in attributesCombinations">
 
-						{{-- unint --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="unit-select">واحد :<span class="text-danger">&starf;</span></label>
-							</div>
-							<div class="col-xl-10">
-								<multiselect 
-									dir="rtl" 
-									id="unit-select" 
-									class="custom-multiselect"
-									v-model="product.unit"
-									placeholder="انتخاب واحد" 
-									label="name"
-									required
-									:options="units">
-								</multiselect>		
-							</div>
-						</div>
-
-						{{-- tags --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="tag-select">تگ ها</label>					
-							</div>
-							<div class="col-xl-10">
-								<multiselect 
-									dir="rtl" 
-									id="tags-select" 
-									class="custom-multiselect"
-									v-model="product.tags"
-									placeholder="انتخاب تگ ها" 
-									label="name"
-									:multiple="true"
-									track-by="id"
-									:close-on-select="false"
-									:options="tags">
-								</multiselect>	
-							</div>
-						</div>
-
-						{{-- image_alt --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-2">
-								<label for="product-image_alt">alt محصول :<span class="text-danger">&starf;</span></label>
-							</div>
-							<div class="col-xl-10">
-								<input type="text" placeholder="alt محصول" class="form-control" v-model="product.image_alt" id="product-image_alt"/>
-							</div>
-						</div>
-
-					</x-slot>
-				</x-card>
-
-				{{-- varieties --}}
-				<x-card>
-					<x-slot name="cardTitle">تنوع‌ها</x-slot>
-					<x-slot name="cardOptions">
-						<div class="card-options">
-							<button 
-								type="button" 
-								data-toggle="modal"
-								data-target="#set-price-for-varieties"
-								:disabled="isVarietiesEmpty"
-								class="btn btn-sm btn-outline-info">
-								قیمت گذاری کلی
-							</button>
-						</div>
-					</x-slot>
-					<x-slot name="cardBody">
-
-						{{-- attributes select-box --}}
-						<div class="row align-items-center mb-5">
-							<div class="col-xl-2">
-								<label for="categories-select">ویژگی‌ها <span class="text-danger">&starf;</span></label>
-							</div>
-							<div class="col-xl-10">
-								<multiselect
-									dir="rtl"
-									label="label"
-									track-by="id"
-									:options="uniqueAttributes"
-									v-model="product.attributes"
-									class="custom-multiselect"
-									id="attributes"
-									placeholder="انتخاب ویژگی ها"
-									:multiple="true"
-									:close-on-select="false"
-									required
-								></multiselect>
-							</div>
-						</div>
-
-						{{-- attribute values select-box --}}
-						<div class="row align-items-center my-2" v-for="attribute in product.attributes">
-							<div class="col-xl-2">
-								<label>
-									ویژگی 
-									<b v-text="attribute.label"></b>
-									<span class="text-danger">&starf;</span>
-								</label>
-							</div>
-							<div class="col-xl-10">
-								<multiselect
-									dir="rtl"
-									label="value"
-									track-by="id"
-									class="custom-multiselect"
-									:taggable="attribute.type === 'text'"
-									v-model="product.attribute_values[attribute.id]"
-									@tag="(value) => addNewTag(value, attribute)"
-									@remove="clearVarietyValues()"
-									@select="clearVarietyValues()"
-									placeholder="انتخاب مقادیر ویژگی"
-									:multiple="true"
-									:close-on-select="attribute.type === 'text'"
-									:required="true"
-									:options="attributes.find(attr => attr.id === attribute.id).values"
-								></multiselect>
-							</div>
-						</div>
-
-						{{-- varieties --}}
-						<div v-show="!isVarietiesEmpty" class="table-responsive mt-5">
-							<table class="table table-bordered text-nowrap text-center">
-								<thead class="border-top">
 									<tr>
-										<th>عنوان</th>
-										<th>قیمت</th>
-										<th>بارکد - SKU</th>
-										<th>موجودی</th>
-										<th>عملیات</th>
+										<td>
+											<span v-for="(attr, index) in attributes.items" :key="index">
+												<span v-text="attr.value" class="fs-12"></span>
+												<span v-if="index !== attributes.items.length - 1">	- </span>
+											</span>
+										</td>
+										<td>  
+											<input 
+												type="number" 
+												class="form-control text-center"   
+												placeholder="قیمت"
+												v-model="getVarietyValue(attributes.id).price"
+											/>  
+										</td>  
+										<td>  
+											<input 
+												type="text" 
+												class="mb-2 form-control text-center"   
+												v-model="getVarietyValue(attributes.id).barcode"
+												placeholder="بارکد"
+											/>  
+											<input 
+												type="text" 
+												class="mt-2 form-control text-center"   
+												v-model="getVarietyValue(attributes.id).SKU"
+												placeholder="SKU"
+											/>  
+										</td>  
+										<td>  
+											<input 
+												type="number" 
+												class="form-control text-center"   
+												v-model="getVarietyValue(attributes.id).quantity"
+												placeholder="موجودی"
+											/>  
+										</td> 
+										<td>
+											<button 
+												:data-target="'#variety-images' + attributes.id"
+												data-toggle="modal"
+												class="btn btn-sm btn-icon btn-success ml-1" 
+												type="button">
+												<i class="fa fa-image"></i>
+											</button>
+											<button 
+												:data-target="'#variety-extra-details' + attributes.id"
+												data-toggle="modal"
+												class="btn btn-sm btn-icon btn-warning" 
+												type="button">
+												<i class="fa fa-pencil"></i>
+											</button>
+										</td>
 									</tr>
-								</thead>
-								<tbody>
-									<template v-for="(attributes, index) in attributesCombinations">
 
-										<tr>
-											<td>
-												<span v-for="(attr, index) in attributes.items" :key="index">
-													@{{ attr.value }}
-													<span v-if="index !== attributes.items.length - 1">	- </span>
-												</span>
-											</td>
-											<td>  
-                        <input 
-													type="number" 
-													class="form-control text-center"   
-                          :name="`product[varieties][${index}][price]`"
-                          placeholder="قیمت"
-													v-model="getVarietyValue(attributes.id).price"
-												/>  
-											</td>  
-											<td>  
-												<input 
-													type="text" 
-													class="mb-2 form-control text-center"   
-                          :name="`product[varieties][${index}][barcode]`"
-													v-model="getVarietyValue(attributes.id).barcode"
-													placeholder="بارکد"
-												/>  
-												<input 
-													type="text" 
-													class="mt-2 form-control text-center"   
-                          :name="`product[varieties][${index}][SKU]`"
-													v-model="getVarietyValue(attributes.id).SKU"
-													placeholder="SKU"
-												/>  
-											</td>  
-											<td>  
-												<input 
-													type="number" 
-													class="form-control text-center"   
-                          :name="`product[varieties][${index}][quantity]`"
-													v-model="getVarietyValue(attributes.id).quantity"
-													placeholder="موجودی"
-												/>  
-											</td> 
-											<td>
-												<button 
-													:data-target="'#variety-images' + attributes.id"
-                          data-toggle="modal"
-													class="btn btn-sm btn-icon btn-success ml-1" 
-													type="button">
-													<i class="fa fa-image"></i>
-												</button>
-												<button 
-													:data-target="'#variety-extra-details' + attributes.id"
-                          data-toggle="modal"
-													class="btn btn-sm btn-icon btn-warning" 
-													type="button">
-													<i class="fa fa-pencil"></i>
-												</button>
-											</td>
-										</tr>
+									<div class="modal fade" :id="'variety-extra-details' + attributes.id" style="display: none" aria-hidden="true">
+										<div class="modal-dialog modal-lg" role="document">
+											<div class="modal-content modal-content-demo">
+												<div class="modal-header">
+													<p class="modal-title font-weight-bold">اطلاعات تنوع</p>
+													<button aria-label="Close" class="close" data-dismiss="modal">
+														<span aria-hidden="true">×</span>
+													</button>
+												</div>
+												<div class="modal-body">
 
-										<div class="modal fade" :id="'variety-extra-details' + attributes.id" style="display: none" aria-hidden="true">
-                      <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content modal-content-demo">
-                          <div class="modal-header">
-                            <p class="modal-title font-weight-bold">اطلاعات تنوع</p>
-                            <button aria-label="Close" class="close" data-dismiss="modal">
-                              <span aria-hidden="true">×</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-
-														<div class="row align-items-center my-3">
-															<div class="col-xl-2">
-																<label class="d-flex" :for="'variety-price' + attributes.id">قیمت : <span class="text-danger">&starf;</span></label>
-															</div>
-															<div class="col-xl-10">
-																<input 
-																	:id="'variety-price' + attributes.id" 
-																	type="text"
-																	class="form-control" 
-																	v-model="product.variety_values[attributes.id].price" 
-																	required
-																/>
-															</div>
+													<div class="row align-items-center my-3">
+														<div class="col-xl-2">
+															<label class="d-flex" :for="'variety-price' + attributes.id">قیمت : <span class="text-danger">&starf;</span></label>
 														</div>
-
-														<div class="row align-items-center my-3">
-															<div class="col-xl-2">
-																<label class="d-flex" :for="'variety-purchase-price' + attributes.id">قیمت خرید :</label>
-															</div>
-															<div class="col-xl-10">
-																<input 
-																	:id="'variety-purchase-price' + attributes.id" 
-																	type="text" 
-																	class="form-control" 
-																	v-model="product.variety_values[attributes.id].purchase_price"
-																/>															
-															</div>
+														<div class="col-xl-10">
+															<input 
+																:id="'variety-price' + attributes.id" 
+																type="text"
+																class="form-control" 
+																v-model="product.variety_values[attributes.id].price" 
+																required
+															/>
 														</div>
+													</div>
 
-														<div class="row align-items-center my-3">
-															<div class="col-xl-2">
-																<label class="d-flex" :for="'variety-discount-type' + attributes.id">نوع تخفیف :</label>
-															</div>
-															<div class="col-xl-10">
-																<multiselect
-																	dir="rtl"
-																	:id="'variety-discount-type' + attributes.id" 
-																	:name="`product[varieties][${index}][discount_type]`"
-																	class="custom-multiselect"
-																	v-model="product.variety_values[attributes.id].discount_type"
-																	label="label"
-																	placeholder="انتخاب نوع تخفیف"
-																	:options="discountTypes"
-																></multiselect>														
-															</div>
+													<div class="row align-items-center my-3">
+														<div class="col-xl-2">
+															<label class="d-flex" :for="'variety-purchase-price' + attributes.id">قیمت خرید :</label>
 														</div>
-
-														<div class="row align-items-center my-3">
-															<div class="col-xl-2">
-																<label class="d-flex" :for="'variety-discount' + attributes.id">تخفیف :</label>
-															</div>
-															<div class="col-xl-10">
-																<input 
-																	:id="'variety-discount' + attributes.id" 
-																	type="number" 
-																	class="form-control" 
-																	:name="`product[varieties][${index}][discount]`"
-																	v-model="product.variety_values[attributes.id].discount"
-																/>													
-															</div>
+														<div class="col-xl-10">
+															<input 
+																:id="'variety-purchase-price' + attributes.id" 
+																type="text" 
+																class="form-control" 
+																v-model="product.variety_values[attributes.id].purchase_price"
+															/>															
 														</div>
+													</div>
 
-														<div class="row align-items-center my-3">
-															<div class="col-xl-2">
-																<label class="d-flex" :for="'variety-barcode' + attributes.id">بارکد :</label>
-															</div>
-															<div class="col-xl-10">
-																<input 
-																	:id="'variety-barcode' + attributes.id" 
-																	type="text" 
-																	class="form-control" 
-																	v-model="product.variety_values[attributes.id].barcode"
-																/>
-															</div>
+													<div class="row align-items-center my-3">
+														<div class="col-xl-2">
+															<label class="d-flex" :for="'variety-discount-type' + attributes.id">نوع تخفیف :</label>
 														</div>
-
-														<div class="row align-items-center my-3">
-															<div class="col-xl-2">
-																<label class="d-flex" :for="'variety-SKU' + attributes.id">SKU :</label>
-															</div>
-															<div class="col-xl-10">
-																<input 
-																	:id="'variety-SKU' + attributes.id" 
-																	type="text" 
-																	class="form-control" 
-																	v-model="product.variety_values[attributes.id].SKU"
-																/>
-															</div>
+														<div class="col-xl-10">
+															<multiselect
+																dir="rtl"
+																:id="'variety-discount-type' + attributes.id" 
+																class="custom-multiselect"
+																v-model="product.variety_values[attributes.id].discount_type"
+																label="label"
+																placeholder="انتخاب نوع تخفیف"
+																:options="discountTypes"
+															></multiselect>														
 														</div>
+													</div>
 
-														<div class="row mt-3">
-															<div class="col-12">
-																<button class="btn-block btn btn-sm btn-danger" data-dismiss="modal">بستن</button>
-															</div>
+													<div class="row align-items-center my-3">
+														<div class="col-xl-2">
+															<label class="d-flex" :for="'variety-discount' + attributes.id">تخفیف :</label>
 														</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="modal fade" :id="'variety-images' + attributes.id" style="display: none" aria-hidden="true">
-                      <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content modal-content-demo">
-                          <div class="modal-header">
-                            <p class="modal-title font-weight-bold">تصاویر</p>
-                            <button aria-label="Close" class="close" data-dismiss="modal">
-                              <span aria-hidden="true">×</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-
-														<button
-															type="button"
-															class="btn btn-outline-primary"
-															@click="triggerVarietiesFileInput(attributes.id)">
-															افزودن عکس
-														</button>
-
-                            <input
-                              type="file"
-                              :id="'variety-images-input' + attributes.id"
-                              :name="`product[varieties][${index}][images]`"
-                              multiple
-															hidden
-                              accept="image/*"
-															ref="fileInputs"
-                              @change="(e) => handleUploadVarietyImages(e, attributes.id)"
-                            />
-
-														<div class="row m-4">
-															<div v-for="(image, imgIndex) in getVarietyValue(attributes.id).images" :key="imgIndex" class="position-relative col-12 col-xl-3 col-md-6 my-2">
-																<img :src="image" alt="product-image" class="img-thumbnail image-size" style="width: 100%; height: auto;"/>
-																<span class="remove-btn" @click="deleteVarietyImage(attributes.id, imgIndex)">&times;</span>
-															</div>
+														<div class="col-xl-10">
+															<input 
+																:id="'variety-discount' + attributes.id" 
+																type="number" 
+																class="form-control" 
+																v-model="product.variety_values[attributes.id].discount"
+															/>													
 														</div>
-                        
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+													</div>
 
-									</template>
-								</tbody>
-							</table>
-						</div>
+													<div class="row align-items-center my-3">
+														<div class="col-xl-2">
+															<label class="d-flex" :for="'variety-barcode' + attributes.id">بارکد :</label>
+														</div>
+														<div class="col-xl-10">
+															<input 
+																:id="'variety-barcode' + attributes.id" 
+																type="text" 
+																class="form-control" 
+																v-model="product.variety_values[attributes.id].barcode"
+															/>
+														</div>
+													</div>
 
-						{{-- set price for varieties modal --}}
-						<div class="modal fade" id="set-price-for-varieties" style="display: none" aria-hidden="true">
-							<div class="modal-dialog modal-md" role="document">
-								<div class="modal-content modal-content-demo">
-									<div class="modal-body">
-										<div class="row">
-											<h2 class="col-12 text-center">قیمت جدید را وارد کنید</h2>
-											<div class="col-12">
-												<input 
-													type="number"
-													placeholder="قیمت به تومان" 
-													class="form-control"
-													v-model="generalPriceForVarieties"
-												/>
+													<div class="row align-items-center my-3">
+														<div class="col-xl-2">
+															<label class="d-flex" :for="'variety-SKU' + attributes.id">SKU :</label>
+														</div>
+														<div class="col-xl-10">
+															<input 
+																:id="'variety-SKU' + attributes.id" 
+																type="text" 
+																class="form-control" 
+																v-model="product.variety_values[attributes.id].SKU"
+															/>
+														</div>
+													</div>
+
+													<div class="row mt-3">
+														<div class="col-12">
+															<button class="btn-block btn btn-sm btn-danger" data-dismiss="modal">بستن</button>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
-										<div class="row mt-3">
-											<div class="col-12 d-flex justify-content-center">
-												<button class="btn btn-sm btn-danger" data-dismiss="modal">بستن</button>
+									</div>
+
+									<div class="modal fade" :id="'variety-images' + attributes.id" style="display: none" aria-hidden="true">
+										<div class="modal-dialog modal-lg" role="document">
+											<div class="modal-content modal-content-demo">
+												<div class="modal-header">
+													<p class="modal-title font-weight-bold">تصاویر</p>
+													<button aria-label="Close" class="close" data-dismiss="modal">
+														<span aria-hidden="true">×</span>
+													</button>
+												</div>
+												<div class="modal-body">
+
+													<button
+														type="button"
+														class="btn btn-outline-primary"
+														@click="triggerVarietiesFileInput(attributes.id)">
+														افزودن عکس
+													</button>
+
+													<input
+														type="file"
+														:id="'variety-images-input' + attributes.id"
+														multiple
+														hidden
+														accept="image/*"
+														ref="fileInputs"
+														@change="(e) => handleUploadVarietyImages(e, attributes.id)"
+													/>
+
+													<div class="row m-4">
+														<div v-for="(image, imgIndex) in getVarietyValue(attributes.id).images" :key="imgIndex" class="position-relative col-12 col-xl-3 col-md-6 my-2">
+															<img :src="image" alt="product-image" class="img-thumbnail image-size" style="width: 100%; height: auto;"/>
+															<span class="remove-btn" @click="deleteVarietyImage(attributes.id, imgIndex)">&times;</span>
+														</div>
+													</div>
+											
+												</div>
 											</div>
+										</div>
+									</div>
+
+								</template>
+							</tbody>
+						</table>
+					</div>
+
+					{{-- set price for varieties modal --}}
+					<div class="modal fade" id="set-price-for-varieties" style="display: none" aria-hidden="true">
+						<div class="modal-dialog modal-md" role="document">
+							<div class="modal-content modal-content-demo">
+								<div class="modal-body">
+									<div class="row">
+										<h2 class="col-12 text-center">قیمت جدید را وارد کنید</h2>
+										<div class="col-12">
+											<input 
+												type="number"
+												placeholder="قیمت به تومان" 
+												class="form-control"
+												v-model="generalPriceForVarieties"
+											/>
+										</div>
+									</div>
+									<div class="row mt-3">
+										<div class="col-12 d-flex justify-content-center">
+											<button class="btn btn-sm btn-danger" data-dismiss="modal">بستن</button>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+					</div>
 
-					</x-slot>
-				</x-card>
+				</x-slot>
+			</x-card>
 
-				{{-- specification --}}
-				<x-card>
-					<x-slot name="cardTitle">مشخصات محصول</x-slot>
-					<x-slot name="cardBody">
-						<div class="table-responsive mt-5">
-							<table class="table table-bordered text-nowrap text-center">
-								<thead class="border-top">
+			{{-- specification --}}
+			<x-card>
+				<x-slot name="cardTitle">مشخصات محصول</x-slot>
+				<x-slot name="cardBody">
+					<div class="table-responsive mt-5">
+						<table class="table table-bordered text-nowrap text-center">
+							<thead class="border-top">
+								<tr>
+									<th style="width: 20%">نام</th>
+									<th style="width: 80%">مقدار</th>
+								</tr>
+							</thead>
+							<tbody>
+								<template v-for="(specification, index) in specifications" :key="index">
 									<tr>
-										<th style="width: 20%">نام</th>
-										<th style="width: 80%">مقدار</th>
+										<td style="padding: 10px">
+											<span class="fs-13" v-text="specification.label"></span>
+											<span v-show="specification.required" class="text-danger"> &starf;</span>
+											{{-- @{{ specification.label }} --}}
+										</td>
+										<td style="padding: 10px">
+											<input 
+												v-if="specification.type == 'text'"
+												class="form-control" 
+												type="text" 
+												v-model="product.specifications[specification.id]"
+											>
+											<multiselect
+												v-else
+												dir="rtl"
+												label="value"
+												:options="specification.values"
+												track-by="id"
+												placeholder="انتخاب مقدار"
+												:multiple="specification.type == 'multi_select'"
+												:close-on-select="specification.type != 'multi_select'"
+												:required="specification.required"
+												class="custom-multiselect"
+												v-model="product.specifications[specification.id]"
+											></multiselect>
+										</td>
 									</tr>
-								</thead>
-								<tbody>
-									<template v-for="(specification, index) in specifications" :key="index">
-										<tr>
-											<td style="padding: 10px">
-												<span class="fs-13" v-text="specification.label"></span>
-												<span v-show="specification.required" class="text-danger"> &starf;</span>
-												{{-- @{{ specification.label }} --}}
-											</td>
-											<td style="padding: 10px">
-												<input 
-													v-if="specification.type == 'text'"
-													class="form-control" 
-													type="text" 
-													:value="specification.id"
-													v-model="product.specifications[specification.id]"
-												>
-												<multiselect
-													v-else
-													dir="rtl"
-													label="value"
-													:options="specification.values"
-													track-by="id"
-													placeholder="انتخاب مقدار"
-													:multiple="specification.type == 'multi_select'"
-													:close-on-select="specification.type != 'multi_select'"
-													:required="specification.required"
-													class="custom-multiselect"
-													v-model="product.specifications[specification.id]"
-												></multiselect>
-											</td>
-										</tr>
-									</template>
-								</tbody>
-							</table>
-						</div>
-					</x-slot>
-				</x-card>
+								</template>
+							</tbody>
+						</table>
+					</div>
+				</x-slot>
+			</x-card>
 
-				{{-- sizechart --}}  
-				<x-card>  
-					<x-slot name="cardTitle">سایز چارت</x-slot>  
-					<x-slot name="cardOptions">  
-						<div class="card-options">  
-							<button class="btn btn-sm btn-success" type="button" @click="addNewSizechart">افزودن سایز چارت</button>  
+			{{-- sizechart --}}  
+			<x-card>  
+				<x-slot name="cardTitle">سایز چارت</x-slot>  
+				<x-slot name="cardOptions">  
+					<div class="card-options">  
+						<button class="btn btn-sm btn-success" type="button" @click="addNewSizechart">افزودن سایز چارت</button>  
+					</div>  
+				</x-slot>  
+				<x-slot name="cardBody">  
+					<div v-for="(sizeChart, index) in product.size_charts" :key="index" class="row mb-5">  
+						<div class="col-12 mb-4">  
+							<button class="btn btn-danger btn-sm" type="button" @click="removeSizechart(index)">حذف سایز چارت</button>  
 						</div>  
-					</x-slot>  
-					<x-slot name="cardBody">  
-						<div v-for="(sizeChart, index) in product.size_charts" :key="index" class="row mb-5">  
-							<div class="col-12 mb-4">  
-								<button class="btn btn-danger btn-sm" type="button" @click="removeSizechart(index)">حذف سایز چارت</button>  
-							</div>  
-							<div class="col-12">  
-								<div class="form-group">  
-									<label :for="'size-chart-title-' + index">عنوان</label>  
-									<input  
-										:id="'size-chart-title-' + index"  
-										type="text"  
-										class="form-control"  
-										placeholder="لطفا عنوان ساییز چارت را وارد کنید"  
-										v-model="sizeChart.title"  
-									/>  
-								</div>  
-							</div>  
-							<div class="col-12">  
-								<div class="form-group">  
-									<label :for="'size-chart-type-' + index">نوع سایز چارت</label>  
-									<multiselect  
-										:id="'size-chart-type-' + index"  
-										dir="rtl"  
-										label="name"  
-										track-by="id"  
-										class="custom-multiselect"  
-										placeholder="انتخاب نوع سایز چارت"  
-										v-model="choosenSizecharts"
-										required  
-										:options="sizeChartTypes"
-										@select="(selectedSizeChartTypeObj) => addTypeAndChartToSizechart(selectedSizeChartTypeObj, index)"  
-										@remove="(removedSizeChartTypeObj) => removeTypeAndChartFromSizechart(index)"  
-									></multiselect>
-								</div>  
-							</div>  
-							<div v-show="sizeChart.chart.length" class="col-12 mt-4">  
-								<table class="table table-bordered text-nowrap text-center">  
-									<tbody>  
-										<template v-for="(charts, chartsIndex) in sizeChart.chart" :key="chartsIndex">  
-											<tr>  
-												<td v-for="(chartValue, chartValueIndex) in charts" :key="chartValueIndex">  
-													<input 
-														:disabled="chartsIndex === 0" 
-														type="text" 
-														class="form-control" 
-														v-model="product.size_charts[index].chart[chartsIndex][chartValueIndex]"
-													/>  
-												</td>  
-												<td>  
-													<button type="button" @click="addNewChartInputRow(index)" class="btn btn-sm btn-icon btn-success">+</button>  
-													<button  
-														v-if="chartsIndex > 0"  
-														type="button"  
-														@click="removeChartInputRow(index, chartsIndex)"  
-														:disabled="charts.length <= 2"  
-														class="btn btn-sm btn-icon btn-danger mr-1">-</button>  
-												</td>  
-											</tr>  
-										</template>  
-									</tbody>  
-								</table>  
+						<div class="col-12">  
+							<div class="form-group">  
+								<label :for="'size-chart-title-' + index">عنوان</label>  
+								<input  
+									:id="'size-chart-title-' + index"  
+									type="text"  
+									class="form-control"  
+									placeholder="لطفا عنوان ساییز چارت را وارد کنید"  
+									v-model="sizeChart.title"  
+								/>  
 							</div>  
 						</div>  
-					</x-slot>  
-				</x-card>  
-
-      </div>
-			<div class="col-xl-4">
-
-				{{-- publish --}}
-				<x-card>
-					<x-slot name="cardTitle">انتشار</x-slot>
-					<x-slot name="cardOptions">
-						<div class="card-options">
-							<button class="btn btn-sm btn-primary" type="button" @click="storeProduct">ثبت محصول</button>
-						</div>
-					</x-slot>
-					<x-slot name="cardBody">
-
-						<div class="row align-items-center mb-2">
-							<div class="col-xl-4">
-								<label for="status-select">وضعیت<span class="text-danger">&starf;</span></label>
-							</div>
-							<div class="col-xl-8">
-								<multiselect
-									dir="rtl"
-									id="status-select"
-									class="custom-multiselect"
-									v-model="product.status"
-									label="label"
-									placeholder="انتخاب وضعیت محصول"
-									:options="productsStatuses"
-									:select-label="null"
-									:deselect-label="null"
-									:selected-label="null"
-									required
+						<div class="col-12">  
+							<div class="form-group">  
+								<label :for="'size-chart-type-' + index">نوع سایز چارت</label>  
+								<multiselect  
+									:id="'size-chart-type-' + index"  
+									dir="rtl"  
+									label="name"  
+									track-by="id"  
+									class="custom-multiselect"  
+									placeholder="انتخاب نوع سایز چارت"  
+									v-model="choosenSizecharts"
+									required  
+									:options="sizeChartTypes"
+									@select="(selectedSizeChartTypeObj) => addTypeAndChartToSizechart(selectedSizeChartTypeObj, index)"  
+									@remove="(removedSizeChartTypeObj) => removeTypeAndChartFromSizechart(index)"  
 								></multiselect>
-							</div>
-						</div>
+							</div>  
+						</div>  
+						<div v-show="sizeChart.chart.length" class="col-12 mt-4">  
+							<table class="table table-bordered text-nowrap text-center">  
+								<tbody>  
+									<template v-for="(charts, chartsIndex) in sizeChart.chart" :key="chartsIndex">  
+										<tr>  
+											<td v-for="(chartValue, chartValueIndex) in charts" :key="chartValueIndex">  
+												<input 
+													:disabled="chartsIndex === 0" 
+													type="text" 
+													class="form-control" 
+													v-model="product.size_charts[index].chart[chartsIndex][chartValueIndex]"
+												/>  
+											</td>  
+											<td>  
+												<button type="button" @click="addNewChartInputRow(index)" class="btn btn-sm btn-icon btn-success">+</button>  
+												<button  
+													v-if="chartsIndex > 0"  
+													type="button"  
+													@click="removeChartInputRow(index, chartsIndex)"  
+													:disabled="sizeChart.chart.length <= 2"  
+													class="btn btn-sm btn-icon btn-danger mr-1">-</button>  
+											</td>  
+										</tr>  
+									</template>  
+								</tbody>  
+							</table>  
+						</div>  
+					</div>  
+				</x-slot>  
+			</x-card>  
 
-						<div class="row align-items-center mb-2">
-							<div class="col-xl-4">
-								<label for="status-select">زمان انتشار</label>
-							</div>
-							<div class="col-xl-8">
-								<date-picker 
-									id="published-at" 
-									v-model="product.published_at" 
-									type="datetime" 
-									format="YYYY-MM-DD HH:mm"
-									display-format="jYYYY/jM/jD HH:mm"
-								/>
-							</div>
-						</div>
+			<button class="btn btn-sm btn-primary" type="button" @click="storeProduct">ثبت محصول</button>
 
-					</x-slot>
-				</x-card>
+		</div>
+		<div class="col-xl-4">
 
-				{{-- images --}}
-				<x-card>
-					<x-slot name="cardTitle">عکس‌ها</x-slot>
-					<x-slot name="cardOptions">
-						<div class="card-options">
-							<button
-								type="button"
-								id="add-image-btn"
-								class="btn btn-sm btn-outline-info"
-								onclick="document.getElementById('product-images-input').click()"
-							>افزودن عکس
-							</button>
+			{{-- publish --}}
+			<x-card>
+				<x-slot name="cardTitle">انتشار</x-slot>
+				<x-slot name="cardOptions">
+					<div class="card-options">
+						<button class="btn btn-sm btn-primary" type="button" @click="storeProduct">ثبت محصول</button>
+					</div>
+				</x-slot>
+				<x-slot name="cardBody">
+
+					<div class="row align-items-center mb-2">
+						<div class="col-xl-4">
+							<label for="status-select">وضعیت<span class="text-danger">&starf;</span></label>
 						</div>
-					</x-slot>
-					<x-slot name="cardBody">
-						<div class="row">
-							<input
-								type="file"
-								id="product-images-input"
-								hidden
-								multiple
-								accept="image/*"
-								@change="handleUploadImages"
+						<div class="col-xl-8">
+							<multiselect
+								dir="rtl"
+								id="status-select"
+								class="custom-multiselect"
+								v-model="product.status"
+								label="label"
+								placeholder="انتخاب وضعیت محصول"
+								:options="productsStatuses"
+								:select-label="null"
+								:deselect-label="null"
+								:selected-label="null"
+								required
+							></multiselect>
+						</div>
+					</div>
+
+					<div class="row align-items-center mb-2">
+						<div class="col-xl-4">
+							<label for="status-select">زمان انتشار</label>
+						</div>
+						<div class="col-xl-8">
+							<date-picker 
+								id="published-at" 
+								v-model="product.published_at" 
+								type="datetime" 
+								format="YYYY-MM-DD HH:mm"
+								display-format="jYYYY/jM/jD HH:mm"
 							/>
 						</div>
-						<div class="row mt-3">
-							<div v-for="(image, index) in product.images" :key="index" class="position-relative col-md-6 my-2">
-								<img :src="image" alt="product-image" class="img-thumbnail image-size" style="width: 100%; height: auto;"/>
-								<span class="remove-btn" @click="deleteImage(index)">&times;</span>
-							</div>
-						</div>
-					</x-slot>
-				</x-card>
+					</div>
 
-				{{-- video --}}
-				<x-card>
-					<x-slot name="cardTitle">ویدیو محصول</x-slot>
-					<x-slot name="cardBody">
-						<div class="row align-items-center my-2">
-							<div class="col-12">
-								<div class="custom-file">
-									<input 
-										id="product-video-cover" 
-										type="file" 
-										class="custom-file-input"
-										accept="image/*" 
-										@change="handleUploadVideoCover"
-									>
-									<label class="custom-file-label">انتخاب کاور ویدیو</label>
-								</div>
-							</div>
-						</div>
-						<div class="row align-items-center my-2">
-							<div class="col-12">
-								<div class="custom-file">
-									<input 
-										type="file" 
-										id="product-video" 
-										class="custom-file-input"
-										accept="video/*"
-										@change="handleUploadVideo"
-									>
-									<label class="custom-file-label">انتخاب ویدیو</label>
-								</div>
-							</div>
-						</div>
-					</x-slot>
-				</x-card>
-				
-				{{-- pricing --}}
-				<x-card>
-					<x-slot name="cardTitle">قیمت گذاری</x-slot>
-					<x-slot name="cardBody">
+				</x-slot>
+			</x-card>
 
-						{{-- unit price --}}
-						<div class="row align-items-center mb-2">
-							<div class="col-xl-4">
-								<label for="product-unit-price">قیمت واحد</label>
-							</div>
-							<div class="col-xl-8">
+			{{-- images --}}
+			<x-card>
+				<x-slot name="cardTitle">عکس‌ها</x-slot>
+				<x-slot name="cardOptions">
+					<div class="card-options">
+						<button
+							type="button"
+							id="add-image-btn"
+							class="btn btn-sm btn-outline-info"
+							onclick="document.getElementById('product-images-input').click()"
+						>افزودن عکس
+						</button>
+					</div>
+				</x-slot>
+				<x-slot name="cardBody">
+					<div class="row">
+						<input
+							type="file"
+							id="product-images-input"
+							hidden
+							multiple
+							accept="image/*"
+							@change="handleUploadImages"
+						/>
+					</div>
+					<div class="row mt-3">
+						<div v-for="(image, index) in product.images" :key="index" class="position-relative col-md-6 my-2">
+							<img :src="image" alt="product-image" class="img-thumbnail image-size" style="width: 100%; height: auto;"/>
+							<span class="remove-btn" @click="deleteImage(index)">&times;</span>
+						</div>
+					</div>
+				</x-slot>
+			</x-card>
+
+			{{-- video --}}
+			<x-card>
+				<x-slot name="cardTitle">ویدیو محصول</x-slot>
+				<x-slot name="cardBody">
+					<div class="row align-items-center my-2">
+						<div class="col-12">
+							<div class="custom-file">
 								<input 
-									id="product-unit-price" 
-									type="text"
-									v-model="product.unit_price" 
-									class="form-control" 
-									placeholder="قیمت را به تومان وارد کنید"
-									@input="formatAmount($event, product.unit_price)"
+									id="product-video-cover" 
+									type="file" 
+									class="custom-file-input"
+									accept="image/*" 
+									@change="handleUploadVideoCover"
 								>
+								<label class="custom-file-label">انتخاب کاور ویدیو</label>
 							</div>
 						</div>
-
-						{{-- purchase price --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-4">
-								<label for="product-purchase-price">قیمت خرید</label>
-							</div>
-							<div class="col-xl-8">
-								<input id="product-purchase-price" v-model="product.purchase_price" type="number" class="form-control" placeholder="قیمت خرید را به تومان وارد کنید">
-							</div>
+						<div v-show="product.video_cover != null" class="position-relative col-12 mt-2 mb-5">
+							<img :src="product.video_cover" class="img-thumbnail image-size" style="width: 100%; height: auto;"/>
+							<span class="remove-btn" @click="deleteVideoCover">&times;</span>
 						</div>
-
-						{{-- discount type --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-4">
-								<label for="product-discount-type">نوع تخفیف</label>
-							</div>
-							<div class="col-xl-8">
-								<multiselect
-									dir="rtl"
-									id="product-discount-type" 
-									name="product[discount_type]"
-									class="custom-multiselect"
-									label="label"
-									track-by="name"
-									placeholder="انتخاب نوع تخفیف"
-									v-model="product.discount_type"
-									@select="logDiscountType"
-									:options="discountTypes"
-									:select-label="null"
-									:deselect-label="null"
-									:selected-label="null"
-								></multiselect>
-							</div>
-						</div>
-
-						{{-- discount --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-4">
-								<label for="product-discount">تخفیف</label>
-							</div>
-							<div class="col-xl-8">
+					</div>
+					<div class="row align-items-center my-2">
+						<div class="col-12">
+							<div class="custom-file">
 								<input 
-									id="product-discount" 
-									type="number" 
-									class="form-control" 
-									v-model="product.discount"
-									:max="product.discount_type?.name == 'percentage' ? 100 : ''"
-									placeholder="مقدار تخفیف را وارد کنید"
-								/>
+									type="file" 
+									id="product-video" 
+									class="custom-file-input"
+									accept="video/*"
+									@change="handleUploadVideo"
+								>
+								<label class="custom-file-label">انتخاب ویدیو</label>
 							</div>
 						</div>
+						<div v-show="product.video != null" class="position-relative col-12 mt-2">
+							<video :src="product.video" controls></video>
+							<span class="remove-btn" @click="deleteVideo">&times;</span>
+						</div>
+					</div>
+				</x-slot>
+			</x-card>
+			
+			{{-- pricing --}}
+			<x-card>
+				<x-slot name="cardTitle">قیمت گذاری</x-slot>
+				<x-slot name="cardBody">
 
-						{{-- discount until --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-4">
-								<label for="product-discount-until">زمان اتمام تخفیف</label>
-							</div>
-							<div class="col-xl-8">
-								<date-picker 
-									id="product-discount-until" 
-									v-model="product.discount_until" 
-									type="datetime" 
-									format="YYYY/MM/DD HH:mm"
-									display-format="jYYYY/jM/jD HH:mm"
-								/>
+					{{-- unit price --}}
+					<div class="row align-items-center mb-2">
+						<div class="col-xl-4">
+							<label for="product-unit-price">قیمت واحد</label>
+						</div>
+						<div class="col-xl-8">
+							<input 
+								id="product-unit-price" 
+								type="number"
+								v-model="product.unit_price" 
+								class="form-control" 
+								placeholder="قیمت را به تومان وارد کنید"
+							>
+						</div>
+					</div>
+
+					{{-- purchase price --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-4">
+							<label for="product-purchase-price">قیمت خرید</label>
+						</div>
+						<div class="col-xl-8">
+							<input id="product-purchase-price" v-model="product.purchase_price" type="number" class="form-control" placeholder="قیمت خرید را به تومان وارد کنید">
+						</div>
+					</div>
+
+					{{-- discount type --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-4">
+							<label for="product-discount-type">نوع تخفیف</label>
+						</div>
+						<div class="col-xl-8">
+							<multiselect
+								dir="rtl"
+								id="product-discount-type" 
+								class="custom-multiselect"
+								label="label"
+								track-by="name"
+								placeholder="انتخاب نوع تخفیف"
+								v-model="product.discount_type"
+								:options="discountTypes"
+								:select-label="null"
+								:deselect-label="null"
+								:selected-label="null"
+							></multiselect>
+						</div>
+					</div>
+
+					{{-- discount --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-4">
+							<label for="product-discount">تخفیف</label>
+						</div>
+						<div class="col-xl-8">
+							<input 
+								id="product-discount" 
+								type="number" 
+								class="form-control" 
+								v-model="product.discount"
+								:max="product.discount_type?.name == 'percentage' ? 100 : ''"
+								placeholder="مقدار تخفیف را وارد کنید"
+							/>
+						</div>
+					</div>
+
+					{{-- discount until --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-4">
+							<label for="product-discount-until">زمان اتمام تخفیف</label>
+						</div>
+						<div class="col-xl-8">
+							<date-picker 
+								id="product-discount-until" 
+								v-model="product.discount_until" 
+								type="datetime" 
+								format="YYYY/MM/DD HH:mm"
+								display-format="jYYYY/jM/jD HH:mm"
+							/>
+						</div>
+					</div>
+
+					{{-- threshold quantity --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-4">
+							<label for="product-threshold-quantity">تعداد آستانه</label>
+						</div>
+						<div class="col-xl-8">
+							<input id="product-threshold-quantity" type="number" class="form-control" v-model="product.threshold_quantity"placeholder="تعداد آستانه را وارد کنید"/>
+						</div>
+					</div>
+
+					{{-- threshold date --}}
+					<div class="row align-items-center my-2">
+						<div class="col-xl-4">
+							<label for="product-threshold-date">تاریخ آستانه</label>
+						</div>
+						<div class="col-xl-8">
+							<date-picker 
+								id="product-threshold-date" 
+								v-model="product.threshold_date" 
+								type="datetime" 
+								format="YYYY/MM/DD HH:mm"
+								display-format="jYYYY/jM/jD HH:mm"
+							/>
+						</div>
+					</div>
+
+				</x-slot>
+			</x-card>
+
+			{{-- settings --}}
+			<x-card>
+				<x-slot name="cardTitle">تنظیمات</x-slot>
+				<x-slot name="cardBody">
+					<div class="row align-items-center mb-2">
+						<div class="col-xl-4">
+							<label for="product-low-stock-quantity-warning">اخطار موجودی <span class="text-danger">&starf;</span></label>
+						</div>
+						<div class="col-xl-8">
+							<input id="product-low-stock-quantity-warning" type="number" v-model="product.low_stock_quantity_warning" class="form-control" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<label for="chargeable-checkbox" class="custom-control custom-checkbox">
+								<input id="chargeable-checkbox" v-model="product.chargeable" type="checkbox" class="custom-control-input" value="1"/>
+								<span class="custom-control-label">قابل شارژ</span>
+							</label>
+						</div>
+						<div class="col-12">
+							<label for="send-notif-to-customers" class="custom-control custom-checkbox">
+								<input id="send-notif-to-customers" type="checkbox" class="custom-control-input" value="1"/>
+								<span class="custom-control-label">ارسال نوتیفیکیشن به کاربران در انتظار</span>
+							</label>
+						</div>
+						<div class="col-12">
+							<label for="show-quantity" class="custom-control custom-checkbox">
+								<input id="show-quantity" v-model="product.show_quantity" type="checkbox" class="custom-control-input" value="1"/>
+								<span class="custom-control-label">مشاهده موجودی</span>
+							</label>
+						</div>
+					</div>
+				</x-slot>
+			</x-card>
+
+			{{-- SEO --}}
+			<x-card>
+				<x-slot name="cardTitle">اطلاعات سئو</x-slot>
+				<x-slot name="cardOptions">
+					<div class="card-options">
+						<button class="btn btn-sm btn-primary" type="button" @click="storeProduct">ثبت محصول</button>
+					</div>
+				</x-slot>
+				<x-slot name="cardBody">
+					<div class="row">
+						<div class="col-12">
+							<div class="form-group">
+								<label for="product-meta-title">عنوان متا</label>
+								<input  id="product-meta-title" placeholder="عنوان متا" class="form-control" v-model="product.meta_title" type="text">
 							</div>
 						</div>
-
-						{{-- threshold quantity --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-4">
-								<label for="product-threshold-quantity">تعداد آستانه</label>
-							</div>
-							<div class="col-xl-8">
-								<input id="product-threshold-quantity" type="number" class="form-control" v-model="product.threshold_quantity"placeholder="تعداد آستانه را وارد کنید"/>
+						<div class="col-12">
+							<div class="form-group">
+								<label for="product-meta-description">توضیحات متا</label>
+								<textarea id="product-meta-description" placeholder="توضیحات متا" class="form-control" v-model="product.meta_description" rows="4"></textarea>
 							</div>
 						</div>
+					</div>
+				</x-slot>
+			</x-card>
 
-						{{-- threshold date --}}
-						<div class="row align-items-center my-2">
-							<div class="col-xl-4">
-								<label for="product-threshold-date">تاریخ آستانه</label>
-							</div>
-							<div class="col-xl-8">
-								<date-picker 
-									id="product-threshold-date" 
-									v-model="product.threshold_date" 
-									type="datetime" 
-									format="YYYY/MM/DD HH:mm"
-									display-format="jYYYY/jM/jD HH:mm"
-								/>
-							</div>
-						</div>
-
-					</x-slot>
-				</x-card>
-
-				{{-- settings --}}
-				<x-card>
-					<x-slot name="cardTitle">تنظیمات</x-slot>
-					<x-slot name="cardBody">
-						<div class="row align-items-center mb-2">
-							<div class="col-xl-4">
-								<label for="product-low-stock-quantity-warning">اخطار موجودی <span class="text-danger">&starf;</span></label>
-							</div>
-							<div class="col-xl-8">
-								<input id="product-low-stock-quantity-warning" type="number" v-model="product.low_stock_quantity_warning" class="form-control">
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<label for="chargeable-checkbox" class="custom-control custom-checkbox">
-									<input id="chargeable-checkbox" v-model="product.chargeable" type="checkbox" class="custom-control-input" value="1"/>
-									<span class="custom-control-label">قابل شارژ</span>
-								</label>
-							</div>
-							<div class="col-12">
-								<label for="send-notif-to-customers" class="custom-control custom-checkbox">
-									<input id="send-notif-to-customers" type="checkbox" class="custom-control-input" value="1"/>
-									<span class="custom-control-label">ارسال نوتیفیکیشن به کاربران در انتظار</span>
-								</label>
-							</div>
-							<div class="col-12">
-								<label for="show-quantity" class="custom-control custom-checkbox">
-									<input id="show-quantity" v-model="product.show_quantity" type="checkbox" class="custom-control-input" value="1"/>
-									<span class="custom-control-label">مشاهده موجودی</span>
-								</label>
-							</div>
-						</div>
-					</x-slot>
-				</x-card>
-
-				{{-- SEO --}}
-				<x-card>
-					<x-slot name="cardTitle">اطلاعات سئو</x-slot>
-					<x-slot name="cardBody">
-						<div class="row">
-							<div class="col-12">
-								<div class="form-group">
-									<label for="product-meta-title">عنوان متا</label>
-									<input  id="product-meta-title" placeholder="عنوان متا" class="form-control" v-model="product.meta_title" type="text">
-								</div>
-							</div>
-							<div class="col-12">
-								<div class="form-group">
-									<label for="product-meta-description">توضیحات متا</label>
-									<textarea id="product-meta-description" placeholder="توضیحات متا" class="form-control" v-model="product.meta_description" rows="4"></textarea>
-								</div>
-							</div>
-						</div>
-					</x-slot>
-				</x-card>
-
-			</div>
-    </div>
-  </form>
+		</div>
+	</div>
 </div>
-
-<div style="margin-bottom: 200px"></div>
 
 @endsection
 
@@ -925,7 +948,18 @@
 <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
 <script src="{{ asset('assets/vue/date-time-picker/vue3-persian-datetime-picker.umd.min.js') }}"></script>
 
+{{-- <script src="{{ asset('/assets/editor/ckeditor/ckeditor.js') }}"></script>
 <script>
+	CKEDITOR.replace('product-description', {
+		filebrowserImageBrowseUrl: @json(asset('/assets/editor/ckfinder/ckfinder.html?type=Images')),
+		filebrowserImageUploadUrl: @json(asset('/assets/editor/ckfinder/ckfinder.html?type=Images')),
+		filebrowserBrowseUrl: @json(asset('/assets/editor/ckfinder/ckfinder.html?type=Images')),
+		filebrowserUploadUrl: @json(asset('/assets/editor/ckfinder/ckfinder.html?type=Images'))
+	});
+</script> --}}
+
+<script>
+
   const {
     createApp
   } = Vue;
@@ -964,6 +998,7 @@
 					discount: null,
 					discount_until: null,
 					description: null,
+					short_description: null,
 					meta_description: null,
 					meta_title: null,
 					threshold_date: null,
@@ -995,8 +1030,8 @@
       addNewTag(value, attribute) {
         this.clearVarietyValues();
         this.product.attribute_values[attribute.id] = this.product.attribute_values[attribute.id] || [];
-        const id = value.substring(0, 2) + Math.floor((Math.random() * 10000000))
-        this.product.attribute_values[attribute.id].push({ value, id });
+        const attribute_id = attribute.pivot.attribute_id;
+        this.product.attribute_values[attribute.id].push({ value, attribute_id });
       },
       handleUploadImages(e) {
         const files = Array.from(e.target.files);
@@ -1031,14 +1066,20 @@
       deleteImage(index) {
         this.product.images.splice(index, 1);
       },
+			deleteVideo() {
+        this.product.video = null;
+      },
+			deleteVideoCover() {
+        this.product.video_cover = null;
+      },
       getVarietyValue(attributeId) {
         if (!this.product.variety_values[attributeId]) {
           this.product.variety_values[attributeId] = {
-            price: 0,
+            price: null,
 						purchase_price: null,
             barcode: '',
             SKU: '',
-            quantity: 0,
+            quantity: null,
             images: [],
 						discount_type: '',
 						discount: null,
@@ -1073,25 +1114,24 @@
         this.product.variety_values = {};
       },
 			addNewSizechart() {  
-      this.product.size_charts.push({  
-        title: '',  
-        type_id: null,  
-        chart: [],  
-      });  
-    },  
+				this.product.size_charts.push({  
+					title: '',  
+					type_id: null,  
+					chart: [],  
+				});  
+			},  
 			addTypeAndChartToSizechart(selectedSizeChartTypeObj, index) {  
 				const chartArr = ['سایزبندی', ...selectedSizeChartTypeObj.values.map(value => value.name)];  
-
 				this.product.size_charts[index].type_id = selectedSizeChartTypeObj.id;  
 				this.product.size_charts[index].chart = [chartArr];  
+				this.addNewChartInputRow(index);
 			},
 			removeTypeAndChartFromSizechart(index) {
 				this.product.size_charts[index].type_id = null;  
 				this.product.size_charts[index].chart = [];  
 			},
 			addNewChartInputRow(sizeChartIndex) {  
-				const newChartValueArray = Array(this.product.size_charts[sizeChartIndex].chart[0].length).fill('');  
-				this.product.size_charts[sizeChartIndex].chart.push(newChartValueArray);  
+				this.product.size_charts[sizeChartIndex].chart.push(Array(this.product.size_charts[sizeChartIndex].chart[0].length).fill(''));  
 			},  
 			removeChartInputRow(sizeChartIndex, chartIndex) {  
 				this.product.size_charts[sizeChartIndex].chart.splice(chartIndex, 1);  
@@ -1104,17 +1144,24 @@
 				if (Object.keys(this.product.specifications).length < 1) {
 					return [];
 				};
-
+				console.log(this.product.specifications);
 				const specifications = [];
 				specifications.push(  
-					...Object.entries(this.product.specifications).map(([specificationId, specificationValues]) => {  
-						const specification = this.specification.find(s => s.id == specificationId);
-						const values = specification.type == 'multi_select'  
-							? specificationValues.map(specificationValue => specificationValue.value)   
-							: specificationValues[0].value;
+					...Object.entries(this.product.specifications).map(([specificationId, specificationValueObjects]) => {  
+						const specification = this.specifications.find(s => s.id == specificationId);
+
+						let value;
+						if (specification.type == 'text') {
+							value = specificationValueObjects;
+						}else {
+							value = specification.type == 'multi_select'  
+							? specificationValueObjects.map(specificationValue => specificationValue.id)   
+							: specificationValueObjects[0].id;
+						}
+
 						return {  
 							id: specificationId,  
-							value: values  
+							value: value  
 						};  
 					})
 				);  
@@ -1132,6 +1179,7 @@
 				clonedProduct.specifications = this.compileSpecifications();
 				clonedProduct.status = this.product.status?.name || null;
 				clonedProduct.discount_type = this.product.discount_type?.name || null;
+				clonedProduct.varieties = this.varieties;
 
 				delete clonedProduct.brand;
 				delete clonedProduct.unit;
@@ -1154,6 +1202,7 @@
 						console.log('request failed:', response.json());
 					} else {
 						console.log('request success', response.json());
+						window.location.replace(@json(route('admin.products.index')));
 					}
 				} catch (error) {
 					console.error('There was a problem with the submission:', error);
@@ -1180,7 +1229,6 @@
         const attributes = Object.values(this.product.attribute_values).filter(
           (values) => values.length > 0
         );
-
         // all possible combinations into this format
         /**
          * [
@@ -1199,6 +1247,34 @@
               items: combination
           }))
           : [];
+      },
+			varieties() {
+
+				if (Object.keys(this.product.variety_values).length === 0) {
+					return [];
+				}
+
+        return [
+          ...Object.entries(this.product.variety_values).map(([varietyId, variety]) => {
+            return {
+              price: variety.price,
+              purchase_price: variety.purchase_price,
+              barcode: variety.barcode,
+              SKU: variety.SKU,
+							color_id: null,
+              quantity: variety.quantity,
+              discount_type: variety.discount_type,
+              discount: variety.discount,
+              images: variety.images,
+              attributes: this.attributesCombinations.find(
+                (combination) => combination.id === varietyId
+              ).items.map((item) => ({
+								id: item.attribute_id,
+								value: item.hasOwnProperty('id') ? item.id :item.value // if attribute type is select_box the value should be the attribute_value_id
+              }))
+            }
+          })
+        ];
       },
 			isVarietiesEmpty() {
 				return Object.keys(this.product.variety_values).length === 0;

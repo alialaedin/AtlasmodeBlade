@@ -2,9 +2,9 @@
 
 namespace Modules\Menu\Entities;
 
-use Shetabit\Shopit\Modules\Menu\Entities\MenuGroup as BaseMenuGroup;
+use Modules\Core\Entities\BaseModel;
 
-class MenuGroup extends BaseMenuGroup
+class MenuGroup extends BaseModel
 {
-
+  protected $fillable = ['title'];
 }

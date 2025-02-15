@@ -15,6 +15,7 @@
     <title>@yield('title', \Modules\Setting\Entities\Setting::getFromName('title'))</title>
 
     @include('admin.layouts.includes.styles')
+		@stack('scripts')
     @yield('styles')
 
 </head>
@@ -38,6 +39,7 @@
 
 	@include('admin.layouts.includes.scripts')
 
+	@stack('scripts')
 	@yield('scripts')
 </body>
 
