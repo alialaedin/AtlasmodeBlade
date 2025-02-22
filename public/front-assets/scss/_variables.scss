@@ -1,0 +1,88 @@
+// Variables
+$font-icon:"icon";
+$font-primary:"YekanBakh";
+
+$grid-breakpoints: (
+  zero:0,
+  xs: 360px,
+  sm: 640px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1280px,
+  2xl: 1336px,
+  3xl: 1440px,
+  4xl: 1676px
+) !default;
+$enable-cssgrid: true !default;
+
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: $spacer * .4,
+  2: $spacer * .8,
+  3: $spacer * 1.2,
+  4: $spacer * 1.6,
+  5: $spacer * 2,
+  6: $spacer * 2.4,
+  7: $spacer * 2.8,
+  8: $spacer * 3.2,
+  9: $spacer * 3.6,
+  10: $spacer * 4,
+  11: $spacer * 4.4,
+  12: $spacer * 4.8,
+) !default;
+
+$radius-small: 10px;
+$radius: 16px;
+$radius-medium: 18px;
+$radius-large: 25px;
+$radius-xl: 40px;
+$radius-u: 100px;
+$radius-circle: 50%;
+
+$color-warning-100: #f9a825;
+$color-warning-200: #f57f17;
+$color-warning-300:#ff4610;
+
+$color-error-100: #cf3e3e;
+$color-error-200: #b2001a;
+
+$color-success-100: #38eb9d;
+$color-success-200: #21ab64;
+
+
+$color-primary-100: #feebec;
+$color-primary-200: #f9d4e4;
+$color-primary-300: #f172ac;
+$color-primary-500: #eb0037;
+$color-primary-600: #eea35a;
+$color-primary-700: #c92f2f;
+
+$color-secondary-100: #d2ef9a;
+$color-secondary-200: #be9858;
+$color-secondary-300: #15be958c;
+$color-secondary-400: #15be95;
+$color-secondary-500: #00a6ff;
+$color-secondary-600: #00bfd6;
+$color-secondary-700: #383c47;
+
+
+$color-rating-0-2: #ffc107;
+$color-rating-2-3: #b1b64d;
+$color-rating-3-4: #65aa57;
+$color-rating-4-5: #00a049;
+
+$color-gray-100: #f9f9f9;
+$color-gray-200: #f0f0f1;
+$color-gray-300: #e2e1e1;
+$color-gray-400: #d1d1d1;
+$color-gray-500: #c8c5c5;
+$color-gray-600: #a4a4a4;
+$color-gray-700: #888888;
+$color-gray-800: #999999;
+$color-gray-900: #5c5c5c;
+
+$color-transparent: transparent;
+
+$color-white:    #fff;
+$color-black:    #000 ;

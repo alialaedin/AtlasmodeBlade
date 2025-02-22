@@ -192,12 +192,17 @@
               <td>{{ number_format($product->varieties->min('price')) }}</td>
               <td>{{ $product->total_quantity }}</td>
               <td>
+                @if ($product->categories->count() == 1)
+                <span class="btn btn-secondary btn-sm">{{ $product->categories->first()->title }}</span>
+                @else
                 <span
                   class="btn btn-outline-secondary btn-sm" 
                   data-toggle="tooltip" 
                   data-original-title="{{ $product->categories->pluck('title')->join(' - ') }}" 
-                  style="cursor: pointer;">مشاهده
+                  style="cursor: pointer;">
+                  {{ $product->categories->count() }} دسته بندی
                 </span>
+                @endif
               </td>
               <td>
                 <x-badge>

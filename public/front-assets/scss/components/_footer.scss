@@ -1,0 +1,21 @@
+.enamad{
+    width: 80px;
+}
+.icon-instagram{
+    color: #bbb;
+    &:hover{
+      &::before{
+        color: black;
+      }
+    }
+}
+.menu-footer{
+    a{
+        &:hover{
+           color: $color-gray-700;
+        }
+    }
+}
+.footer-enamad{
+    width: 80px;
+}

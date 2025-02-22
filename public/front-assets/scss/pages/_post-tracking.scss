@@ -1,0 +1,17 @@
+.orderdetail-table{
+    display: none;
+    th{
+        min-width: 80px;
+        width: 200px;
+        @include mq(lg){
+        width: 300px;
+
+        }
+    }
+    td{
+        @extend th;
+    }
+    &.active{
+        display: block;
+    }
+}

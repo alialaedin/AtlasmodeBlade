@@ -1,0 +1,40 @@
+.login-register{
+    .login-register-form{
+        display: none;
+        &.active{
+            display: flex;
+        }
+        width:100%;
+        margin-top: 10%;
+
+        .login-btn{
+            padding: 5px 0;
+        }
+        @include mq(md){
+          width: 50%;
+        }
+        @include mq(lg){
+            width: 30%;
+          }
+    }
+    .token-form{
+        display: none;
+        &.active{
+            display: flex;
+        }
+        width: 100%;
+        margin-top: 10%;
+        .token-btn{
+            padding: 5px 0;
+        }
+        .send-token-again{
+            display: none;
+        }
+        @include mq(md){
+            width: 50%;
+        }
+        @include mq(lg){
+            width: 30%;
+        }
+    }
+}

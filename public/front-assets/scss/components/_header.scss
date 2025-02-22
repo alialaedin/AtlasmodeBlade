@@ -1,0 +1,63 @@
+//Header Styles
+.header-top{
+    z-index: 15;
+    padding-left:20px;
+    padding-right:20px;
+    .logo-header{
+        width:130px;
+        @include mq(md){
+            width:190px;
+        }
+    }
+    .mainMenu-li-hasSubMenu{
+        .subMenu{
+            top:100%;
+            right: 5%;
+            width:  90%;
+            height: 665px;
+            box-shadow: -1px 8px 8px 1px rgba(0, 0, 0, 0.09);
+            z-index: 10;
+            transform-origin: top;
+            transform: scaleY(0) !important;
+            transition: transform .2s linear;
+            border-bottom-right-radius:$radius-large ;
+            border-bottom-left-radius:$radius-large ;
+        }
+        &:hover{
+            .subMenu{
+              transform: scaleY(1) !important;
+            }
+        }
+      
+    }
+    .shopping-cart{
+        height: 25px;
+        span{
+            left: -14px;
+            top: -7px;
+        }
+    }
+    .favorite{
+        height: 25px;
+    }
+    .login-btn{
+        
+        div:last-child{
+            top: 100%;
+            left:0;
+            right: 0;
+            z-index: 12;
+            display: none;
+            &.active{
+                display: flex;
+            }
+        }
+      }
+    @include mq(2xl){
+        padding-left:0px;
+        padding-right:0px;
+    }
+}
+
+   
+

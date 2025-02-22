@@ -1,0 +1,560 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #000, $alpha: 0.3);
+    z-index: 25;
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s opacity linear;
+    &.active {
+        visibility: visible;
+        opacity: 1;
+        transition: .5s opacity linear;
+    }
+    .modal-close{
+        right: 15px;
+        top: 20px;
+    }
+}
+
+
+.modal{
+    position: fixed;
+    max-height: 100%;
+    z-index: 25;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s linear, visibility 0.3s linear;
+    &.active {
+        visibility: visible;
+        opacity: 1;
+
+    }
+    @include mq(lg) {
+        left: 50%;
+        top: 50%;
+        min-width: 460px;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s linear, visibility 0.3s linear, transform 0.3s linear;
+        &.active {
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+.modal-mobile-category{
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: fit-content;
+    max-height: 75%;
+    @include mq(sm){
+        width: 70%;
+    }
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    .icon-angle-left{
+       &.deactive{
+        display: none !important;
+       }
+    }
+    .icon-angle-down{
+        display: none;
+        &.active{
+            display:block;
+        }
+    }
+    .category-lists{
+        margin-top: 50px !important;
+        @include mq(md){
+            width: 80%;
+            margin: 0 auto;
+        }
+        .menu-sublist{
+            max-height: 0;
+            overflow: hidden;
+            transition: all .3s linear;
+            &.active{
+                padding-top: 10px;
+                max-height: fit-content;
+            }
+        }
+        .menu-sublist-child{
+            max-height: 0;
+            overflow: hidden;
+            transition: all .3s linear;
+            &.active{
+                max-height: fit-content;
+            }
+        }
+        li{
+            padding:2px 8px;
+        }
+    }
+}
+.modal-mobile-menu{
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    transform: translateX(200%);
+    transition: transform 0.6s linear, opacity 0.6s linear, visibility 0.6s linear;
+    opacity: 0; 
+    visibility: hidden;
+    @include mq(sm){
+      width: 80%;
+    }
+    img{
+        width: 170px;
+    }
+    &.active {
+        transform: translateX(0);
+        opacity: 1; 
+        visibility: visible;
+    }
+    .icon-angle-left{
+        &.deactive{
+         display: none !important;
+        }
+     }
+     .icon-angle-down{
+         display: none;
+         &.active{
+             display:block;
+         }
+     }
+    .menu-sublist{
+        max-height: 0;
+        overflow: hidden;
+        transition: all .3s linear;
+        a{
+            color: $color-secondary-500;
+        }
+        &.active{
+            padding-top: 10px;
+            max-height: fit-content;
+        }
+    }
+    .menu-sublist-child{
+        max-height: 0;
+        overflow: hidden;
+        transition: all .3s linear;
+        a{
+            color: $color-secondary-500;
+        }
+        &.active{
+            max-height: fit-content;
+        }
+    }
+
+}
+.modal-search{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+    width: 90%;
+    max-width: 1000.75px;
+    max-height: 0;
+    overflow-y: auto;
+    &.active{
+        max-height: 80%;
+    }
+    @include mq(sm){
+        width: 70%;
+    }
+    .product-list{
+        figure{
+            padding-top: 4px;
+            width: 60px;
+            img{
+                height: 75px;
+            }
+        }
+    }
+}
+.modal-mobile-filter{
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    transform: translateY(-100%);
+    transition: transform 0.6s linear, opacity 0.6s linear, visibility 0.6s linear;
+    opacity: 0; 
+    visibility: hidden;
+    &.active {
+        transform: translateY(0);
+        opacity: 1; 
+        visibility: visible;
+    }
+    .price-range2{
+        .range-input2{
+            .slider2 {
+                height: 5px;
+                position: relative;
+                background:#ddd;
+                border-radius: 5px;
+              }
+              .slider2 .progress2 {
+                height: 100%;
+                left: 0;
+                right: 0;
+                position: absolute;
+                border-radius: 5px;
+                background:black;
+              }
+            input {
+                position: absolute;
+                width: 100%;
+                height: 8px;
+                top: -2px;
+                background: none;
+                pointer-events: none;
+                -webkit-appearance: unset;
+                -moz-appearance: unset;
+              }
+        
+        }
+    }
+}
+.modal-sortMobile{
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: fit-content;
+    border-top-left-radius: $radius-large;
+    border-top-right-radius: $radius-large;
+    transform: translateY(200%);
+    transition: transform 0.6s linear, opacity 0.6s linear, visibility 0.6s linear;
+    opacity: 0; 
+    visibility: hidden;
+    &.active {
+        transform: translateY(0);
+        opacity: 1; 
+        visibility: visible;
+    }
+    .display-sort-list{
+        .sort-item{
+            &.active{
+              background-color: $color-primary-500;
+              color: white;
+            }
+        }
+    }
+
+}
+.modal-sizeTable{
+    left: 50%;
+    top: 50%;
+    max-height:80% ;
+    width: fit-content;
+    max-width: 80%;
+    transform: translate(-50%, -50%);
+     @include mq(xs){
+        width: 350px;
+     }
+     @include mq(lg){
+       width: max-content;
+     }
+     .modal-content{
+         overflow-y: auto;
+        thead{
+           tr{
+              >:nth-child(n){
+                  border-bottom: 1px solid $color-gray-400;
+                  
+              }
+              >:nth-child(n):not(:last-child){
+                border-left: 1px solid $color-gray-400;
+              }
+           }
+        }
+        tbody{
+            >:nth-child(even){
+                background-color: #bbbbbb2e;
+            }
+            tr{
+                >:nth-child(n){
+                   border-bottom: 1px solid $color-gray-400;   
+                }
+                >:nth-child(n):not(:last-child){
+                  border-left: 1px solid $color-gray-400;
+                }
+            }
+            >:last-child{
+                >:nth-child(n){
+                    border-bottom: unset;   
+                 }
+            }
+        }
+     }
+}
+.modal-cart{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px 0 gray;
+    min-width: 300px;
+    .header-modal{
+        border-bottom: 1px solid $color-gray-200;
+        svg{
+            width: 16px;
+            height: 16px;
+            fill: $color-success-100;
+            @include mq(lg){
+                width: 24px;
+                height: 24px
+            }
+        }
+    }
+    .item{
+        box-shadow:  0 0 5px 0 rgba(128, 128, 128, 0.525);
+        img{
+            width: 80px;
+            height: 100px;
+        }
+        .price{
+            @include mq(lg){
+                border-right: 1px solid $color-gray-200;
+                padding-right: 4px;
+            }
+        }
+    }
+    .goToOrder{
+        width: 88%;
+    }
+    @include mq(xs){
+        min-width:350px;
+    }
+     @include mq(lg){
+       width: max-content;
+     }
+}
+.modal-delivery-method{
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px 0 gray;
+    .header-modal{
+        border-bottom: 1px solid $color-gray-200;
+     }
+     @include mq(sm){
+        width:60%;
+      }
+     @include mq(lg){
+       width: max-content;
+     }
+    .delivery-method-form{
+        img{
+            width: 30px;
+            height: 30px;
+            @include mq(lg){
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+}
+.modal-address{
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px 0 gray;
+    .header-modal{
+        border-bottom: 1px solid $color-gray-200;
+    }
+    .available-address-form{
+        .item{
+            border-bottom: .3px solid $color-gray-200;
+        }
+         overflow-y: auto;
+        &::-webkit-scrollbar{
+            display: none;
+        }
+    }
+    @include mq(sm){
+        width:60%;
+      }
+     @include mq(lg){
+       width: max-content;
+     }
+}
+.modal-add-newAddress{
+     overflow-y: auto;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    max-height: 90%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px 0 gray;
+    .header-modal{
+        border-bottom: 1px solid $color-gray-200;
+    }
+    .add-newAddress-btn{
+        padding-top: 5px;
+        padding-bottom: 5px;
+        width: 80%;
+        margin: 0 auto;
+    }
+    @include mq(sm){
+        width:60%;
+      }
+    @include mq(lg){
+       width: max-content;
+    }
+}
+.modal-exit{
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    max-height: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px 0 gray;
+    @include mq(sm){
+        width:fit-content;
+    }
+    @include mq(sm){
+       width: max-content;
+    }
+    .exit-modal-btn{
+        transition: all .2s linear;
+        max-height: 40px;
+        &:hover{
+            background-color: $color-error-200;
+            box-shadow: 0 0 7px 0 rgba($color: $color-error-200, $alpha: 0.8);
+        }
+    }
+    .cancel-modal-btn{
+        transition: all .2s linear;
+        max-height: 40px;
+        &:hover{
+            background-color: $color-secondary-400;
+            box-shadow: 0 0 7px 0 rgba($color: $color-secondary-400, $alpha: 0.8);
+
+        }
+    }
+}
+.modal-comment-userPanel{
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    max-height:70%;
+     overflow-y: auto;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px 0 gray;
+    @include mq(sm){
+       width: max-content;
+    }
+    figure{
+        width: 80px;
+    }
+    .send-comment{
+        width: 100%;
+        button{
+           width: 60%;
+           margin-left: 20%;
+           margin-right: 20%;
+        }
+    }
+    .icon-starFill::before{
+        font-size: 17px;
+    }
+    .rating-modal{
+        direction: ltr;
+        
+         .simple{
+            &.deactive{
+                display: none;
+            }
+         }
+         .fill{
+            display: none;
+            &.active{
+                display: inline-block;
+            }
+         }
+    }
+}
+.charge-wallet-modal{
+    left: 50%;
+    top: 50%;
+    width: 80%;
+    max-height:80%;
+    transform: translate(-50%, -50%);
+     overflow-y: auto;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    .portal{
+        border-bottom: 1px solid $color-gray-200;
+        &-item-sep{
+            &.active{
+                .tick{
+                    display: block;
+                }
+            }
+            .tick{
+                display: none;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50% , -50%);
+                width: 25px;
+                height: 25px;
+            }
+            img:last-child{
+                width: 50px;
+                height: 50px;
+            }
+        }
+        &-item-zarinpal{
+            @extend .portal-item-sep
+        }
+    }
+    @include mq(sm){
+        width:60%;
+    }
+    @include mq(lg){
+       width: max-content;
+    }
+}
+.modal-userInfo{
+     overflow-y: auto;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    max-height: 90%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px 0 gray;
+    .header-modal{
+        border-bottom: 1px solid $color-gray-200;
+    }
+    .save-info-btn{
+        padding-top: 5px;
+        padding-bottom: 5px;
+        width: 80%;
+        margin: 0 auto;
+    }
+    @include mq(sm){
+        width:60%;
+      }
+    @include mq(lg){
+       width: max-content;
+    }
+}

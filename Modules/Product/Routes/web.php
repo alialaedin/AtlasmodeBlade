@@ -5,6 +5,7 @@ use Modules\Product\Http\Controllers\Admin\SpecificDiscountController;
 use Modules\Product\Http\Controllers\Admin\SpecificDiscountItemController;
 use Modules\Product\Http\Controllers\Admin\SpecificDiscountTypeController;
 use Modules\Product\Http\Controllers\Admin\ProductController as AdminProductController;
+use Modules\Product\Http\Controllers\Front\ProductController as FrontProductController;
 use Modules\Product\Http\Controllers\Admin\RecommendationController;
 
 Route::webSuperGroup("admin", function () {
@@ -64,4 +65,9 @@ Route::webSuperGroup("admin", function () {
       Route::delete('/', [SpecificDiscountItemController::class, 'destroy'])->name('destroy')->hasPermission('delete_specificDiscountItem');
     });
   });
+});
+
+Route::prefix('/products')->name('front.products.')->group(function () {
+  Route::get('/', [FrontProductController::class, 'index'])->name('index');
+  Route::get('/{product}', [FrontProductController::class, 'show'])->name('show');
 });

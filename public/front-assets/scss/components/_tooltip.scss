@@ -1,0 +1,40 @@
+.tooltip{
+    @extend .text-medium;
+    background-color: $color-white;
+    border-radius: $radius-u;
+    padding: map-get($map: $spacers, $key: 0) map-get($map: $spacers, $key:3 );
+    margin: map-get($map: $spacers, $key: 1);
+    box-shadow: 0 0 6px 0 rgba(128, 128, 128, 0.637);
+    width: max-content;
+    display: none;
+    position: absolute;
+    z-index: 16;
+    &[data-position="left"]
+    {
+        top: 50%;
+        transform: translateY(-50%);
+        right: 100%
+    }
+
+    &[data-position="right"]
+    {
+        top: 50%;
+        transform: translateY(-50%);
+        left: 100%
+    }
+
+    &[data-position="bottom"]
+    {
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.showTooltip{
+    position: relative;
+    &:hover .tooltip{
+        display:flex
+    }
+}
+

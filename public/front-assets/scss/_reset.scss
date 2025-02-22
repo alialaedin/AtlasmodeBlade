@@ -1,0 +1,84 @@
+// Reset Styles
+html{
+    font-size: 12px;
+    @include mq(xs){
+        font-size: 14px;
+    };
+}
+*{
+    font-family: $font-primary;
+}
+*::-webkit-scrollbar {
+    width: 10px;
+}
+*::-webkit-scrollbar-thumb{
+    background-color: black;
+}
+*::-webkit-scrollbar-track{
+    background: rgb(216, 216, 216);
+}
+*,*::after,*::before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+ins{
+    text-decoration: none;
+}
+address{
+    font-style: normal;
+}
+button{
+    background-color: unset;
+    border: unset;
+    cursor: pointer;
+}
+input{
+    outline: unset;
+    border: unset;
+    background-color: transparent;
+}
+select{
+    border: unset;
+    outline: unset;
+}
+input[type="radio"] , input[type='checkbox']{
+    cursor: pointer;
+}
+textarea{
+    outline: unset;
+    border: unset;
+}
+ul,ol,dd{
+    list-style: none;
+}
+.container-sm{
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.container-lg{
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.container-2xl{
+    max-width: 1336px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.container-3xl{
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.container-4xl{
+    max-width: 1676px;
+    margin-left: auto;
+    margin-right: auto;
+}

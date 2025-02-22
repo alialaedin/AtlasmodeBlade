@@ -1,0 +1,22 @@
+.weblog-answerForm{
+    display: none;
+    &.show{
+       display: grid;
+    }
+}
+.aside-article-list{
+    .title{
+        border-bottom: 1px $color-gray-300 dashed;
+    }
+    article{
+        &:hover{
+            figure{
+                overflow: hidden;
+                img{
+                    transform: scale(1.08);
+                    transition: transform .3s linear;
+                }
+            }
+        }
+    }
+}

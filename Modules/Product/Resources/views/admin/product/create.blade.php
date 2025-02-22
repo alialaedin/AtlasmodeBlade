@@ -393,6 +393,21 @@
 
 													<div class="row align-items-center my-3">
 														<div class="col-xl-2">
+															<label class="d-flex" :for="'variety-discount-until' + attributes.id">اتمام تخفیف :</label>
+														</div>
+														<div class="col-xl-10">
+															<date-picker 
+																:id="'variety-discount-until' + attributes.id" 
+																v-model="product.variety_values[attributes.id].discount_until" 
+																type="datetime" 
+																format="YYYY-MM-DD HH:mm"
+																display-format="jYYYY/jM/jD HH:mm"
+															/>
+														</div>
+													</div>
+
+													<div class="row align-items-center my-3">
+														<div class="col-xl-2">
 															<label class="d-flex" :for="'variety-barcode' + attributes.id">بارکد :</label>
 														</div>
 														<div class="col-xl-10">
@@ -948,16 +963,6 @@
 <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
 <script src="{{ asset('assets/vue/date-time-picker/vue3-persian-datetime-picker.umd.min.js') }}"></script>
 
-{{-- <script src="{{ asset('/assets/editor/ckeditor/ckeditor.js') }}"></script>
-<script>
-	CKEDITOR.replace('product-description', {
-		filebrowserImageBrowseUrl: @json(asset('/assets/editor/ckfinder/ckfinder.html?type=Images')),
-		filebrowserImageUploadUrl: @json(asset('/assets/editor/ckfinder/ckfinder.html?type=Images')),
-		filebrowserBrowseUrl: @json(asset('/assets/editor/ckfinder/ckfinder.html?type=Images')),
-		filebrowserUploadUrl: @json(asset('/assets/editor/ckfinder/ckfinder.html?type=Images'))
-	});
-</script> --}}
-
 <script>
 
   const {
@@ -1083,6 +1088,7 @@
             images: [],
 						discount_type: '',
 						discount: null,
+						discount_until: null,
           };
           this.product.variety_values = { ...this.product.variety_values };
         }
@@ -1144,7 +1150,7 @@
 				if (Object.keys(this.product.specifications).length < 1) {
 					return [];
 				};
-				console.log(this.product.specifications);
+				
 				const specifications = [];
 				specifications.push(  
 					...Object.entries(this.product.specifications).map(([specificationId, specificationValueObjects]) => {  
@@ -1263,7 +1269,8 @@
               SKU: variety.SKU,
 							color_id: null,
               quantity: variety.quantity,
-              discount_type: variety.discount_type,
+              discount_type: variety.discount_type?.name || null,
+							discount_until: variety.discount_until,
               discount: variety.discount,
               images: variety.images,
               attributes: this.attributesCombinations.find(

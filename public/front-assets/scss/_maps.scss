@@ -1,0 +1,184 @@
+
+$color: (
+    "gray-100":$color-gray-100,
+    "gray-200":$color-gray-200,
+    "gray-300":$color-gray-300,
+    "gray-400":$color-gray-400,
+    "gray-500":$color-gray-500,
+    "gray-600":$color-gray-600,
+    "gray-700":$color-gray-700,
+    "gray-800":$color-gray-800,
+    "gray-900":$color-gray-900,
+
+    "secondary-100":$color-secondary-100,
+    "secondary-200":$color-secondary-200,
+    "secondary-300":$color-secondary-300,
+    "secondary-400":$color-secondary-400,
+    "secondary-500":$color-secondary-500,
+    "secondary-600":$color-secondary-600,
+    "secondary-700":$color-secondary-700,
+
+    "error-100":$color-error-100,
+    "error-200":$color-error-200,
+
+    "primary-100":$color-primary-100,
+    "primary-200":$color-primary-200,
+    "primary-300":$color-primary-300,
+    "primary-500":$color-primary-500,
+    "primary-600":$color-primary-600,
+    "primary-700":$color-primary-700,
+
+    "rating-0-2":$color-rating-0-2,
+    "rating-2-3":$color-rating-2-3,
+    "rating-3-4":$color-rating-3-4,
+    "rating-4-5":$color-rating-4-5,
+
+
+    "warning-100":$color-warning-100,
+    "warning-200":$color-warning-200,
+    "warning-300":$color-warning-300,
+
+    "success-100":$color-success-100,
+    "success-200":$color-success-200,
+
+    "black":$color-black,
+);
+
+
+$h-w-percent:(
+    '25':25%,
+    '50':50%,
+    '75':75%,
+    '100':100%,
+    'auto':'auto',
+    'unset':'unset',
+    'fit':'fit-content',
+);
+$border-radii: (
+    "small":$radius-small,
+    "radius":$radius,
+    "medium":$radius-medium,
+    "circle":$radius-circle,
+    "large":$radius-large,
+    "xl":$radius-xl,
+    "u":$radius-u
+);
+
+$borders:(
+    'none':none,
+    'gray-300':$color-gray-300 1px solid,
+    'gray-400':$color-gray-400 1px solid,
+    'black':$color-black 1px solid,
+);
+$positions:(
+    'static':static,
+    'relative':relative,
+    'absolute':absolute,
+    'fixed':fixed,
+    'sticky':sticky,
+    'unset':unset,
+);
+$overflow:(
+    'auto':auto,
+    'hidden':hidden,
+    'visible':visible,
+    'scroll':scroll,
+);
+$maps:(
+    "color":(
+        property:"color",
+        class:color,
+        values:$color
+    ),
+    "background-color":(
+        property:"background-color",
+        class:bg,
+        values:$color
+    ),
+    "height-p":(
+        property:"height",
+        class:h-p,
+        isResponsive:true,
+        values:$h-w-percent
+    ),
+    "width-p":(
+        property:"width",
+        isResponsive:true,
+        class:w-p,
+        values:$h-w-percent
+    ),
+    "height":(
+        property:"height",
+        isResponsive:true,
+        class:h,
+        values:$spacers
+    ),
+    "width":(
+        property:"width",
+        isResponsive:true,
+        class:w,
+        values:$spacers
+    ),
+    "border-radius":(
+        property:"border-radius",
+        isResponsive:true,
+        class:radius,
+        values:$border-radii
+    ),
+    "border":(
+        property:"border",
+        isResponsive:true,
+        class:border,
+        values:$borders
+    ),
+    "border-top":(
+        property:"border-top",
+        isResponsive:true,
+        class:border-t,
+        values:$borders
+    ),
+    "border-bottom":(
+        property:"border-bottom",
+        isResponsive:true,
+        class:border-b,
+        values:$borders
+    ),
+    "border-left":(
+        property:"border-left",
+        isResponsive:true,
+        class:border-s,
+        values:$borders
+    ),
+    "border-right":(
+        property:"border-right",
+        isResponsive:true,
+        class:border-e,
+        values:$borders
+    ),
+    "position":(
+        property:"position",
+        isResponsive:true,
+        class:position,
+        values:$positions
+    ),
+    "overflow":(
+        property:"overflow",
+        isResponsive:true,
+        class:overflow,
+        values:$overflow
+    ),
+    "overflow-x":(
+        property:"overflow-x",
+        isResponsive:true,
+        class:overflow-x,
+        values:$overflow
+    ),
+    "overflow-y":(
+        property:"overflow-y",
+        isResponsive:true,
+        class:overflow-y,
+        values:$overflow
+    ),
+);
+
+@include generateClass($maps);

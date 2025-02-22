@@ -1,0 +1,18 @@
+.popover-deleteEdit{
+    width: 150px;
+    top: 100%;
+    left: 2%;
+    transform-origin:top left;
+    transform: scale(0);
+    transition: transform .4s linear;
+    &.opened{
+       transform: scale(1);
+    }
+    box-shadow: 0 0 5px 0 rgba($color: #000000, $alpha: 0.2);
+    button:hover{
+        background-color: $color-gray-100;
+    }
+    @include mq(xl){
+       width: 250px;
+    }
+}

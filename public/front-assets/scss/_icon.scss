@@ -1,0 +1,153 @@
+// Icon Styles
+[class^="icon-"]::before, [class*=" icon-"]::before{
+      /* use !important to prevent issues with browser extensions that change fonts */
+      font-family: $font-icon !important;
+      font-size: 30px;
+      display: block;
+      font-style: normal;
+      font-weight: normal;
+      font-variant: normal;
+      text-transform: none;
+      line-height: 1;
+    
+      /* Better Font Rendering =========== */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .icon-bag:before {
+      content: "\e90a";
+    }
+    .icon-caret-down:before {
+      content: "\f0d7";
+    }
+    .icon-caret-up:before {
+      content: "\f0d8";
+    }
+    .icon-caret-left:before {
+      content: "\f0d9";
+    }
+    .icon-caret-right:before {
+      content: "\f0da";
+    }
+    .icon-angle-double-left:before {
+      content: "\f100";
+    }
+    .icon-angle-double-right:before {
+      content: "\f101";
+    }
+    .icon-angle-left:before {
+      content: "\f104";
+    }
+    .icon-angle-right:before {
+      content: "\f105";
+    }
+    .icon-angle-up:before {
+      content: "\f106";
+    }
+    .icon-angle-down:before {
+      content: "\f107";
+    }
+    .icon-user1:before {
+      content: "\e90c";
+    }
+    .icon-home1:before {
+      content: "\e900";
+    }
+    .icon-mail:before {
+      content: "\e905";
+    }
+    .icon-map:before {
+      content: "\e906";
+    }
+    .icon-trash-2:before {
+      content: "\e909";
+    }
+    .icon-checkmark:before {
+      content: "\e912";
+    }
+    .icon-cancel:before {
+      content: "\e914";
+    }
+    .icon-heart:before {
+      content: "\e915";
+    }
+    .icon-dot-single:before {
+      content: "\e916";
+    }
+    .icon-minus:before {
+      content: "\e91a";
+    }
+    .icon-plus:before {
+      content: "\e91d";
+    }
+    .icon-arrow-right2:before {
+      content: "\ea3c";
+    }
+    .icon-arrow-down2:before {
+      content: "\ea3e";
+    }
+    .icon-arrow-left2:before {
+      content: "\ea40";
+    }
+    .icon-troli:before {
+      content: "\e901";
+      color: #fff;
+    }
+    .icon-comment:before {
+      content: "\e902";
+      color: #fff;
+    }
+    .icon-share:before {
+      content: "\e903";
+    }
+    .icon-star-fill:before {
+      content: "\e904";
+    }
+    .icon-sort:before {
+      content: "\e907";
+      color: #999;
+    }
+    .icon-filter:before {
+      content: "\e908";
+    }
+    .icon-category:before {
+      content: "\e90b";
+    }
+    .icon-copyright:before {
+      content: "\e90d";
+      color: #666;
+    }
+    .icon-instagram:before {
+      content: "\e90e";
+      // color: black;
+    }
+    .icon-map-pin:before {
+      content: "\e90f";
+      color: #666;
+    }
+    .icon-phone-call:before {
+      content: "\e910";
+      color: #666;
+    }
+    .icon-star:before {
+      content: "\e913";
+    }
+    .icon-shipping-cart-fill:before {
+      content: "\e917";
+      color: #666;
+    }
+    .icon-phone:before {
+      content: "\e918";
+      color: #a5a5a5;
+    }
+    .icon-user:before {
+      content: "\e91b";
+    }
+    .icon-search:before {
+      content: "\e91c";
+    }
+    .icon-hamburger-menu:before {
+      content: "\e91e";
+    }
+   

@@ -1,0 +1,50 @@
+@mixin generateClass($list) {
+
+    @each $item, $var in $list {
+        $property: map-get($map: $var, $key: property);
+        $class-name: map-get($map: $var, $key: class);
+
+        $values: map-get($map: $var, $key: values);
+        $responsive: map-get($map: $var, $key: isResponsive);
+    
+        @each $key, $value in $values {
+
+            
+            .#{$class-name +  "-" + $key} {
+                #{$property}:#{$value}
+            }
+
+        }
+
+        @if($responsive)
+        {
+            @each $breakpoint,$value in $grid-breakpoints{
+                @include mq($breakpoint)
+                {
+                    @each $key, $value in $values {
+
+            
+                        .#{$class-name +  "-"+$breakpoint+"-" + $key} {
+                            #{$property}:#{$value}
+                        }
+            
+                    }
+                }
+            }
+        }
+       
+
+
+
+    }
+}
+
+
+@mixin mq($key){
+
+    $size:map-get($map:$grid-breakpoints , $key: $key);
+
+    @media only screen and (min-width:$size) {
+        @content
+    }
+}

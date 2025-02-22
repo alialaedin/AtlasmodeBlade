@@ -1,0 +1,16 @@
+.customRadio{
+    height: 15px;
+    width: 15px;
+    appearance: none;
+    border: 2px solid $color-gray-700;
+    border-radius: $radius-circle;
+    &:checked{
+        background-color: black;
+        border: 2px solid white;
+        outline: 2px solid black;
+    }
+    @include mq(md){
+        height: 18px;
+        width: 18px;
+    }
+}

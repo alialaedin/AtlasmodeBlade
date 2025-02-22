@@ -1,0 +1,279 @@
+.user-panel{
+    background-color: #F5F5F5;
+    padding: 15px;
+    @include mq(lg){
+        background-color: unset;
+        padding: unset;
+    }
+}
+.panel-side{
+    height: fit-content;
+    .icon-cart{
+        padding-right: 3px;
+    }
+    .icon-cart::before{
+        font-size: 20px;
+    }
+    .lists{
+        button:hover{
+            background-color: $color-gray-100;
+        }
+        .item{
+            &.select{
+               background-color: $color-gray-100;
+            }
+        }
+        .exit-btn{
+            color: red;
+            svg{
+                stroke: red;
+            }
+        }
+    } 
+    @include mq(lg){
+      top: 20px;
+    } 
+}
+.section{
+    display: none;
+    &.active{
+        display: flex;
+    }
+}
+.user-info{
+    div div:first-child{
+        border-left: 1px solid $color-gray-200;
+    }
+    .birth-date{
+        border-left: 1px solid $color-gray-200;
+    }
+    .icon-simpleAdd::before{
+        font-size: 20px;
+        @include mq(lg){
+            font-size: 30px;
+        }
+    }
+    svg{
+        width: 15px;
+        height: 15px;
+        @include mq(lg){
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+.favorite{
+    .favorite-products{
+        div{
+            height: fit-content !important;
+        }
+    }
+   
+    .heart-btn{
+        right: 15px;
+        top: 15px;
+        svg{
+           fill: $color-error-100;
+        }
+    }
+}
+.address-info{
+    height: fit-content;
+    .address-title{
+        width: fit-content;
+    }
+    .address-title::before{
+        content: "";
+        position: absolute;
+        width: 115%;
+        height: 100%;
+        top: 0;
+        left: -2px;
+        border-bottom: 2px solid $color-gray-700;
+    }
+    .add-address-btn{
+        border: 1px solid $color-gray-700;
+    }
+    .saved-addresses{
+        .item:not(:last-child){
+            padding-bottom: 10px;
+            border-bottom: 1px solid $color-gray-200;
+        }
+        .edit-delete-btn{
+            transform: rotate(90deg);
+        }
+        .address-svg{
+            fill: $color-gray-300;
+        }
+        .postal-code-svg{
+           @extend .address-svg
+        }
+        .phone-svg{
+            @extend .address-svg
+        }
+        .icon-user2::before{
+            color: $color-gray-300;
+        }
+    }
+    
+}
+.orders-info{
+    .orders-list{
+        button{
+            .delivered-number{
+                padding-left: 8px;
+                padding-right: 8px;
+                line-height: normal;
+            }
+            &.active{
+                color:$color-secondary-400;
+                .delivered-number{
+                    background-color:$color-secondary-400;
+                }
+            }
+            &:hover{
+                color:$color-secondary-400;
+                .delivered-number{
+                    background-color:$color-secondary-400;
+                }
+            }
+        }
+    }
+    .div{
+        display: none;
+        &.active{
+            display: flex;
+        }
+    }
+    .order{
+        .title{
+            svg{
+                fill: $color-success-100;
+                width: 16px;
+                height: 16px;
+                @include mq(lg){
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+        }
+        &-images{
+            figure{
+                width: 70px;
+            }
+        }
+    }
+}
+.orders-history{
+    height: fit-content;
+    .icon-fleshBottom{
+       transform: rotate(90deg);
+    }
+    .products-info{
+        > *:nth-child(n+2){
+            border-top: 1px solid $color-gray-300;
+        }
+        .product{
+            div:first-child{
+               grid-template-columns: 90px 1fr;
+                @include mq(lg){
+                 grid-template-columns: 116px 1fr; 
+                }
+            }
+            .icon-starFill::before{
+                font-size: 14px;
+                @include mq(lg){
+                    font-size: 17px;
+                }
+            }
+            .rating{
+                direction: ltr;
+                
+                 .starSimple{
+                    svg{
+                        width: 15px;
+                        height: 14px;
+                        @include mq(lg){
+                            width: 18px;
+                            height: 17px;
+                        }
+                    }
+                    &.deactive{
+                        display: none;
+                    }
+                 }
+                 .starFill{
+                    display: none;
+                    &.active{
+                        display: inline-block;
+                    }
+                 }
+            }
+            .registered-rating{
+                .rating-text{
+                    text-wrap: nowrap;
+                }
+                svg{
+                    width: 15px;
+                    height: 15px;
+                    @include mq(lg){
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+                .comment-rate-btn{
+                    span{
+                        text-wrap: nowrap;
+                    }
+                }
+            }
+            .cm-btn{
+                border: 2px solid $color-primary-500;
+                svg{
+                    fill: $color-primary-500;
+                    width: 16px;
+                    height: 16px;
+                    @include mq(lg){
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+            }
+        }
+    }
+}
+.wallet{
+    .transactions-detail-desktop{
+           thead{
+            tr{
+                th{
+                    width: 12%;
+                }
+            }
+           }
+           tbody{
+            > *:nth-child(n){
+                td{
+                    width: 10%;
+                    text-align: center;
+                }
+            }
+           }
+    }
+    .descrip{
+        left: 5%;
+        font-size: 12px;
+        @include mq(2xl){
+         left: 9%;
+        }
+        @include mq(4xl){
+            left: 18%;
+        }
+    }
+    .transaction{
+        height: fit-content;
+    }
+    .status{
+        height: fit-content;
+    }
+}

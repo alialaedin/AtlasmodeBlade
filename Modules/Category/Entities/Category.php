@@ -8,7 +8,6 @@ use Modules\Admin\Entities\Admin;
 use Modules\Attribute\Entities\Attribute;
 use Modules\Brand\Entities\Brand;
 use Modules\Core\Classes\DontAppend;
-use Modules\Core\Entities\HasCommonRelations;
 use Modules\Core\Helpers\Helpers;
 use Modules\Core\Traits\HasAuthors;
 use Modules\Core\Traits\HasDefaultFields;

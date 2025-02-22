@@ -8,6 +8,7 @@ use Modules\Core\Traits\HasAuthors;
 use Modules\Core\Traits\HasDefaultFields;
 use Modules\Product\Entities\Variety;
 use Modules\Attribute\Entities\AttributeValue;
+use Modules\Core\Helpers\Helpers;
 
 class Attribute extends BaseModel
 {
@@ -78,5 +79,20 @@ class Attribute extends BaseModel
   public function scopeActive($query)
   {
     $query->where('status', true);
+  }
+
+  public static function getSizeValues()
+  {
+    return Helpers::cacheRemember('size_values', 3600, function () {
+      $sizeAttribute = Attribute::whereName('size')->select('id')->first();
+      if (!$sizeAttribute) {
+        return [];
+      }
+
+      return (object) [
+        'id' => $sizeAttribute->id,
+        'values' => $sizeAttribute->values()->select(['id', 'value'])->get()
+      ];
+  });
   }
 }

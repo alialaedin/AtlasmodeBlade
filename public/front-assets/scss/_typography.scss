@@ -1,0 +1,276 @@
+//Website Fonts
+@font-face {
+    font-family: YekanBakh;
+    src: url('../fonts/fontPage/Yekan-Bakh-Medium.597c8017.woff') format('woff');
+}
+
+// Icon Fonts
+@font-face {
+    font-family: 'icon';
+    src:  url('../fonts/icons/fonts/icomoon.ttf') format('truetype');
+    src:  url('../fonts/icons/fonts/icomoon.eot') format('eot');
+    src:  url('../fonts/icons/fonts/icomoon.woff') format('woff');
+    src: url('../fonts/icons/fonts/icomoon.svg') format('svg');
+  }
+
+  .icon-fs-2xsmall::before{
+    font-size: 12px;
+    }
+   .icon-fs-xsmall::before{
+       font-size: 14px;
+   }
+   .icon-fs-small::before{
+    font-size: 16px;
+    }       
+    .icon-fs-medium::before{
+        font-size: 18px;
+    }
+    .icon-fs-medium-2::before{
+        font-size: 20px;
+    }
+    .icon-fs-large::before{
+        font-size: 25px;
+    }
+    .icon-fs-xlarge::before{
+        font-size: 30px;
+    }
+    .icon-fs-2xl::before{
+        font-size: 40px;
+    }
+    
+    .h1{
+        font-size: 25px;
+        font-weight: 400;
+    
+        @include mq(lg) {
+            font-size: 30px;
+    
+        }
+    }
+    .h1-strong{
+        font-size: 25px;
+        font-weight: 800;
+    
+        @include mq(lg) {
+            font-size: 30px;
+    
+        }
+    }
+    .h2{
+        font-size: 23px;
+        font-weight: 400;
+    
+        @include mq(lg) {
+            font-size: 28px;
+    
+        }
+    }
+    
+    .h2-strong{
+        font-size: 23px;
+        font-weight: 800;
+    
+        @include mq(lg) {
+            font-size: 28px;
+    
+        }
+    }
+    
+    
+    
+    .h3{
+        font-size: 21px;
+        font-weight: 400;
+    
+        @include mq(lg) {
+            font-size: 26px;
+    
+        }
+    }
+    
+    
+    .h3-strong{
+        font-size: 21px;
+        font-weight: 800;
+    
+        @include mq(lg) {
+            font-size: 24px;
+    
+        }
+    }
+    
+    .h4{
+        font-size: 20px;
+        font-weight: 400;
+    
+        @include mq(lg) {
+            font-size: 23px;
+    
+        }
+    }
+    .h4-strong{
+        font-size: 20px;
+        font-weight: 800;
+        @include mq(lg) {
+            font-size: 23px;
+    
+        }
+    }
+    
+    .h5{
+        font-size: 19px;
+        font-weight: 400;
+        @include mq(lg) {
+            font-size: 22px;
+    
+        }
+    }
+    
+    .h5-strong {
+        font-size: 19px;
+        font-weight: 800;
+        @include mq("lg")
+        {
+            font-size: 22px;
+        }
+    
+    }
+    .text-button{
+        font-size: 13px;
+        font-weight: 400;
+    }
+    .text-button-strong{
+        font-size: 13px;
+        font-weight: 800;
+    }
+    
+    .text-button-1{
+        font-size: 14px;
+        font-weight: 400;
+    }
+    .text-button-1-strong{
+        font-size:14px;
+        font-weight: 800;
+    }
+    
+    .text-medium {
+        font-size: 14px;
+        font-weight: 400;
+        @include mq(lg) {
+            font-size:16px;
+    
+        }
+    }
+    .text-medium-strong{
+        font-size:14px;
+        font-weight: 800;
+        @include mq(lg) {
+            font-size:16px;
+    
+        }
+    }
+    
+    .text-medium-2{
+        font-size: 15px;
+        font-weight: 400;
+        @include mq(lg) {
+            font-size: 18px;
+    
+        }
+    }
+    .text-medium-2-strong{
+        font-size: 15px;
+        font-weight: 800;
+        @include mq(lg) {
+            font-size: 18px;
+    
+        }
+    }
+    
+    .text-medium-3 {
+        font-size: 18px;
+        font-weight: 400;
+        @include mq(lg) {
+            font-size: 20px;
+    
+        }
+    }
+    .text-medium-3-strong {
+        font-size: 18px;
+        font-weight: 800;
+        @include mq(lg) {
+            font-size: 20px;
+    
+        }
+    }
+    
+    .text-strong{
+        font-size:15px;
+        font-weight: 800;
+        @include mq(lg)
+        {
+            font-size:17px;
+        }
+    }
+    .text-strong-2{
+        font-size: 16px;
+        font-weight: 800;
+        @include mq(lg)
+        {
+            font-size:18px;
+        }
+    }
+    .text-strong-3{
+        font-size:18px;
+        font-weight: 800;
+        @include mq(lg)
+        {
+            font-size:20px;
+        }
+    }
+    
+    .text-subtitle{
+        font-size: 11px;
+        font-weight: 400;
+        @include mq(lg)
+        {
+            font-size: 12px;
+        }
+    }
+    .text-subtitle-2{
+        font-size:12px;
+        font-weight: 400;
+        @include mq(lg)
+        {
+            font-size:13px;
+        }
+    }
+    .text-subtitle-strong{
+        font-size:11px;
+        font-weight: 800;
+        @include mq(lg)
+        {
+            font-size:12px;
+        }
+    }
+    
+    
+    .text-truncate{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+    
+    .text-truncate-3{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+    
+    .text-nowrap{
+        white-space: nowrap
+    }
