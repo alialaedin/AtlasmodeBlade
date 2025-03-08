@@ -4,67 +4,31 @@ namespace Modules\Blog\Http\Controllers\Front;
 
 use Carbon\Carbon;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Modules\Advertise\Entities\Advertise;
 use Modules\Blog\Entities\Post;
 use Modules\Blog\Entities\PostCategory;
-use Modules\Core\Classes\CoreSettings;
-use Modules\Core\Classes\Tag;
-use Shetabit\Shopit\Modules\Blog\Services\BlogService;
 
 class PostController extends Controller
 {
-  public function index($category_id = null)
+  public function index()
   {
-    $posts = Post::published()
-      ->with(['category' => function ($query) {
-        $query->select(['id', 'name', 'slug']);
-      }])->when($tagName = request('tag'), function ($query) use ($tagName) {
-        $query->whereHas('tags', function ($query) use ($tagName) {
-          $query->where('name', $tagName);
-        });
-      })->when($categoryName = request('category'), function ($query) use ($categoryName) {
-        $query->whereHas('category', function ($query) use ($categoryName) {
-          $query->where('name', $categoryName);
-        });
-      })->when(request('title'), function ($query) {
-        $query->where('title', 'LIKE', "%" . request('title') . "%");
-      })->when($category_id, function ($query) use ($category_id) {
-        $query->where('post_category_id', $category_id);
+    $search = '%' . request('search') . '%';
+    $postCategroryId = request('post_category_id');
+
+    $posts = Post::query()
+      ->select(['id', 'title', 'status', 'published_at', 'summary', 'post_category_id', 'slug'])
+      ->published()
+      ->with('category', fn ($q) => $q->select(['id', 'name', 'slug']))
+      ->when($postCategroryId, fn ($q) => $q->where('post_category_id', $postCategroryId))
+      ->when($search, function ($q) use ($search) {
+        $q->where('title', 'LIKE', $search)
+          ->orWhere('summary', 'LIKE', $search)
+          ->orWhereHas('category', fn ($cq) =>  $cq->where('name', 'LIKE', $search));
       })
-      ->select(['id', 'title', 'summary', 'slug', 'special', 'created_at', 'post_category_id'])
-      ->withCount('views')
-      ->filters()
-      ->paginateOrAll(9);
-
-    $data = [
-      'posts' => $posts
-    ];
-
-    if (!request('posts_only')) {
-      $mostViews = BlogService::getMostViews();
-      $category  = PostCategory::query()->active()->get();
-      $banner = Advertise::getForHome();
-
-      $data = array_merge([
-        'category' => $category,
-        'banner' => $banner,
-        'mostViews' => $mostViews
-      ], $data);
-
-      $coreSetting = app(CoreSettings::class);
-      if (in_array('tags', $coreSetting->get('blog.front', []))) {
-        $tagIds = DB::table('taggables')->select('tag_id')->take(15)
-          ->distinct('tag_id')->where('taggable_type', Post::class)->get()
-          ->map(function ($taggable) {
-            return $taggable->tag_id;
-          });
-
-        $data['tags'] = Tag::query()->whereIn('id', $tagIds)->get();
-      }
-    }
-
-    return response()->success('', $data);
+      ->take(9)
+      ->get();
+    
+    return view('blog::front.index', compact('posts'));
   }
 
   public function show($id)
@@ -100,10 +64,5 @@ class PostController extends Controller
     ];
 
     return response()->success('', compact('post'));
-  }
-
-  public function byCategory($category_id): \Illuminate\Http\JsonResponse
-  {
-    return $this->index($category_id);
   }
 }

@@ -30,21 +30,13 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
     InteractsWithViews;
 
   const STATUS_DRAFT = 'draft';
-
   const STATUS_PENDING = 'pending';
-
   const STATUS_PUBLISHED = 'published';
-
   const STATUS_UNPUBLISHED = 'unpublished';
 
-  protected  $appends = ['image', 'views_count'];
+  // protected  $appends = ['image', 'views_count'];
 
-  public function getViewsCountAttribute()
-  {
-    return views($this)->count();
-  }
-
-  protected $hidden = ['media'];
+  // protected $hidden = ['media'];
 
   public $sortable = [
     'order_column_name' => 'order',
@@ -116,6 +108,11 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
       static::STATUS_PUBLISHED,
       static::STATUS_UNPUBLISHED
     ];
+  }
+
+  public function getViewsCountAttribute()
+  {
+    return views($this)->count();
   }
 
   //Media library
