@@ -190,7 +190,7 @@
         <li class="slide">
           <a class="side-menu__item" style="cursor: pointer" data-toggle="slide">
             <i class="fe fe-database sidemenu_icon"></i>
-            <span class="side-menu__label">انبار</span>
+            <span class="side-menu__label">مدیریت انبار</span>
             <i class="angle fa fa-angle-left"></i>
           </a>
           <ul class="slide-menu">

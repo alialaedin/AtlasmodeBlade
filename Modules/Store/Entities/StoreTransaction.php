@@ -2,56 +2,45 @@
 
 namespace Modules\Store\Entities;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Traits\HasMorphAuthors;
 use Modules\Order\Entities\Order;
-use Shetabit\Shopit\Modules\Store\Entities\StoreTransaction as BaseStoreTransaction;
 
-class StoreTransaction extends BaseStoreTransaction
+class StoreTransaction extends Model
 {
-    use HasMorphAuthors;
+	use HasMorphAuthors;
 
-    public $with = ['creator'];
+	public $with = ['creator'];
+	protected $fillable = [
+		'type',
+		'description',
+		'quantity',
+		'mini_order_id',
+		'order_id',
+		'is_done'
+	];
 
-    protected $fillable = [
-        'type',
-        'description',
-        'quantity',
-        'mini_order_id',
-        'order_id',
-        'is_done'
-    ];
+	public const TYPE_DECREMENT = 'decrement';
+	public const TYPE_INCREMENT = 'increment';
 
-    public const TRANSACTION_DECREMENT = 'decrement';
-    public const TRANSACTION_INCREMENT = 'increment';
+	public static function getAvailableTypes()
+	{
+		return [self::TYPE_DECREMENT, self::TYPE_DECREMENT];
+	}
 
-    public const TRANSACTION_TYPES = [
-        StoreTransaction::TRANSACTION_DECREMENT, StoreTransaction::TRANSACTION_INCREMENT
-    ];
+	public function order(): BelongsTo
+	{
+		return $this->belongsTo(Order::class, 'order_id');
+	}
 
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class, 'order_id');
-    }
+	public function store()
+	{
+		return $this->belongsTo(Store::class);
+	}
 
-    public function scopeOnlineOrder(
-        Builder $query,
-        $transactionType = StoreTransaction::TRANSACTION_DECREMENT,
-        $excluded_order_statuses = ['delivered']
-    ) {
-        return $query->whereHas('order', function (Builder $order_query) use ($excluded_order_statuses) {
-            $order_query->whereNotIn('status', $excluded_order_statuses);
-        })
-            ->whereType($transactionType);
-    }
-
-    public function scopeDoneState(Builder $transaction_query,$preferred_done_state){
-        return $transaction_query->when(!$preferred_done_state,function(Builder $query) use ($transaction_query){
-             $transaction_query->where('is_done',false)->orWhereNull('is_done');
-        },$transaction_query->where('is_done',$preferred_done_state));
-
-    }
-
-
+	public function miniOrder()
+	{
+		return $this->belongsTo(Store::class);
+	}
 }

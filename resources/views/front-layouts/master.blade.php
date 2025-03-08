@@ -6,6 +6,7 @@
   <title>@yield('title', 'فروشگاه اطلس مد')</title>
   @include('front-layouts.includes.styles')
   @yield('styles')
+  @stack('styles')
 </head>
 <body>
   <div class="page-wrapper bg-gray-100">
@@ -18,5 +19,6 @@
   </div>
   @include('front-layouts.includes.scripts')
   @yield('scripts')
+  @stack('scripts')
 </body>
 </html>

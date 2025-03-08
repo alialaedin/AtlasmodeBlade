@@ -16445,13 +16445,17 @@ input[type=range]::-moz-range-thumb {
   content: unset;
 }
 
-.pages .page a {
+/* .pages .page a {
   height: 30px;
   width: 30px;
   display: inline-block;
   border-radius: 10px;
-}
+} */
 .pages .page .page-item {
+  width: 30px;
+  display: inline-block;
+  border-radius: 10px;
+  height: 30px;
   color: #888888;
   background-color: white;
 }
@@ -17476,6 +17480,22 @@ input[type=range]::-moz-range-thumb {
 }
 .see-more:hover {
   color: black;
+}
+
+.product-cart .like-btn {
+  height: 25px;
+}
+
+.product-cart .like-btn .icon-heart .hide {
+  display: none;
+}
+
+.product-cart .like-btn .icon-red {
+  display: none;
+}
+
+.product-cart .like-btn .icon-red .show{
+  display: block;
 }
 
 .product-cart .hover-buttons {

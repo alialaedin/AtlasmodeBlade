@@ -1,4 +1,4 @@
-<footer class="d-flex flex-column pt-10 pb-lg-7 pb-10 container-2xl px-lg-0 px-2">
+<footer class="d-flex flex-column pt-10 pb-lg-7 pb-10 container-2xl px-4 px-md-8 px-3xl-0">
   <!-- Subscribe To The Newsletter -->
   <div class="newsletter mb-4 w-p-100 px-2 d-flex flex-lg-row gap-2 flex-column pb-3 justify-content-between align-items-lg-center">
       <div class="col-lg-6 col-12 d-flex flex-column color-gray-900">

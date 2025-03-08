@@ -47,17 +47,17 @@ class Product extends BaseModel implements HasMedia, Viewable
 	protected $defaults = [
 		'chargeable' => 0
 	];
-	protected $appends = [
-		'images',
-		'total_quantity',
-		'price',
-		'rate',
-		'major_discount_amount',
-		'major_image',
-		'major_gifts',
-		'major_final_price',
-		'views_count'
-	];
+	// protected $appends = [
+	// 	'images',
+	// 	'total_quantity',
+	// 	'price',
+	// 	'rate',
+	// 	'major_discount_amount',
+	// 	'major_image',
+	// 	'major_gifts',
+	// 	'major_final_price',
+	// 	'views_count'
+	// ];
 	protected $hidden = ['media'];
 	protected $with = ['activeFlash'];
 	protected $fillable = [
@@ -271,7 +271,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 		$query->where('status', self::STATUS_AVAILABLE)
 			->whereNotNull('approved_at');
 
-		$customer = Auth::guard('customer-api')->user();
+		$customer = Auth::guard('customer')->user();
 		if ($force || !($customer instanceof Customer) || !($customer->canSeeUnpublishedProducts())) {
 			$query->where('published_at', "<=", Carbon::now());
 		}
@@ -449,17 +449,17 @@ class Product extends BaseModel implements HasMedia, Viewable
 		return Str::slug($this->title);
 	}
 
-	public function getMainImageAttribute($mediaResource = false)
+	public function getMainImageAttribute()
 	{
 		$media = $this->getFirstMedia('images');
 		if ($media) {
-			return $media;
+			return new MediaResource($media);
 		}
 		$varieties = $this->varieties;
 		foreach ($varieties as $variety) {
 			$media = $variety->main_image;
 			if ($media) {
-				return ($mediaResource) ? new MediaResource($media) : $media;
+				return new MediaResource($media);
 			}
 		}
 
@@ -486,7 +486,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 		return $discount;
 	}
 
-	public function getMajorFinalPriceAttribute()
+	public function getFinalPriceAttribute()
 	{
 		if (!$this->relationLoaded('varieties')) {
 			return new DontAppend('getMajorDiscountPercentageAttribute');
@@ -526,7 +526,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 			}
 		}
 
-		return $this->getMainImageAttribute(true);
+		return $this->getMainImageAttribute();
 	}
 
 	public function getMajorGiftsAttribute()

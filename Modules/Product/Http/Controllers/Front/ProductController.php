@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\Attribute\Entities\Attribute;
 use Modules\Category\Entities\Category;
-use Modules\Core\Classes\CoreSettings;
 use Modules\Core\Helpers\Helpers;
 use Modules\Product\Entities\Product;
 use Modules\Product\Services\NewProductService;
@@ -19,25 +18,11 @@ class ProductController extends Controller
 {
 	public function index(): View
 	{
-		// $productService = new ProductService();
-		// $products = $productService->filters();
-		// $priceFilter = $productService->maxAndMinPrice();
-		// $perPage = request('per_page', app(CoreSettings::class)->get('product.pagination', 12));
-		// $products = $products->paginate($perPage)->withQueryString();
-		// foreach ($products as $product) {
-		//     $product->makeHidden('varieties');
-		//     $product->makeHidden('activeFlash');
-		//     $product->makeHidden('varietyOnlyDiscountsRelationship');
-		// }
-		// dd('Products index');
-
-		// dd(in_array(1, json_decode(request()->attribute_value_id)));
-		// dd(json_decode(request()->attribute_value_id));
 		$priceFilter = (new ProductService())->maxAndMinPrice();
 		$products = (new NewProductService())->getProducts();
 		$sizeValues = Attribute::getSizeValues();
 		$categories = Category::query()->orderBy('priority')->with('children')->parents()->active()->get();
-		
+
 		return view('product::front.product.index', compact(['products', 'priceFilter', 'sizeValues', 'categories']));
 	}
 
@@ -96,41 +81,31 @@ class ProductController extends Controller
 	public function search()
 	{
 
-		$q = request('q');
-		if (!$q || mb_strlen($q) === 1) {
-			return '';
-		}
-		$coreSetting = app(CoreSettings::class);
+		$searchKey = request('q');
+		$serach = '%' . $searchKey . '%';
 
-		//        $numberPattern = $coreSetting->get('search.products.number_pattern');
-		//        if (is_numeric($q) && $numberPattern) {
-		//            $q = str_replace('{number}', $q, $numberPattern);
-		//        }
+		$products = Product::query()
+			->select(['id', 'title', 'short_description', 'status', 'slug', 'approved_at'])
+			->where('title', 'LIKE', $serach)
+			->orWhere('short_description', 'LIKE', $serach)
+			->orWhereHas('categories', fn($q) => $q->where('id', $serach)->oreWhere('parent_id', $serach))
+			->with([
+				'varieties' => function ($varietyQuery) {
+					$varietyQuery->select(['id', 'product_id', 'discount', 'discount_until', 'discount_type', 'purchase_price', 'price']);
+				},
+				'varieties.store' => function ($storeQuery) {
+					$storeQuery->select(['id', 'variety_id', 'balance']);
+				}, 
+			])
+			->latest('id')
+			->active()
+			->take(8)
+			->get();
 
-		$s =  '%' . $q . '%';
-		$products = ((new ProductService())->filters())->with('varieties')->where(function ($query) use ($s) {
-			$query->where('title', 'LIKE', $s)->orWhere('short_description', 'LIKE', $s);
-		})->orWhereHas('varieties', function ($query) use ($s) {
-			$query->where('name', 'LIKE', $s);
-		})->latest()->active();
-
-		if ($c = request('c')) {
-			$products->whereHas('category', function ($query) use ($c) {
-				$query->where('id', $c);
-			});
-		}
-		$products->orWhere('title', 'LIKE', '%' . $q . '%');
-
-		$products = $products->take(8)->get(['id', 'title', 'short_description', 'status', 'slug'])->map(function ($p) {
-			$p->makeHidden('varieties');
-			return $p;
-		});
-		/**
-		 * @var Product $product 
-		 */
 		foreach ($products as $product) {
-			$product->setAppends(['slug', 'price', 'major_image', 'images', 'major_final_price', 'rate']);
+			$product->setAppends(['slug', 'main_image', 'final_price', 'rate']);
 		}
+
 		$products->makeHidden('varieties');
 		$products->makeHidden('activeFlash');
 		$products->makeHidden('active_flash');

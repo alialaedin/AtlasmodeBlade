@@ -9,13 +9,13 @@ use Modules\Product\Entities\Product;
 
 class NewProductService
 {
-  private $perPage;
-  private $sortBy;
+  private Builder $productQuery;
 
-  public function __construct($perPage = null, $sortBy = null)
+  public function __construct(private $perPage = null, private $sortBy = null)
   {
     $this->sortBy = $sortBy ?? request('sort', 'newest');
     $this->perPage = $perPage ?? request('per_page', app(CoreSettings::class)->get('product.pagination', 12));
+    $this->productQuery = Product::query()->select(['id', 'status', 'title']);
   }
 
   private static function getAvailableSortStatuses(): array
@@ -23,61 +23,7 @@ class NewProductService
     return ["'available'", "'soon'", "'out_of_stock'", "'draft'"];
   }
 
-  public function getProducts()
-  {
-    $productsQuery = Product::query()->filters()->active();
-    return $this->sort($productsQuery)->paginate($this->perPage)->withQueryString();
-  }
-
-  private function sort(Builder $query)
-  {
-    $sortStatus = self::getAvailableSortStatuses();
-    $query->orderByRaw('FIELD(`status`, ' . implode(", ", $sortStatus) . ')');
-
-    switch ($this->sortBy) {
-      case 'newest':
-        return $query->orderByDesc('id');
-      case 'most_visited':
-        return $query->orderByUniqueViews();
-      case 'low_to_high':
-      case 'high_to_low':
-        return $this->orderByPrice($query);
-      case 'top_sales':
-        return $this->orderByTopSales($query);
-      case 'most_discount':
-        return $this->orderByMostDiscount($query);
-      default:
-        return $query;
-    }
-  }
-
-  private function orderByPrice($query)
-  {
-    $activeProducts = $this->getActiveProductsData();
-    $orderDirection = $this->sortBy === 'low_to_high' ? '' : 'DESC';
-
-    $priceSortedProductIds = $activeProducts->sortBy(function ($product) {
-      return $product->final_prices->min() ?? PHP_INT_MAX;
-    })->pluck('id')->toArray();
-
-    return $query->orderByRaw('FIELD(`id`, ' . implode(", ", $priceSortedProductIds) . ') ' . $orderDirection);
-  }
-
-  private function orderByTopSales($query)
-  {
-    $activeProducts = $this->getActiveProductsData();
-    return $query->orderByRaw('FIELD(`id`, ' . implode(", ", $this->sortProductsBySales($activeProducts)) . ') DESC');
-  }
-
-  private function orderByMostDiscount($query)
-  {
-    $activeProducts = $this->getActiveProductsData();
-    $discountedProductIds = $this->sortProductsByDiscount($activeProducts);
-    return $query->available()->whereIn('id', $discountedProductIds)
-      ->orderByRaw('FIELD(`id`, ' . implode(", ", $discountedProductIds) . ') DESC');
-  }
-
-  private function getActiveProductsData()
+  private static function getActiveProductsData()
   {
     return Cache::remember('allActiveProductData', 6000, function () {
       return Product::query()
@@ -96,33 +42,119 @@ class NewProductService
         ->select(['id', 'status'])
         ->active()
         ->get()
-        ->map([$this, 'mapProductData']);
+        ->map(fn ($product) => self::mapProductData($product));
     });
   }
 
-  private function mapProductData($product)
+  private static function mapProductData($product)
   {
-    $product->total_sales = $product->orderItems->where('status', 1)->sum('quantity');
-    $product->most_discount = $product->varieties->max('final_price.discount') ?: 0;
-
-    $product->final_prices = $product->varieties->map(function ($variety) {
-      return $variety->final_price['amount'];
-    });
+    $product->total_sales = $product->orderItems->where('status', 1)?->sum('quantity') ?? 0;
+    $product->discount = $product->varieties->max(fn ($variety) => $variety->final_price['discount'] ?? 0);
+    $product->final_price = $product->varieties->min(fn ($variety) => $variety->final_price['amount'] ?? 0);
 
     return $product;
   }
 
-  private function sortProductsBySales($activeProducts)
+  public function getProducts()
   {
-    return $activeProducts->sortByDesc('total_sales')->pluck('id')->toArray();
+    $this->applyFilters();
+    $this->loadRelations();
+    $this->sort();
+
+    return $this->productQuery->paginate($this->perPage)->withQueryString();
   }
 
-  private function sortProductsByDiscount($activeProducts)
+  private function applyFilters()
   {
-    return $activeProducts->filter(fn($item) => $item->most_discount > 0)
+    $this->productQuery->filters()->active();
+    if (request('min_price') || request('max_price')) {
+      $productIdsFilteredByPrice = $this->sortProductsByPrice();
+      $this->productQuery->whereIn('id', $productIdsFilteredByPrice);
+    }
+  }
+
+  private function loadRelations()
+  { 
+    $this->productQuery->with([
+      'varieties' => function ($varietiesQuery): void {
+        $varietiesQuery->active()
+          ->select(['id', 'product_id', 'price', 'purchase_price', 'discount', 'discount_type', 'max_number_purchases', 'deleted_at'])
+          ->with([
+            'product' => function ($productQuery): void {
+              $productQuery->select('id')->with('activeFlash');
+            },
+            'store:id,variety_id,balance'
+          ]);
+      }
+    ]);
+  }
+
+  private function sort()
+  {
+    $sortStatus = self::getAvailableSortStatuses();
+    $this->productQuery->orderByRaw('FIELD(`status`, ' . implode(", ", $sortStatus) . ')');
+
+    switch ($this->sortBy) {
+      case 'newest':
+        $this->productQuery->orderByDesc('id');
+        break;
+      case 'most_visited':
+        $this->productQuery->orderByUniqueViews();
+        break;
+      case 'low_to_high':
+      case 'high_to_low':
+        $this->orderByPrice();
+        break;
+      case 'top_sales':
+        $this->orderByTopSales();
+        break;
+      case 'most_discount':
+        $this->orderByMostDiscount();
+        break;
+    }
+  }
+
+  private function orderByPrice()
+  {
+    $orderDirection = $this->sortBy === 'low_to_high' ? '' : 'DESC';
+    $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $this->sortProductsByPrice()) . ') ' . $orderDirection);
+  }
+
+  private function orderByTopSales()
+  {
+    $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $this->sortProductsBySales()) . ') DESC');
+  }
+
+  private function orderByMostDiscount()
+  {
+    $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $this->sortProductsByDiscount()) . ') DESC');
+  }
+
+  private function sortProductsBySales()
+  {
+    return self::getActiveProductsData()
+      ->sortByDesc('total_sales')
+      ->pluck('id')
+      ->toArray();
+  }
+
+  private function sortProductsByDiscount()
+  {
+    return self::getActiveProductsData()
+      ->filter(fn($item) => $item->discount > 0)
       ->pluck('id')
       ->sort()
       ->values()
+      ->toArray();
+  }
+
+  private function sortProductsByPrice()
+  {
+    return self::getActiveProductsData()
+      ->sortBy(fn ($product) => $product->final_price)
+      ->when(request('min_price'), fn ($c) => $c->where('final_price', '>=', request('min_price')))
+      ->when(request('max_price'), fn ($c) => $c->where('final_price', '<=', request('max_price')))
+      ->pluck('id')
       ->toArray();
   }
 }

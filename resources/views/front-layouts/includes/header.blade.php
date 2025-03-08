@@ -1,4 +1,4 @@
-<header class="header pb-1 bg-white position-relative">
+<header class="header px-4 px-md-8 px-3xl-0 pb-1 bg-white position-relative">
   <div class="header-top bg-white container-2xl d-flex justify-content-between align-items-sm-center pb-2 pt-3 pt-lg-5">
 
 		<button type="button" data-modal="hamburgerMenu" class="d-lg-none">
@@ -79,7 +79,7 @@
 					@endif
 				@endforeach
 
-				@foreach ($menus['header'] as $menuItem)
+				@foreach (count($menus) ? $menus['header'] : [] as $menuItem)
 					@php
 						$href = '/';
 						// switch ($menuItem->linkable_type) {

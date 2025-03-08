@@ -8,6 +8,7 @@ popOver()
 hamburgerMenu()
 suggestedSwiper()
 hoverImg()
+likeProduct()
 // Seperate Number 3 Digits
 $(document).ready(function(){
     $('.currency').each(function(){
@@ -16,6 +17,16 @@ $(document).ready(function(){
         $(this).text(formattedNumber);
     })
 });
+
+function likeProduct() {
+    let btn = $('.like-btn');
+    btn.click( (event) => {
+        event.preventDefault();
+        $(this).children('.icon-heart').toggleClass('d-none');
+        $(this).children('.heart-red').toggleClass('d-block');
+    });
+}
+
 // Show Deatils When Clicked User Button On Header
 function loginBtn(){
     let btn=$('.login-btn');

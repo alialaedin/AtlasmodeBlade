@@ -5,7 +5,7 @@
 
     <!-- Page Path -->
     <div class="bg-white">
-      <div class="page-path container-2xl py-2 d-flex gap-1 align-items-center">
+      <div class="page-path container-2xl px-4 px-md-8 px-3xl-0 py-2 d-flex gap-1 align-items-center">
         <i class="icon-home1 icon-fs-medium-2"></i>
         <a href="/" class="text-button-1 mt-1">خانه</a>
         <i class="icon-angle-double-left icon-fs-medium"></i>
@@ -25,7 +25,7 @@
       <input hidden name="max_price" value="{{ request('max_price') }}" />
     </form>
 
-    <section class="container-2xl d-flex px-4 gap-3 mt-12 pb-12">
+    <section class="container-2xl d-flex px-4 px-md-8 px-3xl-0 gap-3 mt-12 pb-12">
 
       <aside class="aside d-lg-flex d-none flex-column align-items-center">
 
@@ -129,7 +129,7 @@
           <!-- Size Lists -->
           <div class="w-p-100 size-list grid gap-2 mt-3">
             @php
-              $attributeValueIdsArray = json_decode(request('attribute_value_id', []));
+              $attributeValueIdsArray = json_decode(request('attribute_value_id', '')) ?? [];
             @endphp
             @foreach ($sizeValues->values as $sizeValue)
               <label class="d-flex gap-1 g-col-3">
@@ -139,7 +139,7 @@
                   value="{{ $sizeValue->id }}" 
                   class="size-list-item bg-white customCheckbox radius-medium text-center text-medium" 
                 />
-                <span>{{ $sizeValue->value }}</span>
+                <span>{{ Str::limit($sizeValue->value, 4) }}</span>
               </label>
             @endforeach
           </div>
@@ -160,7 +160,7 @@
         </div>
 
         <!-- Price Range -->
-        <div class="price-range w-p-100 d-flex flex-column gap-3 px-2 pt-4 pb-3">
+        {{-- <div class="price-range w-p-100 d-flex flex-column gap-3 px-2 pt-4 pb-3">
           <span class="text-medium-2-strong color-gray-900">قیمت ها</span>
           <form class="range-input position-relative">
             <div class="slider">
@@ -181,7 +181,7 @@
               <span>تومان</span>
             </div>
           </div>
-        </div>
+        </div> --}}
 
         <!-- Set Filters Button -->
         <button type="button" class="setFilter-btn w-p-100 bg-black color-white  py-1 text-medium mt-2">اعمال فیلتر</button>
@@ -204,7 +204,12 @@
             </button>
             <!-- Available Input -->
             <div class="d-flex gap-1 align-items-center">
-              <input type="checkbox" id="available" class="available-btn2 customCheckbox" />
+              <input 
+                type="checkbox" 
+                id="available" 
+                class="available-btn2 customCheckbox" 
+                {{ request('available') == '1' ? 'checked': '' }}
+              />
               <label class="text-button-1 color-gray-900 mt-1" name="available">نمایش محصولات موجود</label>
             </div> 
           </div>
@@ -215,7 +220,7 @@
           <!-- Sorting Display -->
           <div>
             <span class="text-medium">فیلتر :</span>
-            <select class="select-sorting p-1 border-gray-300 text-button-1">
+            <select id="sort-select" class="select-sorting p-1 border-gray-300 text-button-1">
               <option value="most_visited" {{ request('sort', 'newest') == 'most_visited' ? 'selected' : '' }}>پربازدید ترین</option>
               <option value="low_to_high" {{ request('sort', 'newest') == 'low_to_high' ? 'selected' : '' }}>ارزان ترین</option>
               <option value="high_to_low" {{ request('sort', 'newest') == 'high_to_low' ? 'selected' : '' }}>گران ترین</option>
@@ -231,7 +236,7 @@
           @foreach ($products as $product)
             <div class="g-col-md-4 g-col-6">
               <article class="product-cart">
-                <a href="./product-detail.html" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
+                <a href="{{ route('front.products.show', $product) }}" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
                   <!-- Hover Buttons -->
                   <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
                     <button type="button" class="d-flex flex-column gap-1">
@@ -241,8 +246,9 @@
                       <i class="icon-star icon-fs-xsmall"></i>
                       <i class="icon-star icon-fs-xsmall"></i>
                     </button>
-                    <button type="button" class="like">
+                    <button type="button" class="like-btn">
                       <i class="icon-heart icon-fs-medium-2"></i>
+                      <svg class="heart-red" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-10f8db86=""><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8498 2.50071C16.4808 2.50071 17.1108 2.58971 17.7098 2.79071C21.4008 3.99071 22.7308 8.04071 21.6198 11.5807C20.9898 13.3897 19.9598 15.0407 18.6108 16.3897C16.6798 18.2597 14.5608 19.9197 12.2798 21.3497L12.0298 21.5007L11.7698 21.3397C9.4808 19.9197 7.3498 18.2597 5.4008 16.3797C4.0608 15.0307 3.0298 13.3897 2.3898 11.5807C1.2598 8.04071 2.5898 3.99071 6.3208 2.76971C6.6108 2.66971 6.9098 2.59971 7.2098 2.56071H7.3298C7.6108 2.51971 7.8898 2.50071 8.1698 2.50071H8.2798C8.9098 2.51971 9.5198 2.62971 10.1108 2.83071H10.1698C10.2098 2.84971 10.2398 2.87071 10.2598 2.88971C10.4808 2.96071 10.6898 3.04071 10.8898 3.15071L11.2698 3.32071C11.3616 3.36968 11.4647 3.44451 11.5538 3.50918C11.6102 3.55015 11.661 3.58705 11.6998 3.61071C11.7161 3.62034 11.7327 3.63002 11.7494 3.63978C11.8352 3.68983 11.9245 3.74197 11.9998 3.79971C13.1108 2.95071 14.4598 2.49071 15.8498 2.50071ZM18.5098 9.70071C18.9198 9.68971 19.2698 9.36071 19.2998 8.93971V8.82071C19.3298 7.41971 18.4808 6.15071 17.1898 5.66071C16.7798 5.51971 16.3298 5.74071 16.1798 6.16071C16.0398 6.58071 16.2598 7.04071 16.6798 7.18971C17.3208 7.42971 17.7498 8.06071 17.7498 8.75971V8.79071C17.7308 9.01971 17.7998 9.24071 17.9398 9.41071C18.0798 9.58071 18.2898 9.67971 18.5098 9.70071Z" data-v-10f8db86="" fill="#ee1212"></path></svg>
                     </button>
                   </div>
                   <!-- Img -->
@@ -253,20 +259,25 @@
                   </figure>
                   <div class="product-details d-flex flex-column px-2 mt-2">
                     <!-- Title -->
-                    <h5 class="text-medium-2-strong color-gray-900 text-truncate">بلوز یقه گرد ژاکارد 3871  </h5> 
+                    <h5 class="text-medium-2-strong color-gray-900 text-truncate">{{ $product->title }}</h5> 
                     <div class="d-flex flex-wrap gap-lg-1 align-items-center">
                       <!-- Price -->
                       <div class="d-flex gap-1 align-items-center">
-                        <ins class="currency text-medium-2 color-primary-500">549000</ins>
+                        <ins class="currency text-medium-2 color-primary-500">{{ $product->final_price['amount'] }}</ins>
                         <span class="text-medium color-gray-800">تومان</span>
                       </div>
-                      <!-- Discount Price -->
-                      <div class="d-flex align-items-center color-gray-700">
-                        <i class="icon-angle-double-right icon-fs-small pb-1"></i>
-                        <s class="text-medium  currency">595000</s>
-                      </div>
-                      <!-- Discount Percent -->
-                      <span class="px-2 radius-u text-button-1 bg-secondary-100">20%</span> 
+                      @if ($product->final_price['discount'])
+                        <!-- Discount Price -->
+                        <div class="d-flex align-items-center color-gray-700">
+                          <i class="icon-angle-double-right icon-fs-small pb-1"></i>
+                          <s class="text-medium currency">{{ $product->final_price['base_amount'] }}</s>
+                        </div>
+                        <!-- Discount Percent -->
+                        <span class="px-2 radius-u text-button-1 bg-secondary-100">
+                          {{ number_format($product->final_price['discount']) }}
+                          {{ $product->final_price['discount_type'] == 'flat' ? 'تومان' : '%' }}
+                        </span> 
+                      @endif
                       <div></div>
                     </div>
                   </div>
@@ -276,37 +287,7 @@
           @endforeach
         </div>
 
-        <!-- Products Pages -->
-        <ul class="pages mt-3 d-flex gap-3 justify-content-center">
-            <li class="page lock d-flex align-items-center">
-                <a href="#" class="page-prev">
-                  <i class="icon-angle-right color-gray-700 icon-fs-medium"></i>
-                </a>
-            </li>
-            <li class="page active text-center">
-                <a href="#" class="page-item text-medium-2">1</a>
-            </li>
-            <li class="page text-center">
-                <a href="#" class="page-item text-medium-2">2</a>
-            </li>
-            <li class="page text-center">
-                <a href="#" class="page-item text-medium-2">3</a>
-            </li>
-            <li class="page text-center">
-                <a href="#" class="page-item text-medium-2">4</a>
-            </li>
-            <li class="page text-center">
-                <a href="#" class="page-item text-medium-2">...</a>
-            </li>
-            <li class="page text-center">
-                <a href="#" class="page-item text-medium-2">17</a>
-            </li>
-            <li class="page text-center d-flex align-items-center">
-                <a href="#" class="page-next">
-                  <i class="icon-angle-left color-gray-700 icon-fs-medium-2"></i>
-                </a>
-            </li>
-        </ul>
+        {{ $products->onEachSide(0)->links('vendor.pagination.front-product-index') }}
 
       </div>
 
@@ -314,27 +295,27 @@
 
     <!-- Mobile Menu Bottom -->
     <section class="mobile-menu-bottom d-lg-none position-fixed bottom-0 end-0 start-0">
-        <ul class="d-flex  bg-white pt-2 align-items-center justify-content-around">
-          <li class="d-flex flex-column align-items-center active">
-            <a href="/"><i class="icon-home1 icon-fs-medium-2"></i></a>
-            <span class="text-button">صفحه اصلی</span>
-          </li>
-          <li class="d-flex flex-column align-items-center">
-            <button type="button" data-modal="category">
-              <i class="icon-category icon-fs-medium-2"></i>
-            </button>
-            <span class="text-button"> دسته بندی ها</span>
-          </li> 
-          <li class="d-flex flex-column align-items-center position-relative">
-            <a href="./order.html"><i class="icon-bag icon-fs-medium-2"></i></a>
-            <span class="text-button">سبد خرید</span>
-            <span class="cart-number position-absolute bg-primary-500 color-white radius-circle  h-4 w-4 text-center top-0 start-0">2</span>
-          </li>  
-          <li class="d-flex flex-column align-items-center">
-            <a href="./user-panel.html"><i class="icon-user icon-fs-medium-2"></i></a>
-            <span class="text-button">پروفایل</span>
-          </li> 
-        </ul>
+      <ul class="d-flex  bg-white pt-2 align-items-center justify-content-around">
+        <li class="d-flex flex-column align-items-center active">
+          <a href="/"><i class="icon-home1 icon-fs-medium-2"></i></a>
+          <span class="text-button">صفحه اصلی</span>
+        </li>
+        <li class="d-flex flex-column align-items-center">
+          <button type="button" data-modal="category">
+            <i class="icon-category icon-fs-medium-2"></i>
+          </button>
+          <span class="text-button"> دسته بندی ها</span>
+        </li> 
+        <li class="d-flex flex-column align-items-center position-relative">
+          <a href="./order.html"><i class="icon-bag icon-fs-medium-2"></i></a>
+          <span class="text-button">سبد خرید</span>
+          <span class="cart-number position-absolute bg-primary-500 color-white radius-circle  h-4 w-4 text-center top-0 start-0">2</span>
+        </li>  
+        <li class="d-flex flex-column align-items-center">
+          <a href="./user-panel.html"><i class="icon-user icon-fs-medium-2"></i></a>
+          <span class="text-button">پروفایل</span>
+        </li> 
+      </ul>
     </section>
 
       <!-- Whatsapp Icon In mobile -->
@@ -501,7 +482,7 @@
   }
 
   function sortSystem() {
-    $('.select-sorting').chnage(() => {
+    $('#sort-select').change(function() {
       appendNewFilter('sort', $(this).val());
       submitFilterForm();
     });
@@ -524,14 +505,16 @@
         sizeAttributeValueIds.push($(this).val());
       }
     });
-    appendNewFilter('attribute_value_id', JSON.stringify(sizeAttributeValueIds));
+    if (sizeAttributeValueIds.length < 1) {
+      appendNewFilter('attribute_value_id', '');
+    }else {
+      appendNewFilter('attribute_value_id', JSON.stringify(sizeAttributeValueIds));
+    }
   }
 
   function filterByTitle() {
     const title = $('.title-input').val()?.trim();
-    if (title.length > 0) {
-      appendNewFilter('title', title);
-    }
+    appendNewFilter('title', title);
   }
 
   function filterByStoreBalance() {
@@ -540,12 +523,23 @@
   }
 
   function filterByPrice() {
-    appendNewFilter('min_price', $('.range-min').val());
-    appendNewFilter('max_price', $('.range-max').val());
+    // appendNewFilter('min_price', $('.range-min').val());
+    // appendNewFilter('max_price', $('.range-max').val());
+  }
+
+  function showAvailableProducts() {
+    $('.available-btn2').change(function() {
+      console.log(1);
+      const available = $(this).is(':checked') ? 1 : 0;
+      appendNewFilter('available', available);
+      submitFilterForm();
+    });
   }
 
   $(document).ready(() => {
     filterByCategoryId();
+    sortSystem();
+    showAvailableProducts();
     handleFiltringWhenSetFilterClicked();
   });
 
