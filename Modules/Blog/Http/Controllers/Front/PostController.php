@@ -10,16 +10,15 @@ use Modules\Blog\Entities\PostCategory;
 
 class PostController extends Controller
 {
-  public function index()
+  public function index($categoryId = null)
   {
     $search = '%' . request('search') . '%';
-    $postCategroryId = request('post_category_id');
-
+    $postCategories = PostCategory::getActiveCategories();
     $posts = Post::query()
       ->select(['id', 'title', 'status', 'published_at', 'summary', 'post_category_id', 'slug'])
       ->published()
       ->with('category', fn ($q) => $q->select(['id', 'name', 'slug']))
-      ->when($postCategroryId, fn ($q) => $q->where('post_category_id', $postCategroryId))
+      ->when($categoryId, fn ($q) => $q->where('post_category_id', $categoryId))
       ->when($search, function ($q) use ($search) {
         $q->where('title', 'LIKE', $search)
           ->orWhere('summary', 'LIKE', $search)
@@ -28,7 +27,7 @@ class PostController extends Controller
       ->take(9)
       ->get();
     
-    return view('blog::front.index', compact('posts'));
+    return view('blog::front.index', compact('posts', 'postCategories'));
   }
 
   public function show($id)
@@ -64,5 +63,10 @@ class PostController extends Controller
     ];
 
     return response()->success('', compact('post'));
+  }
+
+  public function byCategory($categoryId)
+  {
+    return $this->index($categoryId); 
   }
 }

@@ -14,8 +14,7 @@ class PostCategory extends BaseModel implements Sortable
 {
   use HasAuthors, SortableTrait;
 
-  protected $fillable = ['name','slug','status'];
-
+  protected $fillable = ['name', 'slug', 'status'];
   public $sortable = [
     'order_column_name' => 'order',
     'sort_when_creating' => true,
@@ -51,12 +50,12 @@ class PostCategory extends BaseModel implements Sortable
 
   public static function getActiveCategories()
   {
-    return static::query()->select(['id', 'name', 'status'])->active()->get();
+    return static::query()->select(['id', 'name', 'status', 'slug'])->active()->get();
   }
 
   public static function getAllCategories()
   {
-    return static::query()->select(['id', 'name', 'status'])->get();
+    return static::query()->select(['id', 'name', 'status', 'slug'])->get();
   }
 
   public function scopeFilters($query)
