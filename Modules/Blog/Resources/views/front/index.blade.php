@@ -39,7 +39,7 @@
                     <!-- Little Explaintion -->
                     <div class="d-flex gap-1 align-items-center color-gray-900">
                       <i class="icon-caret-left icon-fs-medium"></i>
-                      <h5 class="text-medium text-truncate">{{ $post->title }}</h5>
+                      <h5 class="text-medium text-truncate">{{ Str::limit($post->title, 40) }}</h5>
                     </div> 
                       <div class="d-lg-flex d-none align-items-center justify-content-between pb-2 border-b-gray-300">
                         <!-- Publication Date -->
@@ -53,7 +53,7 @@
                         <div class="d-flex gap-1 align-items-center text-button-1">
                           <span class="color-gray-900">دسته بندی:</span>
                           <a 
-                            href="{{ route('front.posts.byCategory', ['categoryId' => $post->post_category_id]) }}" 
+                            href="{{ route('front.posts.byCategory', ['categoryId' => $post->post_category_id, 'slug' => $post->category->slug]) }}" 
                             class="category color-gray-700">
                             {{ $post->category->name }}
                           </a>
@@ -68,7 +68,7 @@
         </div>
 
         <!-- Pages -->
-        {{ $posts->links('pagination.default') }}
+        {{ $posts->onEachSide(0)->links('pagination.default') }}
 
       </div>
 
@@ -79,7 +79,7 @@
             @foreach ($postCategories ?? [] as $category)
               <li class="mb-2">
                 <a 
-                  href="{{ route('front.posts.byCategory', ['categoryId' => $category->id]) }}" 
+                  href="{{ route('front.posts.byCategory', ['categoryId' => $category->id, 'slug' => $category->slug]) }}" 
                   class="d-flex gap-1 align-items-center color-gray-800 text-medium">
                   <i class="icon-angle-left icon-fs-medium"></i>
                   <span>{{ $category->name }}</span>
@@ -136,86 +136,5 @@
 @endsection
 
 @section('scripts')
-
 <script src="{{ asset('front-assets/js/lightbox.js') }}"></script>
-
-<script>
-
-  const submitFilterForm = () => $('#filter-form').submit();
-  const appendNewFilter = (inputName, value) => $('#filter-form').find(`input[name=${inputName}]`).attr('value', value);
-
-  function filterByCategoryId() {
-    $('.category-filter-item').each(function () {
-      $(this).click(() => {
-        const categoryId = $(this).data('category-id') ?? null;
-        appendNewFilter('category_id', categoryId);
-        submitFilterForm();
-      });
-    });
-  }
-
-  function sortSystem() {
-    $('#sort-select').change(function() {
-      appendNewFilter('sort', $(this).val());
-      submitFilterForm();
-    });
-  } 
-
-  function handleFiltringWhenSetFilterClicked() {
-    $('.setFilter-btn').click(() => {
-      filterBySize();
-      filterByTitle();
-      filterByStoreBalance();
-      filterByPrice();
-      submitFilterForm();
-    });
-  }
-
-  function filterBySize() {
-    const sizeAttributeValueIds = [];
-    $('.size-list-item').each(function() {
-      if ($(this).is(':checked')) {
-        sizeAttributeValueIds.push($(this).val());
-      }
-    });
-    if (sizeAttributeValueIds.length < 1) {
-      appendNewFilter('attribute_value_id', '');
-    }else {
-      appendNewFilter('attribute_value_id', JSON.stringify(sizeAttributeValueIds));
-    }
-  }
-
-  function filterByTitle() {
-    const title = $('.title-input').val()?.trim();
-    appendNewFilter('title', title);
-  }
-
-  function filterByStoreBalance() {
-    const isAvailableChecked = $('.available-btn').is(':checked') ? 1 : '';
-    appendNewFilter('available', isAvailableChecked);
-  }
-
-  function filterByPrice() {
-    // appendNewFilter('min_price', $('.range-min').val());
-    // appendNewFilter('max_price', $('.range-max').val());
-  }
-
-  function showAvailableProducts() {
-    $('.available-btn2').change(function() {
-      console.log(1);
-      const available = $(this).is(':checked') ? 1 : 0;
-      appendNewFilter('available', available);
-      submitFilterForm();
-    });
-  }
-
-  $(document).ready(() => {
-    filterByCategoryId();
-    sortSystem();
-    showAvailableProducts();
-    handleFiltringWhenSetFilterClicked();
-  });
-
-</script>
-
 @endsection

@@ -123,9 +123,14 @@ class Comment extends BaseModel
   /**
    * @return Builder
    */
-  public static function scopeActive($query)
+  public function scopeActive($query)
   {
     return $query->where('status', '=', static::STATUS_APPROVED);
+  }
+
+  public function scopeParents($query)
+  {
+    return $query->whereNull('parent_id');
   }
 
   public function getChildrenCountAttribute($value = null)

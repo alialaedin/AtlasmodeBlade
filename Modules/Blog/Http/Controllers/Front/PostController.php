@@ -2,9 +2,7 @@
 
 namespace Modules\Blog\Http\Controllers\Front;
 
-use Carbon\Carbon;
 use Illuminate\Routing\Controller;
-use Modules\Advertise\Entities\Advertise;
 use Modules\Blog\Entities\Post;
 use Modules\Blog\Entities\PostCategory;
 
@@ -23,49 +21,28 @@ class PostController extends Controller
         $q->where('title', 'LIKE', $search)
           ->orWhere('summary', 'LIKE', $search)
           ->orWhereHas('category', fn ($cq) =>  $cq->where('name', 'LIKE', $search));
-      })
-      ->take(9)
-      ->get();
+      })->paginate(9)->withQueryString();
     
     return view('blog::front.index', compact('posts', 'postCategories'));
   }
 
-  public function show($id)
+  public function show(Post $post)
   {
-    $user = auth()->user();
-    $getPost = Post::query()->published()->findOrFail($id)->loadCommonRelations();
-    $getPost->setAttribute('view_count', views($getPost)->count());
-    views($getPost)->record();
+    abort_unless($post->isPublished(), 404, 'دسترسی به این مطلب امکان پذیر نیست');
+    views($post)->record();
 
-    if ($getPost->status != Post::STATUS_PUBLISHED || Carbon::now()->lt($getPost->published_at)) {
-      return response()->error('دسترسی به این مطلب امکان پذیر نیست', [], 403);
-    }
+    $post->load(['creator', 'category']);
+    $post->loadCount(['views', 'comments']);
 
-    $category  = PostCategory::query()->active()->get();
-    $suggests  = Post::query()->published()
-      ->withCount('views')
-      ->with('category')
-      ->where('post_category_id',  $getPost->post_category_id)
-      ->where('id', '!=', $getPost->id)
-      ->inRandomOrder()->take(3)->get();
+    $relatedPosts = Post::getRelatedPosts($post);
+    $latestPosts = Post::getLatestPosts($post);
+    $postComments = Post::getLatestComments($post);
+    $postCategories = PostCategory::getActiveCategories();
 
-    $lastPost  = Post::query()->select(['id', 'title', 'slug', 'created_at'])->published()
-      ->where('id', '!=', $getPost->id)->withCount('views')->latest()->take(10)->get();
-    $banner = Advertise::getForHome();
-
-    $post = [
-      'post' => $getPost,
-      'category' => $category,
-      'suggests' => $suggests,
-      'lastPost' => $lastPost,
-      'user' => $user,
-      'banner' => $banner
-    ];
-
-    return response()->success('', compact('post'));
+    return view('blog::front.show', compact(['post', 'relatedPosts', 'latestPosts', 'postComments', 'postCategories']));
   }
 
-  public function byCategory($categoryId)
+  public function byCategory($categoryId, $slug)
   {
     return $this->index($categoryId); 
   }

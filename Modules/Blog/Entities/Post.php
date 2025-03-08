@@ -110,6 +110,41 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
     ];
   }
 
+  public static function getRelatedPosts(self $post, $take = 3) 
+  {
+    return self::query()
+      ->select(['id', 'title', 'status', 'published_at', 'summary', 'post_category_id', 'slug'])
+      ->published()
+      ->with('category', fn ($q) => $q->select(['id', 'name', 'slug']))
+      ->where('post_category_id', '!=', $post->post_category_id)
+      ->where('id', '!=', $post->id)
+      ->latest('id')
+      ->take($take)
+      ->get(); 
+  }
+
+  public static function getLatestPosts(self $post, $take = 5) 
+  {
+    return self::query()
+      ->select(['id', 'title', 'status', 'published_at', 'slug'])
+      ->published()
+      ->where('id', '!=', $post->id)
+      ->latest('id')
+      ->take($take)
+      ->get(); 
+  }
+
+  public static function getLatestComments(self $post, $take = 5)
+  {
+    return $post->comments()
+      ->active()
+      ->parents()
+      ->with('children')
+      ->latest('id')
+      ->take($take)
+      ->get();
+  }
+
   public function getViewsCountAttribute()
   {
     return views($this)->count();
@@ -163,6 +198,10 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
       ->when(request('end_date'), fn($q) => $q->whereDate('created_at', '<=', request('end_date')));
   }
 
+  public function isPublished()
+  {
+    return $this->status == self::STATUS_PUBLISHED && $this->published_at <= now();
+  } 
 
 
   //Relations

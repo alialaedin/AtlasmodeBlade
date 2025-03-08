@@ -29,6 +29,6 @@ Route::webSuperGroup('admin', function () {
 
 Route::prefix('/posts')->name('front.posts.')->group(function () {
   Route::get('/', [FrontPostController::class, 'index'])->name('index');
-  Route::get('/{categoryId}', [FrontPostController::class, 'byCategory'])->name('byCategory');
+  Route::get('/{categoryId}/{slug}', [FrontPostController::class, 'byCategory'])->name('byCategory');
   Route::get('/{post}', [FrontPostController::class, 'show'])->name('show');
 });
