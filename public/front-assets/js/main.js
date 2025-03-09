@@ -1174,12 +1174,17 @@ function postTracking(){
     }
 }
 // Weblog Detail Page
-// function weblogDetailPage(){
-//     showCommentBox()
-//     function showCommentBox(){
-//         let btn=$('.weblog-answer-btn');
-//         btn.click(function(){
-//             $('.weblog-answerForm').toggleClass('show');
-//         })
-//     }
-// }
+function weblogDetailPage(){
+    showCommentBox()
+    function showCommentBox(){
+        $('.weblog-answer-btn').each(function () {
+            $(this).click(() => {
+                $(this).next('.weblog-answerForm').toggleClass('show');
+            })
+        });
+        // let btn=$('.weblog-answer-btn');
+        // btn.click(function(){
+        //     $('.weblog-answerForm').toggleClass('show');
+        // })
+    }
+}

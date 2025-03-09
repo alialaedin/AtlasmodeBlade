@@ -153,11 +153,11 @@
           <span class="text-button">نشانی ایمیل شما منتشر نخواهد شد</span>
           <input hidden name="parent_id" value="">
           <form action="{{ route('front.comments.store', $post) }}" method="POST" class="grid comment-form mt-3">
-            <input type="text" name="name" class="g-col-md-5 g-col-12 bg-gray-200 p-1 text-medium" placeholder="نام کامل*">
-            <input type="email" name="email" class="g-col-md-5 g-col-12 bg-gray-200 p-1 text-medium" placeholder=" آدرس ایمیل*">
-            <textarea name="body" class="g-col-12 bg-gray-200 p-1 text-medium p-2" placeholder="دیدگاه شما*" rows="12"></textarea>
+            <input type="text" name="name" class="g-col-md-5 g-col-12 bg-gray-200 p-1 text-medium" placeholder="نام کامل*" required>
+            <input type="email" name="email" class="g-col-md-5 g-col-12 bg-gray-200 p-1 text-medium" placeholder=" آدرس ایمیل*" required>
+            <textarea name="body" class="g-col-12 bg-gray-200 p-1 text-medium p-2" placeholder="دیدگاه شما*" rows="12" required></textarea>
             <div class="d-flex justify-content-end g-col-12">
-              <button type="button" class="weblog-send-comment-btn bg-black px-12 py-1 align-items-center color-white text-medium">ارسال پیام</button>
+              <button type="submit" class="weblog-send-comment-btn bg-black px-12 py-1 align-items-center color-white text-medium">ارسال پیام</button>
             </div>
           </form>
           <!-- comments -->
@@ -188,12 +188,12 @@
                 <!-- Answer Form -->
                 <form action="{{ route('front.comments.store', $post) }}" method="POST" class="weblog-answerForm grid p-lg-3 my-3">
                   <input hidden name="parent_id" value="{{ $comment->id }}">
-                  <input type="text" name="name" class="g-col-md-6 g-col-12 bg-gray-100 p-2" placeholder="نام کامل*">
-                  <input type="text" name="email" class="g-col-md-6 g-col-12 bg-gray-100 p-2" placeholder="آدرس ایمیل*">
-                  <textarea type="text" name="body" rows="8" class="g-col-12 bg-gray-100 p-2" placeholder="دیدگاه شما*"></textarea>
+                  <input type="text" name="name" class="g-col-md-6 g-col-12 bg-gray-100 p-2" placeholder="نام کامل*" required>
+                  <input type="text" name="email" class="g-col-md-6 g-col-12 bg-gray-100 p-2" placeholder="آدرس ایمیل*" required>
+                  <textarea type="text" name="body" rows="8" class="g-col-12 bg-gray-100 p-2" placeholder="دیدگاه شما*" required></textarea>
                   <!-- Button -->
                   <div class="d-flex justify-content-end g-col-12">
-                    <button type="button" class="weblog-send-comment-btn bg-black px-10 py-1 d-flex gap-1 align-items-center color-white text-medium">ارسال پیام</button>
+                    <button type="submit" class="weblog-send-comment-btn bg-black px-10 py-1 d-flex gap-1 align-items-center color-white text-medium">ارسال پیام</button>
                   </div>
                 </form>
                 <!-- Answer -->
@@ -320,50 +320,5 @@
 
 @section('scripts')
 <script src="{{ asset('front-assets/js/lightbox.js') }}"></script>
-{{-- <script> weblogDetailPage(); </script> --}}
-<script>
-
-  $(document).ready(() => {  
-    $('.weblog-send-comment-btn').each(function() {  
-      $(this).click((event) => {
-
-        event.preventDefault(); 
-
-        const button = $(event.target);  
-        const form = button.closest('form');
-
-        const data = {
-          name: form.find('input[name=name]').val(),
-          email: form.find('input[name=email]').val(),
-          body: form.find('textarea[name=body]').val(),
-          parent_id: form.find('input[name=parent_id]').val()
-        };
-
-        $.ajax({  
-          url: form.attr('action'),  
-          type: 'POST',  
-          data: data,  
-          headers: {  
-            'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content'),
-            'Accept': 'application/json'
-          },  
-          success: (response) => {
-            console.log(response);
-          },  
-          error: (error) => {
-            console.log(error);
-          },  
-        }); 
-
-      });  
-    });  
-  }); 
-
-  function showCommentBox(){
-    let btn=$('.weblog-answer-btn');
-    btn.click(function(){
-      $('.weblog-answerForm').toggleClass('show');
-    })
-  }
-</script>
+<script> weblogDetailPage() </script>
 @endsection

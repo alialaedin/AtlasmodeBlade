@@ -55,7 +55,7 @@ trait Commentable
      *
      * @return static
      */
-    public function comment(array $data, $creator = null, Model $parent = null)
+    public function comment(array $data, $creator = null, Model|null $parent = null)
     {
         $commentableModel = $this->commentableModel();
 

@@ -1,5 +1,5 @@
-<header class="header px-4 px-md-8 px-3xl-0 pb-1 bg-white position-relative">
-  <div class="header-top bg-white container-2xl d-flex justify-content-between align-items-sm-center pb-2 pt-3 pt-lg-5">
+<header class="header px-4 px-md-8 px-3xl-0 pb-1 bg-gray-100 position-relative">
+  <div class="header-top container-2xl d-flex justify-content-between align-items-sm-center pb-2 pt-3 pt-lg-5">
 
 		<button type="button" data-modal="hamburgerMenu" class="d-lg-none">
 			<i class="icon-hamburger-menu icon-fs-medium"></i>
