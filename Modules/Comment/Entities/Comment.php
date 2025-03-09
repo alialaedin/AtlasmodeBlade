@@ -8,7 +8,7 @@ use Kalnoy\Nestedset\NodeTrait;
 use Modules\Admin\Entities\Admin;
 use Modules\Core\Classes\DontAppend;
 use Modules\Core\Entities\BaseModel;
-use Modules\Core\Entities\BaseModel as Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends BaseModel
@@ -68,16 +68,7 @@ class Comment extends BaseModel
     return $this->morphTo('creator');
   }
 
-  /**
-   * Create a comment and persists it.
-   *
-   * @param Model $commentable
-   * @param array $data
-   * @param Model|null $creator
-   *
-   * @return static
-   */
-  public function createComment(Model $commentable, array $data, $creator = null): self
+  public function createComment(Model $commentable, array $data, $creator = null): Model
   {
     if ($creator) {
       $data = array_merge($data, [
