@@ -235,6 +235,11 @@ class Shipping extends BaseModel implements Sortable, HasMedia
         }
         return $suitableShippings;
     }
+
+    public static function getActiveShippings()
+    {
+        return self::query()->active()->with(['provinces', 'cities'])->get();
+    }
     
 
     public function getIsPublicAttribute(): bool

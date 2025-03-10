@@ -26,8 +26,8 @@ class CartServiceProvider extends ServiceProvider
   public function boot()
   {
     //        $this->registerTranslations();
-    //        $this->registerConfig();
-    //        $this->registerViews();
+    $this->registerConfig();
+    $this->registerViews();
     if (AppServiceProvider::$runningInConsole) {
       $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
     }

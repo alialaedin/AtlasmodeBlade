@@ -914,7 +914,7 @@ function choosePortal(){
 function loginRegisterPage(){
     let logRegForm=$('.login-register-form'),
         tokenForm=$('.token-form');
-    loginReg();
+    // loginReg();
     editNumber();
     goBack()
     function loginReg(){

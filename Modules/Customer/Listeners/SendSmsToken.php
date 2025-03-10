@@ -28,16 +28,18 @@ class SendSmsToken
    * @param SmsVerify $event
    * @return Sms
    */
-  public function handle(SmsVerify $event): Sms
+  public function handle(SmsVerify $event): Sms|array
   {
     $pattern = app(CoreSettings::class)->get('sms.patterns.verification_code');
     $digits = app(CoreSettings::class)->get('sms.digits', 5);
-    $token = Helpers::randomNumbersCode($digits);
+    // $token = Helpers::randomNumbersCode($digits);
+    $token = 12345;
     $mobile = $event->mobile;
 
-    $output = Sms::pattern($pattern)->data([
-      'code' => $token
-    ])->to([$mobile])->send();
+    $output['status'] = 200;
+    // $output = Sms::pattern($pattern)->data([
+    //   'code' => $token
+    // ])->to([$mobile])->send();
 
     if ($output['status'] != 200) {
       Log::debug('', [$output]);

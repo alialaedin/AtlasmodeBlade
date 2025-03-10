@@ -17,7 +17,7 @@ class CustomerVerifyRequest extends FormRequest
     return [
       'mobile' => ['required', 'digits:11', new IranMobile()],
       'sms_token' => 'required',
-      'type' => ['required', Rule::in(['register', 'forget', 'login'])]
+      // 'type' => ['required', Rule::in(['register', 'forget', 'login'])]
     ];
   }
 
@@ -47,14 +47,14 @@ class CustomerVerifyRequest extends FormRequest
       ]);
     }
 
-    if ($this->type !== 'register') {
-      $customer = Customer::where('mobile', $this->mobile)->first();
-    }
+    // if ($this->type !== 'register') {
+    //   $customer = Customer::where('mobile', $this->mobile)->first();
+    // }
 
 
     $this->merge([
       'smsToken' => $smsToken,
-      'customer' => $customer ?? null
+      // 'customer' => $customer ?? null
     ]);
   }
 }

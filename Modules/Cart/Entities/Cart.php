@@ -3,54 +3,14 @@
 namespace Modules\Cart\Entities;
 
 use Modules\Product\Entities\Variety;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Shetabit\Shopit\Modules\Cart\Database\factories\CartFactory;
-use Modules\Core\Entities\BaseModel;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Customer\Entities\Customer;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
-/**
- * توجه
- * اگر داری دلیتینگ مینویسی
- * @see CartFromRequest@addToCartFromRequest
- */
-class Cart extends BaseModel
+class Cart extends Model
 {
-  use HasFactory;
-
-  protected $fillable = [
-    'quantity',
-    'variety_id',
-  ];
-
-  protected $appends = [];
-
-  protected static $commonRelations = [
-    'variety.product.unit',
-    'variety.product.varieties.attributes',
-    'variety.color',
-    'customer',
-    'variety.attributes.pivot.attributeValue'
-  ];
-
-  protected static function newFactory()
-  {
-    return CartFactory::new();
-  }
-
-
-  /**
-   * Relations Function
-   */
-  public function variety(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-  {
-    return $this->belongsTo(Variety::class);
-  }
-
-  public function customer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-  {
-    return $this->belongsTo(Customer::class);
-  }
-
+  protected $fillable = ['quantity', 'variety_id'];
 
   public function scopeOwner($query)
   {
@@ -79,7 +39,6 @@ class Cart extends BaseModel
     $cart->customer()->associate($customer);
     $cart->variety()->associate($variety);
     $cart->save();
-    $cart->loadCommonRelations();
 
     return $cart;
   }
@@ -126,5 +85,36 @@ class Cart extends BaseModel
       if ($variety->product->free_shipping) return true;
     }
     return false;
+  }
+  
+  public static function addOrUpdateQuantity(Variety $variety, $quantity): self
+  {
+    $customer = Auth::guard('customer')->user();
+    $cart = self::where('variety_id', $variety->id)->owner()->first();
+    if (!$cart) {
+      $cart = self::addToCart($quantity, $variety, $customer);
+    }else {
+      $cart->quantity += $quantity;
+      $cart->save();
+    }
+
+    return $cart;
+  }
+
+  public function loadNecessaryRelations()
+  { 
+    $this->load([
+      'variety'
+    ]);
+  }
+
+  public function variety(): BelongsTo
+  {
+    return $this->belongsTo(Variety::class);
+  }
+
+  public function customer(): BelongsTo
+  {
+    return $this->belongsTo(Customer::class);
   }
 }

@@ -1096,7 +1096,7 @@ class Helpers /*extends BaseHelpers*/
     }
 
 
-    public static function actingAs($user, $guard = 'customer-api')
+    public static function actingAs($user, $guard = 'customer')
     {
         app('auth')->guard($guard)->setUser($user);
         app('auth')->shouldUse($guard);

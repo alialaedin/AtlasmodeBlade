@@ -25,6 +25,8 @@ class CartUpdateRequest extends FormRequest
     if ($this->quantity > $cart->variety->quantity) {
       throw Helpers::makeValidationException(" از تنوع مورد نظر فقط {$cart->variety->quantity} موجود است ");
     }
-    $this->cart = $cart;
+    $this->merge([
+      'cart' => $cart
+    ]);
   }
 }

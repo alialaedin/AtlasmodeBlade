@@ -39,8 +39,12 @@ class Province extends Model
       ->when(request('end_date'), fn($q) => $q->whereDate('created_at', '<=', request('end_date')));
   }
 
-  public static function getAllProvinces()
+  public static function getAllProvinces($withCities = false)
   {
-    return static::query()->select(['id', 'name'])->get();
+    return self::query()
+      ->active()
+      ->select(['id', 'name'])
+      ->when($withCities, fn ($q) => $q->with('cities:id,name,province_id'))
+      ->get();
   }
 }

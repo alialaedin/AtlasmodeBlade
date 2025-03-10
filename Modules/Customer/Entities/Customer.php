@@ -20,6 +20,7 @@ use Modules\Core\Traits\HasAuthors;
 use Bavix\Wallet\Interfaces\Customer as CustomerWallet;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable as NotificationsNotifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Traits\InteractsWithMedia;
 use Modules\Core\Transformers\MediaResource;
@@ -253,6 +254,17 @@ class Customer extends User implements CustomerWallet, Notifiable, HasMedia
     public function prepareForExcel()
     {
         $this->makeHidden('image');
+    }
+
+    public function login():array
+    {
+        Helpers::actingAs($this);
+        if (\Request()->filled('cookieCarts') && count(\Request()->cookieCarts) > 0)
+            Cart::addCookieCarts($this, \Request()->cookieCarts);
+        \Request()->session()->regenerate();
+        Auth::guard('customer')->login($this);
+
+        return ['user' => $this];
     }
 
     public function canSeeUnpublishedProducts()

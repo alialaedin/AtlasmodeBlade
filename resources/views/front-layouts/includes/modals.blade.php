@@ -97,7 +97,7 @@
 <div class="modal modal-mobile-menu bg-white d-flex flex-column gap-2 px-2  pb-lg-4 pt-4 pb-5 overflow-auto" data-id="hamburgerMenu">
   <div class="d-flex justify-content-between align-items-center">
      <figure>
-       <img src="assets/images/header/logo.9208f443 (1).svg" alt="logo">
+       <img src="{{asset('front-assets/images/header/logo.9208f443 (1).svg')}}" alt="logo">
      </figure>
      <button type="button" class="modal-close">
        <i class="icon-cancel icon-fs-large color-gray-700"></i>
@@ -262,7 +262,7 @@
       <ul class="product-list grid w-p-100 gap-2">
           <div class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
                <figure>
-                  <img class="w-p-100 radius-small" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
+                  <img class="w-p-100 radius-small" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
                </figure>
                <div class="d-flex flex-column gap-1">
                   <!-- Titel -->
@@ -277,7 +277,7 @@
           </div>
           <div class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
               <figure>
-                 <img class="w-p-100 radius-small" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
+                 <img class="w-p-100 radius-small" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
               </figure>
               <div class="d-flex flex-column gap-1">
                  <!-- Titel -->
@@ -292,7 +292,7 @@
          </div>
          <div class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
           <figure>
-             <img class="w-p-100 radius-small" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
+             <img class="w-p-100 radius-small" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
           </figure>
           <div class="d-flex flex-column gap-1">
              <!-- Titel -->
@@ -307,7 +307,7 @@
          </div>
          <div class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
           <figure>
-             <img class="w-p-100 radius-small" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
+             <img class="w-p-100 radius-small" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
           </figure>
           <div class="d-flex flex-column gap-1">
              <!-- Titel -->
@@ -351,8 +351,8 @@
                   </div>
                  <!-- Img -->
                  <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg (1).jpg" alt="">
+                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
+                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
                          <!-- See More Btn -->
                           <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
                               مشاهده بیشتر
@@ -404,8 +404,8 @@
                   </div>
                  <!-- Img -->
                  <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg (1).jpg" alt="">
+                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
+                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
                          <!-- See More Btn -->
                           <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
                               مشاهده بیشتر
@@ -457,8 +457,8 @@
                   </div>
                  <!-- Img -->
                  <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg (1).jpg" alt="">
+                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
+                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
                          <!-- See More Btn -->
                           <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
                               مشاهده بیشتر
@@ -510,8 +510,8 @@
                   </div>
                  <!-- Img -->
                  <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg (1).jpg" alt="">
+                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
+                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
                          <!-- See More Btn -->
                           <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
                               مشاهده بیشتر
@@ -563,8 +563,8 @@
                   </div>
                  <!-- Img -->
                  <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg.jpg" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="assets/images/homePage/product-5125-thumb_lg (1).jpg" alt="">
+                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
+                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
                          <!-- See More Btn -->
                           <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
                               مشاهده بیشتر
