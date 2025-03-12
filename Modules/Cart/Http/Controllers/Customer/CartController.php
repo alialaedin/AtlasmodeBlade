@@ -3,24 +3,40 @@
 namespace Modules\Cart\Http\Controllers\Customer;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Area\Entities\Province;
 use Modules\Cart\Entities\Cart;
 use Modules\Cart\Http\Requests\Admin\CartStoreRequest;
 use Modules\Cart\Http\Requests\Admin\CartUpdateRequest;
-use Modules\Cart\Services\WarningMessageCartService;
+use Modules\Customer\Entities\Customer;
 use Modules\Invoice\Entities\Payment;
+use Modules\Product\Entities\Product;
+use Modules\Product\Entities\Variety;
 use Modules\Shipping\Entities\Shipping;
+use Modules\Shipping\Services\ShippingCalculatorService;
 
 class CartController extends Controller
 {
   public function index()
   {
+    /**
+     * @var \Modules\Customer\Entities\Customer $customer
+     */
+
     $customer = auth('customer')->user();
     $customer->load(['addresses' => fn($q) => $q->with('city')]);
 
-    $carts = $customer->carts;
-    $cartsWarnings = (new WarningMessageCartService($carts))->checkAll();
+    $carts = $customer->carts()
+      ->with('variety', function ($vQuery) {
+        $vQuery->select(['id', 'product_id']);
+        $vQuery->with('attributes');
+        $vQuery->with('product', function ($pQuery) {
+          $pQuery->select(['id', 'title']);
+        });
+      })->get();
+
+    // $cartsWarnings = (new WarningMessageCartService($carts))->checkAll();
     $hasFreeShippingProduct = Cart::hasfreeShippingProduct($carts);
 
     $shippings = Shipping::getActiveShippings();
@@ -30,7 +46,7 @@ class CartController extends Controller
     return view('cart::front.index', compact([
       'carts',
       'hasFreeShippingProduct',
-      'cartsWarnings',
+      // 'cartsWarnings',
       'customer',
       'shippings',
       'gateways',
@@ -38,7 +54,7 @@ class CartController extends Controller
     ]));
   }
 
-  public function add(CartStoreRequest $request, $varietyId): JsonResponse
+  public function add(CartStoreRequest $request): JsonResponse
   {
     $cart = Cart::addOrUpdateQuantity($request->variety, $request->quantity);
     return response()->success('محصول با موفقیت به سبد خرید اضافه شد', compact('cart'));
@@ -54,8 +70,8 @@ class CartController extends Controller
 
     return response()->success(
       $isIncrement
-        ? 'محصول با موفقیت به سبد خرید اضافه شد'
-        : 'محصول با موفقیت از سبد خرید کم شد',
+        ? 'تعداد محصول با موفقیت افزایش یافت'
+        : 'تعداد محصول با موفقیت کاهش یافت',
       compact('cart')
     );
   }
@@ -64,5 +80,37 @@ class CartController extends Controller
   {
     $cart->delete();
     return response()->success('محصول با موفقیت از سبد حذف شد');
+  }
+
+  public function getShippableShippings(Request $request)
+  {
+    $request->validate([
+      'varieties' => 'nullable|array',
+      'varieties.*.variety_id' => 'nullable|exists:varieties,id',
+      'varieties.*.quantity' => 'nullable|integer|min:1',
+      'shipping_id' => ['nullable', 'exists:shippings,id'],
+      'address_id' => ['nullable', 'exists:addresses,id'],
+    ]);
+    /** @var Customer $customer */
+    $customer = auth('customer')->user();
+    $carts = [];
+    foreach ($request->varieties ?? [] as $requestCart) {
+      $variety = Variety::query()->find($requestCart['variety_id']);
+      $carts[] = Cart::fakeCartMaker($variety->id, $requestCart['quantity'], $variety->final_price['discount_price'], $variety->final_price['amount']);
+    }
+    $carts = collect($carts);
+
+    $hasFreeShippingProduct = Cart::hasfreeShippingProduct($carts);
+    $shippings = ShippingCalculatorService::getShippableShippingsForFront(
+      customer: $customer,
+      carts: $carts,
+      chosenAddress: ($request->has('address_id')) ? $customer->addresses()->where('id', $request->address_id)->first() : null,
+    );
+
+    return response()->success('سبد خرید شما', compact(
+      'carts',
+      'hasFreeShippingProduct',
+      'shippings'
+    ));
   }
 }

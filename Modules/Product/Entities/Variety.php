@@ -3,6 +3,7 @@
 namespace Modules\Product\Entities;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Helpers\Helpers;
 use Modules\Core\Classes\DontAppend;
 use Modules\Order\Entities\OrderItem;
@@ -33,9 +34,8 @@ use Modules\Product\Entities\VarietyAttributeValuePivot;
 class Variety extends BaseModel implements HasMedia
 {
     use InteractsWithMedia, SoftDeletes;
-    protected $appends = ['unique_attributes_key', 'images', 'quantity', 'final_price', 'final_gifts', 'pending_for_exit_count', 'exited_count'];
+    // protected $appends = ['unique_attributes_key', 'images', 'quantity', 'final_price', 'final_gifts', 'pending_for_exit_count', 'exited_count'];
     protected $hidden = ['media'];
-
     public $dontToArrayProduct = false;
 
     protected $fillable = [

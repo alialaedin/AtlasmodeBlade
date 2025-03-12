@@ -2,11 +2,13 @@
 
 namespace Modules\Cart\Entities;
 
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Product\Entities\Variety;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Customer\Entities\Customer;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
+use Modules\Product\Entities\Product;
 
 class Cart extends Model
 {
@@ -86,14 +88,14 @@ class Cart extends Model
     }
     return false;
   }
-  
+
   public static function addOrUpdateQuantity(Variety $variety, $quantity): self
   {
     $customer = Auth::guard('customer')->user();
     $cart = self::where('variety_id', $variety->id)->owner()->first();
     if (!$cart) {
       $cart = self::addToCart($quantity, $variety, $customer);
-    }else {
+    } else {
       $cart->quantity += $quantity;
       $cart->save();
     }
@@ -102,7 +104,7 @@ class Cart extends Model
   }
 
   public function loadNecessaryRelations()
-  { 
+  {
     $this->load([
       'variety'
     ]);

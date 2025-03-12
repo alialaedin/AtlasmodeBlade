@@ -3,13 +3,12 @@
 @section('content')
   <main id="main-content" class="main mt-lg-0 mt-4">
 
-		<button class="bg-black color-white text-medium" style="margin-right: 200px" @click="consoleLog">لاگ</button>
-        <form action="{{ route('customer.carts.add') }}" method="POST">
-            @csrf
-            <input hidden name="variety_id" value="91">
-            <input hidden name="quantity" value="2">
-            <button class="bg-black color-white text-medium" style="margin-right: 200px">افزودن محصول</button>
-        </form>
+    <form action="{{ route('customer.carts.add') }}" method="POST">
+      @csrf
+      <input hidden name="variety_id" value="91">
+      <input hidden name="quantity" value="2">
+      <button class="bg-black color-white text-medium" style="margin-right: 200px">افزودن محصول</button>
+    </form>
 
     <!-- Page Path -->
     <div class="bg-white">
@@ -40,186 +39,134 @@
 
     <!-- Shipping Cart -->
     <section class="shipping-cart active container-2xl mt-5 gap-3 px-lg-0 px-4 mb-4">
-      <div class="d-flex flex-lg-row flex-column w-p-100 gap-2 px-md-2 mt-1">
+
+      <template v-if="carts.length > 0">
+        <div class="d-flex flex-lg-row flex-column w-p-100 gap-2 px-md-2 mt-1">
+
           <!-- Product Lists -->
           <div class="product-list col-lg-7 d-flex flex-column gap-3 px-1">
-              <div class="shippingCart-info d-flex justify-content-between">
-                  <div class="d-flex align-items-center gap-3">
-                      <h5 class="text-medium-strong">سبد خرید شما</h5>
-                      <span class="text-medium-2">1 کالا</span>
-                  </div>
-                  <!-- Delete Button -->
-                  <button class="delete-allProducts d-flex align-items-center gap-1" type="button">
-                      <span class="text-medium">حذف کل سبد خرید</span>
-                      <i class="icon-trash-2 icon-fs-medium"></i>
-                  </button>
+
+            <div class="shippingCart-info d-flex justify-content-between">
+
+              <div class="d-flex align-items-center gap-3">
+                <h5 class="text-medium-strong">سبد خرید شما</h5>
+                <span class="text-medium-2">@{{ carts.length }} کالا</span>
               </div>
-              <!-- Products -->
-                  <div class="product-item d-flex flex-column p-3 gap-lg-2 position-relative">
-                      <button class="delete-product position-absolute  radius-circle" type="button">
-                          <i class="icon-trash-2 icon-fs-medium color-gray-700"></i>
-                      </button>
-                      <!-- Img And Title -->
-                      <div class="d-flex gap-2 align-items-center">
-                          <a href="./product-detail.html">
-                            <img class="product-item-img radius-large" src="{{ asset('front-assets/images/product-detail/product-5120 (1).jpg') }}" alt="">
-                          </a>
-                          <!-- Title And Color And Size -->
-                          <div class="d-flex flex-column justify-content-between pt-md-4 pt-7 pb-4">
-                              <a class="text-medium-2-strong color-gray-900">پیراهن راه راه سارینا 5393</a>
-                              <span class="color-gray-700 text-medium">رنگ:صورتی</span>
-                              <span class="color-gray-700 text-medium">سایز:38</span>
-                          </div>
-                      </div>
-                      <div class="price d-flex justify-content-around radius-small">
-                          <!-- Price -->
-                          <div class="product-item-price d-flex align-items-center gap-md-3 gap-1 text-medium py-2">
-                              <span class="bg-secondary-100 radius-u px-md-2 px-1 text-button-1">60 %</span>
-                              <!-- First Price -->
-                              <s class="color-gray-700 text-linethrough currency">1600000</s>
-                              <!-- Discount Price -->
-                              <div class="d-flex gap-1 justify-content-start">
-                                  <ins class="currency text-medium-2-strong">1356800</ins>
-                                  <span class="text-medium">تومان</span>
-                              </div>
-                          </div>
-                          <!-- Counter -->
-                          <div class="counter d-flex justify-content-center align-items-center text-medium-3 gap-md-4 gap-2">
-                              <button type="button" class="add-btn border-gray-200 color-gray-700">
-                                  <i class="icon-plus icon-fs-medium-2"></i>
-                              </button>
-                              <span class="count">1</span>
-                              <button type="button" disabled class="remove-btn border-gray-200 color-gray-700">
-                                  <i class="icon-minus icon-fs-medium-2"></i>
-                              </button>
-                          </div>
-                      </div>
+
+              <!-- Delete Button -->
+              <button class="delete-allProducts d-flex align-items-center gap-1" type="button">
+                <span class="text-medium">حذف کل سبد خرید</span>
+                <i class="icon-trash-2 icon-fs-medium"></i>
+              </button>
+
+            </div>
+
+            <!-- Products -->
+            <template v-for="(cart, cartIndex) in carts" :key="cartIndex">
+              <div class="product-item d-flex flex-column p-3 gap-lg-2 position-relative">
+                <button class="delete-product position-absolute radius-circle" @click="deleteCart(cartIndex)" type="button">
+                  <i class="icon-trash-2 icon-fs-medium color-gray-700"></i>
+                </button>
+                <!-- Img And Title -->
+                <div class="d-flex gap-2 align-items-center">
+                  <a :href="'products/' + cart.variety.product_id">
+                    <img class="product-item-img radius-large" src="{{ asset('front-assets/images/product-detail/product-5120 (1).jpg') }}" alt="">
+                  </a>
+                  <!-- Title And Color And Size -->
+                  <div class="d-flex flex-column justify-content-between pt-md-4 pt-7 pb-4">
+                    <a class="text-medium-2-strong color-gray-900">@{{ cart.variety.product.title }}</a>
+                    <template v-for="(attribute, attributeIndex) in cart.variety.attributes" :key="attributeIndex">
+                      <span class="color-gray-700 text-medium">
+                        @{{ attribute.label + ' : ' + attribute.pivot.value }}
+                      </span>
+                    </template>
                   </div>
-                  <div class="product-item d-flex flex-column p-3 gap-lg-2 position-relative">
-                      <button class="delete-product position-absolute  radius-circle" type="button">
-                          <i class="icon-trash-2 icon-fs-medium color-gray-700"></i>
-                      </button>
-                      <!-- Img And Title -->
-                      <div class="d-flex gap-2 align-items-center">
-                          <a href="./product-detail.html">
-                            <img class="product-item-img radius-large" src="{{ asset('front-assets/images/product-detail/product-5120 (1).jpg') }}" alt="">
-                          </a>
-                          <!-- Title And Color And Size -->
-                          <div class="d-flex flex-column justify-content-between pt-md-4 pt-7 pb-4">
-                              <a class="text-medium-2-strong color-gray-900">پیراهن راه راه سارینا 5393</a>
-                              <span class="color-gray-700 text-medium">رنگ:صورتی</span>
-                              <span class="color-gray-700 text-medium">سایز:38</span>
-                          </div>
-                      </div>
-                      <div class="price d-flex justify-content-around radius-small">
-                          <!-- Price -->
-                          <div class="product-item-price d-flex align-items-center gap-md-3 gap-1 text-medium py-2">
-                              <span class="bg-secondary-100 radius-u px-md-2 px-1 text-button-1">60 %</span>
-                              <!-- First Price -->
-                              <s class="color-gray-700 text-linethrough currency">1600000</s>
-                              <!-- Discount Price -->
-                              <div class="d-flex gap-1 justify-content-start">
-                                  <ins class="currency text-medium-2-strong">1356800</ins>
-                                  <span class="text-medium">تومان</span>
-                              </div>
-                          </div>
-                          <!-- Counter -->
-                          <div class="counter d-flex justify-content-center align-items-center text-medium-3 gap-md-4 gap-2">
-                              <button type="button" class="add-btn border-gray-200 color-gray-700">
-                                  <i class="icon-plus icon-fs-medium-2"></i>
-                              </button>
-                              <span class="count">1</span>
-                              <button type="button" disabled class="remove-btn border-gray-200 color-gray-700">
-                                  <i class="icon-minus icon-fs-medium-2"></i>
-                              </button>
-                          </div>
-                      </div>
+                </div>
+                <div class="price d-flex justify-content-around radius-small">
+                  <div class="product-item-price d-flex align-items-center gap-md-3 gap-1 text-medium py-2">
+                    <template v-if="cart.discount_price > 0">
+                      <span class="bg-secondary-100 radius-u px-md-2 px-1 text-button-1">
+                        @{{ cart.discount_price.toLocaleString() }}
+                      </span>
+                      <s class="color-gray-700 text-linethrough currency">
+                        @{{ ((cart.price + cart.discount_price) * cart.quantity).toLocaleString() }}
+                      </s>
+                    </template>
+                    <div class="d-flex gap-1 justify-content-start">
+                      <ins class="currency text-medium-2-strong">@{{ (cart.price * cart.quantity).toLocaleString() }}</ins>
+                      <span class="text-medium">تومان</span>
+                    </div>
                   </div>
-                  <div class="product-item d-flex flex-column p-3 gap-lg-2 position-relative">
-                      <button class="delete-product position-absolute  radius-circle" type="button">
-                          <i class="icon-trash-2 icon-fs-medium color-gray-700"></i>
-                      </button>
-                      <!-- Img And Title -->
-                      <div class="d-flex gap-2 align-items-center">
-                          <a href="./product-detail.html">
-                            <img class="product-item-img radius-large" src="{{ asset('front-assets/images/product-detail/product-5120 (1).jpg') }}" alt="">
-                          </a>
-                          <!-- Title And Color And Size -->
-                          <div class="d-flex flex-column justify-content-between pt-md-4 pt-7 pb-4">
-                              <a class="text-medium-2-strong color-gray-900">پیراهن راه راه سارینا 5393</a>
-                              <span class="color-gray-700 text-medium">رنگ:صورتی</span>
-                              <span class="color-gray-700 text-medium">سایز:38</span>
-                          </div>
-                      </div>
-                      <div class="price d-flex justify-content-around radius-small">
-                          <!-- Price -->
-                          <div class="product-item-price d-flex align-items-center gap-md-3 gap-1 text-medium py-2">
-                              <span class="bg-secondary-100 radius-u px-md-2 px-1 text-button-1">60 %</span>
-                              <!-- First Price -->
-                              <s class="color-gray-700 text-linethrough currency">1600000</s>
-                              <!-- Discount Price -->
-                              <div class="d-flex gap-1 justify-content-start">
-                                  <ins class="currency text-medium-2-strong">1356800</ins>
-                                  <span class="text-medium">تومان</span>
-                              </div>
-                          </div>
-                          <!-- Counter -->
-                          <div class="counter d-flex justify-content-center align-items-center text-medium-3 gap-md-4 gap-2">
-                              <button type="button" class="add-btn border-gray-200 color-gray-700">
-                                  <i class="icon-plus icon-fs-medium-2"></i>
-                              </button>
-                              <span class="count">1</span>
-                              <button type="button" disabled class="remove-btn border-gray-200 color-gray-700">
-                                  <i class="icon-minus icon-fs-medium-2"></i>
-                              </button>
-                          </div>
-                      </div>
+                  <!-- Counter -->
+                  <div class="counter d-flex justify-content-center align-items-center text-medium-3 gap-md-4 gap-2">
+                    <button type="button" class="add-btn border-gray-200 color-gray-700" @click="(e) => increaseCartQuantity(e, cartIndex)">
+                      <i class="icon-plus icon-fs-medium-2"></i>
+                    </button>
+                    <span class="loader hidden"></span>
+                    <span class="count">@{{ cart.quantity }}</span>
+                    <button 
+                      type="button" 
+                      class="remove-btn border-gray-200 color-gray-700"
+                      :disabled="cart.quantity == 1" 
+                      @click="(e) => decreaseCartQuantity(e, cartIndex)">
+                      <i class="icon-minus icon-fs-medium-2"></i>
+                    </button>
                   </div>
+                </div>
+              </div>
+            </template>
+
           </div> 
+
           <!-- Price Details -->
           <div class="price-details position-sticky col-lg-5 d-flex flex-column mt-lg-0 mt-3 gap-2">
-              <span class="text-medium-3-strong pe-4">صورت حساب</span>
-              <div class="d-flex flex-column p-5 gap-5">
-                  <div class="d-flex flex-column gap-1">
-                      <!-- Total Price -->
-                      <div class="d-flex justify-content-between">
-                      <span class="text-medium color-gray-900">مجموع قیمت ها :</span>
-                      <div class="d-flex align-items-center gap-1">
-                          <span class="currency text-medium-2 color-gray-900">1234000</span>
-                          <span class="text-medium color-gray-900">تومان</span>
-                      </div>
-                      </div>
-                      <!-- Discount -->
-                      <div class="d-flex justify-content-between">
-                          <span class="text-medium color-gray-900">تخفیف:</span>
-                          <div class="d-flex align-items-center gap-1">
-                              <span class="currency text-medium-3 color-gray-900">840000</span>
-                              <span class="text-medium color-gray-900">تومان</span>
-                          </div>
-                      </div>
-                      <!-- Final Price -->
-                      <div class="d-flex justify-content-between">
-                      <span class="text-medium-strong color-gray-900">پرداخت نهایی:</span>
-                      <div class="d-flex align-items-center gap-1">
-                          <span class="currency text-medium-3-strong color-gray-900">840000</span>
-                          <span class="text-medium-strong color-gray-900">تومان</span>
-                      </div>
-                      </div>
+            <span class="text-medium-3-strong pe-4">صورت حساب</span>
+            <div class="d-flex flex-column p-5 gap-5">
+              <div class="d-flex flex-column gap-1">
+                <!-- Total Price -->
+                <div class="d-flex justify-content-between">
+                  <span class="text-medium color-gray-900">مجموع قیمت ها :</span>
+                  <div class="d-flex align-items-center gap-1">
+                    <span class="currency text-medium-2 color-gray-900">@{{ totalOrderAmounts.totalItemsPrice.toLocaleString() }}</span>
+                    <span class="text-medium color-gray-900">تومان</span>
                   </div>
-                  <form class="discount-form mx-auto">
-                      <input type="text" placeholder="کد تخفیف را وارد کنید" class="discount-input bg-gray-200 p-2">
-                      <button type="button" class="discount-btn bg-gray-700 color-white text-medium py-1 px-md-3 px-1">ثبت کد تخفیف</button>
-                  </form>
-                  <button type="button" class="continue-process-btn bg-black color-white text-medium">
-                      ادامه فرآیند خرید
-                  </button>
+                  </div>
+                  <!-- Discount -->
+                  <div class="d-flex justify-content-between">
+                    <span class="text-medium color-gray-900">تخفیف:</span>
+                    <div class="d-flex align-items-center gap-1">
+                      <span class="currency text-medium-3 color-gray-900">@{{ totalOrderAmounts.totalItemsDiscountPrice.toLocaleString() }}</span>
+                      <span class="text-medium color-gray-900">تومان</span>
+                    </div>
+                  </div>
+                  <!-- Final Price -->
+                  <div class="d-flex justify-content-between">
+                  <span class="text-medium-strong color-gray-900">پرداخت نهایی:</span>
+                  <div class="d-flex align-items-center gap-1">
+                    <span class="currency text-medium-3-strong color-gray-900">@{{ totalOrderAmounts.orderFinalPrice.toLocaleString() }}</span>
+                    <span class="text-medium-strong color-gray-900">تومان</span>
+                  </div>
+                </div>
+                <div class="discount-form mx-auto">
+                  <input type="text" placeholder="کد تخفیف را وارد کنید" class="discount-input bg-gray-200 p-2">
+                  <button type="button" class="discount-btn bg-gray-700 color-white text-medium py-1 px-md-3 px-1" @click="applyCoupon">ثبت کد تخفیف</button>
+                </div>
+                <button type="button" class="continue-process-btn bg-black color-white text-medium" @click="goToInformationTab">ادامه فرآیند خرید</button>
               </div>
+            </div>
           </div>
-      </div>
-      <div class="empty-cart flex-column align-items-center justify-content-center radius-medium">
-        <i class="icon-cart color-gray-600"></i>
-        <h2 class="text-medium-3-strong color-gray-600">سبد خرید شما خالیست!</h2>
-      </div>
+
+        </div>
+      </template>
+
+      <template v-else>
+        <div class="empty-cart flex-column align-items-center justify-content-center radius-medium">
+          <i class="icon-cart color-gray-600"></i>
+          <h2 class="text-medium-3-strong color-gray-600">سبد خرید شما خالیست!</h2>
+        </div>
+      </template>
+        
+
     </section>
 
     <!-- Address And Delivery Informations -->
@@ -472,37 +419,293 @@
   </main>
 @endsection
 
+@section('styles')
+  <style>
+    .loader.hidden {
+      display: none;
+    }
+
+    .loader {
+      width: 20px;
+      height: 20px;
+      border: 5px solid #5a5959;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      display: inline-block;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+@endsection
+
 @section('scripts')
 
-<script>
+{{-- <script>
   orderPage()
   editAddress()
   choosePortal()
-  counter()
-</script>  
+</script>   --}}
 
 <script src="{{ asset('assets/vue/vue3/vue.global.prod.js') }}"></script>
+<script src="{{ asset('assets/sweetalert2/sweetalert2.js') }}"></script>
 
 <script>
 
-  const {
-    createApp
-  } = Vue;
+  function showValidationError(errors) {  
+
+    const list = document.createElement('ul');  
+    list.className = 'list-group';
+
+    for (const key in errors) {  
+      if (errors.hasOwnProperty(key)) {  
+        const errorsArray = errors[key];  
+        errorsArray.forEach((errorMessage) => {  
+          const listItem = document.createElement('li');  
+          listItem.className = 'list-group-item';  
+          listItem.textContent = errorMessage;
+          list.appendChild(listItem); 
+        });  
+      }  
+    }  
+
+    Swal.fire({  
+      title: "<b>خطا های زیر رخ داده است</b>",  
+      html: list.outerHTML, 
+      icon: "error",  
+      confirmButtonText: "بستن",  
+    });  
+  }  
+  function popup(type, title, message) {
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: type,
+      confirmButtonText: "بستن",
+    });
+  } 
+  function popupWithConfirmCallback(type, title, message, confirmButtonText, isConfirmedCallback) {
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: type,
+      confirmButtonText: confirmButtonText,
+      showDenyButton: true,
+      denyButtonText: "انصراف",
+    }).then((result) => {
+      if (result.isConfirmed) isConfirmedCallback();
+    });
+  }
+
+  const { createApp } = Vue;
 
   createApp({
     data() {
       return {
-        carts: @json($carts)
-      }
+        message: "Hello Vue!",
+        carts: @json($carts),
+        copounCode: '',
+        discountPriceByCoupon: 0,
+      };
     },
 		watch: {},
     methods: {
-			consoleLog() {
-				console.log(this.carts);
-			}
-		},
-    computed: {}
+
+      // متد های مربوط به تب اول
+      async deleteCart(cartIndex) {
+
+        const cartId = this.carts[cartIndex].id;
+        const message = 'آیا مطمع هستید که میخواهید محصول  را از سبد خرید حذف کنید ؟'
+
+        popupWithConfirmCallback('warning', 'توجه', message, 'بله حذف کن', async () => {
+          try {
+            const response = await fetch(`cart/${cartId}`, {
+              method: 'DELETE',
+              headers: this.getDefaultRequestHeaders()
+            });
+
+            const result = await response.json();
+            if (result.success) {
+              this.carts.splice(cartIndex, 1);
+              popup('success', 'عملیات موفق', result.message);
+            } else {
+              popup('danger', 'عملیات ناموفق', result.message);
+            }
+
+          } catch (error) {
+            console.error('error:', error);
+          }
+        });
+      },
+      async updateCartQuantity(event, cart, newQuantity) {
+        const button = event.currentTarget;
+        this.updateCounterState(button, true);
+        try {
+
+          const response = await fetch(`cart/${cart.id}`, {
+            method: 'PUT',
+            headers: this.getDefaultRequestHeaders(),
+            body: JSON.stringify({ quantity: newQuantity }),
+          });
+
+          const result = await response.json();
+          if (!response.ok && response.status == 422) {
+            showValidationError(result.errors);
+          }
+
+          if (response.ok) {
+            cart.quantity = newQuantity; 
+            popup('success', 'عملیات موفق', result.message);
+          }
+
+        } catch (error) {
+          console.error('error:', error);
+        } finally {  
+          this.updateCounterState(button, false);  
+        }  
+      },
+      increaseCartQuantity(event, cartIndex) {
+        const cart = this.carts[cartIndex];  
+        const newQuantity = cart.quantity + 1;
+        this.updateCartQuantity(event, cart, newQuantity);
+      },
+      decreaseCartQuantity(event, cartIndex) {
+
+        const cart = this.carts[cartIndex];  
+        const currentQuantity = cart.quantity;
+
+        if (currentQuantity == 1) {
+          this.updateCounterState(event.currentTarget, true);
+          popupWithConfirmCallback(
+            'warning', 
+            'توجه', 
+            'حداقل تعداد محصول در  سبد 1 می باشد. آیا تمایل دارید که محصول را حذف کنید از سبد', 
+            'بله حذف کن',
+            async () => {
+              await this.deleteCart(cartIndex);  
+              this.updateCounterState(event.currentTarget, false);
+            }
+          );
+          return;
+        }
+
+        const newQuantity = currentQuantity - 1;
+        this.updateCartQuantity(event, cart, newQuantity);
+
+      },
+      updateCounterState(btn, isLoading) {  
+
+        const counterElement = btn.closest('.counter');  
+        const countElement = counterElement.querySelector('.count');  
+        const loaderElement = counterElement.querySelector('.loader');  
+        const removeBtn = counterElement.querySelector('.remove-btn');  
+        const addBtn = counterElement.querySelector('.add-btn');  
+
+        if (isLoading) {  
+          countElement.classList.add('d-none');  
+          loaderElement.classList.remove('hidden');  
+          removeBtn.disabled = true;  
+          removeBtn.style.opacity = '0.5';  
+          addBtn.disabled = true;  
+          addBtn.style.opacity = '0.5';  
+        } else {  
+          countElement.classList.remove('d-none');  
+          loaderElement.classList.add('hidden');  
+          removeBtn.disabled = false;  
+          removeBtn.style.opacity = '1';  
+          addBtn.disabled = false;  
+          addBtn.style.opacity = '1';  
+        }  
+      },
+      getDefaultRequestHeaders() {
+        return {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': @json(csrf_token())
+        };
+      },
+      async applyCoupon() {
+
+        const couponInput = document.querySelector('.discount-input');
+        const couponCode = couponInput.value;
+
+        try {
+
+          const url = @json(route('customer.coupon_verify'));
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: this.getDefaultRequestHeaders(),
+            body: JSON.stringify({ code: couponCode }),
+          });
+
+          const result = await response.json();
+          if (!response.ok && response.status == 422) {
+            showValidationError(result.errors);
+          }
+
+          if (response.ok) {
+            this.copounCode = couponCode; 
+            this.discountPriceByCoupon = result.data.discount;
+            popup('success', 'عملیات موفق', result.message);
+          }
+
+        } catch (error) {
+          console.error('error:', error);
+        }
+
+      },
+      goToInformationTab() {
+
+        const info = document.querySelector('.send-information');  
+        const shippCart = document.querySelector('.shipping-cart');  
+        const shippCartBtn = document.querySelector('.shipping-cart-btn');  
+        const sendInfoBtn = document.querySelector('.send-information-btn');  
+
+        shippCart.classList.remove('active');  
+        shippCartBtn.classList.remove('active');  
+        info.classList.add('active');  
+        sendInfoBtn.classList.add('active');  
+
+        const topCart = document.querySelector('.top-cart');  
+        window.scrollTo({  
+          top: topCart.getBoundingClientRect().top + window.scrollY,  
+          behavior: 'smooth'  
+        });  
+      }
+
+
+    },
+    computed: {
+      totalOrderAmounts() {
+
+        let totalItemsPrice = 0;
+        let totalItemsDiscountPrice = 0;
+
+        this.carts.forEach(cart => {
+          totalItemsPrice += cart.price * cart.quantity;
+          totalItemsDiscountPrice += cart.discount_price * cart.quantity;
+        });
+
+        const orderFinalPrice = totalItemsPrice - totalItemsDiscountPrice - this.discountPriceByCoupon;
+
+        return {
+          totalItemsPrice: totalItemsPrice,
+          totalItemsDiscountPrice: totalItemsDiscountPrice,
+          orderFinalPrice: orderFinalPrice
+        };
+        
+      }
+    }
   }).mount("#main-content");
+
 </script>
 
 @endsection

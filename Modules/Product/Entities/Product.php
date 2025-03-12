@@ -729,69 +729,69 @@ class Product extends BaseModel implements HasMedia, Viewable
 		return false;
 	}
 
-	public function beforeToArray()
-	{
-		if ($this->relationLoaded('varieties')) {
-			/** @var Variety $variety */
-			foreach ($this->varieties as $variety) {
-				$copyProduct = $this->replicate()->withoutRelations();
-				if ($this->relationLoaded('activeFlash')) {
-					$copyProduct->setRelation('activeFlash', $this->activeFlash);
-				}
-				if ($this->relationLoaded('activeGifts')) {
-					$copyProduct->setRelation('activeGifts', $this->activeGifts);
-				}
-				$variety->product()->associate($copyProduct);
-				$variety->dontToArrayProduct = true;
-			}
-		}
-		if (!(\Auth::user() instanceof Admin)) {
-			$other = [];
-			if (!Route::getCurrentRoute() || !str_contains(Route::getCurrentRoute()->getName(), 'show')) {
-				// اگر اعلام نکردیم که به اینا نیاز داریم پس پنهانش کن
-				$withSetting = app(CoreSettings::class)->get('product.with') ?? [];
-				foreach (['description', 'categories'] as $key) {
-					if (!in_array($key, $withSetting) && !in_array($key, $this->dontHide)) {
-						$other[] = $key;
-					}
-				}
-			}
+	// public function beforeToArray()
+	// {
+	// 	if ($this->relationLoaded('varieties')) {
+	// 		/** @var Variety $variety */
+	// 		foreach ($this->varieties as $variety) {
+	// 			$copyProduct = $this->replicate()->withoutRelations();
+	// 			if ($this->relationLoaded('activeFlash')) {
+	// 				$copyProduct->setRelation('activeFlash', $this->activeFlash);
+	// 			}
+	// 			if ($this->relationLoaded('activeGifts')) {
+	// 				$copyProduct->setRelation('activeGifts', $this->activeGifts);
+	// 			}
+	// 			$variety->product()->associate($copyProduct);
+	// 			$variety->dontToArrayProduct = true;
+	// 		}
+	// 	}
+	// 	if (!(\Auth::user() instanceof Admin)) {
+	// 		$other = [];
+	// 		if (!Route::getCurrentRoute() || !str_contains(Route::getCurrentRoute()->getName(), 'show')) {
+	// 			// اگر اعلام نکردیم که به اینا نیاز داریم پس پنهانش کن
+	// 			$withSetting = app(CoreSettings::class)->get('product.with') ?? [];
+	// 			foreach (['description', 'categories'] as $key) {
+	// 				if (!in_array($key, $withSetting) && !in_array($key, $this->dontHide)) {
+	// 					$other[] = $key;
+	// 				}
+	// 			}
+	// 		}
 
-			static::makeHiddenForFront($this, $other);
-		}
-	}
+	// 		static::makeHiddenForFront($this, $other);
+	// 	}
+	// }
 
-	public function afterToArray($result)
-	{
-		foreach ($result['categories'] ?? [] as $key1 => $cat) {
-			foreach (['description', 'meta_title', 'meta_description'] as $key) {
-				unset($result['categories'][$key1][$key]);
-			}
-		}
-		if ($this->relationLoaded('varieties') && isset($result['varieties'])) {
-			/** @var Variety $variety */
-			foreach ($result['varieties'] as $key => $variety) {
-				$tempCopy = $result;
-				$result['id'] = $this->id;
-				$except = ['activeFlash', 'activeGifts'];
-				foreach (array_filter(array_keys($this->relations), fn($v) => !in_array($v, $except)) as $relation) {
-					unset($tempCopy[\Illuminate\Support\Str::snake($relation)]);
-				}
+	// public function afterToArray($result)
+	// {
+	// 	foreach ($result['categories'] ?? [] as $key1 => $cat) {
+	// 		foreach (['description', 'meta_title', 'meta_description'] as $key) {
+	// 			unset($result['categories'][$key1][$key]);
+	// 		}
+	// 	}
+	// 	if ($this->relationLoaded('varieties') && isset($result['varieties'])) {
+	// 		/** @var Variety $variety */
+	// 		foreach ($result['varieties'] as $key => $variety) {
+	// 			$tempCopy = $result;
+	// 			$result['id'] = $this->id;
+	// 			$except = ['activeFlash', 'activeGifts'];
+	// 			foreach (array_filter(array_keys($this->relations), fn($v) => !in_array($v, $except)) as $relation) {
+	// 				unset($tempCopy[\Illuminate\Support\Str::snake($relation)]);
+	// 			}
 
-				$result['varieties'][$key]['product'] = $tempCopy;
-			}
-		}
+	// 			$result['varieties'][$key]['product'] = $tempCopy;
+	// 		}
+	// 	}
 
-		return $result;
-	}
+	// 	return $result;
+	// }
 
-	public function toArray()
-	{
-		// $this->beforeToArray();
-		$result = parent::toArray();
+	// public function toArray()
+	// {
+	// 	// $this->beforeToArray();
+	// 	$result = parent::toArray();
 
-		// return $this->afterToArray($result);
-	}
+	// 	// return $this->afterToArray($result);
+	// }
 
 	public function registerMediaCollections(): void
 	{

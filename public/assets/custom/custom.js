@@ -51,7 +51,6 @@ function popupWithConfirmCallback(type, title, message, confirmButtonText, isCon
     confirmButtonText: confirmButtonText,
     showDenyButton: true,
     denyButtonText: "انصراف",
-    dangerMode: true,
   }).then((result) => {
     if (result.isConfirmed) isConfirmedCallback();
   });
