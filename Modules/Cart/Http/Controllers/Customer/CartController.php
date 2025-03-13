@@ -25,7 +25,10 @@ class CartController extends Controller
      */
 
     $customer = auth('customer')->user();
-    $customer->load(['addresses' => fn($q) => $q->with('city')]);
+    $customer->load(['addresses' => function($q) {
+      $q->select(['id', 'city_id', 'address', 'customer_id', 'first_name', 'last_name', 'mobile', 'postal_code', 'telephone']);
+      $q->with('city');
+    }]);
 
     $carts = $customer->carts()
       ->with('variety', function ($vQuery) {

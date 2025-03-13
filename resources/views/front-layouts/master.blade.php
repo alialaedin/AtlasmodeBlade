@@ -10,7 +10,7 @@
   @stack('styles')
 </head>
 <body>
-  <div class="page-wrapper bg-gray-100">
+  <div id="main-content" class="page-wrapper bg-gray-100">
     @include('front-layouts.includes.header')
     @yield('content')
     @include('front-layouts.includes.footer')

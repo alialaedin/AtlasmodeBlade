@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Order\Http\Controllers\Admin\OrderController;
+use Modules\Order\Http\Controllers\Admin\OrderController as AdminOrderController;
+use Modules\Order\Http\Controllers\Customer\OrderController as CustomerOrderController;
 use Modules\Order\Http\Controllers\Admin\ShippingExcelController;
 
 Route::webSuperGroup('admin', function () {
@@ -15,22 +16,28 @@ Route::webSuperGroup('admin', function () {
 
   Route::prefix('/orders')->name('orders.')->group(function () {
 
-    Route::get('/print', [OrderController::class, 'print'])->name('print')->hasPermission('read_order');
-    Route::put('/{order}/update-status', [OrderController::class,'updateStatus'])->name('update-status')->hasPermission('modify_order');
-    Route::post('/status/changes', [OrderController::class,'changeStatusSelectedOrders'])->name('changeStatusSelectedOrders')->hasPermission('modify_order');
-    Route::post('/get-shippings', [OrderController::class,'getShippableShippings'])->name('shippable-shippings')->hasPermission('write_order');
+    Route::get('/print', [AdminOrderController::class, 'print'])->name('print')->hasPermission('read_order');
+    Route::put('/{order}/update-status', [AdminOrderController::class,'updateStatus'])->name('update-status')->hasPermission('modify_order');
+    Route::post('/status/changes', [AdminOrderController::class,'changeStatusSelectedOrders'])->name('changeStatusSelectedOrders')->hasPermission('modify_order');
+    Route::post('/get-shippings', [AdminOrderController::class,'getShippableShippings'])->name('shippable-shippings')->hasPermission('write_order');
 
-    Route::post('/{order}/items', [OrderController::class, 'addItem'])->name('add-item')->hasPermission('write_order');
-    Route::put('/items/{order_item}', [OrderController::class, 'updateQuantityItem'])->name('update-item-quantity')->hasPermission('modify_order');
-    Route::put('/items/{order_item}/status', [OrderController::class, 'updateItemStatus'])->name('update-item-status')->hasPermission('modify_order');
+    Route::post('/{order}/items', [AdminOrderController::class, 'addItem'])->name('add-item')->hasPermission('write_order');
+    Route::put('/items/{order_item}', [AdminOrderController::class, 'updateQuantityItem'])->name('update-item-quantity')->hasPermission('modify_order');
+    Route::put('/items/{order_item}/status', [AdminOrderController::class, 'updateItemStatus'])->name('update-item-status')->hasPermission('modify_order');
 
-    Route::get('/', [OrderController::class, 'index'])->name('index')->hasPermission('read_order');
-    Route::get('/create', [OrderController::class, 'create'])->name('create')->hasPermission('write_order');
-    Route::get('/{order}', [OrderController::class, 'show'])->name('show')->hasPermission('read_order');
-    Route::post('/', [OrderController::class, 'store'])->name('store')->hasPermission('write_order');
-    Route::put('/{order}', [OrderController::class, 'update'])->name('update')->hasPermission('modify_order');
+    Route::get('/', [AdminOrderController::class, 'index'])->name('index')->hasPermission('read_order');
+    Route::get('/create', [AdminOrderController::class, 'create'])->name('create')->hasPermission('write_order');
+    Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show')->hasPermission('read_order');
+    Route::post('/', [AdminOrderController::class, 'store'])->name('store')->hasPermission('write_order');
+    Route::put('/{order}', [AdminOrderController::class, 'update'])->name('update')->hasPermission('modify_order');
 
   });
 
+});
+
+Route::middleware('auth:customer')->name('customer.')->group(function () {
+  Route::prefix('/orders')->name('orders.')->group(function () {
+    Route::post('/', [CustomerOrderController::class, 'store'])->name('store');
+  });
 });
 

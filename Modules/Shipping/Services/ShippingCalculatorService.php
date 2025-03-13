@@ -76,31 +76,15 @@ class ShippingCalculatorService
 
     public function calculate()
     {
-        // maybe chosen shipping is free_shipping itself
         if ($this->shipping->free_shipping) return $this->responseCreator(0);
-
-        // free_shipping_products. if product.free_shipping column be true, and if there was a variety of this product in carts (or order) shipping is free.
-        $varietyIds = $this->items->pluck('variety_id')->toArray();
-        $varieties = Variety::query()
-            ->select(['id', 'product_id'])
-            ->whereIn('id', $varietyIds)
-            ->with('product:id,free_shipping')
-            ->get();
-
-        foreach ($varieties as $variety) {
-            if ($variety->product->free_shipping) return $this->responseCreator(0);
-        }
 
         $sumOrderItemsWithoutShipping = $this->sumOrderItemsCalculator();
 
-        // we have to attention to the threshold
         if ($this->shipping->free_threshold < $sumOrderItemsWithoutShipping) return $this->responseCreator(0);
 
-        // shipping amount for gorgan shipping
         if($this->address->city_id == 264 && $sumOrderItemsWithoutShipping >= Setting::getFromName('free_shipping_amount_for_gorgan'))
             return $this->responseCreator(0);
 
-        // if sum carts be more than a value, shipping is free.
         if ($sumOrderItemsWithoutShipping >= Setting::getFromName('free_shipping_amount_for_other_cities'))
             return $this->responseCreator(0);
 
