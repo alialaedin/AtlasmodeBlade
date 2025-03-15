@@ -58,7 +58,7 @@ class AuthController extends Controller
 		$customer = Customer::where('mobile', $request->mobile)->first();
 		$customer->login();	
 
-		return redirect('/')->with('success', 'با موفقیت لاگین شدید.');
+		return response()->success('با موفقیت لاگین شدید', compact('customer'));
 	}
 
 	// public function registerLogin(CustomerRegisterLoginRequest $request): JsonResponse

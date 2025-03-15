@@ -1033,9 +1033,11 @@
           this.showValidationError(result.errors);
         }
 
+        console.log(result.data.shippings);
         if (response.ok) {
           this.shippings = result.data.shippings;
         }
+        console.log(this.shippings);
 
         this.closeChooseAddressModal();
       },
@@ -1196,8 +1198,16 @@
           });
 
           const result = await response.json();
-          console.log(response);
-          console.log(result);
+          if (!response.ok && response.status == 422) {
+            this.showValidationError(result.errors);
+          }
+
+          if (response.ok && result.success && result.data.need_pay) {
+            const baseUrl = result.data.make_response.url;
+            const params = new URLSearchParams(result.data.make_response.inputs).toString();
+            const urlWithParams = `${baseUrl}?${params}`;
+            window.location.replace(urlWithParams);
+          }
 
         } catch (error) {
           console.error('error:', error);
