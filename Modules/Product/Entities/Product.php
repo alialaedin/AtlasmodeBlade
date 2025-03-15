@@ -240,6 +240,22 @@ class Product extends BaseModel implements HasMedia, Viewable
 			->toArray();
 	}
 
+	public static function getRelatedProducts(self $product, int $take = 8)
+	{
+		$availableCategoryIds = $product->categories->whereNotNull('parent_id')->pluck('id')->toArray() ?? $product->categories->pluck('id')->toArray();
+		return self::query()
+			->select(['id', 'status', 'title', 'slug', 'image_alt', 'approved_at', 'published_at'])
+			->available()
+			->active()
+			->whereKeyNot($product->id)
+			->whereHas('categories', fn($q) => $q->whereIn('id', $availableCategoryIds))
+			->with(['media', 'varieties' => fn($q) => $q->select(['id', 'product_id', 'price', 'discount', 'discount_until', 'discount_type'])])
+			->latest('id')
+			->take($take)
+			->get()
+			->each(fn($p) => $p->append(['main_image', 'final_price']));
+	}
+
 	public static function getAvailableStatusesWithLabel()
 	{
 		foreach (self::getAvailableStatuses() as $s) {
@@ -304,7 +320,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 					$categoriesQuery->where('id', request('category_id'))->orWhere('parent_id', request('category_id'));
 				});
 			})
-			->when(in_array(request('vip'), ["1", "0"]), fn($q) => $q->where('published_at','>',now()))
+			->when(in_array(request('vip'), ["1", "0"]), fn($q) => $q->where('published_at', '>', now()))
 			->when(request('id'), fn($q) => $q->where('id', request('id')))
 			->when(request('title'), fn($q) => $q->where('title', 'LIKE', "%" . request('title') . "%"))
 			->when(request('start_date'), fn($q) => $q->whereDate('created_at', '>=', request('start_date')))
@@ -314,8 +330,8 @@ class Product extends BaseModel implements HasMedia, Viewable
 				request('is_approved') == '1' ? $q->whereNotNull('approved_at') : $q->whereNull('approved_at');
 			})
 			->when(request('available'), fn($q) => $q->available())
-			->when(request('attribute_value_id'), function ($productQuery){
-				$productQuery->whereHas('varieties', function ($varietyQuery){
+			->when(request('attribute_value_id'), function ($productQuery) {
+				$productQuery->whereHas('varieties', function ($varietyQuery) {
 					$varietyQuery->whereHas('attributes', function ($attributeQuery) {
 						$attributeValueIdsArr = json_decode(request()->attribute_value_id, true);
 						$attributeQuery->whereIn('attribute_variety.attribute_value_id', $attributeValueIdsArr);

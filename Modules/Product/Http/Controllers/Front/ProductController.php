@@ -26,56 +26,47 @@ class ProductController extends Controller
 		return view('product::front.product.index', compact(['products', 'priceFilter', 'sizeValues', 'categories']));
 	}
 
-	public function show($id): JsonResponse
+	public function show($id)
 	{
-		$startTime = microtime(true);
+		abort_if(!is_numeric($id), 500);
 
-		if (!is_numeric($id)) {
-			abort(500);
-		}
-		/**
-		 * @var Product $product 
-		 */
-		$product = Product::query()->active()->with(['imagesNew', 'varieties.store'])->withCommonRelations()->findOrFail($id);
-
-
-
-		views($product)->collection('product')->record();
-
-		$relatedProducts = Product::query()->Available()->active()->with([/*'categories', 'activeFlash',*/'varieties'])
-			->whereHas('categories', function ($query) use ($product) {
-				return $query->whereIn(
-					'id',
-					$product->categories->whereNotNull('parent_id')->pluck('id')->toArray() ?? $product->categories->pluck('id')->toArray()
-				);
-			})
-			->whereKeyNot($product->id)
-			->inRandomOrder()
-			->select(
+		$product = Product::query()
+			->select([
 				'id',
 				'title',
+				'unit_price',
+				'discount',
+				'discount_until',
+				'discount_type',
 				'slug',
+				'image_alt',
 				'status',
-				//                'rate',
-				//                'major_final_price',
-				//                'major_image',
-				//                'images',
-			)
-			->take(6)
-			->get();
+				'show_quantity',
+				'approved_at',
+				'published_at'
+			])
+			->active()
+			->with([
+				'categories' => fn($cQuery) => $cQuery->select(['id', 'title', 'parent_id']),
+				'varieties' => fn($vQuery) => $vQuery->select(['id', 'product_id', 'price', 'discount', 'discount_type', 'discount_until']),
+				'varieties.store' => fn($sQuery) => $sQuery->select(['id', 'variety_id', 'balance']),
+				'varieties.attributes' => fn($aQuery) => $aQuery->select(['id', 'name', 'label', 'style']),
+				'media'
+			])
+			->findOrFail($id)
+			->append(['images', 'final_price', 'main_image']);
 
-		$relatedProducts = Helpers::removeVarieties($relatedProducts->toArray());
+		foreach ($product->varieties as $variety) {
+			$variety->makeHidden('product');
+			foreach ($variety->attributes as $attribute) {
+				$attribute->makeHidden('values');
+			}
+		}
 
-		// $relatedProducts = collect();
-		$settedProducts = $product->setted_products;
-		//        return response()->json($relatedProducts);
+		views($product)->collection('product')->record();
+		$relatedProducts = Product::getRelatedProducts($product);
 
-
-		$endTime = microtime(true);
-		$elapsedTime = $endTime - $startTime;
-		Log::info('Show Product Normal: ', ['elapsed_time' => $elapsedTime]);
-
-		return response()->success('', compact('product', 'relatedProducts', 'settedProducts'));
+		return view('product::front.product.show', compact(['product', 'relatedProducts']));
 	}
 
 	public function search()
@@ -95,7 +86,7 @@ class ProductController extends Controller
 				},
 				'varieties.store' => function ($storeQuery) {
 					$storeQuery->select(['id', 'variety_id', 'balance']);
-				}, 
+				},
 			])
 			->latest('id')
 			->active()

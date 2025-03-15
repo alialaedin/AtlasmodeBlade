@@ -1162,7 +1162,7 @@
 						}else {
 							value = specification.type == 'multi_select'  
 							? specificationValueObjects.map(specificationValue => specificationValue.id)   
-							: specificationValueObjects[0].id;
+							: specificationValueObjects.id;
 						}
 
 						return {  

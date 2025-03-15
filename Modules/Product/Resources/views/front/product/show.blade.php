@@ -1,0 +1,593 @@
+@extends('front-layouts.master')
+
+@section('content')
+  <main class="main mb-3">
+
+    <!-- Page Path -->
+    <div class="bg-white">
+      <div class="page-path container-2xl px-4 px-md-8 px-3xl-0 py-2 d-flex gap-1 align-items-center">
+        <i class="icon-home1 icon-fs-medium-2"></i>
+        <a href="/" class="text-button-1 mt-1">خانه</a>
+        <i class="icon-angle-double-left icon-fs-medium"></i>
+        <a href="/products" class="text-button-1 mt-1">محصولات</a>
+        <i class="icon-angle-left icon-fs-medium"></i>
+        <a href="{{ route('front.products.show', $product->id) }}" class="text-button-1 mt-1">{{ $product->title }}</a>
+      </div>
+    </div>
+
+    <section class="container-2xl d-flex flex-column flex-lg-row gap-4 px-4 px-md-8 px-3xl-0 mt-lg-10 mt-6">
+      <!-- Product Images  -->
+      <div class="product-images d-flex gap-lg-2 position-relative pb-3 pb-lg-0 pt-lg-0">
+        <div class="col-3 product-thumbImages-swiper swiper position-sticky">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <figure class="w-p-100">
+                      <img class="w-p-100" src="assets/images/product-detail/product-5120 (1).jpg" alt="">   
+                    </figure>
+                </div>
+                <div class="swiper-slide">
+                    <figure class="w-p-100">
+                      <img class="w-p-100" src="assets/images/product-detail/product-5120.jpg" alt="">   
+                    </figure>
+                </div>
+                <div class="swiper-slide">
+                    <figure class="w-p-100">
+                      <img class="w-p-100" src="assets/images/product-detail/product-5120 (2).jpg" alt="">   
+                    </figure>
+                </div>
+                <div class="swiper-slide">
+                    <figure class="w-p-100">
+                      <img class="w-p-100" src="assets/images/product-detail/product-5120 (3).jpg" alt="">   
+                    </figure>
+                </div>
+                <div class="swiper-slide">
+                    <figure class="w-p-100">
+                      <img class="w-p-100" src="assets/images/product-detail/product-5120 (4).jpg" alt="">   
+                    </figure>
+                </div>
+                
+            </div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+        <div class="col-9 product-main-swiper swiper pb-lg-0 pb-1">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <figure>
+                        <a href="assets/images/product-detail/product-5120 (1).jpg" class="w-p-100" data-lightbox="product-image">
+                            <img class="w-p-100" src="assets/images/product-detail/product-5120 (1).jpg" alt="">   
+                        </a>
+                    </figure>
+                </div>
+                <div class="swiper-slide">
+                  <figure>
+                    <a href="assets/images/product-detail/product-5120.jpg" class="w-p-100" data-lightbox="product-image">
+                        <img class="w-p-100" src="assets/images/product-detail/product-5120.jpg" alt="">   
+                    </a>
+                  </figure>
+                </div>
+                <div class="swiper-slide">
+                    <figure>
+                        <a href="assets/images/product-detail/product-5120 (2).jpg" class="w-p-100" data-lightbox="product-image">
+                            <img class="w-p-100" src="assets/images/product-detail/product-5120 (2).jpg" alt="">   
+                        </a>
+                    </figure>
+                </div>
+                <div class="swiper-slide">
+                    <figure>
+                        <a href="assets/images/product-detail/product-5120 (3).jpg" class="w-p-100" data-lightbox="product-image">
+                            <img class="w-p-100" src="assets/images/product-detail/product-5120 (3).jpg" alt="">      
+                        </a>
+                    </figure>
+                </div>
+                <div class="swiper-slide">
+                    <figure>
+                        <a href="assets/images/product-detail/product-5120 (4).jpg" class="w-p-100" data-lightbox="product-image">
+                            <img class="w-p-100" src="assets/images/product-detail/product-5120 (4).jpg" alt="">   
+                        </a>
+                    </figure>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+      <!-- Details -->
+      <div class="product-details d-flex flex-column flex-grow-1 pe-lg-2 pb-10 color-gray-900 px-5 px-lg-0">
+            <!-- Category -->
+            <span class="d-none d-lg-block text-medium color-gray-600">لباس زنانه ، بلوز زنانه</span>
+            <!-- Product Title , Price , Svgs -->
+            <div class="d-flex flex-column gap-1 border-b-2 pb-1">
+              <!-- Title and Svg -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 class="h5-strong product-title color-gray-900"> بلوز کبریتی دیور 3859</h1>
+                    <div class="d-flex align-items-center gap-1">
+                        <button type="button" class="like-btn">
+                            <svg class="heart" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.761 20.8538C9.5904 19.5179 7.57111 17.9456 5.73929 16.1652C4.45144 14.8829 3.47101 13.3198 2.8731 11.5954C1.79714 8.25031 3.05393 4.42083 6.57112 3.28752C8.41961 2.69243 10.4384 3.03255 11.9961 4.20148C13.5543 3.03398 15.5725 2.69398 17.4211 3.28752C20.9383 4.42083 22.2041 8.25031 21.1281 11.5954C20.5302 13.3198 19.5498 14.8829 18.2619 16.1652C16.4301 17.9456 14.4108 19.5179 12.2402 20.8538L12.0051 21L11.761 20.8538Z" stroke="#444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.7393 7.05301C16.8046 7.39331 17.5615 8.34971 17.6561 9.47499" stroke="#444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                            <svg class="heart-red" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-10f8db86=""><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8498 2.50071C16.4808 2.50071 17.1108 2.58971 17.7098 2.79071C21.4008 3.99071 22.7308 8.04071 21.6198 11.5807C20.9898 13.3897 19.9598 15.0407 18.6108 16.3897C16.6798 18.2597 14.5608 19.9197 12.2798 21.3497L12.0298 21.5007L11.7698 21.3397C9.4808 19.9197 7.3498 18.2597 5.4008 16.3797C4.0608 15.0307 3.0298 13.3897 2.3898 11.5807C1.2598 8.04071 2.5898 3.99071 6.3208 2.76971C6.6108 2.66971 6.9098 2.59971 7.2098 2.56071H7.3298C7.6108 2.51971 7.8898 2.50071 8.1698 2.50071H8.2798C8.9098 2.51971 9.5198 2.62971 10.1108 2.83071H10.1698C10.2098 2.84971 10.2398 2.87071 10.2598 2.88971C10.4808 2.96071 10.6898 3.04071 10.8898 3.15071L11.2698 3.32071C11.3616 3.36968 11.4647 3.44451 11.5538 3.50918C11.6102 3.55015 11.661 3.58705 11.6998 3.61071C11.7161 3.62034 11.7327 3.63002 11.7494 3.63978C11.8352 3.68983 11.9245 3.74197 11.9998 3.79971C13.1108 2.95071 14.4598 2.49071 15.8498 2.50071ZM18.5098 9.70071C18.9198 9.68971 19.2698 9.36071 19.2998 8.93971V8.82071C19.3298 7.41971 18.4808 6.15071 17.1898 5.66071C16.7798 5.51971 16.3298 5.74071 16.1798 6.16071C16.0398 6.58071 16.2598 7.04071 16.6798 7.18971C17.3208 7.42971 17.7498 8.06071 17.7498 8.75971V8.79071C17.7308 9.01971 17.7998 9.24071 17.9398 9.41071C18.0798 9.58071 18.2898 9.67971 18.5098 9.70071Z" data-v-10f8db86="" fill="#ee1212"></path></svg>
+                        </button>
+                        <button type="button" class="share-btn">
+                            <i class="icon-share icon-fs-medium-2"></i>
+                        </button>
+                    </div>
+                </div>
+              <!-- Price  -->
+                <div class="d-flex flex-wrap gap-2 align-items-center pb-2 border-b-gray-300">
+                    <!-- Price -->
+                    <div class="d-flex gap-1 align-items-center">
+                        <ins class="currency text-medium-3-strong color-primary-500">
+                          549000
+                        </ins>
+                        <span class="text-medium-2 color-gray-900">
+                        تومان 
+                        </span>
+                    </div>
+                    <!-- Discount Price -->
+                    <div class="d-flex gap-1 align-items-center color-gray-700">
+                        <span class="horizontal-divider h-4 bg-gray-300"></span>
+                        <s class="text-medium-2 d-flex gap-1 currency">
+                            <span class="currency">595000</span>
+                            <span class="">
+                                تومان 
+                            </span>
+                        </s>
+                        
+                    </div>
+                    <!-- Discount Percent -->
+                    <span class="px-2 radius-u text-button-1 bg-secondary-100">20%</span> 
+                </div>
+            </div>
+            <!-- Sizes -->
+            <div class="product-sizes d-flex flex-column gap-1 mt-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Title -->
+                    <span class="text-button-1">انتخاب سایز</span>
+                    <!-- Show Table Size Button -->
+                    <button type="button" data-modal="sizeTable" class="show-sizeTable d-lg-none bg-gray-900 text-button color-white px-1" data-modal="sizeTable">
+                      <span> سایز من چنده؟</span>
+                    </button>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mt-lg-0 mt-2 align-items-center">
+                  <div class="d-flex gap-1">
+                      <!-- Select -->
+                      <button type="button" class="size-btn text-center active text-button radius-circle">
+                        <span class="">XL</span>
+                      </button>
+                      <!-- Out Of Stock -->
+                      <button type="button" class="size-btn disabled text-button radius-circle">
+                        <span>M</span>
+                      </button>
+                      <button type="button" class="size-btn text-button radius-circle">
+                        <span>S</span>
+                      </button>
+                      <button type="button" class="size-btn text-button radius-circle">
+                        <span>L</span>
+                      </button>
+                      <button type="button" class="size-btn text-button radius-circle">
+                        <span>XS</span>
+                      </button>
+                  </div>
+                  <!-- Show Table Size Button -->
+                  <button type="button" class="show-sizeTable d-none d-lg-block bg-gray-900 text-button color-white px-1" data-modal="sizeTable">
+                      <span>سایز من چنده؟</span>
+                  </button>
+                </div>
+            </div>
+            <!-- Pattern -->
+            <form class="pattern d-flex flex-column gap-2 mt-3">
+                <span class="text-button-1">انتخاب طرح</span>
+                <select name="pattern-select-option" id="" class="p-2 border-gray-300 bg-gray-100">
+                    <option value="" selected disabled>طرح</option>
+                    <option value="">سفید</option>
+                    <option value="" disabled>سیاه</option>
+                    <option value="">صورتی</option>
+                    <option value="">ابی</option>
+                    <option value="">قهوه ایی</option>
+                </select>
+            </form>
+            <!-- Counter -->
+            <div class="d-flex flex-column gap-2 mt-3">
+                <!-- Title -->
+                <div class="d-flex gap-1 align-items-center">
+                    <span class="text-button-1">تعداد:</span>
+                    <!-- Quantity In Store -->
+                    <p class="quantity-mobile text-button-1  color-rating-3-4"> از این محصول 5 عدد در انبار باقی است </p>
+                </div>
+                <div class="counter d-flex justify-content-center align-items-center p-2 border-gray-300 justify-content-between">
+                    <button type="button" class="add-btn">
+                        <i class="icon-plus icon-fs-medium-2"></i>
+                    </button>
+                    <span class="count text-medium-2">1</span>
+                    <button type="button" disabled class="remove-btn">
+                        <i class="icon-minus icon-fs-medium-2"></i>
+                    </button>
+                </div>
+                <!-- Quantity In Store -->
+                <p class="quantity text-button-1 border-green p-2 mt-1 w-p-fit"> از این محصول 5 عدد در انبار باقی است </p>
+                <!-- Quantity In Shipping Cart -->
+                <div class="product-in-shippcart text-button-1 mt-1 gap-1 color-rating-4-5">
+                    <svg data-v-6463b8dc="" fill="#28a745" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 122.88 122.88" enable-background="new 0 0 122.88 122.88" xml:space="preserve" class="notice-icon"><g data-v-6463b8dc=""><path data-v-6463b8dc="" fill-rule="evenodd" clip-rule="evenodd" d="M61.44,0c33.926,0,61.44,27.514,61.44,61.44c0,33.926-27.514,61.439-61.44,61.439 C27.513,122.88,0,95.366,0,61.44C0,27.514,27.513,0,61.44,0L61.44,0z M52.687,90.555H69.44v14.81H52.687V90.555L52.687,90.555z M69.431,82.96H52.691c-1.665-20.343-5.159-29.414-5.159-49.729c0-7.492,6.075-13.57,13.567-13.57s13.57,6.078,13.57,13.57 C74.67,53.535,71.13,62.633,69.431,82.96L69.431,82.96z"></path></g></svg>
+                    <p>2 عدد از این محصول در سبد خرید شما وجود دارد</p>
+                </div>
+            </div>
+            <!-- Add To Cart Button -->
+            <button type="button"  data-modal="cart" class="add-toCart mt-4 d-lg-flex d-none gap-2 align-items-center justify-content-center bg-black text-medium color-white">
+              <i class="icon-troli icon-fs-medium"></i>    
+              <span>
+                افزودن به سبد خرید
+              </span>
+              <!-- <span>
+                ناموجود
+              </span> -->
+            </button>
+            
+      </div>
+    </section>
+
+    <!-- Specifications & Description & Comments -->
+    <section class="container-2xl d-flex flex-column gap-4 mt-lg-12 mt-6 px-4 px-md-8 px-3xl-0">
+        <ul class="second-section-list d-flex justify-content-center gap-4 text-medium px-3">
+            <li class="description-title position-relative d-flex flex-column gap-1 justify-content-center pointer">
+                <span class="px-1 pb-1 text-medium-strong">نقد و بررسی</span>
+            </li>
+            <li class="specifications-title active position-relative d-flex flex-column justify-content-center align-items-center pointer">
+            <span class="px-1 pb-1 text-medium-strong">مشخصات</span>
+            </li>
+            <li class="comments-title position-relative d-flex flex-column gap-1 justify-content-center pointer">
+              <span class="px-1 pb-1 text-medium-strong">نظرات کار بران</span>
+            </li>
+        </ul>
+        <div class="second-section-content">
+            <!-- Specifications -->
+            <ul class="specification-table active flex-column px-lg-0 px-3 mx-auto text-medium">
+            <li class="d-flex p-2 px-md-8">
+                <!-- Title -->
+                <span class="text-medium-strong">مدل لباس</span>
+                <!-- Value -->
+                <span class="">بلوز دورس</span>
+            </li>
+            <li class="d-flex p-2 px-md-8">
+                <!-- Title -->
+                <span class="text-medium-strong">کاربرد </span>
+                <!-- Value -->
+                <span class="">بیرونی، ورزشی، قابل استفاده زیر پافر، کاپشن، بارونی و...</span>
+            </li>
+            <li class="d-flex p-2 px-md-8">
+                <!-- Title -->
+                <span class="text-medium-strong">استایل</span>
+                <!-- Value -->
+                <span class="">اسپرت</span>
+            </li>
+            <li class="d-flex p-2 px-md-8">
+                <!-- Title -->
+                <span class="text-medium-strong">طرح</span>
+                <!-- Value -->
+                <span class="">طرح چاپی دارد.</span>
+            </li>
+            <li class="d-flex p-2 px-md-8">
+                <!-- Title -->
+                <span class="text-medium-strong">جنس پارچه</span>
+                <!-- Value -->
+                <span class="">دورس تو کرک سه نخ</span>
+            </li>
+            <li class="d-flex p-2 px-md-8">
+                <!-- Title -->
+                <span class="text-medium-strong">راهنمای شستشو</span>
+                <!-- Value -->
+                <span class="">قابل شستشو با ماشین لباسشویی</span>
+            </li>
+            </ul>
+            <!-- description -->
+            <div class="description py-6 flex-column gap-2 color-gray-700">
+                <h3 class="h1-strong">تیشرت ساده </h3>
+                <p class="text-medium"> 
+                    <b>تیشرت ساده</b> بدون طرح، گزینه‌ای مینیمال و راحت برای هر نوع استایل است. این تیشرت در سایزهای S تا 4XL و رنگ‌های متنوع عرضه می‌شود، بنابراین هر فرد با هر سلیقه‌ای می‌تواند انتخاب مناسبی داشته باشد. جنس باکیفیت و نرم این تیشرت، برای استفاده روزمره ایده‌آل است.
+                </p>
+                <h3 class="h1-strong">ویژگی‌ها:</h3>
+                <ul class="d-flex flex-column gap-1 color-gray-700 text-medium">
+                    <li class="d-flex gap-1 align-items-center">
+                        <i class="icon-dot-single icon-fs-medium-2"></i>
+                        <span>
+                            سایزها: از XS تا 4XL
+                        </span>
+                    </li>
+                    <li class="d-flex gap-1 align-items-center">
+                        <i class="icon-dot-single icon-fs-medium-2"></i>
+                        <span>
+                            رنگ‌ها: متنوع
+                        </span>
+                    </li>
+                    <li class="d-flex gap-1 align-items-center">
+                        <i class="icon-dot-single icon-fs-medium-2"></i>
+                        <span>
+                            جنس: نخ و پلی‌استر
+                        </span>
+                    </li>
+                    <li class="d-flex gap-1 align-items-center">
+                        <i class="icon-dot-single icon-fs-medium-2"></i>
+                        <span>
+                            مناسب برای: استفاده روزمره و استایل کژوال
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <!-- Comments -->
+            <div class="comments mt-6 flex-column">
+            <!-- No Comment Postes -->
+            <!-- <div class="d-flex flex-column gap-2 align-items-center mx-auto">
+                <span class="color-gray-700 text-medium">
+                    دیدگاهی برای این محصول ثبت نشده است.
+                </span>
+                <span class="text-medium-2-strong color-gray-900">
+                    اولین نفری باشید که دیدگاهی را ارسال می‌کند.
+                </span>
+            </div> -->
+            <button type="button" class="writeComment mx-auto bg-black color-white d-flex gap-1 align-items-center px-8 py-1">
+              <i class="icon-comment icon-fs-medium-2"></i>
+              <span class="text-medium">
+                برای ارسال نظر کلیک کنید
+              </span>
+            </button>
+            <!-- Set A Comment -->
+            <form id="comment-from" class="comments-form flex-lg-row flex-column gap-3">
+                <div class="col-lg-3 col-12 d-flex flex-column gap-2">
+                    <input type="text" placeholder="عنوان" class="comment-form-titleInput w-p-100 p-2 border-gray-300 radius-small">
+                    <!-- Stars -->
+                    <div class="rating d-flex gap-1 mt-lg-3 mt-1 px-lg-4">
+                        <button type="button" class="star-fill">
+                            <i class="icon-star-fill color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="starSimple">
+                            <i class="icon-star color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="star-fill">
+                            <i class="icon-star-fill color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="starSimple">
+                            <i class="icon-star color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="star-fill">
+                            <i class="icon-star-fill color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="starSimple">
+                            <i class="icon-star color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="star-fill">
+                            <i class="icon-star-fill color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="starSimple">
+                            <i class="icon-star color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="star-fill">
+                            <i class="icon-star-fill color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                        <button type="button" class="starSimple">
+                            <i class="icon-star color-rating-0-2 icon-fs-medium-2"></i>
+                        </button>
+                    </div>
+                    <!-- Show User Name Input -->
+                    <div class="name-input d-flex gap-1 align-items-center mt-1 px-lg-4">
+                        <input type="checkbox" checked class="customCheckbox">
+                        <span class="text-button-1">نمایش نام شما</span>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-12 d-flex flex-column ps-lg-3">
+                    <textarea class="comment-textarea w-p-100 p-2 radius-small border-gray-300" cols="5" rows="5" placeholder="دیدگاه شما *"></textarea>
+                    <button type="button" class="sendopinion bg-black px-8 py-1 text-medium color-white mt-3"> ارسال پیام</button>
+                </div>
+            </form>
+            <!-- Users Comments -->
+            <div class="user-comments d-flex flex-column gap-3">
+                <!-- Comment -->
+                <div class="user-comment bg-gray-200 d-flex flex-column gap-3 px-3 pt-3 pb-2 border-gray-300 radius-small">
+                    <!-- User Name And Rating -->
+                    <div class="d-flex flex-lg-row flex-column justify-content-lg-between">
+                        <div class="d-flex gap-6 align-items-center">
+                            <!-- User Name -->
+                            <div class="d-flex gap-1 align-items-center color-gray-700 ">
+                                <i class="icon-user1 icon-fs-medium-2"></i>
+                                <span class="text-button-1">کاربر الینور</span>
+                            </div>
+                            <!-- Publication Date -->
+                            <div class="d-flex gap-2">
+                                <span class="text-button-1-strong">تاریخ انتشار :</span>
+                                <time class="text-button-1" datetime=""1402/10/09> ۱۴۰۲/۱۰/۰۹</time>
+                            </div>
+                        </div>
+                        <!-- Stars -->
+                        <div class="user-rating d-flex gap-1 mt-1 " dir="ltr">
+                            <i class="icon-star-fill icon-fs-medium-2 color-rating-0-2"></i>
+                            <i class="icon-star-fill icon-fs-medium-2 color-rating-0-2"></i>
+                            <i class="icon-star-fill icon-fs-medium-2 color-rating-0-2"></i>
+                            <i class="icon-star-fill icon-fs-medium-2 color-rating-0-2"></i>
+                            <i class="icon-star icon-fs-medium-2 color-rating-0-2"></i>
+                        </div>
+                    </div>
+                    <!-- Text -->
+                    <p class="user-comment-text text-medium">لطفا رنگ کرم و سفیدش رو هم موجود کنین </p>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Similar Products -->
+    @if ($relatedProducts->isNotEmpty())
+      <section class="container-2xl d-flex flex-column mt-12 gap-6 px-4 px-md-8 px-3xl-0">
+        <!-- Title -->
+        <div class="d-flex align-items-center justify-content-between">
+          <h2 class="h4-strong color-gray-900">محصولات مشابه</h2>
+          <a href="{{ route('front.products.index') }}" class="see-more pb-1 text-medium-strong color-gray-900">مشاهده همه محصولات</a>
+        </div>
+        <div class="similar-products-swiper swiper">
+          <div class="swiper-wrapper pb-3">
+            @foreach ($relatedProducts as $relatedProduct)
+              <div class="swiper-slide">
+                <article class="product-cart">
+                  <a href="{{ route('front.products.show', $relatedProduct->id) }}" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
+                    <!-- Hover Buttons -->
+                    <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
+                      <button type="button" class="d-flex flex-column gap-1">
+                        <i class="icon-star icon-fs-xsmall"></i>
+                        <i class="icon-star icon-fs-xsmall"></i>
+                        <i class="icon-star icon-fs-xsmall"></i>
+                        <i class="icon-star icon-fs-xsmall"></i>
+                        <i class="icon-star icon-fs-xsmall"></i>
+                      </button>
+                      <button type="button" class="like">
+                        <i class="icon-heart icon-fs-medium-2"></i>
+                        <!-- <svg class="heart-red" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-10f8db86=""><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8498 2.50071C16.4808 2.50071 17.1108 2.58971 17.7098 2.79071C21.4008 3.99071 22.7308 8.04071 21.6198 11.5807C20.9898 13.3897 19.9598 15.0407 18.6108 16.3897C16.6798 18.2597 14.5608 19.9197 12.2798 21.3497L12.0298 21.5007L11.7698 21.3397C9.4808 19.9197 7.3498 18.2597 5.4008 16.3797C4.0608 15.0307 3.0298 13.3897 2.3898 11.5807C1.2598 8.04071 2.5898 3.99071 6.3208 2.76971C6.6108 2.66971 6.9098 2.59971 7.2098 2.56071H7.3298C7.6108 2.51971 7.8898 2.50071 8.1698 2.50071H8.2798C8.9098 2.51971 9.5198 2.62971 10.1108 2.83071H10.1698C10.2098 2.84971 10.2398 2.87071 10.2598 2.88971C10.4808 2.96071 10.6898 3.04071 10.8898 3.15071L11.2698 3.32071C11.3616 3.36968 11.4647 3.44451 11.5538 3.50918C11.6102 3.55015 11.661 3.58705 11.6998 3.61071C11.7161 3.62034 11.7327 3.63002 11.7494 3.63978C11.8352 3.68983 11.9245 3.74197 11.9998 3.79971C13.1108 2.95071 14.4598 2.49071 15.8498 2.50071ZM18.5098 9.70071C18.9198 9.68971 19.2698 9.36071 19.2998 8.93971V8.82071C19.3298 7.41971 18.4808 6.15071 17.1898 5.66071C16.7798 5.51971 16.3298 5.74071 16.1798 6.16071C16.0398 6.58071 16.2598 7.04071 16.6798 7.18971C17.3208 7.42971 17.7498 8.06071 17.7498 8.75971V8.79071C17.7308 9.01971 17.7998 9.24071 17.9398 9.41071C18.0798 9.58071 18.2898 9.67971 18.5098 9.70071Z" data-v-10f8db86="" fill="#ee1212"></path></svg> -->
+                      </button>
+                    </div>
+                    <!-- Img -->
+                    <figure class="product-img overflow-hidden position-relative">
+                      <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{ $relatedProduct->main_image['url'] }}" alt="{{ $relatedProduct->image_alt }}">
+                      <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{ $relatedProduct->main_image['url'] }}" alt="{{ $relatedProduct->image_alt }}">
+                      <!-- See More Btn -->
+                      <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">مشاهده بیشتر</button>
+                    </figure>
+                    <div class="product-details d-flex flex-column px-2 mt-2">
+                      <!-- Title -->
+                      <h5 class="text-medium-2-strong color-gray-900 text-truncate">{{ $relatedProduct->title }}</h5> 
+                      <div class="d-flex flex-wrap gap-lg-1 align-items-center">
+                        <!-- Price -->
+                        <div class="d-flex gap-1 align-items-center">
+                          <ins class="currency text-medium-2 color-primary-500">{{ $relatedProduct->final_price['amount'] }}</ins>
+                          <span class="text-medium color-gray-800">تومان</span>
+                        </div>
+                        @if ($relatedProduct->final_price['discount'])
+                          <!-- Discount Price -->
+                          <div class="d-flex align-items-center color-gray-700">
+                            <i class="icon-angle-double-right icon-fs-small pb-1"></i>
+                            <s class="text-medium currency">{{ $relatedProduct->final_price['base_amount'] }}</s>
+                          </div>
+                          <!-- Discount Percent -->
+                          <span class="px-2 radius-u text-button-1 bg-secondary-100">
+                            {{ number_format($relatedProduct->final_price['discount']) }}
+                            {{ $relatedProduct->final_price['discount_type'] == 'flat' ? 'تومان' : '%' }}
+                          </span> 
+                        @endif
+                        <div></div>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+              </div>
+            @endforeach
+          </div>
+          <div class="swiper-pagination position-absolute"></div>
+        </div>
+      </section>
+    @endif
+
+    <!-- Add To Cart Mobile -->
+    <button type="button" data-modal="cart" class="add-toCart-mobile d-lg-none gap-2 py-3 bg-black position-fixed bottom-0 start-0 end-0 d-flex align-items-center justify-content-center color-white">
+      <i class="icon-troli icon-fs-medium-2"></i>
+      <span> افزودن به سبد خرید</span>
+      <!-- <span>ناموجود</span> -->
+    </button>
+
+    <!-- Whatsapp Icon In mobile -->
+    <figure class="Whatsapp-icon-mobile d-lg-none">
+      <a class="w-p-100" href="https://wa.me/+989039611333">
+        <img class="w-p-100" src="assets/images/homePage/whatsApp.c1c819e5.png" alt="whatsapp">
+      </a>
+    </figure>
+
+  </main>
+@endsection
+
+@section('modals')
+ <!-- Cart Modal -->
+ <div class="modal modal-cart gap-2 overflow-auto d-flex flex-column align-items-center radius-medium px-lg-6 px-3 pt-3 pb-6 bg-white" data-id="cart">
+  <!-- Header -->
+   <div class="header-modal d-flex w-p-100 justify-content-between align-items-center">
+      <div class="d-flex gap-1 align-items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="24" height="24" viewBox="0 0 512 512">
+              <g id="icomoon-ignore">
+              </g>
+              <path d="M256 0c-141.376 0-256 114.624-256 256s114.624 256 256 256 256-114.624 256-256-114.624-256-256-256zM216.32 374.128l-117.792-117.808 45.248-45.248 72.528 72.56 153.872-153.872 45.248 45.248-199.104 199.12z"/>
+          </svg>
+          <span class="text-medium-3">کالا به سبد خرید اضافه شد</span>
+      </div>
+      <i class="modal-close icon-close icon-fs-large"></i>
+   </div>
+  <!-- Item-->
+  <div class="item w-p-100 d-flex flex-lg-row flex-column align-items-center justify-content-between radius-medium px-2 py-1">
+      <div class="w-p-100 d-flex ms-lg-1 gap-lg-2 gap-4 align-items-center">
+         <img class="item-img radius-medium" src="assets/images/product-detail/product-5120 (1).jpg" alt="">
+          <span class="text-medium-strong"> بلوز کبریتی دیور 3859 </span>
+      </div>
+      <div class="price d-flex flex-row flex-lg-column text-subtitle gap-lg-0 gap-1 align-items-center">
+          <span class="text-button d-lg-none">قیمت:</span>
+          <!-- Discount -->
+          <s class="currency text-center color-gray-600">1230000</s>
+          <div class="d-flex gap-1 align-items-center">
+             <ins class="currency text-strong">1800000</ins>
+             <span class="">تومان</span>
+          </div>
+      </div>
+  </div>
+  <!-- Button -->
+  <a href="./order.html" class="goToOrder mt-3 color-gray-900 bg-gray-200 d-flex gap-2 align-items-center justify-content-center text-medium-3 py-1 radius-small ">
+      <span>مشاهده سبد خرید </span>
+      <i class="icon-arrowLeft icon-fs-small color-gray-900"></i>
+  </a>
+</div>
+<!-- Table Size -->
+<div class="modal modal-sizeTable bg-white d-flex flex-column radius-medium px-2 px-md-8 pb-4 position-relative" data-id="sizeTable">
+  <div class="d-flex align-items-center px-6 pt-2 pb-1 border-b-gray-300">
+      <button type="button" class="modal-close">
+          <i class="icon-cancel icon-fs-small color-gray-700"></i>
+      </button>
+      <span class="flex-grow-1 text-center modal-title text-medium-3 color-gray-900">راهنمای انتخاب سایز</span>
+  </div>
+ <div class="overflow-auto px-1 pb-2">
+  <table class="modal-content mt-4 border-gray-400">
+      <thead class="">
+          <tr class="text-medium">
+              <th class="py-1 px-lg-3 px-1">سایزبندی</th>
+              <th class="py-1 px-lg-3 px-1">فری سایز</th>
+              <th class="py-1 px-lg-3 px-1">سایزبندی</th>
+              <th class="py-1 px-lg-3 px-1">فری سایز</th>
+              <th class="py-1 px-lg-3 px-1">سایزبندی</th>
+              <th class="py-1 px-lg-3 px-1">فری سایز</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr class="">
+              <td class="text-center py-2 px-lg-3 px-1">دورسینه</td>
+              <td class="text-center py-2 px-lg-3 px-1">126</td>
+              <td class="text-center py-2 px-lg-3 px-1">دورسینه</td>
+              <td class="text-center py-2 px-lg-3 px-1">126</td>
+              <td class="text-center py-2 px-lg-3 px-1">-</td>
+              <td class="text-center py-2 px-lg-3 px-1">-</td>
+          </tr>
+          <tr class="">
+              <td class="text-center py-2 px-lg-3 px-1">کشسانی دورسینه</td>
+              <td class="text-center py-2 px-lg-3 px-1">132</td>
+              <td class="text-center py-2 px-lg-3 px-1">دورسینه</td>
+              <td class="text-center py-2 px-lg-3 px-1">126</td>
+              <td class="text-center py-2 px-lg-3 px-1">کشسانی دورسینه</td>
+              <td class="text-center py-2 px-lg-3 px-1">132</td>
+          </tr>
+          <tr class="">
+              <td class="text-center py-2 px-lg-3 px-1">سرشانه</td>
+              <td class="text-center py-2 px-lg-3 px-1">21</td>
+              <td class="text-center py-2 px-lg-3 px-1">دورسینه</td>
+              <td class="text-center py-2 px-lg-3 px-1">126</td>
+              <td class="text-center py-2 px-lg-3 px-1">کشسانی دورسینه</td>
+              <td class="text-center py-2 px-lg-3 px-1">132</td>
+          </tr>
+
+      </tbody>
+  </table>
+ </div>
+</div>
+@endsection
+
+@section('scripts')
+  <script>
+    productDetailPage()
+    counter()
+  </script>  
+@endsection
