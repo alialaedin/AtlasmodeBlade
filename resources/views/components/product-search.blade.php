@@ -32,14 +32,8 @@
 @push('ProductSearchScripts')
   <script>
 
-    let productSelectBoxId = '#' + @json($productInputId);
-    let varietySelectBoxId = '#' + @json($varietyInputId);
-
-    let productSelectBox = $(productSelectBoxId);
-    let varietySelectBox = $(varietySelectBoxId);
-
-    varietySelectBox.select2({ placeholder: 'ابتدا محصول را جستجو کنید' });
-    productSelectBox.select2({  
+    $('#' + @json($varietyInputId)).select2({ placeholder: 'ابتدا محصول را جستجو کنید' });
+    $('#' + @json($productInputId)).select2({  
       ajax: {  
         url: @json(route('admin.products.search')),  
         dataType: 'json',  
@@ -80,12 +74,12 @@
       },  
     });  
 
-    productSelectBox.on('select2:select', () => {
+    $('#' + @json($productInputId)).on('select2:select', () => {
       $.ajax({
         url: @json(route('admin.products.load-varieties')),
         type: 'GET',
         data: {
-          product_id: productSelectBox.val()
+          product_id: $('#' + @json($productInputId)).val()
         },
         success: function(response) {
 
@@ -103,8 +97,8 @@
               options += `<option ${selected} value="${variety.id}">${title}</option>`;
             });
 
-            varietySelectBox.html(options);
-            varietySelectBox.select2({ placeholder: 'تنوع را انتخاب کنید' });
+            $('#' + @json($varietyInputId)).html(options);
+            $('#' + @json($varietyInputId)).select2({ placeholder: 'تنوع را انتخاب کنید' });
             
           }
         }
