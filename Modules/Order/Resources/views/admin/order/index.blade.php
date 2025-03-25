@@ -109,7 +109,7 @@
 							<input type="number" name="invoices_amount_to" placeholder="مبلغ سفارش تا" class="form-control" value="{{ request('invoices_amount_to') }}">
 						</div>
 					</div>
-					<x-product-search />
+					<x-product-search cols="col-12 col-md-6 col-xl-3" :has-label="false"/>
 				</div>
 				<div class="row">
 					<div class="col-12 col-md-6 col-xl-9">
