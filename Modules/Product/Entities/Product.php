@@ -242,7 +242,11 @@ class Product extends BaseModel implements HasMedia, Viewable
 
 	public static function getRelatedProducts(self $product, int $take = 8)
 	{
-		$availableCategoryIds = $product->categories->whereNotNull('parent_id')->pluck('id')->toArray() ?? $product->categories->pluck('id')->toArray();
+		$categories = $product->categories;
+		$availableCategoryIds = count($categories->whereNotNull('parent_id')->pluck('id')->toArray()) > 0
+			? $categories->whereNotNull('parent_id')->pluck('id')->toArray()
+			: $categories->pluck('id')->toArray();
+			
 		return self::query()
 			->select(['id', 'status', 'title', 'slug', 'image_alt', 'approved_at', 'published_at'])
 			->available()
@@ -511,7 +515,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 		$chosenVariety = null;
 		foreach ($this->varieties as $variety) {
 			if (
-				$variety->quantity != 0 &&
+				$variety->store->balance != 0 &&
 				$variety->final_price['amount'] < $finalPrice
 			) {
 				$chosenVariety = $variety;
@@ -673,7 +677,6 @@ class Product extends BaseModel implements HasMedia, Viewable
 
 	public function assignSpecifications(array $product)
 	{
-
 		if (isset($product['specifications']) && !empty($product = $product['specifications'])) {
 			$this->specifications()->detach();
 			foreach ($product as $specification) {

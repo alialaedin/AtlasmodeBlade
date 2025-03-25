@@ -114,6 +114,16 @@
         }
       },
       methods: {
+        getCartCookie() {
+          let cookieArr = document.cookie.split(";");  
+          for (let i = 0; i < cookieArr.length; i++) {  
+            let cookiePair = cookieArr[i].split("=");  
+            if (cookiePair[0].trim() == 'cartCookie') {  
+              return JSON.parse(decodeURIComponent(cookiePair[1]));  
+            }  
+          }  
+          return [];
+        },
         activeMobileForm() {
           document.querySelector('.login-register-form').classList.add('active');
           document.querySelector('.token-form').classList.remove('active');
@@ -219,11 +229,16 @@
         async login() {
           try {
             const url = @json(route('customer.login'));
+            const cartCookie = this.getCartCookie();
             const formData = new FormData();
 
             formData.append('_token', this.csrfToken); 
             formData.append('mobile', this.mobile);
             formData.append('sms_token', this.smsToken);
+
+            if (cartCookie.length > 0) {
+              formData.append('cookieCarts', cartCookie);
+            }
 
             const options = {
               method: 'POST',

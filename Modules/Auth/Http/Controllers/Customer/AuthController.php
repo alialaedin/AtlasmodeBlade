@@ -44,17 +44,9 @@ class AuthController extends Controller
 
 		if ($request->has('cookieCarts') && $request->filled('cookieCarts')) {
 			Cookie::queue(Cookie::forget('productData'));
-			$cookieCartsJson = $request->cookieCarts;
-			$cookieCartsArray = json_decode($cookieCartsJson, true);
-			$cookieCartsArray = array_map(function ($item) {
-				if (isset($item['variety_quantity'])) {
-					$item['quantity'] = $item['variety_quantity'];
-					unset($item['variety_quantity']);
-				}
-				return $item;
-			}, $cookieCartsArray);
-			request()->cookieCarts = $cookieCartsArray;
+			$request->merge(['cookieCarts' => json_decode($request->cookieCarts, true)]);
 		}
+		
 		$customer = Customer::where('mobile', $request->mobile)->first();
 		$customer->login();	
 

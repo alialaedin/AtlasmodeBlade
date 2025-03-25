@@ -45,6 +45,19 @@ class Cart extends Model
     return $cart;
   }
 
+  public static function addCookieCarts(Customer $customer, array $cookieCarts): void
+  {
+    foreach ($cookieCarts as $cookieCart) {
+
+      $variety = Variety::find($cookieCart['variety_id']);
+      $existsInCart = $customer->carts()->where('variety_id', $variety->id)->first();
+      $quantity = $existsInCart ? $cookieCart['quantity'] + $existsInCart->quantity : $cookieCart['quantity'];
+
+      if (!$variety || $quantity > $variety->quantity || $variety->product->status != Product::STATUS_AVAILABLE) continue;
+      Cart::addToCart($cookieCart['quantity'], $variety, $customer);
+    }
+  }
+
   public static function fakeCartMakerWithOrderItems($orderItems)
   {
     $fakeCarts = [];

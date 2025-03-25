@@ -387,10 +387,7 @@ class Variety extends BaseModel implements HasMedia
 
     public function getQuantityAttribute()
     {
-        return Cache::rememberForever('variety-quantity-' . $this->id, function () {
-            $balance = $this->store->balance ?? 0;
-            return min($balance, $this->max_number_purchases);
-        });
+        return min($this->store->balance ?? 0, $this->max_number_purchases);
     }
 
     public function getTotalSalesAttribute()
