@@ -90,9 +90,17 @@
         success: function(response) {
 
           if (Array.isArray(response.varieties) && response.varieties.length > 0) {
+
+            const url = window.location.href;
+            const parsedUrl = new URL(url);
+            const params = new URLSearchParams(parsedUrl.search);
+            const selectedVarietyId = params.get('variety_id');
+
             let options = '<option value="">انتخاب</option>';
             response.varieties.forEach((variety) => {
-              options += `<option value="${variety.id}">${variety.title} | موجودی: ${variety.quantity}</option>`;
+              const title = variety.title + ' |  موجودی: ' + variety.quantity;
+              const selected = selectedVarietyId === String(variety.id) ? 'selected' : '';
+              options += `<option ${selected} value="${variety.id}">${title}</option>`;
             });
             varietySelectBox.html(options);
             varietySelectBox.select2({ placeholder: 'تنوع را انتخاب کنید' });
