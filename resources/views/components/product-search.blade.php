@@ -102,8 +102,10 @@
               const selected = selectedVarietyId === String(variety.id) ? 'selected' : '';
               options += `<option ${selected} value="${variety.id}">${title}</option>`;
             });
+
             varietySelectBox.html(options);
             varietySelectBox.select2({ placeholder: 'تنوع را انتخاب کنید' });
+            
           }
         }
       });

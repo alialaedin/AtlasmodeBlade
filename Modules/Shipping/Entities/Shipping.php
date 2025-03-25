@@ -97,7 +97,7 @@ class Shipping extends BaseModel implements Sortable, HasMedia
             $morePacketPrice ?? $this->more_packet_price, $firstPacketSize ?? $this->first_packet_size);
     }
 
-    public function getForCustomerPrice(Customer $customer)
+    public function getForCustomerPrice($customer)
     {
         if (!($customer instanceof Customer)) {
             return false;
