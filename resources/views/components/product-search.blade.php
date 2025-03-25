@@ -32,11 +32,11 @@
 @push('ProductSearchScripts')
   <script>
 
-    const productSelectBoxId = '#' + @json($productInputId);
-    const varietySelectBoxId = '#' + @json($varietyInputId);
+    let productSelectBoxId = '#' + @json($productInputId);
+    let varietySelectBoxId = '#' + @json($varietyInputId);
 
-    const productSelectBox = $(productSelectBoxId);
-    const varietySelectBox = $(varietySelectBoxId);
+    let productSelectBox = $(productSelectBoxId);
+    let varietySelectBox = $(varietySelectBoxId);
 
     varietySelectBox.select2({ placeholder: 'ابتدا محصول را جستجو کنید' });
     productSelectBox.select2({  
