@@ -573,11 +573,7 @@ class Variety extends BaseModel implements HasMedia
 
     public function getTitleAttribute()
     {
-        $title = $this->product->title . '|';
-        $title .= $this->color->name ?? '';
-        // if (!$this->relationLoaded('attributes')) {
-        //     return new DontAppend('Variety getTitleAttribute');
-        // }
+        $title = $this->product->title;
         foreach ($this->relations['attributes'] ?? [] as $attribute) {
             $title .= ' | ' . $attribute->label . ': ' . $attribute->pivot->value;
         }

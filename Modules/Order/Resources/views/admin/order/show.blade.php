@@ -318,7 +318,7 @@
 </x-modal>
 
 <x-modal id="edit-item-quantity-modal" size="md">
-  <x-slot name="title">ویرزایش تعداد آیتم سفارش</x-slot>
+  <x-slot name="title">ویرایش تعداد آیتم سفارش</x-slot>
   <x-slot name="body">
     <form action="" method="POST">
 

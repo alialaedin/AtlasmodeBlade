@@ -109,6 +109,7 @@
 							<input type="number" name="invoices_amount_to" placeholder="مبلغ سفارش تا" class="form-control" value="{{ request('invoices_amount_to') }}">
 						</div>
 					</div>
+					<x-product-search />
 				</div>
 				<div class="row">
 					<div class="col-12 col-md-6 col-xl-9">
@@ -261,6 +262,8 @@
 		'dateInputId' => 'end_date_hide',
 		'textInputId' => 'end_date_show',
 	])
+
+	@stack('ProductSearchScripts')
 
 	<script>
 
