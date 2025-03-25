@@ -19,7 +19,9 @@
                 <form action="{{ route('admin.stores.index') }}" method="GET" class="col-12">
                     <div class="row">
 
-                        <div class="col-12 col-xl-3">
+                        <x-product-search cols="col-12 col-md-6 col-xl-3" productInputId="product-filter-select" varietyInputId="variety-filter-select"/>
+
+                        {{-- <div class="col-12 col-xl-3">
 							<div class="form-group">
 								<label>انتخاب محصول :</label>
 								<select class="form-control product-select-box">
@@ -35,7 +37,7 @@
 									<option value=""></option>
 								</select>
 							</div>
-						</div>
+						</div> --}}
 
                         <div class="col-12 col-xl-3 form-group">
                             <label>از تاریخ :</label>
@@ -111,7 +113,9 @@
 
                 <div class="row">
 
-					<div class="col-12">
+                    <x-product-search cols="col-12 col-md-6 col-xl-3" productInputId="product-select" varietyInputId="variety-select"/>
+
+					{{-- <div class="col-12">
 						<div class="form-group">
 							<select class="form-control product-select-box">
 								<option value=""></option>
@@ -125,7 +129,7 @@
 								<option value=""></option>
 							</select>
 						</div>
-					</div>
+					</div> --}}
 
                     <div class="col-12">
                         <div class="form-group">
@@ -166,92 +170,92 @@
 
     <script>
 
-		$('.variety-select-box').select2({ placeholder: 'ابتدا محصول را جستجو کنید' });
+		// $('.variety-select-box').select2({ placeholder: 'ابتدا محصول را جستجو کنید' });
 
-		function searchProducts() {  
-			$('.product-select-box').each(function () {
-				$(this).select2({  
-					ajax: {  
-						url: @json(route('admin.products.search')),  
-						dataType: 'json',  
-						delay: 250, 
-						processResults: (response) => {  
-							let products = response.data.products || [];  
-							return {  
-								results: products.map(product => ({  
-									id: product.id,  
-									title: product.title,  
-								})),  
-							};  
-						},  
-						cache: true,  
-						error: (jqXHR, textStatus, errorThrown) => {  
-							console.error("Error fetching products:", textStatus, errorThrown);  
-						},  
-					},  
-					placeholder: 'عنوان محصول را وارد کنید',  
-					minimumInputLength: 1,  
-					templateResult: (repo) => {  
-						if (repo.loading) return "در حال بارگذاری...";  
+		// function searchProducts() {  
+		// 	$('.product-select-box').each(function () {
+		// 		$(this).select2({  
+		// 			ajax: {  
+		// 				url: @json(route('admin.products.search')),  
+		// 				dataType: 'json',  
+		// 				delay: 250, 
+		// 				processResults: (response) => {  
+		// 					let products = response.data.products || [];  
+		// 					return {  
+		// 						results: products.map(product => ({  
+		// 							id: product.id,  
+		// 							title: product.title,  
+		// 						})),  
+		// 					};  
+		// 				},  
+		// 				cache: true,  
+		// 				error: (jqXHR, textStatus, errorThrown) => {  
+		// 					console.error("Error fetching products:", textStatus, errorThrown);  
+		// 				},  
+		// 			},  
+		// 			placeholder: 'عنوان محصول را وارد کنید',  
+		// 			minimumInputLength: 1,  
+		// 			templateResult: (repo) => {  
+		// 				if (repo.loading) return "در حال بارگذاری...";  
 
-						let $container = $(  
-						"<div class='select2-result-repository clearfix'>" +  
-						"<div class='select2-result-repository__meta'>" +  
-						"<div class='select2-result-repository__title'></div>" +  
-						"</div>" +  
-						"</div>"  
-						);  
+		// 				let $container = $(  
+		// 				"<div class='select2-result-repository clearfix'>" +  
+		// 				"<div class='select2-result-repository__meta'>" +  
+		// 				"<div class='select2-result-repository__title'></div>" +  
+		// 				"</div>" +  
+		// 				"</div>"  
+		// 				);  
 
-						$container.find(".select2-result-repository__title").text(repo.title);  
+		// 				$container.find(".select2-result-repository__title").text(repo.title);  
 
-						return $container;  
-					},  
-					templateSelection: (repo) => {  
-						return repo.id ? repo.title : repo.text;  
-					},  
-				});  
-			});
-		}
+		// 				return $container;  
+		// 			},  
+		// 			templateSelection: (repo) => {  
+		// 				return repo.id ? repo.title : repo.text;  
+		// 			},  
+		// 		});  
+		// 	});
+		// }
 
-		function searchVarieties() {
-			$('.product-select-box').each(function() {
-				let productSelectBox = $(this);
-				let varietySelectBox = $(this).closest('form').find('.variety-select-box');
-				productSelectBox.on('select2:select', () => {
-					$.ajax({
-						url: @json(route('admin.products.load-varieties')),
-						type: 'GET',
-						data: {
-							product_id: productSelectBox.val()
-						},
-						success: function(response) {
+		// function searchVarieties() {
+		// 	$('.product-select-box').each(function() {
+		// 		let productSelectBox = $(this);
+		// 		let varietySelectBox = $(this).closest('form').find('.variety-select-box');
+		// 		productSelectBox.on('select2:select', () => {
+		// 			$.ajax({
+		// 				url: @json(route('admin.products.load-varieties')),
+		// 				type: 'GET',
+		// 				data: {
+		// 					product_id: productSelectBox.val()
+		// 				},
+		// 				success: function(response) {
 
-							if (Array.isArray(response.varieties) && response.varieties.length > 0) {
+		// 					if (Array.isArray(response.varieties) && response.varieties.length > 0) {
 
-								let url = window.location.href;
-								let parsedUrl = new URL(url);
-								let params = new URLSearchParams(parsedUrl.search);
-								let selectedVarietyId = params.get('variety_id');
+		// 						let url = window.location.href;
+		// 						let parsedUrl = new URL(url);
+		// 						let params = new URLSearchParams(parsedUrl.search);
+		// 						let selectedVarietyId = params.get('variety_id');
 
-								varietySelectBox.empty();
-								let options = '<option value="">انتخاب</option>';
-								response.varieties.forEach((variety) => {
-									options += `<option value="${variety.id}" ${selectedVarietyId === String(variety.id) ? 'selected' : ''}>${variety.title}</option>`;
-								});
-								varietySelectBox.append(options);
-								varietySelectBox.select2({ placeholder: 'تنوع را انتخاب کنید' });
+		// 						varietySelectBox.empty();
+		// 						let options = '<option value="">انتخاب</option>';
+		// 						response.varieties.forEach((variety) => {
+		// 							options += `<option value="${variety.id}" ${selectedVarietyId === String(variety.id) ? 'selected' : ''}>${variety.title}</option>`;
+		// 						});
+		// 						varietySelectBox.append(options);
+		// 						varietySelectBox.select2({ placeholder: 'تنوع را انتخاب کنید' });
 
-							}
-						}
-					});
-				});
-			});
-		}
+		// 					}
+		// 				}
+		// 			});
+		// 		});
+		// 	});
+		// }
 
         $(document).ready(() => {
 
-			searchProducts();
-			searchVarieties();
+			// searchProducts();
+			// searchVarieties();
 
             $('#increment-store-btn').click(() => showModal('increment'));
             $('#decrement-store-btn').click(() => showModal('decrement'));

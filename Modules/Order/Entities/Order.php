@@ -40,6 +40,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Modules\Order\Entities\OrderItem;
 use Modules\Order\Entities\OrderLog;
+use Shetabit\Shopit\Modules\Sms\Sms;
 
 class Order extends Payable implements ProductWallet
 {
