@@ -168,6 +168,8 @@
         'textInputId' => 'end_date_show',
     ])
 
+    @stack('ProductSearchScripts')
+
     <script>
 
 		// $('.variety-select-box').select2({ placeholder: 'ابتدا محصول را جستجو کنید' });
