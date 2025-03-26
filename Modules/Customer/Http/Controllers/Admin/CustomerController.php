@@ -114,18 +114,16 @@ class CustomerController extends Controller
 		return view('customer::admin.customer.edit', compact('customer'));
 	}
 
-	public function update(CustomerUpdateRequest $request, $id)
+	public function update(CustomerUpdateRequest $request, Customer $customer)
 	{
-		$customer = Customer::query()->findOrFail($id);
 		$customer->update($request->all());
 		ActivityLogHelper::updatedModel('مشتری بروز شد', $customer);
 		
 		return redirect()->route('admin.customers.index')->with('success', 'مشتری با موفقیت به روزرسانی شد.');
 	}
 
-	public function destroy($id)
+	public function destroy(Customer $customer)
 	{
-		$customer = Customer::query()->findOrFail($id);
 		$customer->delete();
 		ActivityLogHelper::deletedModel('مشتری حذف شد', $customer);
 

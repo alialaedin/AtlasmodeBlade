@@ -13,12 +13,13 @@ use Modules\Customer\Entities\Deposit;
 use Modules\Customer\Http\Requests\Customer\ChangePasswordRequest;
 use Modules\Customer\Http\Requests\Customer\ProfileUpdateRequest;
 use Modules\Newsletters\Entities\UsersNewsletters;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Modules\Area\Entities\Province;
 use Throwable;
 
 class ProfileController extends Controller
 {
-
-  private null|\Illuminate\Contracts\Auth\Authenticatable|Customer $user;
+  private null|Authenticatable|Customer $user;
 
   public function __construct()
   {
@@ -27,6 +28,24 @@ class ProfileController extends Controller
 
       return $next($request);
     });
+  }
+
+  public function myAccount()
+  {
+    /** @var Customer $customer */
+    $customer = Auth::guard('customer')->user();
+    $customer->loadCount('orders');
+    $customer->load([
+      'addresses' => fn($q) => $q->with('city'),
+      'orders' => fn($q) => $q->with('items.product')
+    ]);
+
+    $provinces = Province::getAllProvinces(true);
+
+    return view('customer::customer.panel', compact([
+      'customer',
+      'provinces',
+    ]));
   }
 
   public function edit()
@@ -39,8 +58,8 @@ class ProfileController extends Controller
 
   public function update(ProfileUpdateRequest $request)
   {
-    $customer = auth()->user();
-
+    /** @var Customer $customer */
+    $customer = auth('customer')->user();
     $customer->fill($request->only([
       'first_name',
       'last_name',
@@ -66,8 +85,6 @@ class ProfileController extends Controller
     if ($request->hasFile('image')) {
       $customer->addImage($request->image);
     }
-
-    $customer->loadCommonRelations();
 
     return response()->success('پروفایل کاربری با موفقیت به روزرسانی شد', compact('customer'));
   }

@@ -33,8 +33,8 @@ Route::webSuperGroup('admin', function () {
     Route::post('/', [CustomerController::class,'store'])->name('store')->middleware('permission:write_customer');
     Route::get('/{customer}', [CustomerController::class,'show'])->name('show')->middleware('permission:read_customer');
     Route::get('/{customer}/edit', [CustomerController::class,'edit'])->name('edit')->middleware('permission:modify_customer');
-    Route::put('/{id}', [CustomerController::class,'update'])->name('update')->middleware('permission:modify_customer');
-    Route::delete('/{id}', [CustomerController::class,'destroy'])->name('destroy')->middleware('permission:delete_customer');
+    Route::put('/{customer}', [CustomerController::class,'update'])->name('update')->middleware('permission:modify_customer');
+    Route::delete('/{customer}', [CustomerController::class,'destroy'])->name('destroy')->middleware('permission:delete_customer');
 
 	});
 
@@ -52,9 +52,10 @@ Route::webSuperGroup('admin', function () {
   
 });
 
-Route::webSuperGroup('customer', function () {
+Route::middleware('auth:customer')->name('customer.')->group(function () {
   Route::resource('addresses', 'AddressController')->only(['index','store', 'update', 'destroy']);
   Route::get('/my-account', [ProfileController::class, 'myAccount'])->name('my-account');
+  Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/favorites/{product_id}', [ProfileController::class, 'removeProductFromFavorites'])->name('favorites.destroy');
   Route::get('/print-orders', [ProfileController::class, 'printOrders'])->name('print-orders');
 });
