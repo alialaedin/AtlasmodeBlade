@@ -151,6 +151,8 @@ class ProductController extends Controller
 			$product->checkStatusChanges($request->product);
 			$product->unit()->associate($request->product['unit_id']);
 			$product->brand()->associate($request->product['brand_id']);
+
+			$product->barcode = Product::generateBarcode();
 			$product->save();
 			if ($request->filled('product.images')) {
 				$product->addImages($request->product['images']);

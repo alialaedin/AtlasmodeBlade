@@ -230,14 +230,25 @@ class Product extends BaseModel implements HasMedia, Viewable
 
 	public static function getActiveVarietiyIds($productId)
 	{
-		return self::query()
-			->where('id', $productId)
-			->varieties()
-			->select(['id', 'product_id', 'deleted_at',])
+		return Variety::query()
+			->select(['id', 'product_id', 'deleted_at'])
+			->where('product_id', $productId)
 			->withoutGlobalScopes()
 			->whereNull('deleted_at')
 			->pluck('id')
 			->toArray();
+	}
+
+	public static function generateBarcode()
+	{
+		$lastProductBarcode = DB::table('products')->latest('barcode')->first()->barcode;
+		$barcode = $lastProductBarcode + 1;
+		$alreadyExists = Product::where('barcode', Helpers::convertFaNumbersToEn($barcode))->exists();
+		if ($alreadyExists) {
+			return response()->error($barcode . 'بارکد تکراری');
+		}
+
+		return $barcode;
 	}
 
 	public static function getRelatedProducts(self $product, int $take = 8)
@@ -246,7 +257,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 		$availableCategoryIds = count($categories->whereNotNull('parent_id')->pluck('id')->toArray()) > 0
 			? $categories->whereNotNull('parent_id')->pluck('id')->toArray()
 			: $categories->pluck('id')->toArray();
-			
+
 		return self::query()
 			->select(['id', 'status', 'title', 'slug', 'image_alt', 'approved_at', 'published_at'])
 			->available()

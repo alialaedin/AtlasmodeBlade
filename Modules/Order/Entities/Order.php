@@ -35,6 +35,7 @@ use Modules\Setting\Entities\Setting;
 use Modules\Shipping\Entities\Shipping;
 use Bavix\Wallet\Interfaces\Product as ProductWallet;
 use Bavix\Wallet\Interfaces\Customer as CustomerWallet;
+use Illuminate\Support\Facades\Log;
 use Modules\Store\Entities\Store;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -651,8 +652,8 @@ class Order extends Payable implements ProductWallet
 		try {
 			NewOrderForCustomerNotificationJob::dispatch($this);
 			$this->customer->notify(new InvoicePaid($this));
-			$adminEmail = Setting::getFromName('new_order_email_address');
-			Mail::to($adminEmail)->send(new NewOrderEmail($invoice->payable));
+			// $adminEmail = Setting::getFromName('new_order_email_address');
+			// Mail::to($adminEmail)->send(new NewOrderEmail($invoice->payable));
 		} catch (\Exception $e) {
 			Log::error('error on notify new order to admin ', [$e->getMessage()]);
 			Log::error('error on notify new order to admin ', [$e->getTraceAsString()]);

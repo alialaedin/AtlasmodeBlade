@@ -29,6 +29,15 @@ class StoreTransaction extends Model
 		return [self::TYPE_DECREMENT, self::TYPE_DECREMENT];
 	}
 
+	public function scopeFilters($query)
+	{
+		return $query
+			->when(request('id'), fn ($q) => $q->where('id', request('id')))
+			->when(request('type'), fn ($q) => $q->where('type', request('type')))
+			->when(request('start_date'), fn ($q) => $q->whereDate('created_at', '>=', request('start_date')))
+			->when(request('end_date'), fn ($q) => $q->whereDate('created_at', '<=', request('end_date')));
+	} 
+
 	public function order(): BelongsTo
 	{
 		return $this->belongsTo(Order::class, 'order_id');

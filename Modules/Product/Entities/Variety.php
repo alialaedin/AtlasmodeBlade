@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Modules\Admin\Entities\Admin;
 use Modules\Attribute\Entities\Attribute;
 use Modules\Attribute\Entities\AttributeValue;
@@ -102,6 +103,19 @@ class Variety extends BaseModel implements HasMedia
         });
     }
 
+    public static function createBarcode()
+    {
+        $latest_barcode = DB::table('varieties')->latest('barcode')->first()?->barcode;
+        $last_variety_barcode = (isset($latest_barcode) && $latest_barcode != '') ? $latest_barcode : 999;
+        $barcode = $last_variety_barcode + 1;
+        $alreadyExists = Variety::where('barcode', Helpers::convertFaNumbersToEn($barcode))->exists();
+        if ($alreadyExists) {
+            return response()->error($barcode . 'بارکد تکراری');
+        }
+
+        return $barcode;
+    }
+
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');
@@ -169,6 +183,10 @@ class Variety extends BaseModel implements HasMedia
         );
         Store::insertModel($store, true);
         $variety->addImages($varietyRequest['images']);
+
+        $variety->update([
+            'barcode' => self::createBarcode(),
+        ]);
 
         if ($attributes = $varietyRequest['attributes']) {
             $variety->assignAttributes($attributes);

@@ -4,6 +4,7 @@ namespace Modules\Customer\Http\Controllers\Admin;
 
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -93,7 +94,7 @@ class CustomerController extends Controller
 			$customer = Customer::query()->create($request->all());
 			ActivityLogHelper::storeModel('مشتری ایجاد شد', $customer);
 			if (!SmsToken::where('mobile', $customer->mobile)->exists()) {
-				SmsToken::queryy()->create([
+				SmsToken::query()->create([
 					'mobile' => $customer->mobile,
 					'token' => random_int(10000, 99999),
 					'expired_at' => Carbon::now()->addHours(24),
@@ -101,9 +102,9 @@ class CustomerController extends Controller
 				]);
 			}
 			DB::commit();
-		} catch (\Throwable $throwable) {
+		} catch (Exception $e) {
 			DB::rollBack();
-			return redirect()->back()->with('error', 'خطا در ثبت مشتری.');
+			return redirect()->back()->with('error', 'خطا در ثبت مشتری.' . $e->getMessage());
 		}
 
 		return redirect()->route('admin.customers.index')->with('success', 'مشتری با موفقیت ایجاد شد.');

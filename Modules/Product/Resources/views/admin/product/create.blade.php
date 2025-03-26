@@ -44,7 +44,7 @@
 							<label for="product-barcode">بارکد :</label>
 						</div>
 						<div class="col-xl-10">
-							<input type="text" placeholder="بارکد" class="form-control" v-model="product.barcode" id="product-barcode"/>
+							<input type="text" placeholder="بارکد" class="form-control" v-model="product.barcode" id="product-barcode" readonly/>
 						</div>
 					</div>
 
@@ -286,6 +286,7 @@
 												class="mb-2 form-control text-center"   
 												v-model="getVarietyValue(attributes.id).barcode"
 												placeholder="بارکد"
+												readonly
 											/>  
 											<input 
 												type="text" 
@@ -602,7 +603,7 @@
 									track-by="id"  
 									class="custom-multiselect"  
 									placeholder="انتخاب نوع سایز چارت"  
-									v-model="choosenSizecharts"
+									v-model="product.size_charts[index].choosenSizecharts"
 									required  
 									:options="sizeChartTypes"
 									@select="(selectedSizeChartTypeObj) => addTypeAndChartToSizechart(selectedSizeChartTypeObj, index)"  
@@ -1123,6 +1124,7 @@
 				this.product.size_charts.push({  
 					title: '',  
 					type_id: null,  
+					choosenSizecharts: {},
 					chart: [],  
 				});  
 			},  
