@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Customer\Http\Controllers\Admin\AddressController;
+use Modules\Customer\Http\Controllers\Admin\AddressController as AdminAddressController;
+use Modules\Customer\Http\Controllers\Customer\AddressController as CustomerAddressController;
 use Modules\Customer\Http\Controllers\Admin\CustomerController;
 use Modules\Customer\Http\Controllers\Admin\CustomerRoleController;
 use Modules\Customer\Http\Controllers\Customer\ProfileController;
@@ -9,7 +10,7 @@ use Modules\Customer\Http\Controllers\Admin\WithdrawController;
 
 Route::webSuperGroup('admin', function () {
 
-  Route::get('/get-cities', [AddressController::class, 'getCities'])->name('getCity');
+  Route::get('/get-cities', [AdminAddressController::class, 'getCities'])->name('getCity');
 
 	Route::prefix('/withdraws')->name('withdraws.')->group(function () {
 		Route::get('/', [WithdrawController::class, 'index'])->name('index')->middleware('permission:read_withdraw');
@@ -48,12 +49,12 @@ Route::webSuperGroup('admin', function () {
 	});
 
   Route::resource('addresses', 'AddressController')->only(['index','store', 'update']);
-  Route::delete('/addresses/delete/{customer_id}/{address_id?}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+  Route::delete('/addresses/delete/{customer_id}/{address_id?}', [AdminAddressController::class, 'destroy'])->name('addresses.destroy');
   
 });
 
 Route::middleware('auth:customer')->name('customer.')->group(function () {
-  Route::resource('addresses', 'AddressController')->only(['index','store', 'update', 'destroy']);
+  Route::resource('addresses', CustomerAddressController::class)->only(['index','store', 'update', 'destroy']);
   Route::get('/my-account', [ProfileController::class, 'myAccount'])->name('my-account');
   Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/favorites/{product_id}', [ProfileController::class, 'removeProductFromFavorites'])->name('favorites.destroy');

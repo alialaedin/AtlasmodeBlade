@@ -130,7 +130,75 @@
         </div>
       </div> --}}
       
-  </section>
+    </section>
+
+    <!-- Addresses -->
+    <section data-id="address" class="address-info bg-white section col-lg-9 flex-column radius-medium border-gray-300 px-lg-5 py-5 px-2">
+      <div class="d-flex justify-content-between align-items-center">
+         <h3  class="text-medium-3 address-title position-relative">آدرس‌ها</h3>
+        <button type="button" data-modal="add-address" class="add-address-btn d-flex align-items-center gap-1 color-gray-700 py-1 px-4">
+          <i class="icon-map-pin icon-fs-medium"></i>
+          <span class="text-medium">افزودن آدرس جدید</span>
+        </button>
+      </div>
+      <!-- Saved Addresses -->
+      <div class="saved-addresses d-flex flex-column mt-12 gap-2">
+        <template v-for="address in addresses" :key="address.id">
+          <div class="item d-flex flex-column justify-content-between gap-1 pb-4">
+            <div class="d-flex justify-content-between position-relative w-p-100 align-items-center">
+              <span class="item-address-text text-medium color-gray-900">@{{ address.address }}</span>
+              <button type="button" class="edit-delete-btn" data-popover="deleteEdit">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="25" height="20" viewBox="0 0 512 512">
+                  <g id="icomoon-ignore"></g>
+                  <path fill="#000" d="M341.334 256c0 23.466 19.2 42.666 42.666 42.666s42.666-19.2 42.666-42.666c0-23.466-19.2-42.666-42.666-42.666s-42.666 19.2-42.666 42.666zM256 213.333c-23.466 0-42.666 19.2-42.666 42.667s19.2 42.666 42.666 42.666c23.466 0 42.666-19.2 42.666-42.666s-19.2-42.666-42.666-42.666zM85.334 256c0-23.466 19.2-42.666 42.666-42.666s42.666 19.2 42.666 42.666c0 23.466-19.2 42.666-42.666 42.666s-42.666-19.2-42.666-42.666z"/>
+                </svg>
+              </button>
+              <!-- Popup Delete Or Edit Buttons -->
+              <div data-id="deleteEdit" class="popover d-flex popover-deleteEdit radius-small position-absolute flex-column bg-white py-1">
+                <button 
+                  @click="setAddressDataForEdit(address.id)"
+                  type="button" 
+                  data-modal="edit-address-modal"
+                  class="edit-address-btn d-flex gap-3 px-2 py-1 align-items-center" 
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path  fill-rule="evenodd" clip-rule="evenodd" d="M9.3764 20.0279L18.1628 8.66544C18.6403 8.0527 18.8101 7.3443 18.6509 6.62299C18.513 5.96726 18.1097 5.34377 17.5049 4.87078L16.0299 3.69906C14.7459 2.67784 13.1541 2.78534 12.2415 3.95706L11.2546 5.23735C11.1273 5.39752 11.1591 5.63401 11.3183 5.76301C11.3183 5.76301 13.812 7.76246 13.8651 7.80546C14.0349 7.96671 14.1622 8.1817 14.1941 8.43969C14.2471 8.94493 13.8969 9.41792 13.377 9.48242C13.1329 9.51467 12.8994 9.43942 12.7297 9.29967L10.1086 7.21422C9.98126 7.11855 9.79025 7.13898 9.68413 7.26797L3.45514 15.3303C3.0519 15.8355 2.91395 16.4912 3.0519 17.1255L3.84777 20.5761C3.89021 20.7589 4.04939 20.8879 4.24039 20.8879L7.74222 20.8449C8.37891 20.8341 8.97316 20.5439 9.3764 20.0279ZM14.2797 18.9533H19.9898C20.5469 18.9533 21 19.4123 21 19.9766C21 20.5421 20.5469 21 19.9898 21H14.2797C13.7226 21 13.2695 20.5421 13.2695 19.9766C13.2695 19.4123 13.7226 18.9533 14.2797 18.9533Z" fill="#000"></path></svg>
+                  <span class="text-button">ویرایش</span>
+                </button>                                   
+                <button type="button" class="delete-address-btn d-flex gap-3 px-2 py-1 align-items-center">
+                  <i class="icon-trash-2 icon-fs-medium color-error-100"></i>
+                  <span class="text-button mt-1">حذف آدرس</span>
+                </button>
+              </div>
+            </div>
+            <div class="grid gap-2">
+              <!-- City -->
+              <div class="g-col-6 d-flex gap-1 text-medium color-gray-700 align-items-center">
+                <i class="icon-map icon-fs-medium"></i>
+                <span class="item-city">@{{ address.city.name }}</span>
+              </div>
+              <!-- Name -->
+              <div class="g-col-6 d-flex align-items-center gap-1 text-medium color-gray-700 align-items-center">
+                <i class="icon-user icon-fs-medium"></i>
+                <div>
+                  <span class="item-name">@{{ address.firstName }} </span>
+                  <span class="item-lastName">@{{ address.lastName }}</span>
+                </div>
+              </div>
+              <!-- Postal Code -->
+              <div class="g-col-6 d-flex gap-1 text-medium color-gray-700 align-items-center">
+                <i class="icon-mail icon-fs-medium"></i>
+                <span class="item-postalCode">@{{ address.postalCode }}</span>
+              </div>
+              <!-- Phone Number -->
+              <div class="g-col-6 d-flex gap-1 align-items-center text-medium color-gray-700 align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="18" height="18" viewBox="0 0 768 768"><g id="icomoon-ignore"></g><path fill="#888888" d="M475.488 191.392c30.176 5.888 55.68 21.856 73.92 43.968 13.44 16.32 22.912 35.968 27.264 57.376 3.488 17.312 20.384 28.512 37.696 25.024s28.512-20.384 25.024-37.696c-6.4-31.744-20.48-61.024-40.608-85.408-27.328-33.152-65.824-57.248-111.040-66.048-17.344-3.392-34.144 7.936-37.536 25.28s7.936 34.144 25.28 37.536zM478.080 63.808c64 7.104 119.776 37.184 160.16 81.408 35.776 39.168 59.456 89.408 65.984 144.608 2.080 17.536 17.984 30.112 35.52 28.032s30.112-17.984 28.032-35.52c-8.096-68.704-37.632-131.392-82.272-180.288-50.496-55.296-120.384-92.992-200.352-101.856-17.568-1.952-33.376 10.72-35.328 28.256s10.72 33.376 28.256 35.328zM736 541.44c0.512-22.848-7.552-44.928-21.536-62.176-14.72-18.112-36.128-30.944-61.6-34.56-25.6-3.136-54.24-10.048-82.752-20.672-13.856-5.088-28.576-6.976-43.008-5.568-21.216 2.048-41.824 11.168-58.208 27.36l-23.040 23.040c-56.64-35.744-107.52-85.344-146.656-146.848l23.232-23.232c10.304-10.56 18.016-23.232 22.624-36.992 6.784-20.224 6.848-42.752-1.248-64.352-9.248-24.096-16.576-52.608-20.608-83.040-3.328-22.848-14.592-43.040-30.816-57.728-17.248-15.552-40.192-24.928-64.864-24.672h-95.872c-2.816 0-5.824 0.128-8.736 0.384-26.368 2.4-49.344 15.296-65.056 34.112s-24.256 43.744-21.856 70.368c9.6 98.432 43.68 199.776 102.912 291.264 48.064 77.216 116.736 147.936 201.536 201.792 82.176 54.304 181.888 91.584 290.752 103.392 2.944 0.288 6.112 0.416 9.216 0.416 26.496-0.096 50.496-10.976 67.776-28.384s27.936-41.504 27.84-67.872zM672 541.44v96c0.032 8.96-3.488 16.96-9.28 22.784s-13.728 9.44-22.592 9.472c-100.768-10.752-190.752-44.512-264.416-93.184-77.696-49.376-139.488-113.184-182.464-182.208-54.304-83.84-84.96-175.392-93.568-263.616-0.768-8.576 2.048-16.832 7.328-23.168s12.896-10.56 21.696-11.36l98.816-0.16c8.672-0.096 16.224 3.008 21.984 8.192 5.44 4.928 9.216 11.712 10.336 19.456 4.544 34.304 13.056 67.744 24.224 96.8 2.592 6.912 2.56 14.304 0.32 21.056-1.568 4.64-4.192 8.992-7.744 12.64l-40.384 40.352c-10.368 10.368-12.128 26.048-5.184 38.432 50.688 89.12 122.848 158.624 204.192 204.096 12.704 7.104 28.224 4.608 38.24-5.312l40.64-40.64c5.312-5.248 12.064-8.224 19.136-8.928 4.864-0.48 9.92 0.16 14.688 1.92 32.704 12.192 66.24 20.352 97.088 24.128 7.712 1.088 14.784 5.312 19.68 11.36 4.704 5.792 7.392 13.184 7.232 21.824z"/></svg>
+                <span class="item-number">@{{ address.mobile }}</span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </section>
 
   </main>
 @endsection
@@ -183,11 +251,11 @@
         <label for="last-name">نام خانوادگی</label>
         <input type="text" v-model="updateInformation.lastName" id="last-name" class="p-2 bg-gray-100">
       </div>
-      <div class="d-flex flex-column gap-2 g-col-12">
+      <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
         <label for="email">ایمیل</label>
         <input type="text" v-model="updateInformation.email" id="email" class="p-2 bg-gray-100">
       </div>
-      <div class="d-flex flex-column gap-2 g-col-lg-4 g-col-6">
+      <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
         <label for="national-code">کد ملی</label>
         <input type="text" v-model="updateInformation.nationalCode" id="national-code" class="p-2 bg-gray-100">
       </div>
@@ -204,6 +272,137 @@
   </button>
 </div>
 
+<!-- Add New Address -->
+<div class="modal modal-add-newAddress radius-medium d-flex flex-column bg-white gap-2 px-6 py-4" data-id="add-address">
+  <!-- Header Modal -->
+  <div class="header-modal d-flex justify-content-between pb-2">
+    <span class="text-medium-3">افزودن آدرس پستی</span>
+    <button type="button" class="modal-close">
+      <i class="icon-cancel icon-fs-small color-gray-700"></i>
+    </button>
+  </div>
+  <form class="newAddress-from grid gap-1 gap-lg-2 mt-1">
+    <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
+      <label for="country">استان<span class="color-error-100">*</span></label>
+      <select id="country" class="p-2 bg-gray-100" v-model="newAddressData.provinceId">
+        <option value="" disabled selected>انتخاب استان</option>
+        <option
+          v-for="province in provinces"
+          v-text="province.name"
+          :key="province.id"
+          :value="province.id">
+        </option>
+      </select>
+    </div>
+    <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
+      <label for="city">شهر<span class="color-error-100">*</span></label>
+      <select id="city" class="p-2 bg-gray-100" v-model="newAddressData.cityId">
+        <option v-if="newAddressData.cities.length == 0" value="" disabled selected>ابتدا استان را انتخاب کنید</option>
+        <option
+          v-else
+          v-for="city in newAddressData.cities"
+          v-text="city.name"
+          :key="city.id"
+          :value="city.id">
+        </option>
+      </select>
+    </div>
+    <div class="d-flex flex-column gap-2 g-col-12">
+      <label for="address-input">آدرس کامل پستی<span class="color-error-100">*</span></label>
+      <input type="text" v-model="newAddressData.address" id="address-input" required minlength="10" class="p-2 bg-gray-100">
+    </div>
+    <div class="d-flex flex-column gap-2 g-col-12">
+      <label for="postal-code">کد پستی<span class="color-error-100">*</span></label>
+      <input type="text" v-model="newAddressData.postalCode" id="postal-code" required  class="p-2 bg-gray-100">
+    </div>
+    <div class="grid gap-2 pt-2 g-col-12">
+      <div class="d-flex flex-column gap-2 g-col-12 g-col-lg-6">
+        <label for="name">نام گیرنده<span class="color-error-100">*</span></label>
+        <input type="text" v-model="newAddressData.firstName" id="name" required class="p-2 bg-gray-100">
+      </div>
+      <div class="d-flex flex-column gap-2 g-col-12 g-col-lg-6">
+        <label for="last-name">نام‌خانوادگی گیرنده<span class="color-error-100">*</span></label>
+        <input type="text" v-model="newAddressData.lastName" id="last-name" required  class="p-2 bg-gray-100">
+      </div>
+      <div class="d-flex flex-column gap-1 g-col-12 g-col-lg-6">
+        <label for="phone-number">شماره موبایل<span class="color-error-100">*</span></label>
+        <input type="text" v-model="newAddressData.mobile" id="phone-number" required maxlength="11" placeholder="مثل: 09123457686" class="p-2 bg-gray-100">
+      </div>
+    </div>
+  </form>
+  <button
+    @click="storeNewAddress"
+    type="button" 
+    class="add-newAddress-btn bg-black color-white text-medium">
+    ثبت آدرس
+  </button>
+</div>
+
+<!-- Edit Address -->
+<div v-if="editAddressData.addressId != ''" data-id="edit-address-modal" class="modal modal-add-newAddress radius-medium d-flex flex-column bg-white gap-2 px-6 py-4">
+  <!-- Header Modal -->
+  <div class="header-modal d-flex justify-content-between pb-2">
+    <span class="text-medium-3"> ویرایش آدرس پستی</span>
+    <button type="button" class="modal-close">
+      <i class="icon-cancel icon-fs-small color-gray-700"></i>
+    </button>
+  </div>
+  <form class="newAddress-from grid gap-1 gap-lg-2 mt-1">
+    <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
+      <label>استان<span class="color-error-100">*</span></label>
+      <select class="p-2 bg-gray-100" v-model="editAddressData.provinceId" @change="loadCitiesForEditAddress">
+        <option
+          v-for="province in provinces"
+          v-text="province.name"
+          :selected="editAddressData.province.id == province.id"
+          :key="province.id"
+          :value="province.id">
+        </option>
+      </select>
+    </div>
+    <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
+      <label>شهر<span class="color-error-100">*</span></label>
+      <select class="p-2 bg-gray-100" v-model="editAddressData.cityId">
+        <option
+          v-for="city in editAddressData.province.cities"
+          v-text="city.name"
+          :selected="editAddressData.cityId == city.id"
+          :key="city.id"
+          :value="city.id">
+        </option>
+      </select>
+    </div>
+    <div class="d-flex flex-column gap-2 g-col-12">
+      <label for="address-input-2">آدرس کامل پستی<span class="color-error-100">*</span></label>
+      <input type="text" v-model="editAddressData.address" id="address-input-2" required minlength="10" class="p-2 bg-gray-100">
+    </div>
+    <div class="d-flex flex-column gap-2 g-col-12">
+      <label for="postal-code-2">کد پستی<span class="color-error-100">*</span></label>
+      <input type="text" v-model="editAddressData.postalCode" id="postal-code-2" required  class="p-2 bg-gray-100">
+    </div>
+    <div class="grid gap-2 pt-2 g-col-12">
+      <div class="d-flex flex-column gap-2 g-col-12 g-col-lg-6">
+        <label for="name-2">نام گیرنده<span class="color-error-100">*</span></label>
+        <input type="text" v-model="editAddressData.firstName" id="name-2" required class="p-2 bg-gray-100">
+      </div>
+      <div class="d-flex flex-column gap-2 g-col-12 g-col-lg-6">
+        <label for="last-name-2">نام‌خانوادگی گیرنده<span class="color-error-100">*</span></label>
+        <input type="text" v-model="editAddressData.lastName" id="last-name-2" required  class="p-2 bg-gray-100">
+      </div>
+      <div class="d-flex flex-column gap-1 g-col-12 g-col-lg-6">
+        <label for="phone-number-2">شماره موبایل<span class="color-error-100">*</span></label>
+        <input type="text" v-model="editAddressData.mobile" id="phone-number-2" required maxlength="11" class="p-2 bg-gray-100">
+      </div>
+    </div>
+  </form>
+  <button
+    @click="updateAddress"
+    type="button" 
+    class="add-newAddress-btn bg-black color-white text-medium">
+    بروزرسانی آدرس
+  </button>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -213,30 +412,141 @@
   <script src="{{ asset('assets/sweetalert2/sweetalert2.js') }}"></script>
 
   <script>
+    function activeSection() {
+      const listsBtn = document.querySelectorAll('.lists > :not(:last-child)');
+      listsBtn.forEach(button => {
+        button.addEventListener('click', function () {
+          listsBtn.forEach(btn => btn.classList.remove('select'));
+          button.classList.add('select');
+          const data = button.getAttribute('data-btn');
+          const sections = document.querySelectorAll('.section');
+          sections.forEach(section => section.classList.remove('active'));
+          const targetSection = document.querySelector(`[data-id="${data}"]`);
+          targetSection.classList.add('active');
+          window.scrollTo({
+            top: targetSection.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        });
+      });
+    }
+    function modal() {
+      document.querySelectorAll('[data-modal]').forEach(element => {
+        element.addEventListener('click', function () {
+          const id = this.getAttribute('data-modal');
+          document.querySelector(`.modal[data-id="${id}"]`).classList.add('active');
+          document.querySelector('.modal-overlay').classList.add('active');
+          document.body.classList.add('no-overflow');
+        });
+      });
+
+      document.querySelectorAll('.modal-close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function () {
+          document.querySelector('.modal-overlay').classList.remove('active');
+          document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+          document.body.classList.remove('no-overflow');
+        });
+      });
+
+      document.querySelector('.modal-overlay').addEventListener('click', function () {
+        document.querySelector('.modal-overlay').classList.remove('active');
+        document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+        document.body.classList.remove('no-overflow');
+      });
+    }
+    function popOver() {
+      document.querySelectorAll('[data-popover]').forEach(element => {
+        element.addEventListener('click', function(event) {
+          event.stopPropagation();
+          const id = this.getAttribute('data-popover');
+          document.querySelectorAll('[data-id]').forEach(el => el.classList.remove('opened'));
+          this.closest('.item').querySelector(`[data-id="${id}"]`).classList.add('opened');
+        });
+      });
+
+      document.addEventListener('click', function() {
+        document.querySelectorAll('[data-id]').forEach(el => el.classList.remove('opened'));
+      });
+    }
+  </script>
+
+  <script>
 
     const { createApp } = Vue;
 
     createApp({
       mounted() {
+        activeSection();
+        modal();
+        popOver();
         console.log(this.customer);
         this.setCustomerBirthDate();
+        this.setCustomerInformationForUpdate();
       },
       data() {
         return {
           customer: @json($customer),
+          provinces: @json($provinces),
+          existsAddresses: @json($customer->addresses),
           birthDate: '',
           updateInformation: {
-            firstName: this.customer.first_name,
-            lastName: this.customer.last_name,
-            email: this.customer.email,
-            nationalCode: this.customer.national_code,
-            // birthDate: this.customer.birth_date,
+            firstName: '',
+            lastName: '',
+            email: '',
+            nationalCode: '',
+          },
+          newAddressData: {
+            provinceId: '',
+            cities: [],
+            cityId: '',
+            firstName: '',
+            lastName: '',
+            postalCode: '',
+            address: '',
+            mobile: '',
+          },
+          editAddressData: {
+            addressId: '',
+            province: '',
+            provinceId: '',
+            city: {},
+            cityId: '',
+            firstName: '',
+            lastName: '',
+            postalCode: '',
+            address: '',
+            mobile: '',
           },
         }
       },
+      watch: {
+        'newAddressData.provinceId'(newProvinceId, oldProvinceId) {
+          if (typeof newProvinceId !== 'number') return;
+          this.newAddressData.cities = this.provinces.find(p => p.id == newProvinceId)?.cities;
+          this.newAddressData.cityId = this.newAddressData.cities[0].id;
+        },
+        // 'editAddressData.provinceId'(newProvinceId, oldProvinceId) {
+        //   if (typeof newProvinceId !== 'number') return;
+        //   if (oldProvinceId === '') return;
+        //   const province = this.provinces.find(p => p.id == newProvinceId);
+        //   this.editAddressData.province = province;
+        //   this.editAddressData.provinceId = province.id;
+        //   this.editAddressData.city = province.cities[0];
+        //   this.editAddressData.cityId = province.cities[0].id;
+        // },
+      },
       methods: {
 
-        // global methods
+        openModal(selector) {
+          document.querySelector(selector).classList.add('active');  
+          document.querySelector('.modal-overlay').classList.add('active');
+          document.body.classList.add('no-overflow');
+        },
+        closeModal(selector) {
+          document.querySelector(selector).classList.remove('active');  
+          document.querySelector('.modal-overlay').classList.remove('active');
+          document.body.classList.remove('no-overflow');
+        },
         showValidationError(errors) {  
 
           const list = document.createElement('ul');  
@@ -275,7 +585,75 @@
             this.birthDate = moment(this.customer.birth_date).locale('fa').format('YYYY/M/D');
           }
         },
+        setCustomerInformationForUpdate() {
+          this.updateInformation.firstName = this.customer.first_name;
+          this.updateInformation.lastName = this.customer.last_name;
+          this.updateInformation.email = this.customer.email;
+          this.updateInformation.nationalCode = this.customer.national_code;
+        },
+        setNewCustomerInformation(requestCustomer) {
+          this.customer.first_name = requestCustomer.first_name
+          this.customer.last_name = requestCustomer.last_name
+          this.customer.national_code = requestCustomer.national_code
+          this.customer.email = requestCustomer.email
+        },
+        setNewAddress(requestAddress) {
+          this.existsAddresses.unshift(requestAddress);
+        },
+        setAddressDataForEdit(addressId) {
+          const address = this.addresses.find(a => a.id == addressId);
+          this.editAddressData.addressId = addressId;
+          this.editAddressData.province = address.province;
+          this.editAddressData.provinceId = address.province.id;
+          this.editAddressData.city = address.city;
+          this.editAddressData.cityId = address.cityId;
+          this.editAddressData.firstName = address.firstName;
+          this.editAddressData.lastName = address.lastName;
+          this.editAddressData.postalCode = address.postalCode;
+          this.editAddressData.address = address.address;
+          this.editAddressData.mobile = address.mobile;
+        },
 
+        loadCitiesForEditAddress() {
+          const province = this.provinces.find(p => p.id == this.editAddressData.provinceId);
+          this.editAddressData.province = province;
+          this.editAddressData.city = province.cities[0];
+          this.editAddressData.cityId = province.cities[0].id;
+        },
+
+        async request(url, method, data = null, onSuccessRequest) {
+
+          let options = {
+            method: method,
+            headers: {
+              'Accept': 'application/json',
+              'X-CSRF-TOKEN': @json(csrf_token())
+            },
+          };
+
+          if (data === null) {
+            options.headers['Content-Type'] = 'application/json';
+          } else {
+            options.body = data;
+          }
+
+          const response = await fetch(url, options);
+          const result = await response.json();
+
+          if (!response.ok) {
+            switch (response.status) {
+              case 422:
+                this.showValidationError(result.errors);
+                break;
+              case 500:
+                this.popup('error', 'خطای سرور', result.message);
+                break;
+            }
+            return;
+          }
+
+          onSuccessRequest(result);
+        },
         async updateCustomerInformation() {
           try {
 
@@ -287,87 +665,82 @@
             formData.append('email', this.updateInformation.email);
             formData.append('national_code', this.updateInformation.nationalCode);
 
-            const options = {
-              method: 'PUT',
-              headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': @json(csrf_token())
-              },
-              body: formData,
-            };
-
-            const response = await fetch(url, options);
-            const result = await response.json();
-
-            if (!response.ok && response.status == 422)
-              this.showValidationError(result.errors);
-            else if (response.ok && response.status == 200) 
-              this.popup('success', 'عملیات موفق', result.message);
-            console.log(result);
+            await this.request(url, 'PUT', formData, async (result) => {
+              this.setNewCustomerInformation(result.data.customer);
+              this.popup('success', '', result.data.message);
+            });
 
           } catch (error) {
             console.error('error:', error);
           }
         },
+        async storeNewAddress() {
+          try {
 
+            const url = @json(route('customer.addresses.store'));
+            const formData = new FormData();
+
+            formData.append('first_name', this.newAddressData.firstName);
+            formData.append('last_name', this.newAddressData.lastName);
+            formData.append('mobile', this.newAddressData.mobile);
+            formData.append('postal_code', this.newAddressData.postalCode);
+            formData.append('address', this.newAddressData.address);
+            formData.append('city', this.newAddressData.cityId);
+
+            await this.request(url, 'POST', formData, async (result) => {
+              this.setNewAddress(result.data.address);
+              this.popup('success', '', result.data.message);
+            });
+
+          } catch (error) {
+            console.error('error:', error);
+          }
+        },
+        async updateAddress() {
+          try {
+
+            const url = `/addresses/${this.editAddressData.addressId}`;
+            const formData = new FormData();
+
+            formData.append('first_name', this.editAddressData.firstName);
+            formData.append('last_name', this.editAddressData.lastName);
+            formData.append('mobile', this.editAddressData.mobile);
+            formData.append('postal_code', this.editAddressData.postalCode);
+            formData.append('address', this.editAddressData.address);
+            formData.append('city', this.editAddressData.cityId);
+
+            await this.request(url, 'PUT', formData, async (result) => {
+              this.setNewAddress(result.data.address);
+              this.popup('success', '', result.data.message);
+            });
+
+          } catch (error) {
+            console.error('error:', error);
+          }
+        },
+      
       },
       computed: {
-        
+        addresses() {
+          if (!this.existsAddresses || this.existsAddresses.length === 0) return [];
+          return this.existsAddresses.map(address => {
+            const province = this.provinces.find(p => p.id == address.city?.province_id);
+            const city = province?.cities.find(c => c.id == address.city_id);
+            return {
+              id: address.id,
+              province: province,
+              city: city,
+              cityId: address.city_id,
+              firstName: address.first_name,
+              lastName: address.last_name,
+              mobile: address.mobile,
+              postalCode: address.postal_code,
+              address: address.address,
+            }
+          });
+        },
       }
     }).mount('#main-content');
-
-  </script>
-
-  <script>
-
-    function activeSection() {
-      const listsBtn = document.querySelectorAll('.lists > :not(:last-child)');
-      listsBtn.forEach(button => {
-        button.addEventListener('click', function () {
-          listsBtn.forEach(btn => btn.classList.remove('select'));
-          button.classList.add('select');
-          const data = button.getAttribute('data-btn');
-          const sections = document.querySelectorAll('.section');
-          sections.forEach(section => section.classList.remove('active'));
-          const targetSection = document.querySelector(`[data-id="${data}"]`);
-          targetSection.classList.add('active');
-          window.scrollTo({
-            top: targetSection.offsetTop - 100,
-            behavior: 'smooth'
-          });
-        });
-      });
-    }
-
-    function modal() {
-      document.querySelectorAll('[data-modal]').forEach(element => {
-        element.addEventListener('click', function () {
-          const id = this.getAttribute('data-modal');
-          document.querySelector(`.modal[data-id="${id}"]`).classList.add('active');
-          document.querySelector('.modal-overlay').classList.add('active');
-          document.body.classList.add('no-overflow');
-        });
-      });
-
-      document.querySelectorAll('.modal-close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', function () {
-          document.querySelector('.modal-overlay').classList.remove('active');
-          document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
-          document.body.classList.remove('no-overflow');
-        });
-      });
-
-      document.querySelector('.modal-overlay').addEventListener('click', function () {
-        document.querySelector('.modal-overlay').classList.remove('active');
-        document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
-        document.body.classList.remove('no-overflow');
-      });
-    }
-
-    $(document).ready(() => {
-      activeSection();
-      modal();
-    });
 
   </script>
 

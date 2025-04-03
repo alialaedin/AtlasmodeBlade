@@ -36,10 +36,16 @@ class ProfileController extends Controller
     $customer = Auth::guard('customer')->user();
     $customer->loadCount('orders');
     $customer->load([
-      'addresses' => fn($q) => $q->with('city'),
       'orders' => fn($q) => $q->with('items.product')
     ]);
 
+    $addresses = $customer->addresses()
+      ->select(['id', 'address', 'postal_code', 'mobile', 'customer_id', 'first_name', 'last_name', 'city_id'])
+      ->with('city', fn ($q) => $q->select(['id', 'name', 'province_id']))
+      ->latest('id')
+      ->get();
+
+    $customer['addresses'] = $addresses;
     $provinces = Province::getAllProvinces(true);
 
     return view('customer::customer.panel', compact([
@@ -60,17 +66,9 @@ class ProfileController extends Controller
   {
     /** @var Customer $customer */
     $customer = auth('customer')->user();
-    $customer->fill($request->only([
-      'first_name',
-      'last_name',
-      'email',
-      'national_code',
-      'gender',
-      'card_number',
-      'birth_date',
-      'newsletter',
-      'foreign_national'
-    ]));
+    $validatedFields = $request->validated();
+    unset($validatedFields['password']);
+    $customer->fill($validatedFields);
     if ($request->filled('password')) {
       $customer->password = $request->input('password');
     }
