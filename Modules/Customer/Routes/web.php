@@ -54,9 +54,16 @@ Route::webSuperGroup('admin', function () {
 });
 
 Route::middleware('auth:customer')->name('customer.')->group(function () {
-  Route::resource('addresses', CustomerAddressController::class)->only(['index','store', 'update', 'destroy']);
+
+  Route::prefix('/addresses')->name('addresses.')->group(function() {
+    Route::get('/', [CustomerAddressController::class, 'index'])->name('index');
+    Route::post('/', [CustomerAddressController::class, 'store'])->name('store');
+    Route::put('/{address}', [CustomerAddressController::class, 'update'])->name('update');
+    Route::delete('/{address}', [CustomerAddressController::class, 'destroy'])->name('destroy');
+  });
+
+  Route::post('/deposit', [ProfileController::class, 'depositWallet'])->name('wallet.deposit');
   Route::get('/my-account', [ProfileController::class, 'myAccount'])->name('my-account');
   Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-  Route::delete('/favorites/{product_id}', [ProfileController::class, 'removeProductFromFavorites'])->name('favorites.destroy');
   Route::get('/print-orders', [ProfileController::class, 'printOrders'])->name('print-orders');
 });

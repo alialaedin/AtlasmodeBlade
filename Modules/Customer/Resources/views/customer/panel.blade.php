@@ -200,6 +200,318 @@
       </div>
     </section>
 
+    <!-- Orders -->
+    <section data-id="orders" class="orders-info bg-white section col-lg-9 flex-column gap-2 radius-medium border-gray-300 px-lg-5 py-5 px-2">
+
+      <div class="d-flex flex-column gap-4">
+        <h4  class="text-medium-3">تاریخچه سفارشات</h4>
+        <ul class="orders-list d-flex gap-md-8 gap-sm-5 gap-1 pb-1 border-b-gray-400 px-1">
+          <template v-for="statusObj in orderStatistics" :key="statusObj.name">
+            <button 
+              @click="showOrdersList($event)"
+              type="button" 
+              :data-btn="statusObj.name" 
+              class="d-flex color-gray-700 align-items-center gap-1 delivered text-medium">
+              <span>@{{ statusObj.label }}</span>
+              <span class="delivered-number text-button bg-gray-300 color-white radius-small">@{{ statusObj.count }}</span>
+            </button>
+          </template>
+        </ul>
+      </div>
+
+      <template v-for="statusObj in orderStatistics" :key="statusObj.name">
+        <div :data-id="statusObj.name" class="div flex-column gap-3 px-1">
+          <template v-for="order in filteredOrdersByStatus[statusObj.name]" :key="order.id">
+            <div class="order d-flex flex-column gap-1 border-gray-300 radius-small p-2">
+              <div class="d-flex justify-content-between">
+                <div class="title d-flex align-items-center gap-3">
+                  <span class="text-medium">@{{ statusObj.label }}</span>
+                </div>
+                <button type="button" :data-order-id="order.id" class="order-history-btn" @click="showOrderDetail($event)">
+                  <i class="icon-arrow-left2 icon-fs-small"></i>
+                </button>
+              </div>
+              <!-- Order Info -->
+              <div class="d-flex flex-wrap align-items-center gap-1 pb-1 border-b-gray-400">
+                <!-- Order Date -->
+                <time :datetime="order.persian_created_at" class="color-gray-700">@{{ order.persian_created_at }}</time>
+                <i class="icon-dot-single  icon-fs-medium color-gray-700"></i>
+                <!-- Order Code -->
+                <div class="d-flex align-items-center color-gray-700 gap-1">
+                  <span>کد سفارش</span>
+                  <span class="color-gray-900 text-medium">@{{ order.id }}</span>                       
+                </div>
+                <i class="icon-dot-single  icon-fs-medium color-gray-700"></i>
+                <!-- Discount -->
+                <div class="d-flex align-items-center color-gray-700 gap-1">
+                  <span>تخفیف</span>
+                  <div class="d-flex align-items-baseline gap-1">
+                    <span class="currency color-gray-900 text-medium">@{{ order.discount_amount }}</span>
+                    <span>تومان</span>
+                  </div>
+                </div>
+                <i class="icon-dot-single  icon-fs-medium color-gray-700"></i>
+                <!-- Price -->
+                <div class="d-flex align-items-center color-gray-700 gap-1">
+                  <span>مبلغ</span>
+                  <div class="d-flex align-items-baseline gap-1">
+                    <span class="currency color-gray-900 text-medium">@{{ order.total_amount }}</span>
+                    <span>تومان</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Order Img -->
+              <div class="order-images d-flex gap-2 mt-2">
+                <template v-for="item in order.items" :key="item.id">
+                  <figure v-if="item.product.main_image != null">
+                    <img class="w-p-100 radius-small" :src="item.product.main_image.url" :alt="item.product.title" />
+                  </figure>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+      </template>
+      
+    </section>
+
+    <!-- Orders History -->
+    <section class="orders-history section bg-white col-lg-9 flex-column gap-2 radius-medium border-gray-300 px-lg-5 py-5">
+
+      <div class="d-flex justify-content-between align-items-center pb-1 pe-2 border-b-gray-400">
+        <span class="text-medium-3 address-title position-relative">جزئیات سفارش</span>
+        <button type="button" class="backTo-orders-info-btn d-flex align-items-center gap-1 color-primary-500 radius-medium px-4">
+          <i class="icon-fleshBottom icon-fs-medium color-gray-900"></i>
+        </button>
+      </div>
+
+      <div class="d-flex flex-column gap-3 mt-2 pb-2 border-b-gray-400 pe-2">
+        <div class="d-flex gap-1 align-items-center pb-2 border-b-gray-400">
+          <div class="d-flex align-items-center text-medium color-gray-700 gap-1">
+            <span>کد سفارش</span>
+            <span class="color-gray-900">@{{ selectedOrderToShowDetail.id }}</span>                       
+          </div>
+          <i class="icon-dot-single  icon-fs-medium color-gray-700"></i>
+          <div class="d-flex align-items-center text-medium color-gray-700 gap-1">
+            <span>تاریخ ثبت سفارش</span>
+            <time 
+              :datetime="selectedOrderToShowDetail.persian_created_at" 
+              v-text="selectedOrderToShowDetail.persian_created_at"
+              class="color-gray-900">
+            </time>
+          </div>
+        </div>
+        <div class="d-flex flex-column gap-1">
+          <div class="d-flex gap-1 align-items-center">
+            <!-- Name -->
+            <div class="d-flex align-items-center text-medium color-gray-700 gap-1">
+              <span class="text-medium-strong">تحویل گیرنده:</span>
+              <span class="color-gray-900">
+                @{{ selectedOrderToShowDetail.address.first_name + ' ' + selectedOrderToShowDetail.address.last_name }}
+              </span>                       
+            </div>
+            <i class="icon-dot-single  icon-fs-medium color-gray-700"></i>
+            <!-- Number -->
+            <div class="d-flex align-items-center text-medium color-gray-700 gap-1">
+              <span class="text-medium-strong">شماره موبایل:</span>
+              <span class="color-gray-900"> @{{ selectedOrderToShowDetail.address.mobile }}</span>
+            </div>
+          </div>
+          <!-- Address -->
+          <div class="d-flex gap-1 text-medium">
+            <span class="color-gray-700 text-medium-strong">آدرس:</span>
+            <span class="color-gray-900">@{{ selectedOrderToShowDetail.address.address }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Costs -->
+      <div class="d-flex flex-wrap gap-1 mt-1 align-items-center pe-2">
+        <!-- Discount -->
+        <div class="d-flex align-items-center text-medium color-gray-700 gap-1">
+          <span>تخفیف</span>
+          <span class="color-gray-900 currency">@{{ selectedOrderToShowDetail.discount_amount }}</span>
+          <span>تومان</span>                      
+        </div>
+        <i class="icon-dot-single  icon-fs-medium color-gray-700"></i>
+        <!-- Price -->
+        <div class="d-flex align-items-center text-medium color-gray-700 gap-1">
+          <span>مبلغ</span>
+          <span class="color-gray-900 currency">@{{ selectedOrderToShowDetail.total_amount }}</span>
+          <span>تومان</span>                       
+        </div>
+        <i class="icon-dot-single  icon-fs-medium color-gray-700"></i>
+        <!-- Shipping Cost -->
+        <div class="d-flex gap-1 text-medium">
+          <span class="color-gray-700">هزینه ارسال</span>
+          <span class="color-gray-900 currency">@{{ selectedOrderToShowDetail.shipping_amount }}</span>
+          <span class="color-gray-700">تومان</span>                       
+        </div>
+      </div>
+
+      <!-- Products Info -->
+      <div class="products-info d-flex flex-column gap-2 px-1 mx-2 mx-lg-0 border-gray-300 radius-small">
+        <div v-for="item in selectedOrderToShowDetail.items" :key="item.id" class="product d-flex flex-column p-4">
+          <div class="grid gap-0">
+            <a class="position-relative" :href="'/products/' + item.product_id">
+              <figure>
+                <img class="w-p-100 product-img" :src="item.product.main_image?.url" :alt="item.product.title">
+              </figure>
+              <span class="position-absolute bottom-0 start-0 bg-gray-100 px-1 radius-small">@{{ item.quantity }}</span>
+            </a>
+            <!-- Product Name , Color ,Size -->
+            <div class="d-flex flex-column gap-1 me-3">
+              <h4 class="text-medium-2 product-title">@{{ item.product.title }}</h4>
+              <div v-for="attribute in item.variety.attributes" class="d-flex gap1 align-items-center gap-1 text-button color-gray-700">
+                <span>@{{ attribute.label }}</span>
+                <span class="text-medium-strong product-size">@{{ attribute.pivot.value }}</span>
+              </div>
+            </div>
+            <span></span>
+            <!-- Price -->
+            <div class="d-flex flex-column me-1">
+              <!-- Discount -->
+              <div v-if="item.discount_amount > 0" class="d-flex gap-1 text-medium align-items-center">
+                <span class="currency color-primary-500">@{{ item.discount_amount }}</span>
+                <i class="icon-toman icon-fs-small color-primary-500"></i>
+                <span class="color-primary-500">تخفیف</span>
+              </div>
+              <div class="d-flex gap-1 align-items-center">
+                <span class="currency text-medium-3 mt-1">@{{ (item.amount - item.discount_amount) * item.quantity }}</span>
+                <i class="icon-toman icon-fs-medium"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Favorites -->
+    <section data-id="favorites" class="favorite bg-white section col-lg-9 flex-column radius-medium border-gray-300 px-lg-5 py-5 px-2">
+      <h2 class="text-medium-3 ">لیست علاقه مندی ها</h2>
+      <div class="favorite-products grid gap-lg-3 gap-2 mt-3">
+        <div v-for="product in favorites" :key="product.id" class="g-col-lg-3 g-col-6">
+          <article>
+            <a :href="'/products/' + product.id" class="product-cart d-flex flex-column align-items-center gap-2 bg-gray-200 p-1 position-relative w-p-100 radius-medium">
+              <button type="button" @click.prevent="removeFromFavorites(product.id)" class="heart-btn position-absolute">
+                <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-10f8db86=""><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8498 2.50071C16.4808 2.50071 17.1108 2.58971 17.7098 2.79071C21.4008 3.99071 22.7308 8.04071 21.6198 11.5807C20.9898 13.3897 19.9598 15.0407 18.6108 16.3897C16.6798 18.2597 14.5608 19.9197 12.2798 21.3497L12.0298 21.5007L11.7698 21.3397C9.4808 19.9197 7.3498 18.2597 5.4008 16.3797C4.0608 15.0307 3.0298 13.3897 2.3898 11.5807C1.2598 8.04071 2.5898 3.99071 6.3208 2.76971C6.6108 2.66971 6.9098 2.59971 7.2098 2.56071H7.3298C7.6108 2.51971 7.8898 2.50071 8.1698 2.50071H8.2798C8.9098 2.51971 9.5198 2.62971 10.1108 2.83071H10.1698C10.2098 2.84971 10.2398 2.87071 10.2598 2.88971C10.4808 2.96071 10.6898 3.04071 10.8898 3.15071L11.2698 3.32071C11.3616 3.36968 11.4647 3.44451 11.5538 3.50918C11.6102 3.55015 11.661 3.58705 11.6998 3.61071C11.7161 3.62034 11.7327 3.63002 11.7494 3.63978C11.8352 3.68983 11.9245 3.74197 11.9998 3.79971C13.1108 2.95071 14.4598 2.49071 15.8498 2.50071ZM18.5098 9.70071C18.9198 9.68971 19.2698 9.36071 19.2998 8.93971V8.82071C19.3298 7.41971 18.4808 6.15071 17.1898 5.66071C16.7798 5.51971 16.3298 5.74071 16.1798 6.16071C16.0398 6.58071 16.2598 7.04071 16.6798 7.18971C17.3208 7.42971 17.7498 8.06071 17.7498 8.75971V8.79071C17.7308 9.01971 17.7998 9.24071 17.9398 9.41071C18.0798 9.58071 18.2898 9.67971 18.5098 9.70071Z" data-v-10f8db86="" fill="#ee1212"></path></svg>
+              </button>
+              <figure class="product-cart-image w-p-100">
+                <img class="w-p-100 radius-medium" loading="lazy" :src="product.main_image.url" :alt="product.title">
+              </figure>
+              <div class="product-details d-flex flex-column px-2 mt-2">
+                <!-- Title -->
+                <h5 class="text-medium-2-strong color-gray-900 text-truncate">@{{ product.title }}</h5> 
+                <div class="d-flex flex-wrap align-items-center">
+                  <!-- Price -->
+                  <div class="d-flex gap-1 align-items-center">
+                    <ins class="currency text-medium-2 color-primary-700">@{{ product.final_price.amount }}</ins>
+                    <span class="text-medium color-gray-800"> تومان </span>
+                  </div>
+                  <!-- Discount Price -->
+                  <template v-if="product.final_price.discount > 0">
+                    <div class="d-flex align-items-center color-gray-700">
+                      <i class="icon-angle-double-right icon-fs-small pb-1"></i>
+                      <s class="text-medium currency">@{{ product.final_price.base_amount }}</s>
+                    </div>
+                    <span class="px-2 radius-u text-button-1 bg-secondary-100">
+                      @{{ product.final_price.discount }}
+                      <span v-if="product.final_price.discount_type == 'percentage'">%</span>  
+                      <span v-else-if="product.final_price.discount_type == 'flat'">تومان</span>  
+                      <span v-else></span>  
+                    </span> 
+                  </template>
+                  <div></div>
+                </div>
+              </div>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wallet -->
+    <section data-id="wallet" class="wallet bg-white section col-lg-9 flex-column radius-medium border-gray-300 px-lg-5 py-5 px-2">
+
+      <div class="d-flex flex-column px-5 py-2 border-gray-300 radius-medium">
+        <span class="text-medium-strong w-p-100 border-b-gray-400 pb-1">کیف پول</span>
+        <div class="d-flex flex-wrap gap-lg-0 gap-1 py-3 justify-content-around align-items-center">
+          <!-- Wallent Balance -->
+          <div class="d-flex gap-1 text-medium">
+            <span class="">موجودی کیف پول</span>
+            <!-- Value -->
+            <span class="currency">@{{ customer.wallet.balance }}</span>
+            <span>تومان</span>
+          </div>
+          <!-- Transactions Date -->
+          <div v-if="transactions.length > 0" class="d-flex gap-1 align-items-baseline color-gray-700">
+            <span class="text-button">تاریخ اخرین تراکنش شما:</span>
+            <time datetime="{{ verta($customer->transactions->first()->created_at)->format('Y/m/d') }}">
+              {{ verta($customer->transactions->first()->created_at)->format('%d %B %Y') }}
+            </time>
+          </div>
+          <button type="button" data-modal="wallet-modal" class="px-6 py-1  text-button color-white radius-u bg-primary-700">شارژ کیف پول</button>
+        </div>
+      </div>
+
+      <!-- Transactions Detail Dekstop -->
+      <table class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-4 border-gray-300 radius-medium">
+        <thead>
+          <tr class="d-flex gap-lg-8 gap-2 text-medium color-gray-700 bp-1 border-b-gray-400 px-lg-2">
+            <th>شناسه</th>
+            <th>نوع تراکنش</th>
+            <th>تاریخ تراکنش</th>
+            <th>مبلغ (تومان)</th>
+            <th>وضعیت</th>
+            <th>توضیحات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="transaction in transactions" :key="transaction.id" class="d-flex gap-lg-11 gap-4 text-button pb-2 border-b-gray-400 px-lg-2">
+            <td>@{{ transaction.id }}</td>
+            <td v-if="transaction.type == 'deposit'" class="bg-success-100 radius-small color-white p-1">واریز</td>
+            <td v-else class="bg-primary-700 radius-small color-white p-1">برداشت</td>
+            <td class="d-flex gap-1">
+              <time :datetime="transaction.jalali_created_at">@{{ transaction.jalali_created_at }}</time>
+            </td>
+            <td class="currency">@{{ transaction.amount }}</td>
+            <td v-if="transaction.confirmed" class="bg-success-100 color-white radius-small p-1">موفق</td>
+            <td v-else class="bg-primary-700 color-white radius-small p-1">نا موفق</td>
+            <td class="descrip d-none d-xl-block text-nowrap position-absolute">@{{ transaction.meta.description }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Transactions Detail Mobile -->
+      <div class="d-lg-none d-flex flex-column gap-2 px-2 py-2 mt-2 border-gray-300 radius-medium">
+        <h4 class="h4-strong">تراکنش ها</h4>
+        <!-- Withdraw Info -->
+        <div v-for="transaction in transactions" :key="transaction.id" class="grid p-2 border-gray-300 radius-medium gap-1">
+          <div class="g-col-6 d-flex gap-1 text-button align-items-center">
+            <span>نوع تراکنش:</span>
+            <span v-if="transaction.type == 'withdraw'" class="transaction color-warning-300 px-1 radius-medium">برداشت</span>
+            <span v-else class="transaction color-success-100 px-1 radius-medium">برداشت</span>
+          </div>
+          <div class="g-col-6 d-flex gap-1 text-button align-items-center">
+            <span class="text-nowrap">تاریخ :</span>
+            <time :datetime="transaction.jalali_created_at">@{{ transaction.jalali_created_at }}</time>
+          </div>
+          <div class="g-col-6 d-flex gap-1 text-button align-items-center">
+            <span>مبلغ:</span>
+            <span class="currency">@{{ transaction.amount }}</span>
+          </div>
+          <div class="g-col-6 d-flex gap-1 text-button align-items-center">
+            <span>وضعیت:</span>
+            <span v-if="transaction.confirmed" class="status color-success-100 px-1 radius-medium">موفق</span>
+            <span v-else class="status color-warning-300 px-1 radius-medium">نا موفق</span>
+          </div>
+          <span class="g-col-12 text-center color-gray-700">@{{ transaction.meta.description }}</span>
+        </div>
+      </div>
+
+    </section>
+
   </main>
 @endsection
 
@@ -403,6 +715,26 @@
   </button>
 </div>
 
+<!-- Exit Modal -->
+<div class="modal modal-exit radius-medium d-flex flex-column bg-white gap-4 px-6 py-4" data-id="exit">
+  <div class="d-flex justify-content-between border-b-gray-400 px-2">
+    <h4 class="h4 text-center"> حساب کاربری خارج شوید؟</h4>
+    <button type="button" class="modal-close">
+      <i class="icon-cancel icon-fs-small"></i>
+    </button>
+  </div>
+  <p class="text-button">با خروج از حساب کاربری, به سبد خرید فعلی خود دسترسی نخواهید داشت.</p>
+  <div class="d-flex justify-content-between px-lg-4">
+    <button type="button" class="cancel-modal-btn modal-close bg-secondary-300 color-white text-medium radius-medium px-6 py-1">انصراف</button>
+    <button 
+      @click="logout"
+      type="button" 
+      class="exit-modal-btn bg-error-100 color-white text-medium px-6 py-1 radius-medium">
+      خروج از حساب
+    </button>
+  </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -479,15 +811,19 @@
         activeSection();
         modal();
         popOver();
-        console.log(this.customer);
         this.setCustomerBirthDate();
         this.setCustomerInformationForUpdate();
+        this.setFilteredOrders();
+        this.setOrderStatistics();
       },
       data() {
         return {
           customer: @json($customer),
+          allOrders: @json($customer->orders),
           provinces: @json($provinces),
           existsAddresses: @json($customer->addresses),
+          favorites: @json($customer->favorites),
+          transactions: @json($customer->transactions),
           birthDate: '',
           updateInformation: {
             firstName: '',
@@ -517,6 +853,17 @@
             address: '',
             mobile: '',
           },
+          orderStatistics: [],
+          filteredOrdersByStatus: {
+            canceled: [],
+            delivered: [],
+            failed: [],
+            in_progress: [],
+            new: [],
+            reserved: [],
+            wait_for_payment: [],
+          },
+          selectedOrderToShowDetail: @json($customer->orders->first()),
         }
       },
       watch: {
@@ -525,15 +872,6 @@
           this.newAddressData.cities = this.provinces.find(p => p.id == newProvinceId)?.cities;
           this.newAddressData.cityId = this.newAddressData.cities[0].id;
         },
-        // 'editAddressData.provinceId'(newProvinceId, oldProvinceId) {
-        //   if (typeof newProvinceId !== 'number') return;
-        //   if (oldProvinceId === '') return;
-        //   const province = this.provinces.find(p => p.id == newProvinceId);
-        //   this.editAddressData.province = province;
-        //   this.editAddressData.provinceId = province.id;
-        //   this.editAddressData.city = province.cities[0];
-        //   this.editAddressData.cityId = province.cities[0].id;
-        // },
       },
       methods: {
 
@@ -579,6 +917,17 @@
             confirmButtonText: "بستن",
           });
         },
+        popupWithConfirmCallback(type, message, confirmButtonText, isConfirmedCallback) {
+          Swal.fire({
+            text: message,
+            icon: type,
+            confirmButtonText: confirmButtonText,
+            showDenyButton: true,
+            denyButtonText: "انصراف",
+          }).then((result) => {
+            if (result.isConfirmed) isConfirmedCallback();
+          });
+        },
 
         setCustomerBirthDate() {
           if (this.customer.birth_date !== null) {
@@ -613,12 +962,63 @@
           this.editAddressData.address = address.address;
           this.editAddressData.mobile = address.mobile;
         },
+        setFilteredOrders() {
+          Object.keys(this.filteredOrdersByStatus).forEach(status => {
+            this.filteredOrdersByStatus[status] = this.allOrders?.filter(o => o.status === status) ?? [];
+          });
+        },
+        setOrderStatistics() {
+
+          const orderStatistics = @json($orderStatistics);
+          const orderStatusTranslate = {
+            canceled: 'کنسل شده',
+            delivered: 'ارسال شده',
+            failed: 'خطا',
+            in_progress: 'در انتطار تکمیل',
+            new: 'جدید',
+            reserved: 'رزرو شده',
+            wait_for_payment: 'در انتظار پرداخت',
+          };
+
+          Object.keys(orderStatistics).forEach(status => {
+            this.orderStatistics.push({
+              name: status,
+              label: orderStatusTranslate[status],
+              count: orderStatistics[status],
+            })
+          });
+
+        },
 
         loadCitiesForEditAddress() {
           const province = this.provinces.find(p => p.id == this.editAddressData.provinceId);
           this.editAddressData.province = province;
           this.editAddressData.city = province.cities[0];
           this.editAddressData.cityId = province.cities[0].id;
+        },
+        showOrdersList(event) {
+          
+          const button = event.currentTarget;
+          const listsBtns = document.querySelectorAll('.orders-list button');
+          const data = button.getAttribute('data-btn');
+          
+          button.classList.add('active');
+          document.querySelectorAll('.orders-list button').forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.div').forEach(div => div.classList.remove('active'));
+          document.querySelector(`[data-id="${data}"]`).classList.add('active');
+        },
+        showOrderDetail(event) {
+
+          const btn = event.currentTarget;
+          const orderStatus = btn.closest('.div').getAttribute('data-id');
+          const orderId = btn.getAttribute('data-order-id');
+          const order = this.filteredOrdersByStatus[orderStatus].find(o => o.id == orderId);
+
+          this.selectedOrderToShowDetail = order;
+
+          document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+          document.querySelector('.section.orders-history').classList.add('active');
+
         },
 
         async request(url, method, data = null, onSuccessRequest) {
@@ -634,7 +1034,7 @@
           if (data === null) {
             options.headers['Content-Type'] = 'application/json';
           } else {
-            options.body = data;
+            options.body = data instanceof FormData ? data : JSON.stringify(data);
           }
 
           const response = await fetch(url, options);
@@ -700,17 +1100,16 @@
           try {
 
             const url = `/addresses/${this.editAddressData.addressId}`;
-            const formData = new FormData();
+            const data = {
+              first_name: this.editAddressData.firstName,
+              last_name: this.editAddressData.lastName,
+              mobile: this.editAddressData.mobile,
+              postal_code: this.editAddressData.postalCode,
+              address: this.editAddressData.address,
+              city: this.editAddressData.cityId,
+            };
 
-            formData.append('first_name', this.editAddressData.firstName);
-            formData.append('last_name', this.editAddressData.lastName);
-            formData.append('mobile', this.editAddressData.mobile);
-            formData.append('postal_code', this.editAddressData.postalCode);
-            formData.append('address', this.editAddressData.address);
-            formData.append('city', this.editAddressData.cityId);
-
-            await this.request(url, 'PUT', formData, async (result) => {
-              this.setNewAddress(result.data.address);
+            await this.request(url, 'PUT', data, async (result) => {
               this.popup('success', '', result.data.message);
             });
 
@@ -718,7 +1117,30 @@
             console.error('error:', error);
           }
         },
-      
+        async removeFromFavorites(productId) {
+          this.popupWithConfirmCallback('warning', 'آیا میخواهید محصول را از علاقه مندی ها حذف کنید ؟', 'بله', async () => {
+            try {
+              await this.request(`/favorites/${productId}`, 'DELETE', null, async (result) => {
+                this.popup('success', '', result.message);
+                this.favorites = this.favorites.filter(p => p.id != productId);
+              });
+            } catch (error) {
+              console.error('error:', error);
+            }
+          });
+        },
+        async logout() {
+          try {
+            const url = @json(route('customer.logout'));
+            await this.request(url, 'POST', null, async (result) => {
+              this.popup('success', '', result.message);
+              window.location.replace('/');
+            });
+          } catch (error) {
+            console.error('error:', error);
+          }
+        }
+
       },
       computed: {
         addresses() {

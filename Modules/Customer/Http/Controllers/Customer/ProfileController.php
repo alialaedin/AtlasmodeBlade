@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Modules\Core\Helpers\Helpers;
 use Modules\Core\Rules\Base64Image;
 use Modules\Customer\Entities\Customer;
+use Modules\Order\Entities\Order;
 use Modules\Customer\Entities\Deposit;
 use Modules\Customer\Http\Requests\Customer\ChangePasswordRequest;
 use Modules\Customer\Http\Requests\Customer\ProfileUpdateRequest;
@@ -34,23 +35,68 @@ class ProfileController extends Controller
   {
     /** @var Customer $customer */
     $customer = Auth::guard('customer')->user();
-    $customer->loadCount('orders');
-    $customer->load([
-      'orders' => fn($q) => $q->with('items.product')
-    ]);
 
     $addresses = $customer->addresses()
       ->select(['id', 'address', 'postal_code', 'mobile', 'customer_id', 'first_name', 'last_name', 'city_id'])
       ->with('city', fn ($q) => $q->select(['id', 'name', 'province_id']))
       ->latest('id')
       ->get();
+    
+    $orders = $customer->orders()
+      ->select(['id', 'customer_id', 'discount_amount', 'total_amount', 'shipping_amount', 'status', 'created_at', 'address_id'])
+      ->with([
+        'items' => function ($iQuery) {
+          $iQuery->active();
+          $iQuery->select(['id', 'order_id', 'status', 'variety_id', 'product_id', 'discount_amount', 'quantity', 'amount']);
+          $iQuery->with([
+            'variety' => fn ($vQuery) => $vQuery->select(['id', 'product_id'])->with('attributes'),
+            'product' => fn ($pQuery) => $pQuery->select(['id', 'title'])->with('media')
+          ]);
+        },
+        'address' => function ($aQuery) {
+          $aQuery->select(['id', 'address', 'first_name', 'last_name', 'mobile']);
+        }
+      ])
+      ->latest('id')
+      ->get()
+      ->each(function($order) {
+        $order['persian_created_at'] = verta($order->created_at)->format('%d %B %Y');
+        foreach ($order->items as $item) {
+          $item->product->append('main_image');
+        }
+      });
+
+    $favorites = $customer->favorites()
+      ->select(['products.id', 'products.title', 'products.slug', 'products.image_alt'])
+      ->with([
+        'media',
+        'varieties' => fn($q) => $q->select(['id', 'product_id', 'price', 'discount', 'discount_until', 'discount_type']),
+      ])
+      ->get()
+      ->each(function ($p) {
+        $p->append(['main_image', 'final_price']);
+        $p->makeHidden('varieties');
+      });
+
+    $transactions = $customer->transactions()
+      ->select(['id', 'created_at', 'meta', 'payable_id', 'payable_type', 'type', 'amount', 'confirmed'])
+      ->latest('id')
+      ->get()
+      ->each(fn ($tr) => $tr['jalali_created_at'] = verta($tr->created_at)->format('H:i Y/m/d'));
 
     $customer['addresses'] = $addresses;
+    $customer['favorites'] = $favorites;
+    $customer['orders'] = $orders;
+    $customer['transactions'] = $transactions;
+
+    $orderStatistics = Order::getOrderStatisticsForCustomer($customer);
     $provinces = Province::getAllProvinces(true);
 
     return view('customer::customer.panel', compact([
       'customer',
       'provinces',
+      'orderStatistics',
+      'favorites',
     ]));
   }
 
@@ -98,13 +144,12 @@ class ProfileController extends Controller
 
   public function depositWallet(Request $request)
   {
+    dd($request->all());
     $request->validate([
       'amount' => 'required|integer|min:1000'
     ]);
-
     try {
       $deposit = Deposit::storeModel($request->amount);
-
       return $deposit->pay();
     } catch (Throwable $e) {
       Log::error($e->getTraceAsString());

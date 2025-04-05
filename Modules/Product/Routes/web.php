@@ -6,12 +6,13 @@ use Modules\Product\Http\Controllers\Admin\SpecificDiscountItemController;
 use Modules\Product\Http\Controllers\Admin\SpecificDiscountTypeController;
 use Modules\Product\Http\Controllers\Admin\ProductController as AdminProductController;
 use Modules\Product\Http\Controllers\Front\ProductController as FrontProductController;
+use Modules\Product\Http\Controllers\Customer\ProductController as CustomerProductController;
 use Modules\Product\Http\Controllers\Admin\RecommendationController;
 
 Route::webSuperGroup("admin", function () {
 
   // Product
-  Route::prefix('/products')->name('products.')->group(function (){
+  Route::prefix('/products')->name('products.')->group(function () {
 
     Route::get('/search', [AdminProductController::class, 'search'])->name('search');
     Route::get('/load-varieties', [AdminProductController::class, 'loadVarieties'])->name('load-varieties');
@@ -28,7 +29,7 @@ Route::webSuperGroup("admin", function () {
   });
 
   // recommendations
-  Route::prefix('/recommendations')->name('recommendations.')->group(function (){
+  Route::prefix('/recommendations')->name('recommendations.')->group(function () {
     Route::get('/groups/', [RecommendationController::class, 'groups'])->name('groups')->hasPermission('recommendation');
     Route::get('/groups/{group}', [RecommendationController::class, 'index'])->name('index')->hasPermission('recommendation');
     Route::post('/groups/{group}/sort', [RecommendationController::class, 'sort'])->name('sort')->hasPermission('recommendation');
@@ -70,4 +71,12 @@ Route::webSuperGroup("admin", function () {
 Route::prefix('/products')->name('front.products.')->group(function () {
   Route::get('/', [FrontProductController::class, 'index'])->name('index');
   Route::get('/{product}', [FrontProductController::class, 'show'])->name('show');
+});
+
+Route::middleware('auth:customer')->group(function () {
+  Route::prefix('/favorites')->name('customer.favorites.')->group(function () {
+    Route::get('/', [CustomerProductController::class, 'indexFavorites'])->name('index');
+    Route::post('/{productId}', [CustomerProductController::class, 'addToFavorites'])->name('store');
+    Route::delete('/{productId}', [CustomerProductController::class, 'deleteFromFavorites'])->name('destroy');
+  });
 });

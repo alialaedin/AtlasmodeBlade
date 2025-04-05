@@ -3,11 +3,13 @@
 namespace Modules\Auth\Http\Controllers\Customer;
 
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Modules\Auth\Http\Requests\Customer\CustomerSendTokenRequest;
 use Modules\Customer\Entities\Customer;
 use Modules\Customer\Events\SmsVerify;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Modules\Auth\Http\Requests\Customer\CustomerVerifyRequest;
 
@@ -51,6 +53,14 @@ class AuthController extends Controller
 		$customer->login();	
 
 		return response()->success('با موفقیت لاگین شدید', compact('customer'));
+	}
+
+	public function logout(Request $request) 
+	{
+		Auth::guard('customer')->logout();
+		$request->session()->invalidate();
+		$request->session()->regenerateToken();
+		return response()->success('با موفقیت خارج شد');
 	}
 
 	// public function registerLogin(CustomerRegisterLoginRequest $request): JsonResponse
