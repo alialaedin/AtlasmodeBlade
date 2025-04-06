@@ -144,7 +144,7 @@ class ProfileController extends Controller
 
   public function depositWallet(Request $request)
   {
-    dd($request->all());
+    $request->merge(['amount' => str_replace(',', '', $request->amount)]);
     $request->validate([
       'amount' => 'required|integer|min:1000'
     ]);
@@ -153,7 +153,7 @@ class ProfileController extends Controller
       return $deposit->pay();
     } catch (Throwable $e) {
       Log::error($e->getTraceAsString());
-      throw Helpers::makeValidationException('عملیات شارژ کیف پول ناموفق بود،لطفا دوباره تلاش کنید.' . $e->getMessage(), $e->getTrace());
+      throw Helpers::makeValidationException('عملیات شارژ کیف پول ناموفق بود،لطفا دوباره تلاش کنید.' . $e->getMessage());
     }
   }
 

@@ -522,7 +522,7 @@
   <h4 class="text-medium-3 text-center">شارژ کیف پول</h4>
   <form class="wallet-form d-flex flex-column gap-2">
     <span class="text-medium">مبلغ برحسب تومان</span>
-    <input type="text" autofocus class="priceinput border-gray-300 p-3 bg-gray-100 radius-small" placeholder="مبلغ را به تومان وارد کنید">
+    <input v-model="depositWalletAmount" type="text" autofocus class="priceinput border-gray-300 p-3 bg-gray-100 radius-small" placeholder="مبلغ را به تومان وارد کنید">
   </form>
   <!-- Portal -->
   <div class="prtal d-flex align-items-center justify-content-between">
@@ -542,7 +542,7 @@
       </button>
     </div>
   </div>
-  <button type="button" class="close-modal bg-black color-white text-medium  py-1">افزایش موجودی</button>
+  <button @click="depositWallet" type="button" class="close-modal bg-black color-white text-medium  py-1">افزایش موجودی</button>
 </div>
 
 <!-- User Info -->
@@ -824,6 +824,7 @@
           existsAddresses: @json($customer->addresses),
           favorites: @json($customer->favorites),
           transactions: @json($customer->transactions),
+          depositWalletAmount: '',
           birthDate: '',
           updateInformation: {
             firstName: '',
@@ -1045,6 +1046,9 @@
               case 422:
                 this.showValidationError(result.errors);
                 break;
+              case 404:
+                this.popup('error', 'خطای 404', 'چنین چیزی وجود ندارد');
+                break;
               case 500:
                 this.popup('error', 'خطای سرور', result.message);
                 break;
@@ -1053,6 +1057,20 @@
           }
 
           onSuccessRequest(result);
+        },
+        async depositWallet() {
+          try {
+
+            const url = @json(route('customer.wallet.deposit'));
+            const formData = new FormData();
+
+            formData.append('amount', this.depositWalletAmount);
+            await this.request(url, 'POST', formData, async (result) => {
+              console.log(result);
+            });
+          } catch (error) {
+            console.error('error:', error);
+          }
         },
         async updateCustomerInformation() {
           try {
@@ -1140,7 +1158,6 @@
             console.error('error:', error);
           }
         }
-
       },
       computed: {
         addresses() {
