@@ -11,6 +11,7 @@ use Modules\Attribute\Entities\Attribute;
 use Modules\Category\Entities\Category;
 use Modules\Core\Helpers\Helpers;
 use Modules\Product\Entities\Product;
+use Modules\Product\Entities\RecommendationGroup;
 use Modules\Product\Services\NewProductService;
 use Modules\Product\Services\ProductService;
 
@@ -22,8 +23,9 @@ class ProductController extends Controller
 		$products = (new NewProductService())->getProducts();
 		$sizeValues = Attribute::getSizeValues();
 		$categories = Category::query()->orderBy('priority')->with('children')->parents()->active()->get();
+		$sortTypes = RecommendationGroup::query()->where('show_in_filter', 1)->pluck('label', 'name')->toArray();
 
-		return view('product::front.product.index', compact(['products', 'priceFilter', 'sizeValues', 'categories']));
+		return view('product::front.product.index', compact(['products', 'priceFilter', 'sizeValues', 'categories', 'sortTypes']));
 	}
 
 	public function show($id)

@@ -157,8 +157,8 @@ class testController extends Controller
         //     $table->unsignedBigInteger('order');
         //     $table->timestamps();
         // });
-        RecommendationGroup::generateDefaultGroups();
-        dd('DONE');
+        // RecommendationGroup::generateDefaultGroups();
+        // dd('DONE');
 
 
         // Schema::create('specific_discounts', function (Blueprint $table) {

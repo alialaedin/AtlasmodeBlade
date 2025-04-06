@@ -18,7 +18,7 @@
             <th>نمایش در صفحه اصلی</th>  
             <th>نمایش در فیلتر محصولات</th>  
             <th>تعداد آیتم ها</th>  
-            <th>تاریخ ثبت</th>  
+            {{-- <th>تاریخ ثبت</th>   --}}
             <th>عملیات</th>  
           </tr>  
         </x-slot>  
@@ -43,14 +43,14 @@
                 @endif
               </td>
               <td>{{ $group->items_count }}</td>  
-              <td>{{ verta($group->created_at)->format('Y/m/d H:i')}}</td>  
+              {{-- <td>{{ verta($group->created_at)->format('Y/m/d H:i')}}</td>   --}}
               <td>  
                 <x-show-button :model="$group" route="admin.recommendations.index" title="آیتم ها" />
                 <x-edit-button :is-modal="true" :has-title="true" :target="'editGroup-' . $group->id" />
               </td>  
             </tr>  
           @empty  
-            @include('core::includes.data-not-found-alert', ['colspan' => 8])  
+            @include('core::includes.data-not-found-alert', ['colspan' => 7])  
           @endforelse  
         </x-slot>  
       </x-table-component>

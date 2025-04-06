@@ -221,12 +221,9 @@
           <div>
             <span class="text-medium">فیلتر :</span>
             <select id="sort-select" class="select-sorting p-1 border-gray-300 text-button-1">
-              <option value="most_visited" {{ request('sort', 'newest') == 'most_visited' ? 'selected' : '' }}>پربازدید ترین</option>
-              <option value="low_to_high" {{ request('sort', 'newest') == 'low_to_high' ? 'selected' : '' }}>ارزان ترین</option>
-              <option value="high_to_low" {{ request('sort', 'newest') == 'high_to_low' ? 'selected' : '' }}>گران ترین</option>
-              <option value="top_sales" {{ request('sort', 'newest') == 'top_sales' ? 'selected' : '' }}>پرفروش ترین</option>
-              <option value="newest" {{ request('sort', 'newest') == 'newest' ? 'selected' : '' }}>جدید ترین</option>
-              <option value="most_discount" {{ request('sort', 'newest') == 'most_discount' ? 'selected' : '' }}>ویژه</option>
+              @foreach ($sortTypes as $name => $label)
+                <option value="{{ $name }}" {{ request('sort', 'newest') == $name ? 'selected' : '' }}>{{ $label }}</option>
+              @endforeach
             </select>
           </div>
         </div>
