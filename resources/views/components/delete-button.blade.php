@@ -1,13 +1,15 @@
 @props([
   'model',
   'route',
-  'hasTitle' => false
+  'hasTitle' => false,
+  'disabled' => false
 ])
 
 <button 
   type="button" 
   class="btn btn-danger btn-sm text-white" 
   data-original-title="حذف" 
+  @if ($disabled) disabled @endif
   onclick="confirmDelete('delete-{{ $model->id }}')" >
   @if ($hasTitle)
     <span>حذف</span>

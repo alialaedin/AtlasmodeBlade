@@ -3,9 +3,6 @@
 
   <div class="page-header">
 		<x-breadcrumb :items="[['title' => 'گروه های پیشنهادی']]" />
-    <div>
-      <x-create-button type="modal" target="add-new-group-modal" title="ایجاد گروه جدید" />
-    </div>
   </div>
 
   <x-card>
@@ -50,7 +47,6 @@
               <td>  
                 <x-show-button :model="$group" route="admin.recommendations.index" title="آیتم ها" />
                 <x-edit-button :is-modal="true" :has-title="true" :target="'editGroup-' . $group->id" />
-                <x-delete-button :model="$group" route="admin.recommendation-groups.destroy" :has-title="true" />
               </td>  
             </tr>  
           @empty  
@@ -61,41 +57,6 @@
 		</x-slot>
 	</x-card>
 
-  <x-modal id="add-new-group-modal" size="md">
-    <x-slot name="title">ایجاد گروه پیشنهادی جدید</x-slot>
-    <x-slot name="body">
-      <form action="{{ route('admin.recommendation-groups.store') }}" method="POST">
-        @csrf
-        <div class="row">
-          <div class="col-12">
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="عنوان انگیلیسی" name="name" />
-            </div> 
-          </div> 
-          <div class="col-12">
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="عنوان فارسی" name="label" />
-            </div> 
-          </div> 
-          <div class="col-12">
-            <label for="show-in-home-checkbox" class="custom-control custom-checkbox">
-              <input id="show-in-home-checkbox" name="show_in_home" type="checkbox" class="custom-control-input" value="1" checked/>
-              <span class="custom-control-label">نمایش در صفحه اصلی</span>
-            </label> 
-            <label for="show-in-filter-checkbox" class="custom-control custom-checkbox">
-              <input id="show-in-filter-checkbox" name="show_in_filter" type="checkbox" class="custom-control-input" value="1" checked/>
-              <span class="custom-control-label">نمایش در فیلتر محصولات</span>
-            </label> 
-          </div> 
-        </div>
-        <div class="modal-footer justify-content-center pb-0">
-          <button class="btn btn-sm btn-primary" type="submit">ثبت و ذخیره</button>
-          <button class="btn btn-sm btn-danger" type="button" data-dismiss="modal">انصراف</button>
-        </div>
-      </form>
-    </x-slot>
-  </x-modal>
-
   @foreach ($recommendationGroups ?? [] as $group)
     <x-modal id="editGroup-{{ $group->id }}" size="md">
       <x-slot name="title">ویرایش گروه پیشنهادی</x-slot>
@@ -104,16 +65,6 @@
           @csrf
           @method('PUT')
           <div class="row">
-            <div class="col-12">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="عنوان انگیلیسی" name="name" value="{{ $group->name }}"/>
-              </div> 
-            </div> 
-            <div class="col-12">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="عنوان فارسی" name="label" value="{{ $group->label }}"/>
-              </div> 
-            </div> 
             <div class="col-12">
               <label for="show-in-home-checkbox-{{ $group->id }}" class="custom-control custom-checkbox">
                 <input id="show-in-home-checkbox-{{ $group->id }}" name="show_in_home" type="checkbox" class="custom-control-input" value="1" {{ $group->show_in_home ? 'checked' : '' }}/>

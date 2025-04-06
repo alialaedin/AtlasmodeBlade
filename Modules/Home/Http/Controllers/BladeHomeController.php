@@ -11,6 +11,7 @@ use Modules\Core\Helpers\Helpers;
 use Modules\Order\Entities\OrderItem;
 use Modules\Product\Entities\Product;
 use Modules\Product\Entities\Recommendation;
+use Modules\Product\Entities\RecommendationGroup;
 
 class BladeHomeController extends Controller
 {
@@ -18,11 +19,42 @@ class BladeHomeController extends Controller
 	{
 		$advertises = $this->getAdvertise();
 		$specialCategories = $this->getSpecialCategories();
-		$mostSaleProducts = $this->getMostSaleProducts();
-		$newProducts = $this->getNewProducts();
+		// $mostSaleProducts = $this->getMostSaleProducts();
+		// $newProducts = $this->getNewProducts();
 		$posts = $this->getPosts();
+		
+		$recommendationGroups = RecommendationGroup::getForHomePage();
 
-		return view('home::index', compact(['advertises', 'specialCategories', 'mostSaleProducts', 'newProducts', 'posts']));
+		foreach ($recommendationGroups as $group) {
+
+			if ($group->items_count == 0) continue;
+
+			$productIds = Recommendation::where('group_id', $group->id)->latest('order')->pluck('product_id')->toArray();
+			$products = Product::query()
+				->select(['id', 'status', 'title'])
+				->whereIn('id', $productIds)
+				->available(true)
+				->take(8)
+				->with([
+					'media',
+					'varieties' => function ($vQuery) {
+						$vQuery->select(['id', 'product_id', 'discount', 'discount_until', 'discount_type', 'price']);
+						$vQuery->with('store:id,variety_id,balance');
+						$vQuery->with('product:id');
+					}
+				])
+				->get()
+				->each(function ($product) {
+					$product->append(['main_image', 'final_price']);
+					$product->makeHidden(['varieties', 'activeFlash']);
+				});
+
+				$group->products = $products;
+		}
+
+		// dd($recommendationGroups->first()->products->first()->final_price);
+
+		return view('home::index', compact(['advertises', 'specialCategories', 'recommendationGroups', 'posts']));
 	}
 
 	private function getAdvertise(): array
@@ -38,7 +70,7 @@ class BladeHomeController extends Controller
 				->take(8)
 				->special()
 				->active()
-				->latest()
+				->latest('id')
 				->with('media')
 				->get();
 		});

@@ -3,13 +3,13 @@
     <!-- Title -->
     <div class="d-flex align-items-center justify-content-between">
       <h2 class="h4-strong color-gray-900">پست ها</h2>
-      <a href="./weblog-list.html" class="see-more pb-1 text-medium-strong color-gray-900">مشاهده بیشتر</a>
+      <a href="{{ route('front.posts.index') }}" class="see-more pb-1 text-medium-strong color-gray-900">مشاهده بیشتر</a>
     </div>
     <div class="grid gap-2 gap-lg-3">
       @foreach ($posts as $post)
         <div class="g-col-lg-3 g-col-6">
           <article class="blog-cart">
-            <a href="./weblog-details.html" class="d-flex flex-column overflow-hidden position-relative">
+            <a href="{{ route('front.posts.show', $post) }}" class="d-flex flex-column overflow-hidden position-relative">
               <!-- Img -->
               <figure class="blog-img overflow-hidden radius-medium position-relative">
                 <img 

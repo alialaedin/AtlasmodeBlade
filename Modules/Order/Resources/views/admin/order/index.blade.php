@@ -99,7 +99,7 @@
 							<input name="end_date" id="end_date_hide" type="hidden" value="{{ request('end_date') }}" />
 						</div>
 					</div>
-					<div class="col-12 col-md-6 col-xl-3">
+					{{-- <div class="col-12 col-md-6 col-xl-3">
 						<div class="form-group">
 							<input type="number" name="invoices_amount_from" placeholder="مبلغ سفارش از" class="form-control" value="{{ request('invoices_amount_from') }}">
 						</div>
@@ -108,7 +108,7 @@
 						<div class="form-group">
 							<input type="number" name="invoices_amount_to" placeholder="مبلغ سفارش تا" class="form-control" value="{{ request('invoices_amount_to') }}">
 						</div>
-					</div>
+					</div> --}}
 					<x-product-search cols="col-12 col-md-6 col-xl-3" :has-label="false"/>
 				</div>
 				<div class="row">

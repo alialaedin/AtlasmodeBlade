@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Modules\Product\Entities\Product;
 use Modules\Product\Entities\SpecificDiscountItem;
 use Illuminate\Support\Facades\Schema;
+use Modules\Product\Entities\RecommendationGroup;
 use Modules\Report\Http\Controllers\Admin\ReportController;
 use Modules\Store\Entities\Store;
 use Modules\Store\Http\Controllers\Admin\StoreController;
@@ -156,7 +157,8 @@ class testController extends Controller
         //     $table->unsignedBigInteger('order');
         //     $table->timestamps();
         // });
-        // dd('DONE');
+        RecommendationGroup::generateDefaultGroups();
+        dd('DONE');
 
 
         // Schema::create('specific_discounts', function (Blueprint $table) {

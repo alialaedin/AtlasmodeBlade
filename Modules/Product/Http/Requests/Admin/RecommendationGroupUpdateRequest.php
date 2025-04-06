@@ -2,20 +2,28 @@
 
 namespace Modules\Product\Http\Requests\Admin;
 
-use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
-class RecommendationGroupUpdateRequest extends RecommendationGroupStoreRequest 
+class RecommendationGroupUpdateRequest extends FormRequest 
 {
-  public function rules()
+  public function prepareForValidation()
 	{
-    $table = 'recommendation_groups';
-    $id = $this->route('recommendationGroup');
-    
+		$this->merge([
+			'show_in_home' => $this->show_in_home ? 1 : 0,
+			'show_in_filter' => $this->show_in_filter ? 1 : 0,
+		]);
+	}  
+
+	public function rules()
+	{
 		return [
-			'name' => ['required', 'string', 'min:3', Rule::unique($table, 'name')->ignore($id)],
-			'label' => ['required', 'string', 'min:3', Rule::unique($table, 'label')->ignore($id)],
 			'show_in_home' => 'required|boolean',
 			'show_in_filter' => 'required|boolean',
 		];
+	}
+
+	public function authorize()
+	{
+		return true;
 	}
 }

@@ -32,9 +32,7 @@ Route::webSuperGroup("admin", function () {
   // RecommendationGroups
   Route::prefix('/recommendation-groups')->name('recommendation-groups.')->group(function () {
     Route::get('/', [RecommendationGroupController::class, 'index'])->name('index')->hasPermission('recommendation');
-    Route::post('/', [RecommendationGroupController::class, 'store'])->name('store')->hasPermission('recommendation');
     Route::put('/{recommendationGroup}', [RecommendationGroupController::class, 'update'])->name('update')->hasPermission('recommendation');
-    Route::delete('/{recommendationGroup}', [RecommendationGroupController::class, 'destroy'])->name('destroy')->hasPermission('recommendation');
   });
 
   // recommendations

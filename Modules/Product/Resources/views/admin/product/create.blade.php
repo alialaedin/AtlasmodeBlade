@@ -508,7 +508,7 @@
 									</div>
 									<div class="row mt-3">
 										<div class="col-12 d-flex justify-content-center">
-											<button class="btn btn-sm btn-danger" data-dismiss="modal">بستن</button>
+											<button class="btn btn-sm btn-primary" data-dismiss="modal" @click="setGeneralPriceForVarieties">ثبت</button>
 										</div>
 									</div>
 								</div>
@@ -1027,11 +1027,6 @@
         }
       };
     },
-		watch: {  
-			generalPriceForVarieties(newValue) {  
-				Object.values(this.product.variety_values)?.forEach(variety => variety.price = newValue);			
-			},
-		},
     methods: {
       addNewTag(value, attribute) {
         this.clearVarietyValues();
@@ -1175,6 +1170,11 @@
 				);  
 
 				return specifications;
+			},
+			setGeneralPriceForVarieties() {
+				if (this.generalPriceForVarieties > 0) {
+					Object.values(this.product.variety_values)?.forEach(variety => variety.price = this.generalPriceForVarieties);			
+				}
 			},
 			async storeProduct() {
 
