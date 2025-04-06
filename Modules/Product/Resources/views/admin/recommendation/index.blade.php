@@ -10,14 +10,10 @@
 
 @section('content')
 
-  @php
-    $groupLabel = trans("core::groups.$group");
-  @endphp
-
   <div class="page-header">
 		<x-breadcrumb :items="[
-      ['title' => 'گروه های پیشنهادی', 'route_link' => 'admin.recommendations.groups'],
-      ['title' => $groupLabel]
+      ['title' => 'گروه های پیشنهادی', 'route_link' => 'admin.recommendation-groups.index'],
+      ['title' => $recommendationGroup->label]
     ]" />
     <div>
       <button class="btn btn-sm btn btn-teal" type="button" onclick="sort(event)">ذخیره مرتب سازی</button>
@@ -26,7 +22,7 @@
   </div>
 
   <x-card>
-		<x-slot name="cardTitle">گروه پیشنهادی : {{ $groupLabel }}</x-slot>
+		<x-slot name="cardTitle">گروه پیشنهادی : {{ $recommendationGroup->label }}</x-slot>
 		<x-slot name="cardOptions"><x-card-options /></x-slot>
 		<x-slot name="cardBody">
 			<x-table-component id="recommendations-table">  
@@ -71,19 +67,19 @@
   <x-modal id="add-new-product-modal" size="md">
     <x-slot name="title">افزودن محصول جدید به گروه پیشنهادی</x-slot>
     <x-slot name="body">
-      <form action="{{ route('admin.specific-discounts.store') }}" method="POST">
+      <form action="{{ route('admin.recommendations.store') }}" method="POST">
         @csrf
         <div class="row">
           <div class="col-12">
             <div class="form-group">
-              <input hidden name="group" value="{{ $group }}">
+              <input hidden name="group_id" value="{{ $recommendationGroup->id }}">
               <select id="product-select-box" name="product_id" class="form-control" required>  
                 <option value="">انتخاب محصول</option>  
               </select>  
             </div> 
           </div> 
         </div>
-        <div class="modal-footer justify-content-center mt-2">
+        <div class="modal-footer justify-content-center pb-0">
           <button class="btn btn-sm btn-primary" type="submit">افزودن</button>
           <button class="btn btn-sm btn-danger" type="button" data-dismiss="modal">انصراف</button>
         </div>
@@ -93,10 +89,11 @@
 
   <form 
     id="sort-recommendations-form" 
-    action="{{ route('admin.recommendations.sort', $group) }}" 
+    action="{{ route('admin.recommendations.sort') }}" 
     class="d-none" 
     method="POST">
     @csrf
+    <input hidden name="group_id" value="{{ $recommendationGroup->id }}">
   </form>
 
 @endsection

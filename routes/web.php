@@ -11,4 +11,4 @@ use Illuminate\Support\Facades\Route;
 //    [\Modules\Blog\Http\Controllers\Front\PostController::class, 'verify']);
 
 //Route::get('/test', [testController::class, 'index'])->name('test');
-//Route::get('/add', [testController::class, 'add'])->name('add');
+Route::get('/add', [testController::class, 'add'])->name('add');

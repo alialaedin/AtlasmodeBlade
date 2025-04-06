@@ -8,6 +8,7 @@ use Modules\Product\Http\Controllers\Admin\ProductController as AdminProductCont
 use Modules\Product\Http\Controllers\Front\ProductController as FrontProductController;
 use Modules\Product\Http\Controllers\Customer\ProductController as CustomerProductController;
 use Modules\Product\Http\Controllers\Admin\RecommendationController;
+use Modules\Product\Http\Controllers\Admin\RecommendationGroupController;
 
 Route::webSuperGroup("admin", function () {
 
@@ -28,11 +29,18 @@ Route::webSuperGroup("admin", function () {
     Route::delete('/{product}', [AdminProductController::class, 'destroy'])->name('destroy')->hasPermission('delete_product');
   });
 
+  // RecommendationGroups
+  Route::prefix('/recommendation-groups')->name('recommendation-groups.')->group(function () {
+    Route::get('/', [RecommendationGroupController::class, 'index'])->name('index')->hasPermission('recommendation');
+    Route::post('/', [RecommendationGroupController::class, 'store'])->name('store')->hasPermission('recommendation');
+    Route::put('/{recommendationGroup}', [RecommendationGroupController::class, 'update'])->name('update')->hasPermission('recommendation');
+    Route::delete('/{recommendationGroup}', [RecommendationGroupController::class, 'destroy'])->name('destroy')->hasPermission('recommendation');
+  });
+
   // recommendations
   Route::prefix('/recommendations')->name('recommendations.')->group(function () {
-    Route::get('/groups/', [RecommendationController::class, 'groups'])->name('groups')->hasPermission('recommendation');
-    Route::get('/groups/{group}', [RecommendationController::class, 'index'])->name('index')->hasPermission('recommendation');
-    Route::post('/groups/{group}/sort', [RecommendationController::class, 'sort'])->name('sort')->hasPermission('recommendation');
+    Route::get('/{recommendationGroup}', [RecommendationController::class, 'index'])->name('index')->hasPermission('recommendation');
+    Route::post('/sort', [RecommendationController::class, 'sort'])->name('sort')->hasPermission('recommendation');
     Route::post('/', [RecommendationController::class, 'store'])->name('store')->hasPermission('recommendation');
     Route::delete('/{recommendation}', [RecommendationController::class, 'destroy'])->name('destroy')->hasPermission('recommendation');
   });

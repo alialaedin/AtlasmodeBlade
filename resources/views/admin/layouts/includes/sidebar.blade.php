@@ -70,7 +70,7 @@
               <li><a href="{{ route('admin.specific-discounts.index') }}" class="slide-item">تخفیفات ویژه</a></li>
             @endcan
             @can('recommendation')
-              <li><a href="{{ route('admin.recommendations.groups') }}" class="slide-item">محصولات پیشنهادی</a></li>
+              <li><a href="{{ route('admin.recommendation-groups.index') }}" class="slide-item">گروه های پیشنهادی</a></li>
             @endcan
             @can('read_gift_package')
               <li><a href="{{ route('admin.gift-packages.index') }}" class="slide-item">بسته بندی هدیه</a></li>
