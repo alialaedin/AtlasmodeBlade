@@ -119,7 +119,7 @@
           for (let i = 0; i < cookieArr.length; i++) {  
             let cookiePair = cookieArr[i].split("=");  
             if (cookiePair[0].trim() == 'cartCookie') {  
-              return JSON.parse(decodeURIComponent(cookiePair[1]));  
+              return JSON.parse(decodeURIComponent(cookiePair[1])) ?? [];  
             }  
           }  
           return [];
@@ -237,13 +237,15 @@
             formData.append('sms_token', this.smsToken);
 
             if (cartCookie.length > 0) {
-              formData.append('cookieCarts', cartCookie);
+              formData.append('cookieCarts', JSON.stringify(cartCookie));
             }
 
             const options = {
               method: 'POST',
               body: formData,
-              accept: 'application/json'
+              headers: {
+                'Accept': 'application/json',
+              },
             };
 
             const response = await fetch(url, options);

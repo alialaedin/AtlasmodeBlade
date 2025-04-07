@@ -237,31 +237,12 @@
        </li>
    </ul>
 </div>
-<!-- Exit Modal -->
-<div class="modal modal-exit radius-medium d-flex flex-column bg-white gap-4 px-6 py-4" data-id="exit">
-  <div class="d-flex justify-content-between border-b-gray-400 px-2">
-      <h4 class="h4 text-center"> حساب کاربری خارج شوید؟</h4>
-      <button type="button" class="modal-close">
-         <i class="icon-cancel icon-fs-small"></i>
-      </button>
-  </div>
-  <p class="text-button">با خروج از حساب کاربری, به سبد خرید فعلی خود دسترسی نخواهید داشت.</p>
-  <div class="d-flex justify-content-between px-lg-4">
-      <button type="button" class="cancel-modal-btn modal-close bg-secondary-300 color-white text-medium radius-medium px-6 py-1">انصراف</button>
-      <button type="button" class="exit-modal-btn bg-error-100 color-white text-medium px-6 py-1 radius-medium">خروج از حساب</button>
-  </div>
-</div>
-
 <!-- Search Modal -->
-
 <div class="modal modal-search bg-white radius-medium d-flex flex-column gap-2 px-6  pb-lg-4 pt-4 pb-3" data-id="search">
-
   <form class="search-form-modal py-1 px-1 w-p-100 d-flex align-items-center radius-small border-gray-300">
 		<input type="text" class="flex-grow-1 p-1 text-medium" placeholder="جستوجو کنید...">
 		<i class="icon-search icon-fs-large"></i>
   </form>
-
-  <!-- Products -->
   <div class="d-flex flex-column justify-content-center mt-2">
 		<ul class="product-list grid w-p-100 gap-2"></ul>
 		<a href="{{ route('front.products.index') }}" class="show-more-products-btn d-flex d-none justify-content-center gap-1 text-medium mt-2">
@@ -269,7 +250,6 @@
 			<i class="icon-angle-down icon-fs-small"></i>
 		</a>
   </div>
-
 </div>
 
 @push('scripts')

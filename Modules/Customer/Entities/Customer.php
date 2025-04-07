@@ -259,8 +259,9 @@ class Customer extends User implements CustomerWallet, Notifiable, HasMedia
     public function login():array
     {
         Helpers::actingAs($this);
-        if (\Request()->filled('cookieCarts') && count(\Request()->cookieCarts) > 0)
-            Cart::addCookieCarts($this, \Request()->cookieCarts);
+        $cookieCarts = json_decode(request()->cookieCarts, true);
+        if (request()->filled('cookieCarts') && count($cookieCarts) > 0)
+            Cart::addCookieCarts($this, $cookieCarts);
         \Request()->session()->regenerate();
         Auth::guard('customer')->login($this);
 
