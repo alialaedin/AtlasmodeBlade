@@ -75,6 +75,7 @@ Route::webSuperGroup("admin", function () {
 });
 
 Route::prefix('/products')->name('front.products.')->group(function () {
+  Route::get('/search', [FrontProductController::class, 'search'])->name('search');
   Route::get('/', [FrontProductController::class, 'index'])->name('index');
   Route::get('/{product}', [FrontProductController::class, 'show'])->name('show');
 });

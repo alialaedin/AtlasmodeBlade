@@ -117,17 +117,20 @@ class NewProductService
   private function orderByPrice()
   {
     $orderDirection = $this->sortBy === 'low_to_high' ? '' : 'DESC';
-    $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $this->sortProductsByPrice()) . ') ' . $orderDirection);
+    $ids = $this->sortProductsByPrice();
+    if ($ids) $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $ids) . ') ' . $orderDirection);
   }
 
   private function orderByTopSales()
   {
-    $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $this->sortProductsBySales()) . ') DESC');
+    $ids = $this->sortProductsBySales();
+    if ($ids) $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $ids) . ') DESC');
   }
 
   private function orderByMostDiscount()
   {
-    $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $this->sortProductsByDiscount()) . ') DESC');
+    $ids = $this->sortProductsByDiscount();
+    if ($ids) $this->productQuery->orderByRaw('FIELD(`id`, ' . implode(", ", $ids) . ') DESC');
   }
 
   private function sortProductsBySales()

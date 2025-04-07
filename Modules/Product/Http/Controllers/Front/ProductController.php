@@ -78,7 +78,6 @@ class ProductController extends Controller
 
 	public function search()
 	{
-
 		$searchKey = request('q');
 		$serach = '%' . $searchKey . '%';
 
@@ -86,27 +85,22 @@ class ProductController extends Controller
 			->select(['id', 'title', 'short_description', 'status', 'slug', 'approved_at'])
 			->where('title', 'LIKE', $serach)
 			->orWhere('short_description', 'LIKE', $serach)
-			->orWhereHas('categories', fn($q) => $q->where('id', $serach)->oreWhere('parent_id', $serach))
+			->orWhereHas('categories', fn($q) => $q->where('id', $serach)->orWhere('parent_id', $serach))
 			->with([
-				'varieties' => function ($varietyQuery) {
-					$varietyQuery->select(['id', 'product_id', 'discount', 'discount_until', 'discount_type', 'purchase_price', 'price']);
-				},
-				'varieties.store' => function ($storeQuery) {
-					$storeQuery->select(['id', 'variety_id', 'balance']);
+				'media',
+				'varieties' => function ($vQuery) {
+					$vQuery->select(['id', 'product_id', 'discount', 'discount_until', 'discount_type', 'purchase_price', 'price']);
+					$vQuery->with('store', fn ($sQuery) => $sQuery->select(['id', 'variety_id', 'balance']));
 				},
 			])
 			->latest('id')
 			->active()
 			->take(8)
-			->get();
-
-		foreach ($products as $product) {
-			$product->setAppends(['slug', 'main_image', 'final_price', 'rate']);
-		}
-
-		$products->makeHidden('varieties');
-		$products->makeHidden('activeFlash');
-		$products->makeHidden('active_flash');
+			->get()
+			->each(function ($product) {
+				$product->setAppends(['slug', 'main_image', 'final_price']);
+				$product->makeHidden(['varieties', 'activeFlash', 'active_flash']);
+			});
 
 		return response()->success('', compact('products'));
 	}

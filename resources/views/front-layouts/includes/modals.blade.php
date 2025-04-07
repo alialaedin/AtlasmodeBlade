@@ -251,354 +251,103 @@
       <button type="button" class="exit-modal-btn bg-error-100 color-white text-medium px-6 py-1 radius-medium">خروج از حساب</button>
   </div>
 </div>
+
 <!-- Search Modal -->
+
 <div class="modal modal-search bg-white radius-medium d-flex flex-column gap-2 px-6  pb-lg-4 pt-4 pb-3" data-id="search">
+
   <form class="search-form-modal py-1 px-1 w-p-100 d-flex align-items-center radius-small border-gray-300">
-      <input type="text" class="flex-grow-1 p-1 text-medium" placeholder="جستوجو کنید...">
-      <i class="icon-search icon-fs-large"></i>
+		<input type="text" class="flex-grow-1 p-1 text-medium" placeholder="جستوجو کنید...">
+		<i class="icon-search icon-fs-large"></i>
   </form>
+
   <!-- Products -->
   <div class="d-flex flex-column justify-content-center mt-2">
-      <ul class="product-list grid w-p-100 gap-2">
-          <div class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
-               <figure>
-                  <img class="w-p-100 radius-small" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-               </figure>
-               <div class="d-flex flex-column gap-1">
-                  <!-- Titel -->
-                  <span class="text-truncate text-medium">تیشرت طرح عروسکی 3829</span>
-                  <div class="d-flex gap-1 align-items-center flex-wrap">
-                      <div class="text-button-1 d-flex gap-1 color-error-100">
-                          <span class="currency">432000</span>
-                          <span>تومان</span>
-                      </div>
-                  </div>
-               </div>
-          </div>
-          <div class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
-              <figure>
-                 <img class="w-p-100 radius-small" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-              </figure>
-              <div class="d-flex flex-column gap-1">
-                 <!-- Titel -->
-                 <span class="text-truncate text-medium">تیشرت طرح عروسکی 3829</span>
-                 <div class="d-flex gap-1 align-items-center flex-wrap">
-                     <div class="text-button-1 d-flex gap-1 color-error-100">
-                         <span class="currency">432000</span>
-                         <span>تومان</span>
-                     </div>
-                 </div>
-              </div>
-         </div>
-         <div class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
-          <figure>
-             <img class="w-p-100 radius-small" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-          </figure>
-          <div class="d-flex flex-column gap-1">
-             <!-- Titel -->
-             <span class="text-truncate text-medium">تیشرت طرح عروسکی 3829</span>
-             <div class="d-flex gap-1 align-items-center flex-wrap">
-                 <div class="text-button-1 d-flex gap-1 color-error-100">
-                     <span class="currency">432000</span>
-                     <span>تومان</span>
-                 </div>
-             </div>
-          </div>
-         </div>
-         <div class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
-          <figure>
-             <img class="w-p-100 radius-small" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-          </figure>
-          <div class="d-flex flex-column gap-1">
-             <!-- Titel -->
-             <span class="text-truncate text-medium">تیشرت طرح عروسکی 3829</span>
-             <div class="d-flex gap-1 align-items-center flex-wrap">
-                 <div class="text-button-1 d-flex gap-1 color-error-100">
-                     <span class="currency">432000</span>
-                     <span>تومان</span>
-                 </div>
-             </div>
-          </div>
-         </div>
-      </ul>
-      <a href="./products.html" class="d-flex justify-content-center gap-1 text-medium mt-2">
-            <span>مشاهده بیشتر</span>
-            <i class="icon-angle-down icon-fs-small"></i>
-      </a>
+		<ul class="product-list grid w-p-100 gap-2"></ul>
+		<a href="{{ route('front.products.index') }}" class="show-more-products-btn d-flex d-none justify-content-center gap-1 text-medium mt-2">
+			<span>مشاهده بیشتر</span>
+			<i class="icon-angle-down icon-fs-small"></i>
+		</a>
   </div>
-  <div class="d-flex flex-column">
-       <!-- Suggested Products -->
-      <h4 class="text-medium-3-strong color-gray-900 mt-2">
-          محصولات پیشنهادی
-      </h4>
-      <div class="swiper suggested-swiper bg-gray-200 mt-3">
-          <div class="swiper-wrapper">
-              <div class="swiper-slide">
-               <article class="product-cart">
-             <a href="./product-detail.html" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
-                  <!-- Hover Buttons -->
-                  <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
-                      <button type="button" class="d-flex flex-column gap-1">
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                      </button>
-                      <button type="button" class="like">
-                          <i class="icon-heart icon-fs-medium-2"></i>
-                      </button>
-                  </div>
-                 <!-- Img -->
-                 <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
-                         <!-- See More Btn -->
-                          <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
-                              مشاهده بیشتر
-                          </button>
-                  </figure>
-                 <div class="product-details d-flex flex-column px-2 mt-2">
-                     <!-- Title -->
-                     <h5 class="text-medium-2-strong color-gray-900 text-truncate">
-                      بلوز یقه گرد ژاکارد 3871  
-                     </h5> 
-                     <div class="d-flex flex-wrap gap-2 align-items-center">
-                         <!-- Price -->
-                         <div class="d-flex gap-1 align-items-center">
-                              <ins class="currency text-medium-2 color-primary-500">
-                                549000
-                              </ins>
-                             <span class="text-medium color-gray-800">
-                              تومان 
-                             </span>
-                         </div>
-                         <!-- Discount Price -->
-                          <!-- <div class="d-flex align-items-center color-gray-700">
-                              <i class="icon-angle-double-right icon-fs-small pb-1"></i>
-                              <s class="text-medium  currency">595000</s>
-                          </div> -->
-                          <!-- Discount Percent -->
-                          <!-- <span class="px-2 radius-u text-button-1 bg-secondary-100">20%</span>  -->
-                         <div></div>
-                     </div>
-                 </div>
-             </a>
-               </article>
-              </div>
-              <div class="swiper-slide">
-               <article class="product-cart">
-                <a href="./product-detail.html" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
-                  <!-- Hover Buttons -->
-                  <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
-                      <button type="button" class="d-flex flex-column gap-1">
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                      </button>
-                      <button type="button" class="like">
-                          <i class="icon-heart icon-fs-medium-2"></i>
-                      </button>
-                  </div>
-                 <!-- Img -->
-                 <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
-                         <!-- See More Btn -->
-                          <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
-                              مشاهده بیشتر
-                          </button>
-                  </figure>
-                 <div class="product-details d-flex flex-column px-2 mt-2">
-                     <!-- Title -->
-                     <h5 class="text-medium-2-strong color-gray-900 text-truncate">
-                      بلوز یقه گرد ژاکارد 3871  
-                     </h5> 
-                     <div class="d-flex flex-wrap gap-2 align-items-center">
-                         <!-- Price -->
-                         <div class="d-flex gap-1 align-items-center">
-                              <ins class="currency text-medium-2 color-primary-500">
-                                549000
-                              </ins>
-                             <span class="text-medium color-gray-800">
-                              تومان 
-                             </span>
-                         </div>
-                         <!-- Discount Price -->
-                          <!-- <div class="d-flex align-items-center color-gray-700">
-                              <i class="icon-angle-double-right icon-fs-small pb-1"></i>
-                              <s class="text-medium  currency">595000</s>
-                          </div> -->
-                          <!-- Discount Percent -->
-                          <!-- <span class="px-2 radius-u text-button-1 bg-secondary-100">20%</span>  -->
-                         <div></div>
-                     </div>
-                 </div>
-                </a>
-               </article>
-              </div>
-              <div class="swiper-slide">
-               <article class="product-cart">
-                <a href="./product-detail.html" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
-                  <!-- Hover Buttons -->
-                  <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
-                      <button type="button" class="d-flex flex-column gap-1">
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                      </button>
-                      <button type="button" class="like">
-                          <i class="icon-heart icon-fs-medium-2"></i>
-                      </button>
-                  </div>
-                 <!-- Img -->
-                 <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
-                         <!-- See More Btn -->
-                          <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
-                              مشاهده بیشتر
-                          </button>
-                  </figure>
-                 <div class="product-details d-flex flex-column px-2 mt-2">
-                     <!-- Title -->
-                     <h5 class="text-medium-2-strong color-gray-900 text-truncate">
-                      بلوز یقه گرد ژاکارد 3871  
-                     </h5> 
-                     <div class="d-flex flex-wrap gap-2 align-items-center">
-                         <!-- Price -->
-                         <div class="d-flex gap-1 align-items-center">
-                              <ins class="currency text-medium-2 color-primary-500">
-                                549000
-                              </ins>
-                             <span class="text-medium color-gray-800">
-                              تومان 
-                             </span>
-                         </div>
-                         <!-- Discount Price -->
-                          <!-- <div class="d-flex align-items-center color-gray-700">
-                              <i class="icon-angle-double-right icon-fs-small pb-1"></i>
-                              <s class="text-medium  currency">595000</s>
-                          </div> -->
-                          <!-- Discount Percent -->
-                          <!-- <span class="px-2 radius-u text-button-1 bg-secondary-100">20%</span>  -->
-                         <div></div>
-                     </div>
-                 </div>
-                </a>
-               </article>
-              </div>
-              <div class="swiper-slide">
-               <article class="product-cart">
-             <a href="./product-detail.html" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
-                  <!-- Hover Buttons -->
-                  <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
-                      <button type="button" class="d-flex flex-column gap-1">
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                      </button>
-                      <button type="button" class="like">
-                          <i class="icon-heart icon-fs-medium-2"></i>
-                      </button>
-                  </div>
-                 <!-- Img -->
-                 <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
-                         <!-- See More Btn -->
-                          <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
-                              مشاهده بیشتر
-                          </button>
-                  </figure>
-                 <div class="product-details d-flex flex-column px-2 mt-2">
-                     <!-- Title -->
-                     <h5 class="text-medium-2-strong color-gray-900 text-truncate">
-                      بلوز یقه گرد ژاکارد 3871  
-                     </h5> 
-                     <div class="d-flex flex-wrap gap-2 align-items-center">
-                         <!-- Price -->
-                         <div class="d-flex gap-1 align-items-center">
-                              <ins class="currency text-medium-2 color-primary-500">
-                                549000
-                              </ins>
-                             <span class="text-medium color-gray-800">
-                              تومان 
-                             </span>
-                         </div>
-                         <!-- Discount Price -->
-                          <!-- <div class="d-flex align-items-center color-gray-700">
-                              <i class="icon-angle-double-right icon-fs-small pb-1"></i>
-                              <s class="text-medium  currency">595000</s>
-                          </div> -->
-                          <!-- Discount Percent -->
-                          <!-- <span class="px-2 radius-u text-button-1 bg-secondary-100">20%</span>  -->
-                         <div></div>
-                     </div>
-                 </div>
-             </a>
-          </article>
-              </div>
-              <div class="swiper-slide">
-               <article class="product-cart">
-             <a href="./product-detail.html" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
-                  <!-- Hover Buttons -->
-                  <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
-                      <button type="button" class="d-flex flex-column gap-1">
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                          <i class="icon-star icon-fs-xsmall"></i>
-                      </button>
-                      <button type="button" class="like">
-                          <i class="icon-heart icon-fs-medium-2"></i>
-                      </button>
-                  </div>
-                 <!-- Img -->
-                 <figure class="product-img overflow-hidden position-relative">
-                         <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg.jpg')}}" alt="">
-                         <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg')}}" alt="">
-                         <!-- See More Btn -->
-                          <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
-                              مشاهده بیشتر
-                          </button>
-                  </figure>
-                 <div class="product-details d-flex flex-column px-2 mt-2">
-                     <!-- Title -->
-                     <h5 class="text-medium-2-strong color-gray-900 text-truncate">
-                      بلوز یقه گرد ژاکارد 3871  
-                     </h5> 
-                     <div class="d-flex flex-wrap gap-2 align-items-center">
-                         <!-- Price -->
-                         <div class="d-flex gap-1 align-items-center">
-                              <ins class="currency text-medium-2 color-primary-500">
-                                549000
-                              </ins>
-                             <span class="text-medium color-gray-800">
-                              تومان 
-                             </span>
-                         </div>
-                         <!-- Discount Price -->
-                          <!-- <div class="d-flex align-items-center color-gray-700">
-                              <i class="icon-angle-double-right icon-fs-small pb-1"></i>
-                              <s class="text-medium  currency">595000</s>
-                          </div> -->
-                          <!-- Discount Percent -->
-                          <!-- <span class="px-2 radius-u text-button-1 bg-secondary-100">20%</span>  -->
-                         <div></div>
-                     </div>
-                 </div>
-             </a>
-          </article>
-              </div>
-          </div>
-      </div>
-  </div>
+
 </div>
+
+@push('scripts')
+	<script>
+		$(document).ready(() => {
+
+			let typingTimeout;
+			let abortController;
+
+			$('.search-form-modal input').on('input', (event) => {
+
+				clearTimeout(typingTimeout);
+
+				if (abortController) {
+					abortController.abort();
+				}
+
+				const query = event.target.value.trim();
+				if (!query) return;
+
+				typingTimeout = setTimeout(async () => {
+
+					abortController = new AbortController();
+					try {
+
+						const url = `${@json(route('front.products.search'))}?q=${encodeURIComponent(query)}`
+						const response = await fetch(url, {
+							method: 'GET',
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json',
+							},
+							signal: abortController.signal,
+						});
+
+						if (response.ok) {
+
+							const { data } = await response.json();
+							const products = data.products;
+
+							if (products?.length) {
+								const productList = $('.product-list').empty();
+								products.forEach(({ main_image, slug, title, final_price, id }) => {
+									const productBox = `
+										<a href="/products/${id}" class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
+											<figure>
+												<img class="w-p-100 radius-small" src="${main_image.url}" alt="${slug}">
+											</figure>
+											<div class="d-flex flex-column gap-1">
+												<span class="text-truncate text-medium">${title}</span>
+												<div class="d-flex gap-1 align-items-center flex-wrap">
+													<div class="text-button-1 d-flex gap-1 color-error-100">
+														<span class="currency">${final_price.amount.toLocaleString()}</span>
+														<span>تومان</span>
+													</div>
+												</div>
+											</div>
+										</a>`;
+									productList.append(productBox);
+								});
+								$('.show-more-products-btn').removeClass('d-none');
+							} else {
+								if (!$('.show-more-products-btn').hasClass('d-none')) {
+									$('.show-more-products-btn').addClass('d-none');
+								}
+							}
+						} else {
+							console.error('Failed to fetch products:', response.status);
+						}
+					} catch (error) {
+						if (error.name === 'AbortError') {
+							console.log('Request was aborted due to new input.');
+						} else {
+							console.error('Error fetching products:', error);
+						}
+					}
+				}, 1000);
+			});
+		});
+	</script>
+@endpush

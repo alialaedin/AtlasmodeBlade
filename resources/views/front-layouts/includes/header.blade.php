@@ -115,7 +115,7 @@
 
 			<!-- Search -->
 			<button type="button" data-modal="search" class="search">
-					<i class="icon-search icon-fs-large"></i>
+				<i class="icon-search icon-fs-large"></i>
 			</button>
 			<span class="horizontal-divider d-none d-lg-block h-4 bg-gray-300 mx-2"></span>
 
