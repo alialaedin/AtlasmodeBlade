@@ -254,6 +254,7 @@
             if (!response.ok && response.status == 422) {
               this.showValidationError(result.errors);
             }else if (response.ok && response.status == 200) {
+              document.cookie = "cartCookie=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
               toast('success', 'احراز هویت با موفقیت انجام شد');
               window.location.replace('/');
             } else {
