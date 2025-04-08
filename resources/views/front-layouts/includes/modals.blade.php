@@ -251,16 +251,33 @@
 		</a>
   </div>
 </div>
+<!-- Exit Modal -->
+<div class="modal modal-exit radius-medium d-flex flex-column bg-white gap-4 px-6 py-4" data-id="exit">
+	<div class="d-flex justify-content-between border-b-gray-400 px-2">
+		<h4 class="h4 text-center"> حساب کاربری خارج شوید؟</h4>
+		<button type="button" class="modal-close">
+			<i class="icon-cancel icon-fs-small"></i>
+		</button>
+	</div>
+	<p class="text-button">با خروج از حساب کاربری, به سبد خرید فعلی خود دسترسی نخواهید داشت.</p>
+	<div class="d-flex justify-content-between px-lg-4">
+		<button type="button" class="cancel-modal-btn modal-close bg-secondary-300 color-white text-medium radius-medium px-6 py-1">انصراف</button>
+		<button 
+			type="button" 
+			class="exit-modal-btn bg-error-100 color-white text-medium px-6 py-1 radius-medium">
+			خروج از حساب
+		</button>
+	</div>
+</div>
 
 @push('scripts')
 	<script>
-		$(document).ready(() => {
+		document.addEventListener('DOMContentLoaded', () => {
 
 			let typingTimeout;
 			let abortController;
 
-			$('.search-form-modal input').on('input', (event) => {
-
+			document.querySelector('.search-form-modal input').addEventListener('input', (event) => {
 				clearTimeout(typingTimeout);
 
 				if (abortController) {
@@ -271,11 +288,9 @@
 				if (!query) return;
 
 				typingTimeout = setTimeout(async () => {
-
 					abortController = new AbortController();
 					try {
-
-						const url = `${@json(route('front.products.search'))}?q=${encodeURIComponent(query)}`
+						const url = `${JSON.parse('@json(route("front.products.search"))')}?q=${encodeURIComponent(query)}`;
 						const response = await fetch(url, {
 							method: 'GET',
 							headers: {
@@ -286,12 +301,13 @@
 						});
 
 						if (response.ok) {
-
 							const { data } = await response.json();
 							const products = data.products;
 
+							const productList = $('.product-list');
+							productList.empty();
+
 							if (products?.length) {
-								const productList = $('.product-list').empty();
 								products.forEach(({ main_image, slug, title, final_price, id }) => {
 									const productBox = `
 										<a href="/products/${id}" class="g-col-lg-3 p-1 g-col-md-6 g-col-12 border-gray-400 radius-small d-flex gap-1 align-items-center">
@@ -310,11 +326,9 @@
 										</a>`;
 									productList.append(productBox);
 								});
-								$('.show-more-products-btn').removeClass('d-none');
+								document.querySelector('.show-more-products-btn').classList.remove('d-none');
 							} else {
-								if (!$('.show-more-products-btn').hasClass('d-none')) {
-									$('.show-more-products-btn').addClass('d-none');
-								}
+								document.querySelector('.show-more-products-btn').classList.add('d-none');
 							}
 						} else {
 							console.error('Failed to fetch products:', response.status);
@@ -328,6 +342,36 @@
 					}
 				}, 1000);
 			});
+
+			document.querySelector('.exit-modal-btn').addEventListener('click', async () => {
+				const url = JSON.parse('@json(route("customer.logout"))');
+				try {
+
+					const response = await fetch(url, {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/json',
+							'X-CSRF-TOKEN': @json(csrf_token()),
+							'Content-Type': 'application/json',
+						},
+					});
+
+					if (response.ok) {
+						const { message } = await response.json();
+						popup('success', '', message);
+						window.location.replace('/');
+					}
+				} catch (error) {
+					console.error('Error logging out:', error);
+				}
+			});
+
+			document.querySelector('.cancel-modal-btn').addEventListener('click', function () {
+				document.querySelector('.modal-overlay').classList.remove('active');
+				document.querySelector('.modal-exit').classList.remove('active');
+				document.body.classList.remove('no-overflow');
+			});
+
 		});
 	</script>
 @endpush

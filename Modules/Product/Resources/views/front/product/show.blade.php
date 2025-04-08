@@ -466,6 +466,9 @@
         this.initRelatedProductsSwiper();
         this.setCategoriesTitle();
         this.setUniqueAttributes();
+        this.activeLoginBtn();
+        this.openSearchModal();
+        this.hdanleModalOverlayClickOperation();
       },
       data() {
         return {
@@ -484,6 +487,36 @@
         }
       },
       methods: {
+
+        activeLoginBtn() {
+          const btn = document.querySelector('.login-btn');
+          btn.addEventListener('click', function () {
+            const child = this.querySelectorAll('div')[1];
+            child.classList.toggle('active');
+            if (child.classList.contains('active')) {
+              this.style.borderBottomLeftRadius = 'unset';
+              this.style.borderTopLeftRadius = '18px';
+              this.style.borderBottomRightRadius = 'unset';
+              this.style.borderTopRightRadius = '18px';
+            } else {
+              this.style.borderRadius = '100px';
+            }
+          });
+        },
+        openSearchModal() {
+          document.querySelector('.search').addEventListener('click', function () {
+            document.querySelector('.modal-overlay').classList.add('active');
+            document.querySelector('.modal-search').classList.add('active');
+            document.body.classList.add('no-overflow');
+          });
+        },
+        hdanleModalOverlayClickOperation() {
+          document.querySelector('.modal-overlay').addEventListener('click', () => {
+            document.querySelector('.modal-overlay').classList.remove('active');
+            document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+            document.body.classList.remove('no-overflow');
+          });
+        },
 
         // global methods
         openModal(selector) {

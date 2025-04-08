@@ -55,7 +55,7 @@ class CommentController extends Controller
 
     $comment = new Comment();
     $comment->fill($request->all());
-    $comment->creator()->associate(Auth::guard('admin-api')->user());
+    $comment->creator()->associate(Auth::guard('admin')->user());
     $comment->parent()->associate($oldComment);
     $comment->commentable()->associate($oldComment->commentable);
     $comment->save();

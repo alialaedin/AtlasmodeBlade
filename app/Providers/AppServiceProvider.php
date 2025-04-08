@@ -104,12 +104,14 @@ class AppServiceProvider extends ServiceProvider
 				->get();
 
 			$user = Auth::guard('customer')->user();
+			$cartsCount = $user?->carts->count() ?? 0;
 			
 			$view->with([
 				'settings' => $settings,
 				'menus' => $menus,
 				'categories' => $categories,
-				'user' => $user
+				'user' => $user,
+				'cartsCount' => $cartsCount
 			]);
 		});
 	}

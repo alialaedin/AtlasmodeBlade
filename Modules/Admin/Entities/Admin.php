@@ -19,7 +19,7 @@ class Admin extends Authenticatable implements CoreNotifiable
 {
   use HasFactory, HasApiTokens, HasRoles, Notifiable;
 
-  protected $guard_name = 'admin-api';
+  protected $guard_name = 'admin';
 
   protected $fillable = [
     'name',

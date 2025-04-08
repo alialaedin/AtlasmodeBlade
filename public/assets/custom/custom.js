@@ -32,7 +32,7 @@ function ajaxRequest(url, type, data, successCallback, errorCallback) {
     success: successCallback,  
     error: errorCallback,  
   });  
-};  
+}
 
 function popup(type, title, message) {
   Swal.fire({

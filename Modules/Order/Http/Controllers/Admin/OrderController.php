@@ -473,7 +473,7 @@ class OrderController extends Controller
     {
         event(new OrderChangedEvent($order, $request));
         $variety = $request->variety;
-        $oldTotalAmount = $order->getTotalAmount();
+        $oldTotalAmount = $order->total_amount;
         /**
          * @var Product $product 
          */
@@ -519,7 +519,7 @@ class OrderController extends Controller
 
             $orderLog = OrderLog::addLog(
                 $order,
-                ($order->getTotalAmount() - $oldTotalAmount),
+                ($order->total_amount - $oldTotalAmount),
                 0,
                 null,
                 null

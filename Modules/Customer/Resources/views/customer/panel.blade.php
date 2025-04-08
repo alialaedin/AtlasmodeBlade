@@ -815,6 +815,7 @@
         this.setCustomerInformationForUpdate();
         this.setFilteredOrders();
         this.setOrderStatistics();
+        this.activeLoginBtn();
       },
       data() {
         return {
@@ -876,6 +877,21 @@
       },
       methods: {
 
+        activeLoginBtn() {
+          const btn = document.querySelector('.login-btn');
+          btn.addEventListener('click', function () {
+            const child = this.querySelectorAll('div')[1];
+            child.classList.toggle('active');
+            if (child.classList.contains('active')) {
+              this.style.borderBottomLeftRadius = 'unset';
+              this.style.borderTopLeftRadius = '18px';
+              this.style.borderBottomRightRadius = 'unset';
+              this.style.borderTopRightRadius = '18px';
+            } else {
+              this.style.borderRadius = '100px';
+            }
+          });
+        },
         openModal(selector) {
           document.querySelector(selector).classList.add('active');  
           document.querySelector('.modal-overlay').classList.add('active');

@@ -11,19 +11,6 @@
   </div>
 </div>
 
-@php
-  $statusColors = [
-    'wait_for_payment' => 'warning',
-    'new' => 'primary',
-    'in_progress' => 'secondary',
-    'delivered' => 'success',
-    'canceled' => 'danger',
-    'failed' => 'danger',
-    'reserved' => 'info',
-    'canceled_by_user' => 'danger',
-  ];
-@endphp
-
 <x-card>
   <x-slot name="cardTitle">جزئیات سفارش</x-slot>
   <x-slot name="cardOptions"><x-card-options /></x-slot>
@@ -229,55 +216,48 @@
 
 <div style="margin-bottom: 200px"></div>
 
-<div class="modal fade" id="edit-order-status-modal" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content modal-content-demo">
-      <div class="modal-header">
-        <p class="modal-title">تغییر وضعیت سفارش</p>
-        <button aria-label="Close" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+<x-modal id="edit-order-status-modal" size="md">
+  <x-slot name="title">تغییر وضعیت سفارش</x-slot>
+  <x-slot name="body">
+    <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST">
+
+      @csrf
+      @method('PUT')
+
+      <div class="row">
+        <div class="col-12 my-1">
+          <strong class="fs-15">وضعیت فعلی: </strong><span>{{ __('statuses.' . $order->status) }}</span>
+        </div>
       </div>
-      <div class="modal-body">
-        <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST">
 
-          @csrf
-          @method('PUT')
-
-          <div class="row">
-            <div class="col-12 my-1">
-              <strong class="fs-15">وضعیت فعلی: </strong><span>{{ __('statuses.' . $order->status) }}</span>
-            </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="form-group">
+            <select name="status" id="order_status" class="form-control" required>
+              <option value="">انتخاب وضعیت</option>
+              @foreach ($orderStatuses as $status)
+                @if ($status != $order->status)
+                  <option value="{{ $status }}">{{ __('statuses.' . $status) }}</option>
+                @endif
+              @endforeach
+            </select>
           </div>
-
-          <div class="row mt-3">
-            <div class="col-12">
-              <div class="form-group">
-                <select name="status" id="order_status" class="form-control" required>
-                  <option value="">انتخاب وضعیت</option>
-                  @foreach ($orderStatuses as $status)
-                    @if ($status != $order->status)
-                      <option value="{{ $status }}">{{ __('statuses.' . $status) }}</option>
-                    @endif
-                  @endforeach
-                </select>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="form-group">
-                <textarea id="description" class="form-control" rows="2" name="description" placeholder="توضیحات">{{ old('description') }}</textarea>
-              </div>
-            </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <textarea id="description" class="form-control" rows="2" name="description" placeholder="توضیحات">{{ old('description') }}</textarea>
           </div>
-
-          <div class="modal-footer justify-content-center">
-            <button class="btn btn-outline-warning" type="submit">ویرایش</button>
-            <button class="btn btn-outline-danger" data-dismiss="modal">انصراف</button>
-          </div>
-
-        </form>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
+
+      <div class="modal-footer justify-content-center mt-2">
+        <button class="btn btn-sm btn-warning" type="submit">بروزرسانی</button>
+        <button class="btn btn-sm btn-outline-danger" data-dismiss="modal">انصراف</button>
+      </div>
+
+    </form>
+  </x-slot>
+</x-modal>
 
 <x-modal id="add-new-item-modal" size="md">
   <x-slot name="title">افزودن به سفارش</x-slot>
