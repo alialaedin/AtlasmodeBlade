@@ -54,6 +54,10 @@ class Cart extends Model
       $quantity = $existsInCart ? $cookieCart['quantity'] + $existsInCart->quantity : $cookieCart['quantity'];
 
       if (!$variety || $quantity > $variety->quantity || $variety->product->status != Product::STATUS_AVAILABLE) continue;
+      if ($existsInCart) {
+        $existsInCart->update(['quantity' => $quantity]);
+        continue;
+      }
       Cart::addToCart($cookieCart['quantity'], $variety, $customer);
     }
   }
