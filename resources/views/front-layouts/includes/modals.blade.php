@@ -358,7 +358,6 @@
 
 					if (response.ok) {
 						const { message } = await response.json();
-						popup('success', '', message);
 						window.location.replace('/');
 					}
 				} catch (error) {
