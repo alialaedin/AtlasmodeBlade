@@ -268,7 +268,7 @@
               <input type="radio" id="wallet-payment" :value="true" v-model="payByWallet" class="customRadio">
               <label for="wallet-payment" class="d-flex gap-1">
                 <span>پرداخت از کیف پول</span>
-                <span> (موجودی فعلی: @{{ customer.wallet.balance }} تومان)</span>
+                <span class="currency"> (موجودی فعلی: @{{ customer.wallet.balance }} تومان)</span>
               </label>
             </div>
           </form>
@@ -327,25 +327,6 @@
         </div>
       </div>
       <div class="orderType-priceDetails position-sticky col-lg-4 d-flex flex-column gap-3">
-        <!-- Order Type -->
-        {{-- <div class="d-flex flex-column gap-1 px-5 py-2 bg-gray-100 radius-small">
-          <!-- Title -->
-          <div class="d-flex gap-2 align-items-center">
-            <i class="icon-cart icon-fs-medium color-gray-700"></i>
-            <span class="text-medium-strong color-gray-700">نوع سفارش</span>
-          </div>
-          <!-- Type -->
-          <form class="order-type d-flex gap-4 px-2 pb-2">
-              <div class="d-flex text-medium gap-2 align-items-center pb-1">
-                <input type="radio" id="normal" checked name="order-type" class="customRadio">
-                <label for="normal"> عادی</label>
-              </div>
-              <div class="d-flex text-medium gap-2 align-items-center pb-1">
-                  <input type="radio" id="reserve" name="order-type" class="customRadio">
-                  <label for="reserve" class="d-flex gap-1">رزرو</label>
-              </div>
-          </form>
-        </div>  --}}
         <!-- Price Details -->
         <div class="price-details bg-gray-100 radius-small d-flex flex-column p-5 gap-2">
           <!-- Total Price -->

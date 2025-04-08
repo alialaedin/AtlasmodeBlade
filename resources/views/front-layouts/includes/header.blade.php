@@ -178,7 +178,7 @@
 			// End Carts Count 
 
 			// Start Logout button
-			document.querySelector('#logout-modal-button').addEventListener('click', () => {
+			document.querySelector('#logout-modal-button')?.addEventListener('click', () => {
 				document.querySelector('.modal[data-id="exit"]').classList.add('active');
 				document.querySelector('.modal-overlay').classList.add('active');
 				document.body.classList.add('no-overflow');
