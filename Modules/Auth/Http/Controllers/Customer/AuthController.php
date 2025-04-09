@@ -49,7 +49,7 @@ class AuthController extends Controller
 			$request->merge(['cookieCarts' => json_decode($request->cookieCarts, true)]);
 		}
 		
-		$customer = Customer::where('mobile', $request->mobile)->first();
+		$customer = Customer::firstOrCreate(['mobile' => $request->mobile]);
 		$customer->login();	
 
 		return response()->success('با موفقیت لاگین شدید', compact('customer'));

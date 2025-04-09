@@ -11,7 +11,6 @@ use Modules\Cart\Http\Requests\Admin\CartStoreRequest;
 use Modules\Cart\Http\Requests\Admin\CartUpdateRequest;
 use Modules\Customer\Entities\Customer;
 use Modules\Invoice\Entities\Payment;
-use Modules\Product\Entities\Product;
 use Modules\Product\Entities\Variety;
 use Modules\Shipping\Entities\Shipping;
 use Modules\Shipping\Services\ShippingCalculatorService;
@@ -83,6 +82,12 @@ class CartController extends Controller
   {
     $cart->delete();
     return response()->success('محصول با موفقیت از سبد حذف شد');
+  }
+
+  public function getCartsCount()
+  {
+    $count = auth('customer')->user()->carts()->count(); 
+    return response()->success('تعداد محصولات سبد خرید کاربر', compact('count'));
   }
 
   public function getShippableShippings(Request $request)

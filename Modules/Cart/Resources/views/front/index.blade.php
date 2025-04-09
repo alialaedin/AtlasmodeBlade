@@ -873,6 +873,7 @@
             const result = await response.json();
             if (result.success) {
               this.carts.splice(cartIndex, 1);
+              document.querySelector('#carts-count-span').innerText = this.carts.length;
               this.popup('success', 'عملیات موفق', result.message);
             } else {
               this.popup('danger', 'عملیات ناموفق', result.message);

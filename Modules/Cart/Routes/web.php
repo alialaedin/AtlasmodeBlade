@@ -5,6 +5,7 @@ use Modules\Cart\Http\Controllers\Customer\CartController;
 
 Route::middleware('auth:customer')->name('customer.')->group(function() {
   Route::prefix('/cart')->name('carts.')->group(function () {
+    Route::get('/get-carts-count', [CartController::class,'getCartsCount'])->name('count');
     Route::post('/get-shippings', [CartController::class,'getShippableShippings'])->name('shippable-shippings');
     Route::post('check-free-shipping', [CartController::class, 'checkFreeShipping']);
     Route::get('/', [CartController::class, 'index'])->name('index');

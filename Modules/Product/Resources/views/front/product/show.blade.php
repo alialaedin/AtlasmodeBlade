@@ -701,6 +701,10 @@
 
         // add to cart
         addToCart() {
+          if (this.selectedVariety.id === undefined) {
+            this.popup('warning', '', 'لطفا گزینه های محصول را انتخاب کنید');
+            return;
+          }
           if (this.isLoggin) {
             this.addVarietyToDBCart();
           }else {
@@ -757,16 +761,31 @@
             const response = await fetch(url, options);
             const result = await response.json();
 
+            if (response.status === 422) {
+              this.showValidationError(result.errors);
+            }
+
             if (response.ok) {
-              console.log(result);
               this.openModal('#added-to-cart-modal');
+              this.updateCartsCount();
             }
 
           } catch (error) {
             console.error('error:', error);
           }
         },
-      
+        async updateCartsCount() {
+          const url = @json(route('customer.carts.count'));
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+          });
+          if (response.ok && response.status === 200) {
+            const result = await response.json();
+            document.querySelector('#carts-count-span').innerText = result.data.count
+          }
+        },
+
         // comment - specifications - description
         deactiveAllTitles() {
           const listChildren = document.querySelector('.second-section-list').children;
