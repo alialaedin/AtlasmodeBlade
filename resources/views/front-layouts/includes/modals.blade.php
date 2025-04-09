@@ -243,7 +243,7 @@
 		<input type="text" class="flex-grow-1 p-1 text-medium" placeholder="جستوجو کنید...">
 		<i class="icon-search icon-fs-large"></i>
   </form>
-  <div class="d-flex flex-column justify-content-center mt-2">
+  <div id="product-search-contianer" class="d-flex flex-column justify-content-center mt-2">
 		<ul class="product-list grid w-p-100 gap-2"></ul>
 		<a href="{{ route('front.products.index') }}" class="show-more-products-btn d-flex d-none justify-content-center gap-1 text-medium mt-2">
 			<span>مشاهده بیشتر</span>
@@ -272,6 +272,7 @@
 
 @push('scripts')
 	<script>
+        document.getElementById('product-search-contianer').classList.add('d-none');
 		document.addEventListener('DOMContentLoaded', () => {
 
 			let typingTimeout;
@@ -327,8 +328,10 @@
 									productList.append(productBox);
 								});
 								document.querySelector('.show-more-products-btn').classList.remove('d-none');
+                                document.getElementById('product-search-contianer').classList.remove('d-none');
 							} else {
 								document.querySelector('.show-more-products-btn').classList.add('d-none');
+                                document.getElementById('product-search-contianer').classList.add('d-none');
 							}
 						} else {
 							console.error('Failed to fetch products:', response.status);
