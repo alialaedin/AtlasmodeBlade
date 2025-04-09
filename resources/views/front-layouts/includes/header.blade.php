@@ -139,7 +139,7 @@
 
 			<!-- When Is Login -->
 			@if ($user !== null)
-				<button type="button" class="login-btn bg-black me-2 px-3 py-2 mb-1 position-relative radius-u">
+				<button type="button" class="login-btn bg-black me-2 px-3 py-2 mb-1 position-relative radius-u d-none d-lg-block">
 					<div class="d-flex align-items-center color-white gap-1">
 						<i class="icon-user icon-fs-medium-2"></i>
 						<span class="text-button"> حساب کاربری</span>

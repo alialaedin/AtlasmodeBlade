@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\Notifiable;
 use Modules\Admin\Entities\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 use Modules\Core\Classes\Transaction;
 use Modules\Invoice\Classes\Payable;
 use Modules\Invoice\Entities\Invoice;
@@ -76,7 +77,7 @@ class Deposit extends Payable
 
   public static function storeModel($amount)
   {
-    $user = \Auth::user();
+    $user = Auth::guard('customer')->user();
     $deposit = new static;
 
     $deposit->fill([

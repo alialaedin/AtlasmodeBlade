@@ -5,7 +5,7 @@ use Modules\Cart\Http\Controllers\Customer\CartController;
 
 Route::middleware('auth:customer')->name('customer.')->group(function() {
   Route::prefix('/cart')->name('carts.')->group(function () {
-    Route::get('/remove-all', [CartController::class,'removeAllCarts'])->name('remove-all');
+    Route::delete('/remove-all', [CartController::class,'removeAllCarts'])->name('remove-all');
     Route::get('/get-carts-count', [CartController::class,'getCartsCount'])->name('count');
     Route::post('/get-shippings', [CartController::class,'getShippableShippings'])->name('shippable-shippings');
     Route::post('check-free-shipping', [CartController::class, 'checkFreeShipping']);

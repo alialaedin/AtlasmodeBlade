@@ -47,7 +47,7 @@
               </div>
 
               <!-- Delete Button -->
-              <button class="delete-allProducts d-flex align-items-center gap-1" type="button">
+              <button @click="deleteAllCart" class="delete-allProducts d-flex align-items-center gap-1" type="button">
                 <span class="text-medium">حذف کل سبد خرید</span>
                 <i class="icon-trash-2 icon-fs-medium"></i>
               </button>
@@ -876,6 +876,30 @@
             if (result.success) {
               this.carts.splice(cartIndex, 1);
               document.querySelector('#carts-count-span').innerText = this.carts.length;
+              this.popup('success', 'عملیات موفق', result.message);
+            } else {
+              this.popup('danger', 'عملیات ناموفق', result.message);
+            }
+
+          } catch (error) {
+            console.error('error:', error);
+          }
+        });
+      },
+      async deleteAllCart() {
+        const message = 'آیا مطمع هستید که میخواهید سبد خرید خود را خالی کنید ؟'
+        this.popupWithConfirmCallback('warning', 'توجه', message, 'بله حذف کن', async () => {
+          try {
+            const url = @json(route('customer.carts.remove-all'));
+            const response = await fetch(url, {
+              method: 'DELETE',
+              headers: this.getDefaultRequestHeaders()
+            });
+
+            const result = await response.json();
+            if (result.success) {
+              this.carts = [];
+              document.querySelector('#carts-count-span').innerText = 0;
               this.popup('success', 'عملیات موفق', result.message);
             } else {
               this.popup('danger', 'عملیات ناموفق', result.message);

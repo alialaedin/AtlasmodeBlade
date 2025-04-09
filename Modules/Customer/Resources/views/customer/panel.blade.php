@@ -447,8 +447,8 @@
           <!-- Transactions Date -->
           <div v-if="transactions.length > 0" class="d-flex gap-1 align-items-baseline color-gray-700">
             <span class="text-button">تاریخ اخرین تراکنش شما:</span>
-            <time datetime="{{ verta($customer->transactions->first()->created_at)->format('Y/m/d') }}">
-              {{ verta($customer->transactions->first()->created_at)->format('%d %B %Y') }}
+            <time datetime="{{ verta($customer->transactions->first()?->created_at)->format('Y/m/d') }}">
+              {{ verta($customer->transactions->first()?->created_at)->format('%d %B %Y') }}
             </time>
           </div>
           <button type="button" data-modal="wallet-modal" class="px-6 py-1  text-button color-white radius-u bg-primary-700">شارژ کیف پول</button>
@@ -528,18 +528,19 @@
   <div class="prtal d-flex align-items-center justify-content-between">
     <span class="text-medium">انتخاب درگاه</span>
     <div class="d-flex gap-3">
-      <button type="button" class="active portal-item-sep radius-small position-relative">
-        <figure>
-          <img class="tick position-absolute" src="{{ asset('front-assets/images/cart/tick-box.db941cf5.svg') }}" alt="tick">
-          <img src="{{ asset('front-assets/images/cart/sep.png') }}" alt="saman">
-        </figure>
-      </button>
-      <button type="button" class="portal-item-zarinpal position-relative">
-        <figure>
-          <img class="tick position-absolute" src="{{ asset('front-assets/images/cart/tick-box.db941cf5.svg') }}" alt="tick">
-          <img src="{{ asset('front-assets/images/cart/zarinpal.png') }}" alt="zarinpal">
-        </figure>
-      </button>
+      <template v-for="(gateway, gatewayIndex) in gateways" :key="gatewayIndex">
+        <button 
+          type="button" 
+          :portal-name="gateway.name"
+          :class="['portal-item position-relative', gatewayIndex === 0 ? 'active' : '']" 
+          @click="choosePortal($event)"
+        >
+          <figure>
+            <img class="tick position-absolute" src="{{ asset('front-assets/images/cart/tick-box.db941cf5.svg') }}" alt="tick">
+            <img :src="gateway.image" :alt="gateway.name" />
+          </figure>
+        </button>
+      </template>
     </div>
   </div>
   <button @click="depositWallet" type="button" class="close-modal bg-black color-white text-medium  py-1">افزایش موجودی</button>
@@ -816,6 +817,7 @@
         this.setFilteredOrders();
         this.setOrderStatistics();
         this.activeLoginBtn();
+        this.closingModals();
       },
       data() {
         return {
@@ -823,6 +825,7 @@
           allOrders: @json($customer->orders),
           provinces: @json($provinces),
           existsAddresses: @json($customer->addresses),
+          gateways: @json($gateways),
           favorites: @json($customer->favorites),
           transactions: @json($customer->transactions),
           depositWalletAmount: '',
@@ -877,6 +880,20 @@
       },
       methods: {
 
+        closingModals() {
+          document.querySelector('.modal-overlay').addEventListener('click', () => {
+            document.querySelector('.modal-overlay').classList.remove('active');
+            document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+            document.body.classList.remove('no-overflow');
+          });
+          document.querySelectorAll('.modal-close').forEach(modalCloseButton => {
+            modalCloseButton.addEventListener('click', () => {
+              document.querySelector('.modal-overlay').classList.remove('active');
+              document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+              document.body.classList.remove('no-overflow');
+            });
+          })
+        },
         activeLoginBtn() {
           const btn = document.querySelector('.login-btn');
           btn.addEventListener('click', function () {
@@ -1007,6 +1024,15 @@
 
         },
 
+        choosePortal(event) {
+          const selectedPortalItem = event.currentTarget;
+          document.querySelectorAll('.portal-item').forEach(portalItem => {
+            if (portalItem.classList.contains('active')) {
+              portalItem.classList.remove('active');
+            }
+          });
+          selectedPortalItem.classList.add('active');
+        },
         loadCitiesForEditAddress() {
           const province = this.provinces.find(p => p.id == this.editAddressData.provinceId);
           this.editAddressData.province = province;

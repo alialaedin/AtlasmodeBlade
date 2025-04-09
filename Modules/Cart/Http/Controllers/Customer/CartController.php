@@ -17,25 +17,16 @@ use Modules\Shipping\Services\ShippingCalculatorService;
 
 class CartController extends Controller
 {
-  private Customer $customer;
-  protected function __construct()
-  {
-    /**
-     * @var \Modules\Customer\Entities\Customer $customer
-     */
-    $customer = auth('customer')->user();
-    abort_if(!$customer, 401);
-    $this->customer = $customer;
-  }
-
   public function index()
   {
-    $this->customer->load(['addresses' => function ($q) {
+    /** @var Customer $customer */
+    $customer = auth('customer')->user();
+    $customer->load(['addresses' => function ($q) {
       $q->select(['id', 'city_id', 'address', 'customer_id', 'first_name', 'last_name', 'mobile', 'postal_code', 'telephone']);
       $q->with('city');
     }]);
 
-    $carts = $this->customer->carts()
+    $carts = $customer->carts()
       ->with('variety', function ($vQuery) {
         $vQuery->select(['id', 'product_id']);
         $vQuery->with('attributes');
@@ -90,14 +81,19 @@ class CartController extends Controller
     return response()->success('محصول با موفقیت از سبد حذف شد');
   }
 
-  public function removeAllCarts() 
+  public function removeAllCarts()
   {
-    $this->customer->carts()->each(fn($cart) => $cart->delete());
+    /** @var Customer $customer */
+    $customer = auth('customer')->user();
+    $customer->carts()->each(fn($cart) => $cart->delete());
+    return response()->success('سبد خرید با موفقیت خالی شد');
   }
 
   public function getCartsCount()
   {
-    $count = $this->customer->carts()->count();
+    /** @var Customer $customer */
+    $customer = auth('customer')->user();
+    $count = $customer->carts()->count();
     return response()->success('تعداد محصولات سبد خرید کاربر', compact('count'));
   }
 
@@ -110,22 +106,24 @@ class CartController extends Controller
       'shipping_id' => ['nullable', 'exists:shippings,id'],
       'address_id' => ['nullable', 'exists:addresses,id'],
     ]);
+    /** @var Customer $customer */
+    $customer = auth('customer')->user();
     $carts = [];
     foreach ($request->varieties ?? [] as $requestCart) {
       $variety = Variety::query()->find($requestCart['variety_id']);
       $carts[] = Cart::fakeCartMaker(
-        $variety->id, 
-        $requestCart['quantity'], 
-        $variety->final_price['discount_price'], 
+        $variety->id,
+        $requestCart['quantity'],
+        $variety->final_price['discount_price'],
         $variety->final_price['amount']
       );
     }
     $carts = collect($carts);
     $hasFreeShippingProduct = Cart::hasfreeShippingProduct($carts);
     $shippings = ShippingCalculatorService::getShippableShippingsForFront(
-      customer: $this->customer,
+      customer: $customer,
       carts: $carts,
-      chosenAddress: ($request->has('address_id')) ? $this->customer->addresses()->where('id', $request->address_id)->first() : null,
+      chosenAddress: ($request->has('address_id')) ? $customer->addresses()->where('id', $request->address_id)->first() : null,
     );
 
     return response()->success('سبد خرید شما', compact(

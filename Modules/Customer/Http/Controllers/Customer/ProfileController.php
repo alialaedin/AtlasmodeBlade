@@ -16,6 +16,7 @@ use Modules\Customer\Http\Requests\Customer\ProfileUpdateRequest;
 use Modules\Newsletters\Entities\UsersNewsletters;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Modules\Area\Entities\Province;
+use Modules\Invoice\Entities\Payment;
 use Throwable;
 
 class ProfileController extends Controller
@@ -91,12 +92,14 @@ class ProfileController extends Controller
 
     $orderStatistics = Order::getOrderStatisticsForCustomer($customer);
     $provinces = Province::getAllProvinces(true);
+    $gateways = Payment::getAvailableDriversForFront();
 
     return view('customer::customer.panel', compact([
       'customer',
       'provinces',
       'orderStatistics',
       'favorites',
+      'gateways'
     ]));
   }
 
