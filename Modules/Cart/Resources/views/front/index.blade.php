@@ -664,8 +664,10 @@
 
   createApp({
     mounted() {
-      this.choosenAddress = this.addresses[0];
-      this.choosenAddressId = this.choosenAddress.id;
+      if (this.addresses.length) {
+        this.choosenAddress = this.addresses[0];
+        this.choosenAddressId = this.choosenAddress.id;
+      }
       this.loadShippings();
       this.activeLoginBtn();
       this.openSearchModal();
