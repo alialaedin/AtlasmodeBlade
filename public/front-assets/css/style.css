@@ -16820,7 +16820,7 @@ input[type=range]::-moz-range-thumb {
   display: block;
 }
 .shipping-cart .empty-cart {
-  display: none;
+  /* display: none; */
   min-height: 300px;
 }
 .shipping-cart .empty-cart.active {

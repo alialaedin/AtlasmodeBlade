@@ -159,7 +159,6 @@
         </div>
       </template>
         
-
     </section>
 
     <!-- Address And Delivery Informations -->
