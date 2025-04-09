@@ -242,7 +242,7 @@
 						@forelse($newProductComments as $comment)
 							<tr>
 								<td class="font-weight-bold">{{ $loop->iteration }}</td>
-								<td>{{ $comment->creator->full_name ? $comment->creator->full_name : $comment->creator->mobile}}</td>
+								<td>{{ $comment->creator?->full_name ?? $comment->creator?->mobile ?? '-'}}</td>
 								<td>{{Str::limit($comment->product->title,15,'...')}}</td>
 								<td>
 									<span class="badge badge-{{ config('productcomment.status_color.' . $comment->status) }}">
