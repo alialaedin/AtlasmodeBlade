@@ -265,7 +265,7 @@
 			<x-slot name="cardTitle">نظرات مطالب ({{ $postCommentsCount }})</x-slot>
 			<x-slot name="cardOptions">
 				<div class="card-options">
-					<a href="{{ route('admin.post-comments.index') }}" class="btn btn-outline-info ml-3">مشاهده همه</a>
+					<a href="{{ route('admin.post-comments.all') }}" class="btn btn-outline-info ml-3">مشاهده همه</a>
 				</div>
 			</x-slot>
 			<x-slot name="cardBody">
