@@ -5,7 +5,7 @@
 
     <!-- Page Path -->
     <div class="bg-white">
-      <ul class="page-path container-2xl px-4 px-md-8 px-3xl-0  d-flex gap-1 mb-lg-6 mb-4 align-items-center mt-lg-3 mt-0 text-medium">
+      <ul class="page-path container-2xl px-4 px-md-8 px-3xl-0  d-flex gap-1 mb-lg-6 mb-4 align-items-center mt-lg-3 mt-0 text-medium py-1">
         <i class="icon-home1 icon-fs-medium-2"></i>
         <a href="/" class="text-button-1 mt-1">خانه</a>
         <i class="icon-angle-double-left icon-fs-medium"></i>

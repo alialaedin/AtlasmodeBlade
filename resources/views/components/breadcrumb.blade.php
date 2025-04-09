@@ -4,7 +4,7 @@
             <i class="fe fe-home ml-1"></i> داشبورد
         </a>
     </li>
-    @foreach ($items as $item)
+    @foreach ($items ?? [] as $item)
         @if (!isset($item['route_link']) || is_null($item['route_link']))
             <li class="breadcrumb-item active">
                 {{ $item['title'] }}
