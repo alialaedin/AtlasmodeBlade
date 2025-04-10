@@ -70,12 +70,12 @@
   <x-modal id="size-chart-type-modal" size="md">
     <x-slot name="title"></x-slot>
     <x-slot name="body">
-      <form action="" method="POST">
+      <form action="" method="POST">`
         @csrf
         <div class="row">
           <div class="col-12 form-group">
             <label for="">عنوان : <span class="text-danger">&starf;</span></label>
-            <input type="text" class="form-control" name="name" placeholder="عنوان تخفیف را وارد کنید" required/>
+            <input type="text" class="form-control" name="title" placeholder="عنوان سایز چارت کنید" required/>
           </div>
         </div>
         <div id="values-row" class="row" style="gap: 8px;"></div>
@@ -108,6 +108,8 @@
     <div id="example-size-chart-type-value-text" class="col-12">
       <b class="counter fs-17"></b> : <span class="value-name fs-16"></span>
     </div>
+    <button id="example-store-button" class="btn btn-sm btn-primary submit-btn" type="submit">ثبت و ذخیره</button>
+    <button id="example-update-button" class="btn btn-sm btn-warning submit-btn" type="submit">بروزرسانی</button>
   </div>
 
 @endsection
@@ -125,6 +127,8 @@
     const createEditSizeChartValuesRow = $('#values-row');  
     const showSizeChartValuesRow = $('#show-values-row');  
     const createSizeChartTypeBtn = $('#create-size-chart-type-btn');  
+    const exampleStoreButtonElement = $('#example-store-button');
+    const exampleUpdateButtonElement = $('#example-update-button');
 
     const openModal = (modal) => modal.modal('show');  
     const emptyValuesRow = (row) => row.empty();  
@@ -133,6 +137,16 @@
     const addTypeValueBox = () => createEditSizeChartValuesRow.append(exampleSizeChartTypeValueInputBox.clone());  
     const deleteExamples = () => $('#examples').remove();
     const changeModalTitle = (title) => createEditModal.find('.modal-title').text(title);
+
+    const activeStoreButton = () => {
+      createEditModal.find('.modal-footer .submit-btn').remove();
+      createEditModal.find('.modal-footer').prepend(exampleStoreButtonElement);
+    };
+
+    const activeUpdateButton = () => {
+      createEditModal.find('.modal-footer .submit-btn').remove();
+      createEditModal.find('.modal-footer').prepend(exampleUpdateButtonElement);
+    };
 
     const add = () => {  
       $(document).on('click', '.add-btn', () => {  
@@ -175,6 +189,7 @@
         addTypeValueBox();  
         updateFormAction();  
         toggleRemoveBtn(false);  
+        activeStoreButton();
       });  
     };  
 
@@ -199,6 +214,7 @@
 
         toggleRemoveBtn(true);  
         updateFormAction($(this).data('update-url'));  
+        activeUpdateButton();
       });  
     };  
 
