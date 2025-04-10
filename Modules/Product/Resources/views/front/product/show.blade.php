@@ -387,8 +387,6 @@
       <i class="icon-troli icon-fs-medium-2"></i>
       <span> افزودن به سبد خرید</span>
     </button>
-
-    @include('front-layouts.includes.mobile-menu')
     
   </main>
 @endsection
