@@ -6,6 +6,7 @@
     @include('home::includes.special-categories')
     @include('home::includes.products')
     @include('home::includes.posts')
+    @include('front-layouts.includes.mobile-menu')
   </main>
 @endsection
 

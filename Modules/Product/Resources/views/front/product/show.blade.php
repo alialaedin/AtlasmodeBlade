@@ -378,6 +378,8 @@
         <div class="swiper-pagination position-absolute"></div>
       </div>
     </section>
+
+    @include('front-layouts.includes.mobile-menu')
     
   </main>
 @endsection
