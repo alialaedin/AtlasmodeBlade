@@ -363,7 +363,6 @@
     </section>
 
     @include('front-layouts.includes.mobile-menu')
-    
 
   </main>
 @endsection

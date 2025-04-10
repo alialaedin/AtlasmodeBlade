@@ -3597,6 +3597,9 @@ ul, ol, dd {
 .icon-share::before{
   color:black !important;
 }
+.icon-category::before{
+  color:black !important;
+}
 
 .product-details .product-sizes .size-btn.active span {
   color: white !important;

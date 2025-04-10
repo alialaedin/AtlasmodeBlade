@@ -1,5 +1,6 @@
- <!-- Mobile Category Modal -->
- <div class="modal modal-mobile-category bg-white radius-medium d-flex flex-column gap-2 px-6  pb-lg-4 pt-4 pb-5 overflow-auto" data-id="category">
+
+<!-- Mobile Category Modal -->
+<div class="modal modal-mobile-category bg-white radius-medium d-flex flex-column gap-2 px-6  pb-lg-4 pt-4 pb-5 overflow-auto" data-id="category">
   <h5 class="text-medium-3-strong color-gray-900 mx-auto">
       دسته بندی ها
   </h5>
@@ -93,6 +94,7 @@
       </li>
   </ul>
 </div>
+
 <!-- Mobile Menu Modal -->
 <div class="modal modal-mobile-menu bg-white d-flex flex-column gap-2 px-2  pb-lg-4 pt-4 pb-5 overflow-auto" data-id="hamburgerMenu">
   <div class="d-flex justify-content-between align-items-center">
@@ -237,6 +239,7 @@
        </li>
    </ul>
 </div>
+
 <!-- Search Modal -->
 <div class="modal modal-search bg-white radius-medium d-flex flex-column gap-2 px-6  pb-lg-4 pt-4 pb-3" data-id="search">
   <form class="search-form-modal py-1 px-1 w-p-100 d-flex align-items-center radius-small border-gray-300">
@@ -251,6 +254,7 @@
 		</a>
   </div>
 </div>
+
 <!-- Exit Modal -->
 <div class="modal modal-exit radius-medium d-flex flex-column bg-white gap-4 px-6 py-4" data-id="exit">
 	<div class="d-flex justify-content-between border-b-gray-400 px-2">

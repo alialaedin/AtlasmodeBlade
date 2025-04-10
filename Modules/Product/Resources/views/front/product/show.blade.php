@@ -379,6 +379,15 @@
       </div>
     </section>
 
+    <!-- Add To Cart Mobile -->
+    <button 
+      type="button" 
+      @click="addToCart" 
+      class="add-toCart-mobile d-lg-none gap-2 py-3 bg-black position-fixed bottom-0 start-0 end-0 d-flex align-items-center justify-content-center color-white">
+      <i class="icon-troli icon-fs-medium-2"></i>
+      <span> افزودن به سبد خرید</span>
+    </button>
+
     @include('front-layouts.includes.mobile-menu')
     
   </main>
