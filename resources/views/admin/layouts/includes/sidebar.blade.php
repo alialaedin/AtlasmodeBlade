@@ -25,8 +25,16 @@
           </a>
           <ul class="slide-menu">
             @can('read_area')
-              <li><a href="{{ route('admin.provinces.index') }}" class="slide-item">استان</a></li>
-              <li><a href="{{ route('admin.cities.index') }}" class="slide-item">شهر</a></li>
+              <li class="sub-slide">
+                <a class="sub-side-menu__item" data-toggle="sub-slide" href="#">
+                  <span class="sub-side-menu__label">مناطق</span>
+                  <i class="sub-angle fa fa-angle-left"></i>
+                </a>
+                <ul class="sub-slide-menu">
+                  <li><a href="{{ route('admin.provinces.index') }}" class="sub-slide-item">استان</a></li>
+                  <li><a href="{{ route('admin.cities.index') }}" class="sub-slide-item">شهر</a></li>
+                </ul>
+              </li>
             @endcan
             @can('read_color')
               <li><a href="{{ route('admin.colors.index') }}" class="slide-item">رنگ ها</a></li>
@@ -87,12 +95,22 @@
             <i class="angle fa fa-angle-left"></i>
           </a>
           <ul class="slide-menu">
-            @can('read_post')
-              <li><a href="{{ route('admin.posts.index') }}" class="slide-item">مطالب</a></li>
-            @endcan
-            @can('read_post-category')
-              <li><a href="{{ route('admin.post-categories.index') }}" class="slide-item">دسته بندی مطالب</a></li>
-            @endcan
+            @canany(['read_post', 'read_post-category'])
+              <li class="sub-slide">
+                <a class="sub-side-menu__item" data-toggle="sub-slide" href="#">
+                  <span class="sub-side-menu__label">بلاگ</span>
+                  <i class="sub-angle fa fa-angle-left"></i>
+                </a>
+                <ul class="sub-slide-menu">
+                  @can('read_post-category')
+                    <li><a href="{{ route('admin.post-categories.index') }}" class="sub-slide-item">دسته بندی مطالب</a></li>
+                  @endcan
+                  @can('read_post')
+                    <li><a href="{{ route('admin.posts.index') }}" class="sub-slide-item">مطالب</a></li>
+                  @endcan
+                </ul>
+              </li>    
+            @endcanany
             @can('read_slider')
               <li><a href="{{ route('admin.sliders.groups') }}" class="slide-item">اسلایدر</a></li>
             @endcan
@@ -133,7 +151,7 @@
         </li>
       @endcanany
 
-      @can('read_customer')
+      @can('read_customer') 
         <li class="slide">
           <a class="side-menu__item" style="cursor: pointer" data-toggle="slide">
             <i class="fe fe-users sidemenu_icon"></i>
@@ -141,6 +159,7 @@
             <i class="angle fa fa-angle-left"></i>
           </a>
           <ul class="slide-menu">
+
             @role('super_admin')
               <li class="sub-slide">
                 <a class="sub-side-menu__item" data-toggle="sub-slide" style="cursor: pointer">
@@ -148,13 +167,23 @@
                   <i class="sub-angle fa fa-angle-left"></i>
                 </a>
                 <ul class="sub-slide-menu">
-                  <li><a href="{{ route('admin.roles.index') }}" class="slide-item">مدیریت نقش ها</a></li>
-                  <li><a href="{{ route('admin.admins.index') }}" class="slide-item">مدیریت ادمین ها</a></li>
+                  <li><a href="{{ route('admin.roles.index') }}" class="sub-slide-item">نقش ها</a></li>
+                  <li><a href="{{ route('admin.admins.index') }}" class="sub-slide-item">ادمین ها</a></li>
                 </ul>
               </li>
             @endrole
-            <li><a href="{{ route('admin.customers.index') }}" class="slide-item">مشتریان</a></li>
-            <li><a href="{{ route('admin.customer-roles.index') }}" class="slide-item">نقش مشتریان</a></li>
+
+            <li class="sub-slide">
+              <a class="sub-side-menu__item" data-toggle="sub-slide" href="#">
+                <span class="sub-side-menu__label">کاربران</span>
+                <i class="sub-angle fa fa-angle-left"></i>
+              </a>
+              <ul class="sub-slide-menu">
+                <li><a href="{{ route('admin.customers.index') }}" class="sub-slide-item">مشتریان</a></li>
+                <li><a href="{{ route('admin.customer-roles.index') }}" class="sub-slide-item">نقش مشتریان</a></li>
+              </ul>
+            </li>    
+            
           </ul>
         </li>
       @endcan
