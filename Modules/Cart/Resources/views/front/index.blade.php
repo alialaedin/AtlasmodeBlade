@@ -47,7 +47,7 @@
               </div>
 
               <!-- Delete Button -->
-              <button @click="deleteAllCart" class="delete-allProducts d-flex align-items-center gap-1" type="button">
+              <button @click="deleteAllCart" class="delete-allProducts d-flex align-items-center gap-1 color-black" type="button">
                 <span class="text-medium">حذف کل سبد خرید</span>
                 <i class="icon-trash-2 icon-fs-medium"></i>
               </button>

@@ -50,7 +50,7 @@
 
 <div class="row">
 
-	<div class="col-xl-9">
+	<div class="col-xl-9 col-lg-6 col-md-12">
 		<div class="row">
 
 			<div class="col-xl-4 col-lg-6 col-md-12">

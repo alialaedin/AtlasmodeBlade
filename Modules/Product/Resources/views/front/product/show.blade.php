@@ -108,7 +108,7 @@
                     type="button"
                     class="size-btn text-center text-button radius-circle"
                     @click="setActiveAttributes(attribute.id, value)">
-                    <span v-text="value"></span>
+                    <span class="color-black" v-text="value"></span>
                   </button>
                 </div>
               </div>

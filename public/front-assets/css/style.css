@@ -3342,6 +3342,13 @@ input {
 select {
   border: unset;
   outline: unset;
+  all: unset ;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  position: relative;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat left;
+  background-size: 22px;
+  color: black !important;
 }
 
 input[type=radio], input[type=checkbox] {
@@ -3389,6 +3396,7 @@ ul, ol, dd {
 
 [class^=icon-]::before, [class*=" icon-"]::before {
   /* use !important to prevent issues with browser extensions that change fonts */
+  all: unset;
   font-family: "icon" !important;
   font-size: 30px;
   display: block;
@@ -3576,6 +3584,22 @@ ul, ol, dd {
 
 .icon-hamburger-menu:before {
   content: "\e91e";
+}
+
+.header-top .icon-hamburger-menu::before {
+  color: black !important;
+}
+
+.header-top .icon-search::before {
+  color: black !important;
+}
+
+.icon-share::before{
+  color:black !important;
+}
+
+.product-details .product-sizes .size-btn.active span {
+  color: white !important;
 }
 
 @font-face {
@@ -17119,10 +17143,10 @@ input[type=range]::-moz-range-thumb {
   background-color: #f9f9f9;
 }
 .panel-side .lists .exit-btn {
-  color: red;
+  color: red !important;
 }
 .panel-side .lists .exit-btn svg {
-  stroke: red;
+  stroke: red !important;
 }
 @media only screen and (min-width: 1024px) {
   .panel-side {
@@ -17329,12 +17353,13 @@ input[type=range]::-moz-range-thumb {
   text-align: center;
 }
 .wallet .descrip {
-  left: 5%;
+  left: 8%;
   font-size: 12px;
+  max-width: 150px;
 }
 @media only screen and (min-width: 1336px) {
   .wallet .descrip {
-    left: 9%;
+    left: 11%;
   }
 }
 @media only screen and (min-width: 1676px) {

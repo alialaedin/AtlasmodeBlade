@@ -327,133 +327,134 @@
 
 @section('modals')
   <div class="modal modal-mobile-filter bg-white d-flex flex-column gap-2 pb-lg-4 overflow-auto" data-id="filter">
-      <div class="d-flex position-sticky bg-white top-0 start-0 end-0 pb-2 pt-3 px-5 justify-content-between align-items-center">
-         <button type="button" class="modal-close">
-           <i class="icon-cancel icon-fs-medium-2 color-gray-700"></i>
-         </button>
-         <div class="d-flex align-items-center gap-2 flex-grow-1 justify-content-center">
-             <i class="icon-filter icon-fs-medium"></i>
-             <span class="text-medium-2-strong color-gray-900">
-              فیلتر جستوجو
-             </span>
-         </div>
+
+    <div class="d-flex position-sticky bg-white top-0 start-0 end-0 pb-2 pt-3 px-5 justify-content-between align-items-center">
+      <button type="button" class="modal-close">
+      <i class="icon-cancel icon-fs-medium-2 color-gray-700"></i>
+      </button>
+      <div class="d-flex align-items-center gap-2 flex-grow-1 justify-content-center">
+        <i class="icon-filter icon-fs-medium"></i>
+        <span class="text-medium-2-strong color-gray-900">فیلتر جستوجو</span>
       </div>
-      <div class="d-flex flex-column gap-1 bg-gray-100 px-3">
-        <!-- Title -->
-        <form class="title w-p-100 d-flex flex-column gap-4 px-2 pt-3 pb-6">
-          <span class="text-medium-2-strong color-gray-900">عنوان</span>
-          <input type="text" class="title-input text-medium border-gray-300 w-p-100 px-4 py-1" placeholder="عنوان جستجو را بنویسید">
-        </form>
-        <!-- Size -->
-        <div class="size w-p-100 d-flex flex-column gap-4 px-2 pt-3 pb-3">
-            <!-- Title -->
-            <span class="text-medium-2-strong color-gray-900 pb-2 border-b-gray-300">سایز</span>
-             <!-- Size Lists -->
-             <form class="w-p-100 size-list grid gap-2 mt-3">
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> 5XL</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> 4XL</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> 3XL</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> 2XL</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> XL</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> L</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> M</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span>S</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span>XS</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span>36</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span>38</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span>40</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span>42</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> 5XL</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> 4XL</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> 3XL</span>
-                </label>
-                <label for="" class="d-flex gap-1 g-col-3">
-                  <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                  <span> 2XL</span>
-                </label>
-             </form>
+    </div>
+
+    <div class="d-flex flex-column gap-1 bg-gray-100 px-3 pb-2">
+      <!-- Title -->
+      <form class="title w-p-100 d-flex flex-column gap-4 px-2 pt-3 pb-6">
+        <span class="text-medium-2-strong color-gray-900">عنوان</span>
+        <input type="text" class="title-input text-medium border-gray-300 w-p-100 px-4 py-1" placeholder="عنوان جستجو را بنویسید">
+      </form>
+      <!-- Size -->
+      <div class="size w-p-100 d-flex flex-column gap-4 px-2 pt-3 pb-3">
+          <!-- Title -->
+          <span class="text-medium-2-strong color-gray-900 pb-2 border-b-gray-300">سایز</span>
+            <!-- Size Lists -->
+            <form class="w-p-100 size-list grid gap-2 mt-3">
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> 5XL</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> 4XL</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> 3XL</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> 2XL</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> XL</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> L</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> M</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span>S</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span>XS</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span>36</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span>38</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span>40</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span>42</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> 5XL</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> 4XL</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> 3XL</span>
+              </label>
+              <label for="" class="d-flex gap-1 g-col-3">
+                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
+                <span> 2XL</span>
+              </label>
+            </form>
+      </div>
+      <!-- Available Mode -->
+      <div class="available w-p-100 d-flex flex-column gap-4 radius-medium px-2 pt-3 pb-3">
+        <span class="text-medium-2-strong pb-2 color-gray-900 border-b-gray-300">حالت نمایش</span>
+        <div class="d-flex gap-3 align-items-center">
+          <!-- Available input -->
+          <input type="checkbox" id="available" class="available-btn customSwitch bg-gray-400" />
+          <label class="text-medium color-gray-900" name="available">فقط کالاهای موجود</label>
         </div>
-        <!-- Available Mode -->
-        <div class="available w-p-100 d-flex flex-column gap-4 radius-medium px-2 pt-3 pb-3">
-          <span class="text-medium-2-strong pb-2 color-gray-900 border-b-gray-300">حالت نمایش</span>
-          <div class="d-flex gap-3 align-items-center">
-            <!-- Available input -->
-            <input type="checkbox" id="available" class="available-btn customSwitch bg-gray-400" />
-            <label class="text-medium color-gray-900" name="available">فقط کالاهای موجود</label>
+      </div>
+        <!-- Price Range -->
+      <div class="price-range2 w-p-100 d-flex flex-column gap-3 px-4 pt-5 pb-3">
+        <span class="text-medium-2-strong color-gray-900">قیمت ها</span>
+        <div class="range-input2 position-relative">
+          <div class="slider2">
+            <div class="progress2"></div>
           </div>
+          <input type="range" class="range-min2 pointer" min="10000" max="2000000" value="10000" step="10000">
+          <input type="range" class="range-max2 pointer" min="10000" max="2000000" value="2000000" step="10000">
         </div>
-         <!-- Price Range -->
-         <div class="price-range2 w-p-100 d-flex flex-column gap-3 px-4 pt-5 pb-3">
-          <span class="text-medium-2-strong color-gray-900">قیمت ها</span>
-          <div class="range-input2 position-relative">
-            <div class="slider2">
-              <div class="progress2"></div>
-            </div>
-            <input type="range" class="range-min2 pointer" min="10000" max="2000000" value="10000" step="10000">
-            <input type="range" class="range-max2 pointer" min="10000" max="2000000" value="2000000" step="10000">
-          </div>
-          <div class="price-text2 d-flex justify-content-between mt-2">
-            <div class="d-flex gap-1 color-gray-900 text-button-1">
-              <span>از قیمت:</span>
-              <span class="price-min currency">10000</span>
-              <span>تومان</span>
+        <div class="price-text2 d-flex justify-content-between mt-2">
+          <div class="d-flex gap-1 color-gray-900 text-button-1">
+            <span>از قیمت:</span>
+            <span class="price-min currency">10000</span>
+            <span>تومان</span>
           </div>
           <div class="d-flex gap-1 color-gray-900 text-button-1">
-              <span>تا:</span>
-              <span class="price-max currency">2000000</span>
-              <span>تومان</span>
-            </div>
+            <span>تا:</span>
+            <span class="price-max currency">2000000</span>
+            <span>تومان</span>
           </div>
-         </div>
+        </div>
       </div>
-       
+      <button type="button" class="setFilter-btn w-p-100 bg-black color-white py-1 text-medium mt-2">اعمال فیلتر</button>
+    </div>
+
   </div>
 @endsection
 
