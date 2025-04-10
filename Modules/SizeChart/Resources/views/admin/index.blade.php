@@ -70,7 +70,7 @@
   <x-modal id="size-chart-type-modal" size="md">
     <x-slot name="title"></x-slot>
     <x-slot name="body">
-      <form action="" method="POST">`
+      <form action="" method="POST">
         @csrf
         <div class="row">
           <div class="col-12 form-group">
