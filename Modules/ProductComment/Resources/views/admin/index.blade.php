@@ -101,7 +101,12 @@
                                     @endif
                                 </span>
                             </td>
-                            <td>{{ $comment->creator->mobile }}</td>
+                            <td>
+                                @if ($comment->creator)
+                                    {{ $comment->creator->full_name ?? $comment->creator->mobile }}
+                                @else
+                                    -
+                                @endif
                             <td style="white-space: wrap;">{{ $comment->product->title }}</td>
                             <td>
                                 <x-badge isLight="true">
