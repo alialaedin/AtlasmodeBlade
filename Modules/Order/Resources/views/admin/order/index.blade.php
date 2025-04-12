@@ -129,7 +129,7 @@
 			<div class="card-options">
 				<div id="operation-buttons-row" class="ml-3">
 					<button type="button" class="btn mr-2 btn-warning" data-target="#change-orders-status-modal" data-toggle="modal">تغییر وضعیت</button>
-					<button type="button" class="btn mr-2 btn-purple" id="print-orders-btn">چاپ<i class="si si-printer mr-1"></i></button>
+					{{-- <button type="button" class="btn mr-2 btn-purple" id="print-orders-btn">چاپ<i class="si si-printer mr-1"></i></button> --}}
 				</div>
 				<form action="{{ route('admin.orders.index') }}" method="GET">
 					<div class="form-group mb-0">

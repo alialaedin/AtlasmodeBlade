@@ -148,7 +148,11 @@
                 <div class="row">
                     <div class="col-12 my-1">
                         <strong class="fs-17">کاربر :</strong>
-                        <span class="fs-16">{{ $comment->creator->full_name ?? $comment->creator->mobile }}</span>
+                        @if ($comment->creator)
+                            <span class="fs-16">{{ $comment->creator->full_name ?? $comment->creator->mobile }}</span>
+                        @else
+                            <span class="fs-16">-</span>
+                        @endif
                     </div>
                     <div class="col-12 my-1">
                         <strong class="fs-17">محصول :</strong>
