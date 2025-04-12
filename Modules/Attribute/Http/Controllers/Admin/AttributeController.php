@@ -51,8 +51,9 @@ class AttributeController extends Controller
   public function edit(Attribute $attribute)
   {
     $types = Attribute::getAvailableType();
+    $styles = Attribute::getAvailableStyles();
 
-    return view('attribute::admin.edit', compact('attribute', 'types'));
+    return view('attribute::admin.edit', compact(['attribute', 'types', 'styles']));
   }
 
   public function update(AttributeUpdateRequest $request, Attribute $attribute)

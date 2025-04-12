@@ -1,13 +1,10 @@
 @extends('admin.layouts.master')
 @section('content')
     <div class="page-header">
-        @php
-            $items = [
-                ['title' => 'لیست ویژگی ها', 'route_link' => 'admin.attributes.index'],
-                ['title' => 'ویرایش ویژگی', 'route_link' => null],
-            ];
-        @endphp
-        <x-breadcrumb :items="$items" />
+        <x-breadcrumb :items="[
+            ['title' => 'لیست ویژگی ها', 'route_link' => 'admin.attributes.index'],
+            ['title' => 'ویرایش ویژگی', 'route_link' => null],
+        ]" />
     </div>
 
     <x-card>
@@ -19,48 +16,40 @@
                 @csrf
                 @method('PUT')
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-xl-3 col-lg-6 col-12">
                         <div class="form-group">
-                            <label for="name" class="control-label"> نام: <span
-                                    class="text-danger">&starf;</span></label>
-                            <input type="text" id="name" class="form-control" name="name"
-                                value="{{ old('name', $attribute->name) }}" required autofocus />
-                            <span class="text-muted-dark mt-2 mr-1 font-weight-bold fs-11">نام ویژگی را حتما به <span
-                                    class="text-danger">انگیلیسی</span> وارد کنید!</span>
+                            <label for="name" class="control-label"> نام : <span class="text-danger">&starf;</span></label>
+                            <input type="text" id="name" class="form-control" name="name" value="{{ old('name', $attribute->name) }}" required autofocus />
+                            <span class="text-muted-dark mt-2 mr-1 font-weight-bold fs-11">نام ویژگی را حتما به <span class="text-danger">انگیلیسی</span> وارد کنید!</span>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-xl-3 col-lg-6 col-12">
                         <div class="form-group">
-                            <label for="label" class="control-label"> لیبل: <span
-                                    class="text-danger">&starf;</span></label>
-                            <input type="text" id="label" class="form-control" name="label"
-                                value="{{ old('label', $attribute->label) }}" required />
-                            <span class="text-muted-dark mt-2 mr-1 font-weight-bold fs-11">لیبل ویژگی را حتما به <span
-                                    class="text-danger">فارسی</span> وارد کنید!</span>
+                            <label for="label" class="control-label"> لیبل : <span class="text-danger">&starf;</span></label>
+                            <input type="text" id="label" class="form-control" name="label" value="{{ old('label', $attribute->label) }}" required />
+                            <span class="text-muted-dark mt-2 mr-1 font-weight-bold fs-11">لیبل ویژگی را حتما به <span class="text-danger">فارسی</span> وارد کنید!</span>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
+                    <div class="col-xl-3 col-lg-6 col-12">
                         <div class="form-group">
-                            <label for="type" class="control-label">نحوه نمایش: <span
-                                    class="text-danger">&starf;</span></label>
-                            <select name="style" class="form-control" required>
-                                <option value="select" @if ($attribute->style == 'select') selected @endif>کوبمو</option>
-                                <option value="box" @if ($attribute->style == 'box') selected @endif>مربعی</option>
-                                <option value="image" @if ($attribute->style == 'image') selected @endif>مربعی با عکس
-                                </option>
+                            <label for="type" class="control-label">نحوه نمایش : <span class="text-danger">&starf;</span></label>
+                            <select id="attribute-style-selectBox" name="style" class="form-control" required>
+                                <option value=""></option>
+                                @foreach ($styles as $style)
+                                    <option @if(old('style', $attribute->style) === $style) selected @endif value="{{ $style }}">
+                                        {{ config('attribute.translates.styles.' . $style) }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-xl-3 col-lg-6 col-12">
                         <div class="form-group">
-                            <label for="type" class="control-label"> انتخاب نوع ویژگی: </label>
-                            <select class="form-control" name="type" id="type">
+                            <label for="type" class="control-label"> نوع : <span class="text-danger">&starf;</span></label>
+                            <select class="form-control" name="type" id="type" required>
                                 @foreach ($types as $type)
-                                    <option value="{{ $type }}"
-                                        {{ old('type', $attribute->type) == $type ? 'selected' : null }}>
-                                        {{ config('attribute.types.' . $type) }}
+                                    <option @if(old('type', $attribute->type) === $type) selected @endif value="{{ $type }}">
+                                        {{ config('attribute.translates.types.' . $type) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -68,7 +57,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="form-group">
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" name="status" value="1"
@@ -76,8 +65,6 @@
                                 <span class="custom-control-label">وضعیت</span>
                             </label>
                         </div>
-                    </div>
-                    <div class="col-6">
                         <div class="form-group">
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" name="show_filter" value="1"
@@ -98,8 +85,8 @@
                 <div class="row mt-4">
                     <div class="col">
                         <div class="d-flex justify-content-center align-items-center" style="gap: 10px;">
-                            <button class="btn btn-warning" type="submit">ویرایش و ذخیره</button>
-                            <a class="btn btn-outline-danger" href="{{ route('admin.attributes.index') }}">برگشت</a>
+                            <button class="btn btn-sm btn-warning" type="submit">بروزرسانی</button>
+                            <a href="{{ route('admin.attributes.edit', $attribute) }}" class="btn btn-sm btn-danger"">ریست فرم</a>
                         </div>
                     </div>
                 </div>

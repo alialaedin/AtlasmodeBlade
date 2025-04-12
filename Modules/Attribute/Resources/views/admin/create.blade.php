@@ -45,7 +45,7 @@
                     <div class="col-xl-3 col-lg-6 col-12">
                         <div class="form-group">
                             <label for="attribute-type-selectBox" class="control-label"> نوع : <span class="text-danger">&starf;</span></label>
-                            <select class="form-control" name="type" id="attribute-type-selectBox">
+                            <select class="form-control" name="type" id="attribute-type-selectBox" required>
                                 <option value=""></option>
                                 @foreach ($types as $type)
                                     <option @if(old('type') === $type) selected @endif value="{{ $type }}">
