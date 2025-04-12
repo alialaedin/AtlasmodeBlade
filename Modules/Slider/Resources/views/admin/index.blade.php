@@ -34,17 +34,15 @@
                                 <input type="hidden" value="{{ $slider->id }}" name="orders[]">
                                 <input type="hidden" value="{{ $group }}" name="group">
                                 <td>
-                                    @if ($slider->image->url)
-                                        <a href="{{ $slider->image->url }}" target="_blank">
-                                            <div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="max-height: 60px; border-radius: 4px;">
-                                                <img src="{{ $slider->image->url }}" style="height: 50px;" alt="{{ $slider->image->url }}">
-                                            </div>
-                                        </a>
-                                    @else
-                                        -
-                                    @endif
+                                    @php
+                                        $url = '/storage/' . $slider->image->uuid . '/' . $slider->image->file_name;
+                                    @endphp
+                                    <a href="{{ $url }}" target="_blank">
+                                        <div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="max-height: 60px; border-radius: 4px;">
+                                            <img src="{{ $url }}" style="height: 50px;" alt="{{ $url }}">
+                                        </div>
+                                    </a>
                                 </td>
-
                                 <td>@include('core::includes.status', ['status' => $slider->status])</td>
                                 <td>{{ verta($slider->created_at)->format('Y/m/d H:i') }}</td>
                                 <td>
