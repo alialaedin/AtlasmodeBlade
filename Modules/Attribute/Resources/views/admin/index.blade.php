@@ -63,7 +63,7 @@
     </x-card>
 
     <x-card>
-        <x-slot name="cardTitle">لیست همه ویژگی ها ({{ $attributes->total() }})</x-slot>
+        <x-slot name="cardTitle">لیست ویژگی ها ({{ $attributes->count() }})</x-slot>
         <x-slot name="cardOptions"><x-card-options /></x-slot>
         <x-slot name="cardBody">
             <x-table-component>
@@ -115,7 +115,6 @@
                         @include('core::includes.data-not-found-alert', ['colspan' => 8])
                     @endforelse
                 </x-slot>
-                <x-slot name="extraData">{{ $attributes->onEachSide(0)->links('vendor.pagination.bootstrap-4') }}</x-slot>
             </x-table-component>
         </x-slot>
     </x-card>

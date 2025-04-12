@@ -30,8 +30,11 @@ class Attribute extends BaseModel
     'status'
   ];
 
-  const TYPE_SELECT = 'select';
-  const TYPE_TEXT = 'text';
+  public const TYPE_SELECT = 'select';
+  public const TYPE_TEXT = 'text';
+
+  public const STYLE_SELECT = 'select';
+  public const STYLE_BOX = 'box';
 
   protected $hidden = ['created_at', 'updated_at', 'creator_id', 'updater_id'];
 
@@ -74,6 +77,11 @@ class Attribute extends BaseModel
   public static function getAvailableType(): array
   {
     return [static::TYPE_TEXT, static::TYPE_SELECT];
+  }
+
+  public static function getAvailableStyles(): array
+  {
+    return [self::STYLE_SELECT, self::STYLE_BOX];
   }
 
   public function scopeActive($query)

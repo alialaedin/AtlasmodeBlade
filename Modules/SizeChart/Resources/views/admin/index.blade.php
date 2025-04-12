@@ -75,7 +75,7 @@
         <div class="row">
           <div class="col-12 form-group">
             <label for="">عنوان : <span class="text-danger">&starf;</span></label>
-            <input type="text" class="form-control" name="title" placeholder="عنوان سایز چارت کنید" required/>
+            <input type="text" class="form-control" name="name" placeholder="عنوان سایز چارت کنید" required/>
           </div>
         </div>
         <div id="values-row" class="row" style="gap: 8px;"></div>
@@ -103,7 +103,7 @@
     <div id="example-size-chart-type-value-input" class="col-12 d-flex type-value-box" style="gap: 5px;">
       <button type="button" class="add-btn btn btn-success btn-sm">+</button>
       <button type="button" class="remove-btn btn btn-danger btn-sm">-</button>
-      <input type="text" placeholder="مقدار" class="form-control form-control-sm">
+      <input type="text" placeholder="مقدار" class="form-control form-control-sm" name="">
     </div>  
     <div id="example-size-chart-type-value-text" class="col-12">
       <b class="counter fs-17"></b> : <span class="value-name fs-16"></span>
@@ -205,7 +205,7 @@
 
         const sizeChartType = sizeChartTypes.find(s => s.id == $(this).data('id')); 
 
-        form.find('input[name="title"]').val(sizeChartType.name);
+        form.find('input[name="name"]').val(sizeChartType.name);
         sizeChartType.values.forEach(value => {  
           const inputBox = exampleSizeChartTypeValueInputBox.clone();  
           inputBox.find('input').val(value.name);  
@@ -215,6 +215,7 @@
         toggleRemoveBtn(true);  
         updateFormAction($(this).data('update-url'));  
         activeUpdateButton();
+        submit();
       });  
     };  
 

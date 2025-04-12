@@ -21,7 +21,11 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label>دقت:<span class="text-danger">&starf;</span></label>
-                        <input type="number" class="form-control" name="precision" value="{{ old('precision', $unit->precision) }}">
+                        <select class="form-control" name="precision">
+                            @foreach ($precisions as $precision)
+                                <option value="{{ $precision }}" {{ $unit->precision == $precision ? 'selected' : '' }}>{{ $precision }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 				<div class="col-12">

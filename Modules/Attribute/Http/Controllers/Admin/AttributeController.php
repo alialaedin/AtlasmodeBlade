@@ -14,7 +14,7 @@ class AttributeController extends Controller
 {
   public function index(): JsonResponse|View
   {
-    $attributes = Attribute::latest('id')->filters()->paginate();
+    $attributes = Attribute::latest('id')->filters()->get();
     $types = Attribute::getAvailableType();
 
     return view('attribute::admin.index', compact('attributes', 'types'));
@@ -23,8 +23,9 @@ class AttributeController extends Controller
   {
     $attributes = Attribute::latest('id')->filters()->paginate();
     $types = Attribute::getAvailableType();
+    $styles = Attribute::getAvailableStyles();
 
-    return view('attribute::admin.create', compact('attributes', 'types'));
+    return view('attribute::admin.create', compact(['attributes', 'types', 'styles']));
   }
 
   public function store(AttributeStoreRequest $request)

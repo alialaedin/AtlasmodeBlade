@@ -36,9 +36,9 @@
                 </ul>
               </li>
             @endcan
-            @can('read_color')
+            {{-- @can('read_color')
               <li><a href="{{ route('admin.colors.index') }}" class="slide-item">رنگ ها</a></li>
-            @endcan
+            @endcan --}}
             @can('read_unit')
               <li><a href="{{ route('admin.units.index') }}" class="slide-item"><span>واحد</span></a></li>
             @endcan

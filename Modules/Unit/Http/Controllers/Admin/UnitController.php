@@ -12,12 +12,13 @@ class UnitController extends Controller
 {
   public function index()
   {
+    $precisions = Unit::getAvailablePrecisions();
     $units = Unit::query()
       ->select(['id', 'name', 'status', 'created_at'])
       ->latest('id')
       ->get();
 
-    return view('unit::admin.index', compact('units'));
+    return view('unit::admin.index', compact('units', 'precisions'));
   }
 
   public function store(UnitStoreRequest $request)

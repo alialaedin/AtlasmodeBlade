@@ -38,6 +38,7 @@
                                     @include('core::includes.delete-icon-button', [
                                         'model' => $unit,
                                         'route' => 'admin.units.destroy',
+                                        'disabled' => !$unit->is_deletable
                                     ])
                                 @endcan
                             </td>

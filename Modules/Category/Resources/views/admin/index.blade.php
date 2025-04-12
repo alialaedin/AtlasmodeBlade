@@ -3,7 +3,9 @@
     <div class="page-header">
         <x-breadcrumb :items="[['title' => 'لیست دسته بندی ها']]" />
         <div>
-            <button id="submitButton" type="submit" class="btn btn-teal btn-sm">ذخیره مرتب سازی</button>
+            @if ($categories->isNotEmpty())
+                <button id="submitButton" type="submit" class="btn btn-teal btn-sm">ذخیره مرتب سازی</button>
+            @endif
             @can('write_category')
                 @if (isset($categories[0]->parent_id))
                     <x-create-button   
@@ -83,11 +85,13 @@
                         @endforelse
                     </x-slot>
                 </x-table-component>
-                <button class="btn btn-teal btn-sm mt-5" type="submit">ذخیره مرتب سازی</button>
+                @if ($categories->isNotEmpty())
+                    <button class="btn btn-teal btn-sm mt-5" type="submit">ذخیره مرتب سازی</button>
+                @endif
             </form>
         </x-slot>
     </x-card>
-    @foreach ($categories as $category)
+    @foreach ($categories ?? [] as $category)
         <form
             action="{{ route('admin.categories.destroy', $category->id) }}"
             method="POST"

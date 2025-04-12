@@ -2,15 +2,16 @@
 
 use Modules\Attribute\Entities\Attribute;
 
-$typeText = Attribute::TYPE_TEXT;
-$typeSelect = Attribute::TYPE_SELECT;
-
 return [
-    'name' => 'Attribute',
-
+  'name' => 'Attribute',
+  'translates' => [
     'types' => [
-      $typeText => 'متنی',
-      $typeSelect => 'انتخابی',
+      Attribute::TYPE_TEXT => 'متنی',
+      Attribute::TYPE_SELECT => 'انتخابی',
+    ],
+    'styles' => [
+      Attribute::STYLE_BOX => 'مربعی',
+      Attribute::STYLE_SELECT => 'کومبو باکس'
     ]
-    
+  ]
 ];

@@ -8,6 +8,7 @@ use Modules\Admin\Entities\Admin;
 use Modules\Attribute\Entities\Attribute;
 use Modules\Brand\Entities\Brand;
 use Modules\Core\Classes\DontAppend;
+use Modules\Core\Exceptions\ModelCannotBeDeletedException;
 use Modules\Core\Helpers\Helpers;
 use Modules\Core\Traits\HasAuthors;
 use Modules\Core\Traits\HasDefaultFields;
@@ -49,7 +50,7 @@ class Category extends Model
         parent::booted();
         static::deleting(function ($category) {
             if ($category->products()->exists()) {
-                throw Helpers::makeValidationException('دسته بندی دارای محصول میباشد.');
+                throw new ModelCannotBeDeletedException('دسته بندی دارای محصول میباشد.');
             }
         });
         Helpers::clearCacheInBooted(static::class, 'home_category');
