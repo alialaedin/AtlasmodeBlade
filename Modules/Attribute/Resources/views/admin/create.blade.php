@@ -92,7 +92,7 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col">
+                    <div class="col d-flex justify-content-center align-items-center">
                         <div class="text-center d-flex" style="gap: 8px;">
                             <button class="btn btn-sm btn-primary" type="submit">ثبت و ذخیره</button>
                             <a href="{{ route('admin.attributes.create') }}" class="btn btn-sm btn-danger">ریست فرم</a>
