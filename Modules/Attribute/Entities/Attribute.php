@@ -50,16 +50,15 @@ class Attribute extends BaseModel
   }
   public function scopeFilters($query)
   {
-    $status = request('status');
-    $label = request('label');
-    $type = request('type');
-    $show_filter = request('show_filter');
-
     return $query
-      ->when($type, fn($q) => $q->where('type', $type))
-      ->when($label, fn($q) => $q->where('label', 'like', "%$label%"))
-      ->when(isset($show_filter), fn($q) => $q->where("show_filter", $show_filter))
-      ->when(isset($status), fn($q) => $q->where("status", $status));
+      ->when(request('type'), fn($q) => $q->where('type', request('type')))
+      ->when(request('style'), fn($q) => $q->where('style', request('style')))
+      ->when(request('label'), fn($q) => $q->where('label', 'like', "%". request('label') ."%"))
+      ->when(request('name'), fn($q) => $q->where('name', 'like', "%". request('name') ."%"))
+      ->when(in_array(request('show_filter'), ["1", "0"]), fn($q) => $q->where("show_filter", request('show_filter')))
+      ->when(in_array(request('status'), ["1", "0"]), fn($q) => $q->where("status", request('status')))
+      ->when(request('start_date'), fn ($q) => $q->whereDate('created_at', '>=', request('start_date')))
+      ->when(request('end_date'), fn ($q) => $q->whereDate('created_at', '<=', request('end_date')));
   }
 
   //Relations
