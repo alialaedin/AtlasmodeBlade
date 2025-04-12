@@ -119,8 +119,8 @@
                 select: true,
             };
 
-            $('#type').on('change', () => {
-                let type = $('#type').val();
+            $('#attribute-type-selectBox').on('change', () => {
+                let type = $('#attribute-type-selectBox').val();
                 if (hasValue[type]) {
                     $('#specification-values-section').css('display', 'flex');
                 } else {
