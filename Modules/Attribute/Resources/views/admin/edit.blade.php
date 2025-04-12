@@ -103,6 +103,10 @@
 @endsection
 @section('scripts')  
 <script>  
+
+    $('#attribute-style-selectBox').select2({ placeholder: 'انتخاب نحوه نمایش' });
+    $('#type').select2({ placeholder: 'انتخاب نحوه مقدار دهی' });
+
     const exampleAttributeValueBox = $('#examples-attribute-value-box').clone().removeAttr('id');  
     const attributeTypeSelect = $('#type');  
     const attributeValuesSection = $('#attribute-values-section');  
@@ -163,9 +167,6 @@
         removeExamplesFromDOM();  
         emptyTheAttrValuesRow();  
         hideAttrValuesSection();  
-        attributeTypeSelect.select2({  
-            placeholder: 'انتخاب نوع مشخصه'  
-        });  
 
         // بررسی اینکه آیا نوع انتخاب شده، دارای مقادیر است  
         if (attributeTypeSelect.val() && hasValueTypes.includes(attributeTypeSelect.val())) {  
