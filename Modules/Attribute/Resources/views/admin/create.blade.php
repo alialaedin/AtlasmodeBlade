@@ -29,8 +29,6 @@
                             <span class="text-muted-dark mt-2 mr-1 font-weight-bold fs-11">لیبل ویژگی را حتما به <span class="text-danger">فارسی</span> وارد کنید!</span>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-xl-3 col-lg-6 col-12">
                         <div class="form-group">
                             <label for="attribute-style-selectBox" class="control-label">نحوه نمایش : <span class="text-danger">&starf;</span></label>
@@ -95,8 +93,9 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col">
-                        <div class="text-center">
-                            <button class="btn btn-primary" type="submit">ثبت و ذخیره</button>
+                        <div class="text-center d-flex" style="gap: 8px;">
+                            <button class="btn btn-sm btn-primary" type="submit">ثبت و ذخیره</button>
+                            <a href="{{ route('admin.attributes.create') }}" class="btn btn-sm btn-danger">ریست فرم</a>
                         </div>
                     </div>
                 </div>
