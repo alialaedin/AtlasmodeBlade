@@ -14,7 +14,6 @@
 
 							<div class="col-12">
 								<div class="form-group">
-									<label for="name" class="control-label">نام دسته بندی :<span class="text-danger">&starf;</span></label>
 									<input type="text" id="name" class="form-control" name="name" required value="{{ old('name', $category->name) }}">
 								</div>
 							</div>
@@ -37,9 +36,9 @@
 
 						</div>
 
-						<div class="modal-footer justify-content-center">
-							<button class="btn btn-warning" type="submit">بروزرسانی</button>
-							<button class="btn btn-outline-danger" data-dismiss="modal">انصراف</button>
+						<div class="modal-footer justify-content-center pb-0">
+							<button class="btn btn-sm btn-warning" type="submit">بروزرسانی</button>
+							<button class="btn btn-sm btn-outline-danger" data-dismiss="modal">انصراف</button>
 						</div>
 
 					</form>

@@ -12,11 +12,16 @@
 
             <div class="col-12">
               <div class="form-group">
-                <label for="name" class="control-label">نام دسته بندی :<span class="text-danger">&starf;</span></label>
-                <input type="text" id="name" class="form-control" name="name" required value="{{ old('name') }}">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="نام دسته بندی *"
+                  name="name" 
+                  required 
+                  value="{{ old('name') }}"
+                />
               </div>
             </div>
-
             <div class="col-12 col-lg-6">
               <div class="form-group">
                 <label class="custom-control custom-checkbox">
@@ -33,9 +38,9 @@
             </div>
           </div>
 
-          <div class="modal-footer justify-content-center">
-            <button class="btn btn-primary" type="submit">ثبت و ذخیره</button>
-            <button class="btn btn-outline-danger" data-dismiss="modal">انصراف</button>
+          <div class="modal-footer justify-content-center pb-0">
+            <button class="btn btn-sm btn-primary" type="submit">ثبت و ذخیره</button>
+            <button class="btn btn-sm btn-outline-danger" data-dismiss="modal">انصراف</button>
           </div>
 
         </form>

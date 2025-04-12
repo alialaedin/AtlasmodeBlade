@@ -80,9 +80,9 @@
             @can('recommendation')
               <li><a href="{{ route('admin.recommendation-groups.index') }}" class="slide-item">گروه های پیشنهادی</a></li>
             @endcan
-            @can('read_gift_package')
+            {{-- @can('read_gift_package')
               <li><a href="{{ route('admin.gift-packages.index') }}" class="slide-item">بسته بندی هدیه</a></li>
-            @endcan
+            @endcan --}}
           </ul>
         </li>
       @endcanany
