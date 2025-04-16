@@ -190,6 +190,7 @@
         updateFormAction();  
         toggleRemoveBtn(false);  
         activeStoreButton();
+        submit();
       });  
     };  
 

@@ -2,7 +2,9 @@
 
 namespace Modules\Shipping\Entities;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Modules\Admin\Classes\ActivityLogHelper;
 use Modules\Order\Entities\Order;
 use Modules\Area\Entities\City;
 use Modules\Area\Entities\Province;
@@ -20,259 +22,324 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Shipping extends BaseModel implements Sortable, HasMedia
 {
-    use HasAuthors, SortableTrait, InteractsWithMedia;
+	use HasAuthors, SortableTrait, InteractsWithMedia;
 
-    protected $fillable = [
-        'minimum_delay',
-        'name',
-        'default_price',
-        'free_threshold',
-        'order',
-        'description',
-        'status',
-        'packet_size',
-        'first_packet_size',
-        'more_packet_price',
-        'is_free'
-    ];
+	protected $fillable = [
+		'minimum_delay',
+		'name',
+		'default_price',
+		'free_threshold',
+		'order',
+		'description',
+		'status',
+		'packet_size',
+		'first_packet_size',
+		'more_packet_price',
+		'is_free'
+	];
 
-    protected static $commonRelations = [
-        'provinces', 'cities', 'customerRoles'
-    ];
-    public $sortable = [
-        'order_column_name' => 'order',
-        'sort_when_creating' => true,
-    ];
-    protected $appends = ['logo'];
+	protected static $commonRelations = [
+		'provinces',
+		'cities',
+		'customerRoles'
+	];
+	public $sortable = [
+		'order_column_name' => 'order',
+		'sort_when_creating' => true,
+	];
+	protected $appends = ['logo'];
 
-    protected $hidden = ['media'];
+	protected $hidden = ['media'];
 
-    public static function booted()
-    {
-        static::deleting(function (Shipping $shipping) {
-            if ($shipping->orders()->exists()) {
-                throw Helpers::makeValidationException('به علت وجود سفارش برای این روش ارسال امکان حذف آن وجود ندارد');
-            }
-        });
+	public static function booted()
+	{
+		static::deleting(function (Shipping $shipping) {
+			if ($shipping->orders()->exists()) {
+				throw Helpers::makeValidationException('به علت وجود سفارش برای این روش ارسال امکان حذف آن وجود ندارد');
+			}
+		});
+	}
+
+	public static function createOrUpdate(Request $request, self|null $shipping = null)
+	{
+		if ($shipping) {
+			$shipping->update($request->all());
+			ActivityLogHelper::updatedModel(' سرویس حمل و نقل ویرایش شد', $shipping);
+		} else {
+			$shipping = Shipping::query()->create($request->all());
+			ActivityLogHelper::storeModel(' سرویس حمل و نقل ثبت شد', $shipping);
+		}
+
+		if ($request->hasFile('logo')) {
+			foreach ($shipping->getMedia('logo') ?? [] as $singleMedia)
+				$singleMedia->delete();
+			$shipping->addImage($request->file('logo'));
+		}
+
+		$shipping->setProvinces($request);
+		$shipping->setCustomerRoles($request);
+	}
+
+	public static function sort(Request $request)
+	{
+		$order = 99;
+		foreach ($request->input('orders') as $itemId) {
+			$model = self::query()->find($itemId);
+			if (!$model) continue;
+			$model->order = $order--;
+			$model->save();
+		}
+	}
+
+	public static function assingCities(self $shipping, Request $request)
+	{
+		$cities = [];
+    foreach ($request->input('cities') ?? [] as $city) {
+      $cityModel = City::find($city['id']);
+      if (!$cityModel || !$shipping->provinces()->where('provinces.id', $cityModel->province_id)->exists()) {
+        continue;
+      }
+      $cities[$city['id']] = [
+        'price' => $city['price']
+      ];
     }
+    $shipping->cities()->sync($cities);
+	}
 
-    public function scopeActive($query)
-    {
-        $query->where('status', true);
-    }
+	public function scopeActive($query)
+	{
+		$query->where('status', true);
+	}
 
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('logo')->singleFile();
-    }
+	public function registerMediaCollections(): void
+	{
+		$this->addMediaCollection('logo')->singleFile();
+	}
 
-    public function addImage($file)
-    {
-        $media = $this->addMedia($file)
-            ->withCustomProperties(['type' => 'shipping'])
-            ->toMediaCollection('logo');
-        $this->load('media');
+	public function addImage($file)
+	{
+		$media = $this->addMedia($file)
+			->withCustomProperties(['type' => 'shipping'])
+			->toMediaCollection('logo');
+		$this->load('media');
 
-        return $media;
-    }
+		return $media;
+	}
 
-    public function getPrice(City $city, int $orderAmount, $newQuantity, $morePacketPrice =null, $firstPacketSize=null)
-    {
-        if ($newQuantity == 0) {
-            throw new \LogicException('Total quantity should by not zero');
-        }
+	public function getPrice(City $city, int $orderAmount, $newQuantity, $morePacketPrice = null, $firstPacketSize = null)
+	{
+		if ($newQuantity == 0) {
+			throw new \LogicException('Total quantity should by not zero');
+		}
 
-        if (!request('reserved') && $this->free_threshold && $orderAmount >= $this->free_threshold) {
-            return 0;
-        }
+		if (!request('reserved') && $this->free_threshold && $orderAmount >= $this->free_threshold) {
+			return 0;
+		}
 
-        $fromCustomer = $this->getForCustomerPrice(Auth::user());
-        if ($fromCustomer !== false) {
-            return $fromCustomer;
-        }
+		$fromCustomer = $this->getForCustomerPrice(Auth::user());
+		if ($fromCustomer !== false) {
+			return $fromCustomer;
+		}
 
-        $price = $this->getAreaPrice($city, $orderAmount);
+		$price = $this->getAreaPrice($city, $orderAmount);
 
-        return static::getPacketHelper($newQuantity,$this->packet_size, $price,
-            $morePacketPrice ?? $this->more_packet_price, $firstPacketSize ?? $this->first_packet_size);
-    }
+		return static::getPacketHelper(
+			$newQuantity,
+			$this->packet_size,
+			$price,
+			$morePacketPrice ?? $this->more_packet_price,
+			$firstPacketSize ?? $this->first_packet_size
+		);
+	}
 
-    public function getForCustomerPrice($customer)
-    {
-        if (!($customer instanceof Customer)) {
-            return false;
-        }
-        $coreSetting = app(CoreSettings::class);
-        if (!$coreSetting->get('customer.has_role')) {
-            return false;
-        }
-        /** @var CustomerRole $customerRole */
-        $customerRole = $customer->role;
-        if (!$customerRole) {
-            return false;
-        }
-        $shipping = $customerRole->shippings()->where('shippings.id', $this->id)->first();
-        if ($shipping) {
-            return $shipping->pivot->amount;
-        }
-        return false;
-    }
+	public function getForCustomerPrice($customer)
+	{
+		if (!($customer instanceof Customer)) {
+			return false;
+		}
+		$coreSetting = app(CoreSettings::class);
+		if (!$coreSetting->get('customer.has_role')) {
+			return false;
+		}
+		/** @var CustomerRole $customerRole */
+		$customerRole = $customer->role;
+		if (!$customerRole) {
+			return false;
+		}
+		$shipping = $customerRole->shippings()->where('shippings.id', $this->id)->first();
+		if ($shipping) {
+			return $shipping->pivot->amount;
+		}
+		return false;
+	}
 
-    public function checkShippableAddress(?City $city): bool
-    {
-        if ($city == null) {
-            throw new \Exception('لطفا در آدرس خود یک شهر انتخاب کنید');
-        }
-        $shippableAddress = false;
-        if ($this->cities->count() < 1 && $this->provinces->count() < 1) {
-            $shippableAddress = true;
-        } elseif ($this->cities->count() > 0) {
-            $shippableAddress = $this->cities->contains('id', $city->id);
-        } elseif ($this->provinces->count() > 0) {
-            $shippableAddress = $this->provinces->contains('id', $city->province_id);
-        }
+	public function checkShippableAddress(?City $city): bool
+	{
+		if ($city == null) {
+			throw new \Exception('لطفا در آدرس خود یک شهر انتخاب کنید');
+		}
+		$shippableAddress = false;
+		if ($this->cities->count() < 1 && $this->provinces->count() < 1) {
+			$shippableAddress = true;
+		} elseif ($this->cities->count() > 0) {
+			$shippableAddress = $this->cities->contains('id', $city->id);
+		} elseif ($this->provinces->count() > 0) {
+			$shippableAddress = $this->provinces->contains('id', $city->province_id);
+		}
 
-        return $shippableAddress;
-    }
+		return $shippableAddress;
+	}
 
-    public function setProvinces($request)
-    {
-        $provinces = [];
-        foreach ($request->provinces ?? [] as $province) {
-            $provinces[$province['id']] = [
-                'price' => $province['price'] ?? null
-            ];
-        }
+	public function setProvinces(Request $request)
+	{
+		if ($request->isMethod('post') && !$request->provinces) return;
 
-        $this->provinces()->sync($provinces);
-    }
+		$provinces = [];
+		foreach ($request->provinces ?? [] as $province) {
+			$provinces[$province['id']] = [
+				'price' => $province['price'] ?? null
+			];
+		}
 
-    public function setCustomerRoles($request)
-    {
-        $customerRoles = [];
-        foreach ($request->customer_roles ?? [] as $customerRole) {
-            $customerRoles[$customerRole['id']] = [
-                'amount' => $customerRole['amount'] ?? null
-            ];
-        }
+		$this->provinces()->sync($provinces);
+	}
 
-        $this->customerRoles()->sync($customerRoles);
-    }
+	public function setCustomerRoles(Request $request)
+	{
+		if ($request->isMethod('post') && !$request->customer_roles) return;
 
-    public function getPriceByReservation(City $city, int $orderAmount, $newQuantity, $customer, $addressId, int $except = null)
-    {
-        if ($newQuantity == 0) {
-            throw new \LogicException('Total quantity should by not zero');
-        }
+		$customerRoles = [];
+		foreach ($request->customer_roles ?? [] as $customerRole) {
+			$customerRoles[$customerRole['id']] = [
+				'amount' => $customerRole['amount'] ?? null
+			];
+		}
 
-        if ($this->free_threshold && $orderAmount >= $this->free_threshold) {
-            return 0;
-        }
+		$this->customerRoles()->sync($customerRoles);
+	}
 
-        $orders = $customer->orders();
-        $parentOrder = $orders
-            ->where('address_id', $addressId)
-            ->where('status', Order::STATUS_RESERVED)
-            ->isReserved()
-            ->latest()->first();
+	public function getPriceByReservation(City $city, int $orderAmount, $newQuantity, $customer, $addressId, int $except = null)
+	{
+		if ($newQuantity == 0) {
+			throw new \LogicException('Total quantity should by not zero');
+		}
 
-        $fromCustomer = $this->getForCustomerPrice(Auth::user());
-        if ($fromCustomer !== false) {
-            return $fromCustomer;
-        }
+		if ($this->free_threshold && $orderAmount >= $this->free_threshold) {
+			return 0;
+		}
 
-        /** @var $parentOrder Order */
-        if ($parentOrder) {
-            $shippingPacketPrice = $parentOrder->shipping_packet_amount;
-            $oldQuantity = $parentOrder->getTotalTotalQuantity();
-            $oldShippingAmountPaid = $parentOrder->shipping_amount;
+		$orders = $customer->orders();
+		$parentOrder = $orders
+			->where('address_id', $addressId)
+			->where('status', Order::STATUS_RESERVED)
+			->isReserved()
+			->latest()->first();
 
-            return static::getPacketHelper($newQuantity,$this->packet_size,
-            $shippingPacketPrice, $this->more_packet_price, $this->first_packet_size, $oldQuantity,$oldShippingAmountPaid);
-        }
+		$fromCustomer = $this->getForCustomerPrice(Auth::user());
+		if ($fromCustomer !== false) {
+			return $fromCustomer;
+		}
 
-        $price = $this->getAreaPrice($city, $orderAmount);
-        return static::getPacketHelper($newQuantity,$this->packet_size, $price, $this->more_packet_price, $this->first_packet_size);
-    }
+		/** @var $parentOrder Order */
+		if ($parentOrder) {
+			$shippingPacketPrice = $parentOrder->shipping_packet_amount;
+			$oldQuantity = $parentOrder->getTotalTotalQuantity();
+			$oldShippingAmountPaid = $parentOrder->shipping_amount;
 
-    public function getAreaPrice($city, $orderAmount)
-    {
-        $price = $this->attributes['default_price'];
-        // برای رزور ها حد آستانه رایگان نداریم
-        if ($this->free_threshold && $orderAmount >= $this->free_threshold) {
-            return 0;
-        }elseif ($shippableCity = $this->cities->where('id', $city->id)->first()) {
-            $price = $shippableCity->pivot->price;
-        } elseif ($shippableProvince = $this->provinces->where('id', $city->province_id)->first()) {
-            $price = $shippableProvince->pivot->price;
-        }
-        return $price;
-    }
-    public static function getPacketHelper($quantity, $packetSize, $price, $morePrice,$first_packet_size, $oldQuantity = 0, $oldShippingAmountPaid = 0)
-    {
-        $allQuantity = $quantity + $oldQuantity;
-        if ($allQuantity <= $first_packet_size){
-            return $price - $oldShippingAmountPaid;
-        }
-        $newQuantity = $allQuantity - $first_packet_size;
+			return static::getPacketHelper(
+				$newQuantity,
+				$this->packet_size,
+				$shippingPacketPrice,
+				$this->more_packet_price,
+				$this->first_packet_size,
+				$oldQuantity,
+				$oldShippingAmountPaid
+			);
+		}
 
-        $totalPackets = (int)ceil($newQuantity / $packetSize);
-        return (int)($price + ($totalPackets) * $morePrice) - $oldShippingAmountPaid;
-    }
+		$price = $this->getAreaPrice($city, $orderAmount);
+		return static::getPacketHelper($newQuantity, $this->packet_size, $price, $this->more_packet_price, $this->first_packet_size);
+	}
 
-    public static function getShippableShippingsForAddress($address)
-    {
-        $suitableShippings = [];
-        $allShippings = static::query()->active()->get();
-        foreach ($allShippings as $shipping) {
-            if ($shipping->checkShippableAddress($address->city))
-                $suitableShippings[] = $shipping;
-            $address->unsetRelation('city');
-        }
+	public function getAreaPrice($city, $orderAmount)
+	{
+		$price = $this->attributes['default_price'];
+		// برای رزور ها حد آستانه رایگان نداریم
+		if ($this->free_threshold && $orderAmount >= $this->free_threshold) {
+			return 0;
+		} elseif ($shippableCity = $this->cities->where('id', $city->id)->first()) {
+			$price = $shippableCity->pivot->price;
+		} elseif ($shippableProvince = $this->provinces->where('id', $city->province_id)->first()) {
+			$price = $shippableProvince->pivot->price;
+		}
+		return $price;
+	}
+	
+	public static function getPacketHelper($quantity, $packetSize, $price, $morePrice, $first_packet_size, $oldQuantity = 0, $oldShippingAmountPaid = 0)
+	{
+		$allQuantity = $quantity + $oldQuantity;
+		if ($allQuantity <= $first_packet_size) {
+			return $price - $oldShippingAmountPaid;
+		}
+		$newQuantity = $allQuantity - $first_packet_size;
 
-        foreach ($suitableShippings as $suitableShipping) {
-            $suitableShipping->makeHidden(['cities','provinces','shippingRanges']);
-        }
-        return $suitableShippings;
-    }
+		$totalPackets = (int)ceil($newQuantity / $packetSize);
+		return (int)($price + ($totalPackets) * $morePrice) - $oldShippingAmountPaid;
+	}
 
-    public static function getActiveShippings()
-    {
-        return self::query()->active()->with(['provinces', 'cities'])->get();
-    }
-    
+	public static function getShippableShippingsForAddress($address)
+	{
+		$suitableShippings = [];
+		$allShippings = static::query()->active()->get();
+		foreach ($allShippings as $shipping) {
+			if ($shipping->checkShippableAddress($address->city))
+				$suitableShippings[] = $shipping;
+			$address->unsetRelation('city');
+		}
 
-    public function getIsPublicAttribute(): bool
+		foreach ($suitableShippings as $suitableShipping) {
+			$suitableShipping->makeHidden(['cities', 'provinces', 'shippingRanges']);
+		}
+		return $suitableShippings;
+	}
+
+	public static function getActiveShippings()
+	{
+		return self::query()->active()->with(['provinces', 'cities'])->get();
+	}
+
+
+	public function getIsPublicAttribute(): bool
 	{
 		return $this->provinces->isEmpty() && $this->cities->isEmpty();
 	}
 
-    public function getLogoAttribute(): ?MediaResource
-    {
-        $media = $this->getFirstMedia('logo');
-        if (!$media) {
-            return null;
-        }
-        return new MediaResource($media);
-    }
+	public function getLogoAttribute(): ?MediaResource
+	{
+		$media = $this->getFirstMedia('logo');
+		if (!$media) {
+			return null;
+		}
+		return new MediaResource($media);
+	}
 
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
+	public function orders()
+	{
+		return $this->hasMany(Order::class);
+	}
 
-    public function customerRoles()
-    {
-        return $this->belongsToMany(CustomerRole::class)->withPivot(['amount']);
-    }
+	public function customerRoles()
+	{
+		return $this->belongsToMany(CustomerRole::class)->withPivot(['amount']);
+	}
 
-    public function provinces()
-    {
-        return $this->morphedByMany(Province::class, 'shippable')->active()->withPivot(['price']);
-    }
+	public function provinces()
+	{
+		return $this->morphedByMany(Province::class, 'shippable')->active()->withPivot(['price']);
+	}
 
-    public function cities()
-    {
-        return $this->morphedByMany(City::class, 'shippable')->active()->withPivot(['price']);
-    }
+	public function cities()
+	{
+		return $this->morphedByMany(City::class, 'shippable')->active()->withPivot(['price']);
+	}
 }

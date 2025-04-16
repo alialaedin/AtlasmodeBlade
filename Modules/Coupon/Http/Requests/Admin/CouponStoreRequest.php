@@ -3,6 +3,7 @@
 namespace Modules\Coupon\Http\Requests\Admin;
 
 use Carbon\Carbon;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Coupon\Entities\Coupon;
@@ -41,7 +42,19 @@ class CouponStoreRequest extends FormRequest
       'amount' => removeComma($this->input('amount')),
       'min_order_amount' => $this->filled('min_order_amount') ? removeComma($this->input('min_order_amount')) : null
     ]);
+  }
 
+  public function messages()
+  {
+    $startDate = $this->input('start_date');
+    $shamsiDate = $startDate ? (new Verta($startDate))->format('Y/m/d H:i') : null;
+
+    return [
+      'start_date.after_or_equal' => $shamsiDate
+        ? "تاریخ شروع باید برابر یا بعد از تاریخ کنونی باشد (تاریخ وارد شده: $shamsiDate)."
+        : 'تاریخ شروع باید برابر یا بعد از تاریخ کنونی باشد.',
+      'end_date.after_or_equal' => 'تاریخ پایان باید بعد از تاریخ شروع باشد.',
+    ];
   }
 
   protected function passedValidation()

@@ -9,6 +9,15 @@ use Modules\Order\Entities\OrderItem;
 
 class UpdateItemStatusRequest extends FormRequest
 {
+  public function prepareForValidation()
+  {
+    if(is_string($this->status) && in_array($this->status, ["true", "false"])) {
+      $this->merge([
+        'status' => $this->status == 'false' ? 0 : 1
+      ]);
+    }
+  }
+
   public function rules()
   {
     return [
@@ -23,7 +32,7 @@ class UpdateItemStatusRequest extends FormRequest
 
   protected function passedValidation()
   {
-    $itemId = Helpers::getModelIdOnPut('order_item');
+    $itemId = Helpers::getModelIdOnPut('orderItem');
     $orderItem = OrderItem::query()->findOrFail($itemId);
     $order = $orderItem->order;
     $variety = $orderItem->variety()->with(['attributes'])->first();
@@ -33,7 +42,8 @@ class UpdateItemStatusRequest extends FormRequest
     if ($order->status == Order::STATUS_CANCELED || $order->status == Order::STATUS_FAILED) {
       throw Helpers::makeValidationException("زمانی که وضعیت محصول کنسل یا خطا است نمیتوانید وضعیت آیتم اضافه کنید");
     }
-
-    $this->variety = $variety;
+    $this->merge([
+      'variety' => $variety
+    ]);
   }
 }

@@ -25,7 +25,7 @@ class CustomerController extends Controller
 {
 	public function index()
 	{
-		$customers = Customer::query()->filters()->latest('id')->paginate();
+		$customers = Customer::query()->filters()->latest('id')->paginate()->withQueryString();
 
 		return view('customer::admin.customer.index', compact('customers'));
 	}
@@ -109,6 +109,7 @@ class CustomerController extends Controller
 
 		return redirect()->route('admin.customers.index')->with('success', 'مشتری با موفقیت ایجاد شد.');
 	}
+	
 	public function edit(Customer $customer)
 	{
 		return view('customer::admin.customer.edit', compact('customer'));
@@ -164,30 +165,16 @@ class CustomerController extends Controller
 			->with('deposit', fn($q) => $q->select('id', 'amount'))
 			->paginate();
 
-		$totals = $transactions->groupBy('type')->map(fn($items) => $items->sum('amount'));
+		$allTotals = Transaction::query()
+			->where('payable_type', Customer::class)
+			->select('type', DB::raw('sum(amount) as total'))
+			->groupBy('type')
+			->pluck('total', 'type');
 
-		$totalThisPage['deposit'] = $totals->get('deposit', 0);
-		$totalThisPage['withdraw'] = $totals->get('withdraw', 0);
+		$total['deposit'] = $allTotals->get('deposit', 0);
+		$total['withdraw'] = $allTotals->get('withdraw', 0);
 
-		if (request()->header('Accept') == 'application/json') {
-
-			$allTotals = Transaction::query()
-				->where('payable_type', Customer::class)
-				->select('type', DB::raw('sum(amount) as total'))
-				->groupBy('type')
-				->pluck('total', 'type');
-
-			$total['deposit'] = $allTotals->get('deposit', 0);
-			$total['withdraw'] = $allTotals->get('withdraw', 0);
-
-			return response()->success('گزارشات کیف پول', compact([
-				'transactions' => $transactions,
-				'total_this_page' => $totalThisPage,
-				'total' => $total
-			]));
-		}
-
-		return view('customer::admin.wallet.transactions', compact(['transactions', 'totalThisPage']));
+		return view('customer::admin.wallet.transactions', compact(['transactions', 'total']));
 	}
 
 	public function withdrawCustomerWallet(Request $request)

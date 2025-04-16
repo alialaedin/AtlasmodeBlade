@@ -19,7 +19,7 @@ class PostStoreRequest extends FormRequest
       'meta_description' => 'nullable|string|max:1000',
       'status' => ['required',Rule::in(Post::getAvailableStatuses())],
       'special' => 'required|boolean',
-      'published_at' => 'nullable|date_format:Y/m/d',
+      'published_at' => 'nullable|date_format:Y-m-d H:i',
       'tags' => 'nullable|array',
       'tags.*' => 'string|max:191'
     ];

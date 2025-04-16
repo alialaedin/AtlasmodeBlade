@@ -20,7 +20,8 @@ class CityController extends Controller
       ->select(['id', 'name', 'province_id', 'created_at', 'status'])
       ->latest('id')
       ->filters()
-      ->paginate();
+      ->paginate()
+      ->withQueryString();
 
     $provinces = Province::getAllProvinces();
 

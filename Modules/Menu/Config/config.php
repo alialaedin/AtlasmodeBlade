@@ -2,7 +2,4 @@
 
 return [
     'name' => 'Menu',
-    'menuables' => [
-
-    ]
 ];

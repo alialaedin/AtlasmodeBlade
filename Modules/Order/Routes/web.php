@@ -22,8 +22,9 @@ Route::webSuperGroup('admin', function () {
     Route::post('/get-shippings', [AdminOrderController::class,'getShippableShippings'])->name('shippable-shippings')->hasPermission('write_order');
 
     Route::post('/{order}/items', [AdminOrderController::class, 'addItem'])->name('add-item')->hasPermission('write_order');
-    Route::put('/items/{order_item}', [AdminOrderController::class, 'updateQuantityItem'])->name('update-item-quantity')->hasPermission('modify_order');
-    Route::put('/items/{order_item}/status', [AdminOrderController::class, 'updateItemStatus'])->name('update-item-status')->hasPermission('modify_order');
+    Route::patch('/items/{orderItem}/status', [AdminOrderController::class, 'updateItemStatus'])->name('update-item-status')->hasPermission('modify_order');
+    Route::put('/items/{orderItem}', [AdminOrderController::class, 'updateQuantityItem'])->name('update-item-quantity')->hasPermission('modify_order');
+    Route::delete('/{orderItem}', [AdminOrderController::class, 'deleteItem'])->name('delete-item')->hasPermission('modify_order');
 
     Route::get('/', [AdminOrderController::class, 'index'])->name('index')->hasPermission('read_order');
     Route::get('/create', [AdminOrderController::class, 'create'])->name('create')->hasPermission('write_order');

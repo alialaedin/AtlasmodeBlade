@@ -12,10 +12,9 @@ use Modules\Product\Entities\Product;
 
 class MenuStoreRequest extends FormRequest
 {
-  public $toggle = false;
-
   public function rules()
   {
+    dd($this->all());
     return [
       'title' => 'required',
       'link' => "nullable|string",

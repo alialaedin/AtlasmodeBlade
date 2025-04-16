@@ -243,11 +243,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 	{
 		$lastProductBarcode = DB::table('products')->latest('barcode')->first()->barcode;
 		$barcode = $lastProductBarcode + 1;
-		$alreadyExists = Product::where('barcode', Helpers::convertFaNumbersToEn($barcode))->exists();
-		if ($alreadyExists) {
-			return response()->error($barcode . 'بارکد تکراری');
-		}
-
+		while (Product::where('barcode', $barcode)->exists()) $barcode++;
 		return $barcode;
 	}
 

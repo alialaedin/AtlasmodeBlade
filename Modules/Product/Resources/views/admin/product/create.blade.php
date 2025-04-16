@@ -256,7 +256,7 @@
 							<thead class="border-top">
 								<tr>
 									<th>عنوان</th>
-									<th>قیمت</th>
+									<th>قیمت (تومان)</th>
 									<th>بارکد - SKU</th>
 									<th>موجودی</th>
 									<th>عملیات</th>
@@ -276,7 +276,7 @@
 											<input 
 												type="number" 
 												class="form-control text-center"   
-												placeholder="قیمت"
+												placeholder="قیمت (تومان)"
 												v-model="getVarietyValue(attributes.id).price"
 											/>  
 										</td>  
@@ -334,7 +334,7 @@
 
 													<div class="row align-items-center my-3">
 														<div class="col-xl-2">
-															<label class="d-flex" :for="'variety-price' + attributes.id">قیمت : <span class="text-danger">&starf;</span></label>
+															<label class="d-flex" :for="'variety-price' + attributes.id">قیمت (تومان) : <span class="text-danger">&starf;</span></label>
 														</div>
 														<div class="col-xl-10">
 															<input 
@@ -349,7 +349,7 @@
 
 													<div class="row align-items-center my-3">
 														<div class="col-xl-2">
-															<label class="d-flex" :for="'variety-purchase-price' + attributes.id">قیمت خرید :</label>
+															<label class="d-flex" :for="'variety-purchase-price' + attributes.id">قیمت خرید (تومان) :</label>
 														</div>
 														<div class="col-xl-10">
 															<input 
@@ -975,6 +975,11 @@
       'multiselect': window['vue-multiselect'].default,
 			'date-picker': Vue3PersianDatetimePicker,
     },
+		mounted() {
+			if (this.units.length) {
+				this.product.unit = this.units[0];
+			}
+		},
     data() {
       return {
         message: "Hello Vue!",
@@ -1028,6 +1033,38 @@
       };
     },
     methods: {
+			showValidationError(errors) {  
+
+				const list = document.createElement('ul');  
+				list.className = 'list-group';
+
+				for (const key in errors) {  
+					if (errors.hasOwnProperty(key)) {  
+						const errorsArray = errors[key];  
+						errorsArray.forEach((errorMessage) => {  
+							const listItem = document.createElement('li');  
+							listItem.className = 'list-group-item';  
+							listItem.textContent = errorMessage;
+							list.appendChild(listItem); 
+						});  
+					}  
+				}  
+
+				Swal.fire({  
+					title: "<b>خطا های زیر رخ داده است</b>",  
+					html: list.outerHTML, 
+					icon: "error",  
+					confirmButtonText: "بستن",  
+				});  
+			},
+			popup(type, title, message) {
+				Swal.fire({
+					title: title,
+					text: message,
+					icon: type,
+					confirmButtonText: "بستن",
+				});
+			},
       addNewTag(value, attribute) {
         this.clearVarietyValues();
         this.product.attribute_values[attribute.id] = this.product.attribute_values[attribute.id] || [];
@@ -1205,13 +1242,31 @@
 						},
 						body: JSON.stringify({ product: clonedProduct }),
 					});
+					
+					const result = await response.json();
 
-					if (!response.ok) { 
-						console.log('request failed:', response.json());
-					} else {
-						console.log('request success', response.json());
+					if (!response.ok) {
+            switch (response.status) {
+              case 422:
+                this.showValidationError(result.errors);
+                break;
+              case 404:
+                this.popup('error', 'خطای 404', 'چنین چیزی وجود ندارد');
+                break;
+              case 500:
+                this.popup('error', 'خطای سرور', result.message);
+                break;
+            }
+            return;
+          }
+
+					if (response.ok && response.status == 200) {
+						this.popup('success', 'عملیات موفق', result.message);
 						window.location.replace(@json(route('admin.products.index')));
+					} else {
+						this.popup('error', 'خطا', 'لطفا با پشتیبانی تماس بگیرید');
 					}
+
 				} catch (error) {
 					console.error('There was a problem with the submission:', error);
 				}

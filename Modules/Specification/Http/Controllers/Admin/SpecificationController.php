@@ -2,8 +2,8 @@
 
 namespace Modules\Specification\Http\Controllers\Admin;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 use Modules\Admin\Classes\ActivityLogHelper;
@@ -19,7 +19,7 @@ class SpecificationController extends Controller
     $specifications = Specification::query()
       ->orderByDesc('order')
       ->filters()
-      ->paginate();
+      ->get();
 
     return view('specification::admin.index', compact('specifications'));
   }
@@ -75,12 +75,10 @@ class SpecificationController extends Controller
     if (in_array($request->type, [Specification::TYPE_SELECT, Specification::TYPE_MULTI_SELECT]) && $request->values) {
       $notDeleteValues = [];
       foreach ($request->values as $value) {
-        /**
-         * @var $specification Collection
-         */
+        /** @var Collection $specification */
         $specValue = $specification->values->where('id', $value)->first();
         $specValue = $specValue ?: $specification->values->where('value', $value)->first();
-        if ($specValue) {
+        if ($specValue) { 
           $notDeleteValues[] = $specValue->id;
           continue;
         }
@@ -90,11 +88,9 @@ class SpecificationController extends Controller
         $notDeleteValues[] = $v->id;
       }
       $specification->values()->whereNotIn('id', $notDeleteValues)->delete();
-      $specification->load('values');
     }
 
     ActivityLogHelper::updatedModel(' مشخصه ویرایش شد', $specification);
-
     return redirect()->route('admin.specifications.index')->with([
       'success' => 'مشخصه با موفقیت ویرایش شد'
     ]);

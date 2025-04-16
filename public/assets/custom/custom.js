@@ -10,6 +10,9 @@ function confirmDelete(formId) {
     confirmButtonText: "حذف کن",  
     cancelButtonText: "انصراف",   
     dangerMode: true,  
+    customClass: {
+      popup: 'sweet-alert-size'
+    }
   }).then((result) => {  
     if (result.isConfirmed) {  
       document.getElementById(formId).submit();  

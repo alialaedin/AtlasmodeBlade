@@ -1,4 +1,4 @@
-<link href="{{ asset('assets/favicon-32x32.png')}}" rel="icon" type="image/x-icon"/>
+{{-- <link href="{{ asset('assets/favicon-32x32.png')}}" rel="icon" type="image/x-icon"/> --}}
 <link href="{{ asset('assets/font/font.css')}}" rel="stylesheet"/>
 <link href="{{ asset('assets/plugins/sweet-alert/sweetalert.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/plugins/sweet-alert/jquery.sweet-modal.min.css')}}" rel="stylesheet" >
@@ -38,6 +38,10 @@
   .app-header {
     padding-top: 10px;
     padding-bottom: 10px;
+  }
+
+  .sweet-alert-size .swal2-popup {
+    width: 100px; 
   }
 
 </style>

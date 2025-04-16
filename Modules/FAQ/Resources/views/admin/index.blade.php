@@ -4,8 +4,9 @@
     <div class="page-header">
         <x-breadcrumb :items="[['title' => ' لیست سوالات متداول']]" />
             <div>
-                <button id="submitButton" type="submit" class="btn btn-teal align-items-center"><span>ذخیره مرتب سازی</span><i
-                    class="fe fe-code mr-1 font-weight-bold"></i></button>
+                @if ($faqs->isNotEmpty())
+                    <button id="submitButton" type="submit" class="btn btn-sm btn-teal align-items-center">ذخیره مرتب سازی</button>
+                @endif
                 @can('write_faq')
                     <x-create-button type="modal" target="createFaqModal" title="سوال جدید" />
                 @endcan
@@ -63,7 +64,9 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn btn-teal mt-5" type="submit">ذخیره مرتب سازی</button>
+                @if ($faqs->isNotEmpty())
+                    <button class="btn btn-teal mt-5 btn-sm" type="submit">ذخیره مرتب سازی</button>
+                @endif
             </form>
         </x-slot>
     </x-card>

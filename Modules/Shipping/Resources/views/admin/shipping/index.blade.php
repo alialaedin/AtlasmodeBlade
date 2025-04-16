@@ -10,7 +10,7 @@
         </div>
     </div>
     <x-card>
-        <x-slot name="cardTitle">لیست حمل و نقل ها ({{ $totalShipping }})</x-slot>
+        <x-slot name="cardTitle">لیست حمل و نقل ها ({{ $shippings->count() }})</x-slot>
         <x-slot name="cardOptions"><x-card-options /></x-slot>
         <x-slot name="cardBody">
             @include('components.errors')
@@ -38,17 +38,16 @@
                                 <input type="hidden" value="{{ $shipping->id }}" name="orders[]">
                                 <td class="font-weight-bold">{{ $loop->iteration }}</td>
                                 <td>{{ $shipping->name }}</td>
-                                <td>
-                                    @if($shipping->logo?->url)
-                                        <a href="{{ $shipping->logo->url }}" target="_blank">
-                                            <div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="max-height: 60px; border-radius: 4px;">
-                                                <img src="{{ $shipping->logo->url }}" style="height: 50px;" alt="{{ $shipping->logo->url }}">
-                                            </div>
-                                        </a>
-                                    @else
-                                    -
-                                    @endif
-                                </td>
+								<td>
+									@php
+										$url = '/storage/' . $shipping->logo->uuid . '/' . $shipping->logo->file_name;
+									@endphp
+									<a href="{{ $url }}" target="_blank">
+										<div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="max-height: 60px; border-radius: 4px;">
+											<img src="{{ $url }}" style="height: 50px;" alt="{{ $url }}">
+										</div>
+									</a>
+								</td>
                                 <td>{{ number_format($shipping->default_price) }}</td>
                                 <td>
                                     @if ($shipping->is_public)

@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Modules\Category\Entities\Category;
 use Modules\Core\Helpers\Helpers;
+use Modules\Menu\Entities\MenuGroup;
 use Modules\Menu\Entities\MenuItem;
 use Modules\Setting\Entities\Setting;
+use Modules\Slider\Entities\Slider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -64,11 +66,19 @@ class AppServiceProvider extends ServiceProvider
 			});
 
 		view()->composer('admin.layouts.master', function ($view) {
+
+			$menuGroups = MenuGroup::getAllMenuGroups();
+			$sliderGroups = Slider::getAllSliderGroups();
+			$settingGroups = Setting::getGroups();
 			$siteLogo = Setting::where('name', 'logo')->first();
+
 			$view->with([
 				'siteLogo' => $siteLogo,
-				'settingGroups' => Setting::getGroups(),
+				'settingGroups' => $settingGroups,
+				'menuGroups' => $menuGroups,
+				'sliderGroups' => $sliderGroups,
 			]);
+
 		});
 
 		view()->composer('front-layouts.master', function ($view) {

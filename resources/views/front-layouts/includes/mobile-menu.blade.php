@@ -10,7 +10,7 @@
     </li>
 
     <li class="d-flex flex-column align-items-center">
-      <button type="button" data-modal="category">
+      <button id="mobile-menu-categories-btn" type="button">
         <i class="icon-category icon-fs-medium-2"></i>
       </button>
       <span class="text-button"> دسته بندی ها</span>
@@ -40,3 +40,15 @@
     <img class="w-p-100" src="{{ asset('front-assets/images/homePage/whatsApp.c1c819e5.png') }}" alt="whatsapp">
   </a>
 </figure>
+
+@push('scripts')
+  <script>
+    $(document).ready(() => {
+      $('#mobile-menu-categories-btn').click(() => {
+        $('.modal[data-id=category]').addClass('active');
+        $('.modal-overlay').addClass('active');
+        $('body').addClass('no-overflow');
+      });
+    });
+  </script>
+@endpush

@@ -112,10 +112,38 @@
               </li>    
             @endcanany
             @can('read_slider')
-              <li><a href="{{ route('admin.sliders.groups') }}" class="slide-item">اسلایدر</a></li>
+              <li class="sub-slide">
+                <a class="sub-side-menu__item" data-toggle="sub-slide" href="#">
+                  <span class="sub-side-menu__label">اسلایدر</span>
+                  <i class="sub-angle fa fa-angle-left"></i>
+                </a>
+                <ul class="sub-slide-menu">
+                  @foreach ($sliderGroups as $sliderGroup)
+                    <li>
+                      <a href="{{ route('admin.sliders.index', ['group' => $sliderGroup->title]) }}" class="sub-slide-item">
+                        {{ $sliderGroup->label }}
+                      </a>
+                    </li>
+                  @endforeach
+                </ul>
+              </li> 
             @endcan
             @can('read_menu')
-              <li><a href="{{ route('admin.menu.groups')}}" class="slide-item">منو</a></li>
+              <li class="sub-slide">
+                <a class="sub-side-menu__item" data-toggle="sub-slide" href="#">
+                  <span class="sub-side-menu__label">منو</span>
+                  <i class="sub-angle fa fa-angle-left"></i>
+                </a>
+                <ul class="sub-slide-menu">
+                  @foreach ($menuGroups as $menuGroup)
+                    <li>
+                      <a href="{{ route('admin.menus.index', ['group_id' => $menuGroup->id]) }}" class="sub-slide-item">
+                        {{ $menuGroup->title }}
+                      </a>
+                    </li>
+                  @endforeach
+                </ul>
+              </li>   
             @endcan
             @can('read_advertise')
               <li><a href="{{ route('admin.positions.index') }}" class="slide-item">بنر</a></li>
@@ -159,7 +187,6 @@
             <i class="angle fa fa-angle-left"></i>
           </a>
           <ul class="slide-menu">
-
             @role('super_admin')
               <li class="sub-slide">
                 <a class="sub-side-menu__item" data-toggle="sub-slide" style="cursor: pointer">
@@ -172,18 +199,7 @@
                 </ul>
               </li>
             @endrole
-
-            <li class="sub-slide">
-              <a class="sub-side-menu__item" data-toggle="sub-slide" href="#">
-                <span class="sub-side-menu__label">کاربران</span>
-                <i class="sub-angle fa fa-angle-left"></i>
-              </a>
-              <ul class="sub-slide-menu">
-                <li><a href="{{ route('admin.customers.index') }}" class="sub-slide-item">مشتریان</a></li>
-                <li><a href="{{ route('admin.customer-roles.index') }}" class="sub-slide-item">نقش مشتریان</a></li>
-              </ul>
-            </li>    
-            
+            <li><a href="{{ route('admin.customers.index') }}" class="slide-item">مشتریان</a></li>
           </ul>
         </li>
       @endcan

@@ -75,14 +75,14 @@
 
     <div class="row">
         <div class="col-12 col-xl-6">
-            <div class="card bg-danger-transparent">
+            <div class="card bg-success-transparent">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="mt-0 text-right">
-                                <span class="fs-17 text-dark font-weight-bold"> جمع کل برداشت کیف پول این صفحه : </span>
-                                <p class="mb-0 mt-1 text-danger font-weight-bold fs-16">
-                                    {{ number_format(abs($totalThisPage['withdraw'])) }} تومان</p>
+                                <span class="fs-17 text-dark font-weight-bold"> واریز به کیف پول : </span>
+                                <p class="mb-0 mt-1 text-success font-weight-bold fs-16">
+                                    {{ number_format(abs($total['deposit'])) }} تومان</p>
                             </div>
                         </div>
                     </div>
@@ -90,14 +90,14 @@
             </div>
         </div>
         <div class="col-12 col-xl-6">
-            <div class="card bg-success-transparent">
+            <div class="card bg-danger-transparent">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="mt-0 text-right">
-                                <span class="fs-17 text-dark font-weight-bold"> جمع کل افزایش کیف پول این صفحه : </span>
-                                <p class="mb-0 mt-1 text-success font-weight-bold fs-16">
-                                    {{ number_format(abs($totalThisPage['deposit'])) }} تومان</p>
+                                <span class="fs-17 text-dark font-weight-bold"> برداشت از کیف پول : </span>
+                                <p class="mb-0 mt-1 text-danger font-weight-bold fs-16">
+                                    {{ number_format(abs($total['withdraw'])) }} تومان</p>
                             </div>
                         </div>
                     </div>

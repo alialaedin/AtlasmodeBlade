@@ -94,7 +94,7 @@
         </x-slot>
     </x-card>
     <div id="examples">  
-        <div id="examples-attribute-value-box" class="col-xl-3 d-flex attribute-value-bo my-1" style="gap: 5px;">  
+        <div id="examples-attribute-value-box" class="col-xl-3 d-flex attribute-value-box my-1" style="gap: 5px;">  
             <button type="button" class="positive-btn btn btn-success btn-sm" onclick="makeAttrValueBox()">+</button>  
             <button type="button" class="negative-btn btn btn-danger btn-sm" onclick="removeAttrValueBox(event)">-</button>  
             <input type="text" name="" placeholder="مقدار" class="form-control form-control-sm">  
@@ -118,7 +118,7 @@
     let emptyTheAttrValuesRow = () => attributeValuesRow.empty();  
 
     const allAttributeTypesArray = @json($types);  
-    const hasValueTypes = ['select']; // فقط نوع های با مقدار select  
+    const hasValueTypes = ['select']; 
     let index = 0;  
     const attrValues = @json($attribute->values ?? []);  
 
@@ -133,12 +133,11 @@
         const box = $(event.target).closest('.attribute-value-box');  
         const totalBoxes = $(".attribute-value-box").length;  
 
-        // اگر تعداد باکس‌ها فقط 1 باشد، حذف نکنید  
         if (totalBoxes > 1) {  
             box.remove();  
             index--;  
         } else {  
-            alert("حداقل یک مقدار باید وجود داشته باشد."); // پیام هشدار  
+            alert("حداقل یک مقدار باید وجود داشته باشد."); 
         }  
     }  
 
@@ -148,18 +147,16 @@
             showAttrValuesSection();  
             emptyTheAttrValuesRow();  
 
-            // اگر مقادیر قبلاً وجود داشته باشند، باکس‌ها را پر کنید  
             if (attrValues.length > 0) {  
                 attrValues.forEach(attrValue => {  
                     makeAttrValueBox(attrValue.value);  
                 });  
             } else {  
-                // اگر هیچ مقدار قبلی وجود ندارد، باکس جدید بسازید  
                 makeAttrValueBox();  
             }  
         } else {  
-            hideAttrValuesSection(); // مخفی کردن اگر نوع دیگری انتخاب شده باشد  
-            emptyTheAttrValuesRow(); // خالی کردن ردیف مقادیر  
+            hideAttrValuesSection(); 
+            emptyTheAttrValuesRow(); 
         }  
     }  
 
@@ -168,16 +165,13 @@
         emptyTheAttrValuesRow();  
         hideAttrValuesSection();  
 
-        // بررسی اینکه آیا نوع انتخاب شده، دارای مقادیر است  
         if (attributeTypeSelect.val() && hasValueTypes.includes(attributeTypeSelect.val())) {  
             showAttrValuesSection();  
             if (attrValues.length > 0) {  
-                // اگر مقادیر وجود دارند، نمایش آن‌ها  
                 attrValues.forEach(attrValue => {  
                     makeAttrValueBox(attrValue.value);  
                 });  
             } else {  
-                // اگر هیچ مقدار قبلی وجود ندارد، باکس جدید بسازید  
                 makeAttrValueBox();  
             }  
         }  

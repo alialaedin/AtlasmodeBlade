@@ -29,11 +29,11 @@
             <i class="feather feather-minimize fullscreen-button exit-fullscreen header-icons"></i>
           </a>
         </div>
-        <div>
+        {{-- <div>
           <a class="nav-link icon" data-toggle="sidebar-right" data-target=".sidebar-right">
             <i class="feather feather-bell header-icon"></i>
           </a>
-        </div>
+        </div> --}}
         <div>
           <button
             onclick="event.preventDefault();document.getElementById('logout-form').submit();"

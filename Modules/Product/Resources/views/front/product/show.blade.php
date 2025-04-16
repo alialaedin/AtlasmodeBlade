@@ -188,7 +188,7 @@
         <ul class="specification-table specifications active flex-column px-lg-0 px-3 mx-auto text-medium">
           <li v-for="specification in product.specifications" :key="specification.id" class="d-flex p-2 px-md-8">
             <span class="text-medium-strong">@{{ specification.label }}</span>
-            <span>@{{ getSpecificationValue(specification.id) }}</span>
+            <span class="pe-3">@{{ getSpecificationValue(specification.id) }}</span>
           </li>
         </ul>
 

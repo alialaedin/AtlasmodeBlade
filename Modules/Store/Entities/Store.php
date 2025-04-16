@@ -47,17 +47,9 @@ class Store extends Model
 		return [self::TYPE_INCREMENT, self::TYPE_DECREMENT];
 	}
 
-	public static function insertModel($request, $forced = false): ?Store
+	public static function insertModel($request): ?Store
 	{
-		if (!$request || (request('product.no_store_update') && !$forced)) {
-			return null;
-		}
-		$variety = Variety::query()->find($request->variety_id);
-
-		if (!$variety) {
-			throw new Exception('به علت حذف یکی از تنوع ها امکان این عمل وجود ندارد');
-		}
-
+		$variety = Variety::find($request->variety_id);
 		$storeQuery = $variety->store();
 		$store = $storeQuery->exists() ? $storeQuery->first() : $storeQuery->create(['balance' => 0]);
 		$oldBalance = $store->balance ?? 0;

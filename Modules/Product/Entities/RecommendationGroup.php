@@ -37,11 +37,11 @@ class RecommendationGroup extends Model
   {
     $groups = [
       ['name' => 'newest', 'label' => 'جدید ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
-      ['name' => 'most_visited', 'label' => 'پر بازدید ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
+      ['name' => 'most_visited', 'label' => 'پربازدید ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
       ['name' => 'low_to_high', 'label' => 'ارزان ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
       ['name' => 'high_to_low', 'label' => 'گران ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
-      ['name' => 'top_sales', 'label' => 'پر فروش ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
-      ['name' => 'most_discount', 'label' => 'پر تخفیف ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
+      ['name' => 'top_sales', 'label' => 'پرفروش ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
+      ['name' => 'most_discount', 'label' => 'پرتخفیف ترین', 'show_in_home' => 1, 'show_in_filter' => 1],
     ];
     DB::table('recommendation_groups')->insert($groups);
     Cache::forget(self::ALL_GROUPS_CACHE_kEY);

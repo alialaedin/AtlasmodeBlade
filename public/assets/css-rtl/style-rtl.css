@@ -2,11 +2,19 @@
     background: #17263a !important;
 }
 
-.color-menu .app-sidebar .side-menu .slide a.active, .color-menu .app-sidebar .side-menu .slide a:hover {
+.color-menu .app-sidebar .side-menu .slide a.side-menu__item.active {
     color: #fff !important;
     background: #36f !important;
 }
-.color-menu .app-sidebar .side-menu .slide.is-expanded a.slide-item.active , .color-menu .app-sidebar .side-menu .sub-slide a:hover ,.color-menu .app-sidebar .side-menu .slide.is-expanded a.slide-item:hover {
+
+.color-menu .app-sidebar .side-menu .slide a.active, 
+.color-menu .app-sidebar .side-menu .slide a:hover {
+    color: #36f !important;
+    background: 0 0 !important;
+}
+.color-menu .app-sidebar .side-menu .slide.is-expanded a.slide-item.active , 
+.color-menu .app-sidebar .side-menu .sub-slide a:hover ,
+.color-menu .app-sidebar .side-menu .slide.is-expanded a.slide-item:hover {
     color: #36f !important;
     background: 0 0 !important;
 }

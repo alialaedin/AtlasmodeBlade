@@ -18,8 +18,9 @@ use Modules\Product\Entities\Product;
 use Modules\Specification\Entities\Specification;
 use Spatie\EloquentSortable\SortableTrait;
 use Modules\Core\Traits\InteractsWithMedia;
+use Spatie\MediaLibrary\HasMedia;
 
-class Category extends Model
+class Category extends Model implements HasMedia
 {
     use InteractsWithMedia, HasDefaultFields, HasAuthors, SortableTrait, HasViews;
 

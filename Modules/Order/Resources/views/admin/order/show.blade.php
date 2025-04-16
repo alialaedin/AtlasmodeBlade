@@ -11,30 +11,85 @@
   </div>
 </div>
 
-<x-card>
-  <x-slot name="cardTitle">جزئیات سفارش</x-slot>
-  <x-slot name="cardOptions"><x-card-options /></x-slot>
-  <x-slot name="cardBody">
-    @php
-      $orderDetails = [
-        ['title' => 'شناسه سفارش', 'value' => $order->id],
-        ['title' => 'تاریخ ثبت', 'value' => verta($order->created_at)->format('Y/m/d H:i:')],
-        ['title' => 'تاریخ تحویل', 'value' => verta($order->delivered_at)->format('Y/m/d H:i:s')],
-        ['title' => 'وضعیت سفارش', 'value' => __('statuses.' . $order->status)],
-        ['title' => 'شیوه ارسال', 'value' => $order->shipping->name],
-        ['title' => 'رزرو شده', 'value' => $order->reserved ? 'بله' : 'خیر'],
-      ];
-    @endphp
-    <div class="row">
-      @foreach ($orderDetails as $detail)
-        <div class="col-xl-4 my-1">
-          <span class="font-weight-bold">{{ $detail['title'] }} : </span>
-          <span>{{ $detail['value'] }}</span>
+<div class="row">
+  <div class="col-xl-4 col-12">
+    <x-card>
+      <x-slot name="cardTitle">جزئیات سفارش</x-slot>
+      <x-slot name="cardOptions"><x-card-options /></x-slot>
+      <x-slot name="cardBody">
+        @php
+          $orderDetails = [
+            ['title' => 'شناسه سفارش', 'value' => $order->id],
+            ['title' => 'تاریخ ثبت', 'value' => verta($order->created_at)->format('Y/m/d H:i:')],
+            ['title' => 'تاریخ تحویل', 'value' => verta($order->delivered_at)->format('Y/m/d H:i:s')],
+            ['title' => 'وضعیت سفارش', 'value' => __('statuses.' . $order->status)],
+            ['title' => 'شیوه ارسال', 'value' => $order->shipping->name],
+          ];
+        @endphp
+        <div class="row">
+          @foreach ($orderDetails as $detail)
+            <div class="col-12 my-1">
+              <span class="font-weight-bold">{{ $detail['title'] }} : </span>
+              <span>{{ $detail['value'] }}</span>
+            </div>
+          @endforeach
         </div>
-      @endforeach
-    </div>
-  </x-slot>
-</x-card>
+      </x-slot>
+    </x-card>
+  </div>
+  <div class="col-xl-4 col-12">
+    <x-card>
+      <x-slot name="cardTitle">اطلاعات مشتری</x-slot>
+      <x-slot name="cardOptions"><x-card-options /></x-slot>
+      <x-slot name="cardBody">
+        @php
+          $customer = $order->customer;
+          $customerDetail = [
+            ['title' => 'شناسه', 'value' => $customer->id],
+            ['title' => 'نام', 'value' => $customer->first_name],
+            ['title' => 'نام خانوادگی', 'value' => $customer->last_name],
+            ['title' => 'موبایل', 'value' => $customer->mobile],
+            ['title' => 'موجودی کیف پول', 'value' => $customer->wallet ? number_format($customer->wallet->balance) . ' تومان' : 0],
+          ];
+        @endphp
+        <div class="row">
+          @foreach ($customerDetail as $detail)
+            <div class="col-12 my-1">
+              <span class="font-weight-bold">{{ $detail['title'] }} : </span>
+              <span>{{ $detail['value'] }}</span>
+            </div>
+          @endforeach
+        </div>
+      </x-slot>
+    </x-card>
+  </div>
+  <div class="col-xl-4 col-12">
+    <x-card>
+      <x-slot name="cardTitle">اطلاعات دریافت کننده</x-slot>
+      <x-slot name="cardOptions"><x-card-options /></x-slot>
+      <x-slot name="cardBody">
+        @php
+          $address = json_decode($order->address);
+          $receiverDetail = [
+            ['title' => 'نام', 'value' => $address->first_name],
+            ['title' => 'نام خانوادگی', 'value' => $address->last_name],
+            ['title' => 'موبایل', 'value' => $address->mobile],
+            ['title' => 'کد پستی', 'value' => $address->postal_code],
+            ['title' => 'آدرس', 'value' => $address->address],
+          ];
+        @endphp
+        <div class="row">
+          @foreach ($receiverDetail as $detail)
+            <div class="col-12 my-1">
+              <span class="font-weight-bold">{{ $detail['title'] }} : </span>
+              <span>{{ $detail['value'] }}</span>
+            </div>
+          @endforeach
+        </div>
+      </x-slot>
+    </x-card>
+  </div>
+</div>
 
 @if ($order->description)
   <x-card>
@@ -47,64 +102,6 @@
     </x-slot>
   </x-card>
 @endif
-
-<x-card>
-  <x-slot name="cardTitle">اطلاعات مشتری</x-slot>
-  <x-slot name="cardOptions"><x-card-options /></x-slot>
-  <x-slot name="cardBody">
-    @php
-      $customer = $order->customer;
-      $genders = [
-        'male' => 'مرد',
-        'female' => 'زن',
-        null => null,
-      ];
-      $customerDetail = [
-        ['title' => 'شناسه', 'value' => $customer->id],
-        ['title' => 'نام', 'value' => $customer->first_name],
-        ['title' => 'نام خانوادگی', 'value' => $customer->last_name],
-        ['title' => 'موبایل', 'value' => $customer->mobile],
-        ['title' => 'ایمیل', 'value' => $customer->email],
-        ['title' => 'تاریخ تولد', 'value' => $customer->birth_date ? verta($customer->birth_date)->format('Y/m/d') : null],
-        ['title' => 'جنسیت', 'value' => $genders[$customer->gender]],
-        ['title' => 'موجودی کیف پول', 'value' => $customer->wallet ? number_format($customer->wallet->balance) . ' تومان' : 0],
-      ];
-    @endphp
-    <div class="row">
-      @foreach ($customerDetail as $detail)
-        <div class="col-xl-3 my-1">
-          <span class="font-weight-bold">{{ $detail['title'] }} : </span>
-          <span>{{ $detail['value'] }}</span>
-        </div>
-      @endforeach
-    </div>
-  </x-slot>
-</x-card>
-
-<x-card>
-  <x-slot name="cardTitle">اطلاعات دریافت کننده</x-slot>
-  <x-slot name="cardOptions"><x-card-options /></x-slot>
-  <x-slot name="cardBody">
-    @php
-      $address = json_decode($order->address);
-      $receiverDetail = [
-        ['title' => 'نام', 'value' => $address->first_name, 'col' => 'col-xl-3'],
-        ['title' => 'نام خانوادگی', 'value' => $address->last_name, 'col' => 'col-xl-3'],
-        ['title' => 'موبایل', 'value' => $address->mobile, 'col' => 'col-xl-3'],
-        ['title' => 'کد پستی', 'value' => $address->postal_code, 'col' => 'col-xl-3'],
-        ['title' => 'آدرس', 'value' => $address->address, 'col' => 'col-xl-12'],
-      ];
-    @endphp
-    <div class="row">
-      @foreach ($receiverDetail as $detail)
-        <div class="{{ $detail['col'] }} my-1">
-          <span class="font-weight-bold">{{ $detail['title'] }} : </span>
-          <span>{{ $detail['value'] }}</span>
-        </div>
-      @endforeach
-    </div>
-  </x-slot>
-</x-card>
 
 <x-card>
   <x-slot name="cardTitle">اطلاعات پرداخت</x-slot>
@@ -152,6 +149,29 @@
   </x-slot>
 </x-card>
 
+@php
+  $orderStatistics = [
+    ['title' => 'جمع اقلام (تومان)', 'value' => number_format($order->total_amount - $order->discount_amount - $order->shipping_amount), 'color' => 'info'],
+    ['title' => 'جمع تخفیف (تومان)', 'value' => number_format($order->discount_amount), 'color' => 'danger'],
+    ['title' => 'هزینه ارسال (تومان)', 'value' => number_format($order->shipping_amount), 'color' => 'secondary'],
+    ['title' => 'مبلغ نهایی (تومان)', 'value' => number_format($order->total_amount), 'color' => 'success']
+  ];
+@endphp
+
+<div class="row">
+  @foreach ($orderStatistics as $item)
+    <div class="col-xl-3 col-lg-6 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <i class="fa fa-money card-custom-icon icon-dropshadow-{{ $item['color'] }} text-{{ $item['color'] }} fs-60"></i>
+          <p class=" mb-1">{{ $item['title'] }}</p>
+          <h2 class="mb-1 font-weight-bold">{{ $item['value'] }}</h2>
+        </div>
+      </div>
+    </div>
+  @endforeach
+</div>
+
 <x-card>
   <x-slot name="cardTitle">اقلام سفارش</x-slot>
   <x-slot name="cardOptions">
@@ -160,11 +180,6 @@
     </div>
   </x-slot>
   <x-slot name="cardBody">
-
-    <div class="col-xl-4 bg-warning rounded">
-      <p class="text-dark py-2">برای تغییر وضعیت روی <b>وضعیت هر آیتم</b> کلیک کنید</p>
-    </div>
-
     <x-table-component>
       <x-slot name="tableTh">
         <tr>
@@ -186,12 +201,9 @@
             <td class="font-weight-bold">{{ $loop->iteration }}</td>
             <td>{{ $item->variety->title }}</td>
             <td>
-              <button
-                data-item-id="{{ $item->id }}"
-                data-update-status-url="{{ route('admin.orders.update-item-status', $item) }}"
-                class="edit-item-status-button btn btn-sm btn-{{ $item->status ? 'success' : 'danger' }}">
+              <span class="badge badge-{{ $item->status ? 'success' : 'danger' }}">
                 {{ $item->status ? 'فعال' : 'غیر فعال' }}
-              </button>
+              </span>
             </td>
             <td>{{ number_format($item->amount) }}</td>
             <td>{{ number_format($item->discount_amount) }}</td>
@@ -206,6 +218,14 @@
                 class="btn btn-sm btn-dark edit-item-quantity-button">
                 ویرایش تعداد
               </button>
+              <button
+                data-item-id="{{ $item->id }}"
+                data-update-status-url="{{ route('admin.orders.update-item-status', $item) }}"
+                style="margin-left: 1px;"
+                class="edit-item-status-button btn btn-sm btn-warning">
+                تغییر وضعیت
+              </button>
+              <x-delete-button route="admin.orders.delete-item" :model="$item" :has-title="true"/>
             </td>
           </tr>
         @endforeach
@@ -312,6 +332,7 @@
 
       <div class="col-12">
         <div class="form-group">
+          <input hidden name="variety_id" value="">
           <input class="form-control" type="number" placeholder="تعداد جدید را وارد کنید" name="quantity" required/>
         </div>
       </div>
@@ -389,7 +410,7 @@
   action=""
   method="POST">
   @csrf
-  @method('PUT')
+  @method('PATCH')
   <input hidden name="status" value="" required>
 </form>
 

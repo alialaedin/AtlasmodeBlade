@@ -1,10 +1,22 @@
 @extends('admin.layouts.master')
+
+@section('styles')
+    <style>
+        .glyphicon-move:before {
+            content: none;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="page-header">
         <x-breadcrumb :items="[['title' => 'لیست مشخصات']]" />
-        @can('write_specification')
-            <x-create-button route="admin.specifications.create" title="مشخصه جدید" />
-        @endcan
+        <div>
+            <button id="sort" type="button" class="btn btn-teal btn-sm">ذخیره مرتب سازی</button>
+            @can('write_specification')
+                <x-create-button route="admin.specifications.create" title="مشخصه جدید" />
+            @endcan
+        </div>
     </div>
 
     <x-card>
@@ -107,10 +119,10 @@
     </x-card>
 
     <x-card>
-        <x-slot name="cardTitle">لیست همه مشخصات ({{ $specifications->total() }})</x-slot>
+        <x-slot name="cardTitle">لیست همه مشخصات ({{ $specifications->count() }})</x-slot>
         <x-slot name="cardOptions"><x-card-options /></x-slot>
         <x-slot name="cardBody">
-            <x-table-component>
+            <x-table-component id="specifications-table">
                 <x-slot name="tableTh">
                     <tr>
                         <th>ردیف</th>
@@ -128,7 +140,8 @@
                 </x-slot>
                 <x-slot name="tableTd">
                     @forelse ($specifications as $specification)
-                        <tr>
+                        <tr class="glyphicon-move" style="cursor: move">
+                            <td class="d-none sort-spec-id" data-id="{{ $specification->id }}"></td>
                             <td class="font-weight-bold">{{ $loop->iteration }}</td>
                             <td>{{ $specification->name }}</td>
                             <td>{{ $specification->label }}</td>
@@ -181,8 +194,6 @@
                         @include('core::includes.data-not-found-alert', ['colspan' => 10])
                     @endforelse
                 </x-slot>
-                <x-slot
-                    name="extraData">{{ $specifications->onEachSide(0)->links('vendor.pagination.bootstrap-4') }}</x-slot>
             </x-table-component>
         </x-slot>
     </x-card>
@@ -207,6 +218,56 @@
         });
         $('#status').select2({
             placeholder: 'انتخاب وضعیت'
+        });
+
+        var items = document.querySelector('#specifications-table tbody');
+        var sortable = Sortable.create(items, {
+            handle: '.glyphicon-move',
+            animation: 150
+        });
+
+        $(document).ready(() => {
+            $('#sort').click(async () => {
+				
+				const sortButton = $('#sort');
+                const specificationIds = [];
+
+				sortButton.prop('disabled', true);
+
+                $('#specifications-table tbody tr').each(function() {
+                    specificationIds.push($(this).find('.sort-spec-id').data('id'));
+                });
+
+                const url = @json(route('admin.specifications.sort'));
+                const csrfToken = @json(csrf_token());
+
+                // Create a FormData object
+                const formData = new FormData();
+                formData.append('ids', JSON.stringify(specificationIds)); 
+                formData.append('_token', csrfToken); 
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json' 
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+					popup('success', 'عملیات موفق', result.message);
+
+                } catch (error) {
+                    console.error('Error during fetch:', error.message);
+                }finally {
+					sortButton.prop('disabled', false); 
+				}
+            });
         });
     </script>
 @endsection

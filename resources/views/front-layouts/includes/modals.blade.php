@@ -1,243 +1,158 @@
 
 <!-- Mobile Category Modal -->
 <div class="modal modal-mobile-category bg-white radius-medium d-flex flex-column gap-2 px-6  pb-lg-4 pt-4 pb-5 overflow-auto" data-id="category">
-  <h5 class="text-medium-3-strong color-gray-900 mx-auto">
-      دسته بندی ها
-  </h5>
-  <ul class="category-lists content d-flex flex-column gap-2">
-      <li>
-          <a class="text-medium-2-strong d-flex gap-1 align-items-center" href="./products.html">
-              <i class="icon-dot-single icon-fs-xlarge"></i>
-              <span class="color-gray-900">مردانه</span>
-          </a>
-      </li>
-      <li class="d-flex flex-column">
-          <div class="d-flex justify-content-between align-items-center">
-              <a class="text-medium-2-strong d-flex gap-1 align-items-center" href="./products.html">
-                  <i class="icon-dot-single icon-fs-xlarge"></i>
-                  <span class="color-gray-900">زنانه</span>
-              </a>
-               <button type="button" class="category-btn border-black radius-circle w-4 h-4 text-center">
-                  <i class="icon-angle-left icon-fs-medium-2"></i>
-                  <i class="icon-angle-down icon-fs-medium-2"></i>
-              </button>
-          </div>
-          <ul class="menu-sublist border-e-gray-300 pe-3 w-p-100 h-p-100 d-flex flex-column flex-wrap">
-              <li class="d-flex flex-column">
-                <div class="mainMenu-sublist-item-main pb-1 d-flex align-items-center justify-content-between">
-                  <a class="text-truncate text-medium" href="./products.html">مانتو و کت زنانه</a>
-                  <button type="button" class="category-btn-child  border-black radius-circle w-4 h-4 text-center">
-                      <i class="icon-angle-left icon-fs-medium-2"></i>
-                      <i class="icon-angle-down icon-fs-medium-2"></i>
-                  </button>
-                </div>
-                <ul class="menu-sublist-child d-flex flex-column border-e-gray-300 pe-3">
-                  <li class="mainMenu-sublist-item me-3 text-medium">
-                      <a class="text-truncate text-medium" href="./products.html">مانتو</a>
-                  </li>
-                     <li class="mainMenu-sublist-item me-3 text-medium">
-                      <a class="text-truncate text-medium" href="./products.html">کت زنانه</a>
-                  </li>
-                  <li class="mainMenu-sublist-item me-3 text-medium">
-                      <a class="text-truncate text-medium" href="./products.html">مانتو</a>
-                     </li>
-                     <li class="mainMenu-sublist-item me-3 text-medium">
-                      <a class="text-truncate text-medium" href="./products.html">کت زنانه</a>
-                  </li>
-                </ul>
-              </li>
-             <li
-             class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-                  <a class="text-truncate text-medium" href="./products.html">پیراهن و اورال زنانه</a>
-             </li>
-             <li
-             class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-                  <a class="text-truncate text-medium" href="./products.html">شومیز و وست زنانه</a>
-             </li>
-            <li
-            class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-             <a class="text-truncate text-medium" href="./products.html">ست لباس زنانه</a>
-            </li>
-            <li
-            class="mainMenu-sublist-item-main pb-1 mt-1  d-flex align-items-center gap-2">
-             <a class="text-truncate text-medium" href="./products.html">بافت و پلیور زنانه</a>
-            </li>
-            <li
-            class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-                 <a class="text-truncate text-medium" href="./products.html">پیراهن و اورال زنانه</a>
-            </li>
-            <li
-            class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-                 <a class="text-truncate text-medium" href="./products.html">شومیز و وست زنانه</a>
-            </li>
-           <li
-           class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-            <a class="text-truncate text-medium" href="./products.html">ست لباس زنانه</a>
-           </li>
-           <li
-           class="mainMenu-sublist-item-main pb-1 mt-1  d-flex align-items-center gap-2">
-            <a class="text-truncate text-medium" href="./products.html">بافت و پلیور زنانه</a>
-           </li>
-           <li
-           class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-                <a class="text-truncate text-medium" href="./products.html">پیراهن و اورال زنانه</a>
-           </li>
-           <li
-           class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-                <a class="text-truncate text-medium" href="./products.html">شومیز و وست زنانه</a>
-           </li>
-          <li
-          class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
-           <a class="text-truncate text-medium" href="./products.html">ست لباس زنانه</a>
-          </li>
-          </ul>
-      </li>
-  </ul>
+  <h5 class="text-medium-3-strong color-gray-900 mx-auto">دسته بندی ها</h5>
+	@if ($categories->isNotEmpty())
+		<ul class="category-lists content d-flex flex-column gap-2">
+			@foreach ($categories as $parentCategory)
+				@if ($parentCategory->children->isEmpty())
+					<li>
+						<a class="text-medium-2-strong d-flex gap-1 align-items-center" href="{{ route('front.products.index', ['category_id' => $parentCategory->id]) }}">
+							<i class="icon-dot-single icon-fs-xlarge"></i>
+							<span class="color-gray-900">{{ $parentCategory->title }}</span>
+						</a>
+					</li>
+				@else
+					<li class="d-flex flex-column">
+						<div class="d-flex justify-content-between align-items-center">
+							<a class="text-medium-2-strong d-flex gap-1 align-items-center" href="{{ route('front.products.index', ['category_id' => $parentCategory->id]) }}">
+								<i class="icon-dot-single icon-fs-xlarge"></i>
+								<span class="color-gray-900">{{ $parentCategory->title }}</span>
+							</a>
+							<button type="button" class="category-btn border-black radius-circle w-4 h-4 text-center">
+								<i class="icon-angle-left icon-fs-medium-2"></i>
+								<i class="icon-angle-down icon-fs-medium-2"></i>
+							</button>
+						</div>
+						<ul class="menu-sublist border-e-gray-300 pe-3 w-p-100 h-p-100 d-flex flex-column flex-wrap">
+							@foreach ($parentCategory->children as $childCategory)
+								@if ($childCategory->children->isEmpty())
+									<li class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
+										<a class="text-truncate text-medium" href="{{ route('front.products.index', ['category_id' => $childCategory->id]) }}">
+											{{ $childCategory->title }}
+										</a>
+									</li>
+								@else
+									<li class="d-flex flex-column">
+										<div class="mainMenu-sublist-item-main pb-1 d-flex align-items-center justify-content-between">
+											<a class="text-truncate text-medium" href="{{ route('front.products.index', ['category_id' => $childCategory->id]) }}">{{ $childCategory->title }}</a>
+											<button type="button" class="category-btn-child border-black radius-circle w-4 h-4 text-center">
+												<i class="icon-angle-left icon-fs-medium-2"></i>
+												<i class="icon-angle-down icon-fs-medium-2"></i>
+											</button>
+										</div>
+										<ul class="menu-sublist-child d-flex flex-column border-e-gray-300 pe-3">
+											@foreach ($colchildCategory->chidren as $grandChildCategory)
+												<li class="mainMenu-sublist-item me-3 text-medium">
+													<a class="text-truncate text-medium" href="{{ route('front.products.index', ['category_id' => $childCategory->id]) }}">
+														{{ $grandChildCategory->title }}
+													</a>
+												</li>
+											@endforeach
+										</ul>
+									</li>
+								@endif
+							@endforeach
+						</ul>
+					</li>
+				@endif
+			@endforeach			
+		</ul>
+	@endif
 </div>
 
 <!-- Mobile Menu Modal -->
 <div class="modal modal-mobile-menu bg-white d-flex flex-column gap-2 px-2  pb-lg-4 pt-4 pb-5 overflow-auto" data-id="hamburgerMenu">
   <div class="d-flex justify-content-between align-items-center">
-     <figure>
-       <img src="{{asset('front-assets/images/header/logo.9208f443 (1).svg')}}" alt="logo">
-     </figure>
-     <button type="button" class="modal-close">
-       <i class="icon-cancel icon-fs-large color-gray-700"></i>
-     </button>
+		<figure>
+			<img src="{{asset('front-assets/images/header/logo.9208f443 (1).svg')}}" alt="logo">
+		</figure>
+		<button type="button" class="modal-close">
+			<i class="icon-cancel icon-fs-large color-gray-700"></i>
+		</button>
   </div>
-   <ul class="category-lists content d-flex flex-column mt-1">
-       <li class="d-flex flex-column">
-           <div class="d-flex justify-content-between align-items-center">
-               <a class="text-medium-2-strong d-flex gap-1 align-items-center" href="./products.html">
-                   <i class="icon-dot-single icon-fs-2xl"></i>
-                   <span class="color-gray-900">لباس زنانه</span>
-               </a>
-               <button type="button" class="category-btn">
-                   <i class="icon-angle-left icon-fs-medium-2"></i>
-                   <i class="icon-angle-down icon-fs-medium-2"></i>
-               </button>
-           </div>
-           <ul class="menu-sublist pe-3 w-p-100 h-p-100 d-flex flex-column flex-wrap">
-               <li class="d-flex flex-column">
-                 <div class="mainMenu-sublist-item-main pb-1 d-flex align-items-center justify-content-between">
-                   <a class="text-truncate text-medium d-flex align-items-center gap-1" href="./products.html">
-                       <i class="icon-dot-single icon-fs-xlarge"></i>
-                       <span>مانتو و کت زنانه</span>
-                   </a>
-                   <button type="button" class="category-btn-child">
-                       <i class="icon-angle-left icon-fs-medium-2"></i>
-                       <i class="icon-angle-down icon-fs-medium-2"></i>
-                   </button>
-                 </div>
-                 <ul class="menu-sublist-child d-flex flex-column pe-3">
-                   <li class="mainMenu-sublist-item me-3 text-medium">
-                       <a class="text-truncate text-medium d-flex align-items-center gap-1" href="./products.html">
-                           <i class="icon-dot-single icon-fs-xlarge"></i>
-                           <span>مانتو</span>
-                       </a>
-                   </li>
-                      <li class="mainMenu-sublist-item me-3 text-medium">
-                       <a class="text-truncate text-medium d-flex align-items-center gap-1" href="./products.html">
-                           <i class="icon-dot-single icon-fs-xlarge"></i>
-                           <span>کت زنانه</span>
-                       </a>
-                   </li>
-                   <li class="mainMenu-sublist-item me-3 text-medium">
-                       <a class="text-truncate text-medium d-flex align-items-center gap-1" href="./products.html">
-                           <i class="icon-dot-single icon-fs-xlarge"></i>
-                           <span>مانتو</span>
-                       </a>
-                   </li>
-                      <li class="mainMenu-sublist-item me-3 text-medium">
-                       <a class="text-truncate text-medium d-flex align-items-center gap-1" href="./products.html">
-                           <i class="icon-dot-single icon-fs-xlarge"></i>
-                           <span>کت زنانه</span>
-                       </a>
-                   </li>
-                 </ul>
-               </li>
-              <li
-              class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-                  <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-                   <a class="text-truncate text-medium" href="./products.html">پیراهن و اورال زنانه</a>
-              </li>
-              <li
-              class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-                   <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-                   <a class="text-truncate text-medium" href="./products.html">شومیز و وست زنانه</a>
-              </li>
-             <li
-             class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-              <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-              <a class="text-truncate text-medium" href="./products.html">ست لباس زنانه</a>
-             </li>
-             <li
-             class="mainMenu-sublist-item-main pb-1 mt-1  d-flex align-items-center gap-1">
-               <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-               <a class="text-truncate text-medium" href="./products.html">بافت و پلیور زنانه</a>
-             </li>
-             <li
-             class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-                  <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-                  <a class="text-truncate text-medium" href="./products.html">پیراهن و اورال زنانه</a>
-             </li>
-             <li
-             class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-               <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-               <a class="text-truncate text-medium" href="./products.html">شومیز و وست زنانه</a>
-             </li>
-            <li
-            class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-              <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-              <a class="text-truncate text-medium" href="./products.html">ست لباس زنانه</a>
-            </li>
-            <li
-            class="mainMenu-sublist-item-main pb-1 mt-1  d-flex align-items-center gap-1">
-              <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-              <a class="text-truncate text-medium" href="./products.html">بافت و پلیور زنانه</a>
-            </li>
-            <li
-            class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-               <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-               <a class="text-truncate text-medium" href="./products.html">پیراهن و اورال زنانه</a>
-            </li>
-            <li
-            class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-               <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-               <a class="text-truncate text-medium" href="./products.html">شومیز و وست زنانه</a>
-            </li>
-           <li
-           class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
-             <i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
-             <a class="text-truncate text-medium" href="./products.html">ست لباس زنانه</a>
-           </li>
-           </ul>
-       </li>
-       <li>
-           <a class="text-medium-2-strong d-flex gap-1 align-items-center" href="./weblog-list.html">
-               <i class="icon-dot-single icon-fs-2xl"></i>
-               <span class="color-gray-900">بلاگ</span>
-           </a>
-       </li>
-       <li>
-           <a class="text-medium-2-strong d-flex gap-1 align-items-center" href="./post-tracking.html">
-               <i class="icon-dot-single icon-fs-2xl"></i>
-               <span class="color-gray-900">رهگیری پستی</span>
-           </a>
-       </li>
-       <li>
-           <a class="text-medium-2-strong d-flex gap-1 align-items-center" href="./about-us.html">
-               <i class="icon-dot-single icon-fs-2xl"></i>
-               <span class="color-gray-900">درباره ما</span>
-           </a>
-       </li>
-       <li>
-           <a class="text-medium-2-strong d-flex gap-1 align-items-center" href="./contact-us.html">
-               <i class="icon-dot-single icon-fs-2xl"></i>
-               <span class="color-gray-900">تماس با ما</span>
-           </a>
-       </li>
-   </ul>
+	<ul class="category-lists content d-flex flex-column mt-1">
+
+		<li class="d-flex flex-column">
+			<div class="d-flex justify-content-between align-items-center">
+				<a class="text-medium-2-strong d-flex gap-1 align-items-center" href="{{ route('front.products.index') }}">
+					<i class="icon-dot-single icon-fs-2xl"></i>
+					<span class="color-gray-900">محصولات</span>
+				</a>
+				<button type="button" class="category-btn">
+					<i class="icon-angle-left icon-fs-medium-2"></i>
+					<i class="icon-angle-down icon-fs-medium-2"></i>
+				</button>
+			</div>
+			@if ($categories->isNotEmpty())
+				<ul class="menu-sublist pe-3 w-p-100 h-p-100 d-flex flex-column flex-wrap">
+					@foreach ($categories as $parentCategory)
+						@if ($parentCategory->children->isEmpty())
+							<li class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
+								<i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
+								<a class="text-truncate text-medium" href="{{ route('front.products.index', ['category_id' => $parentCategory->id]) }}">{{ $parentCategory->title }}</a>
+							</li>
+						@else
+							<li class="d-flex flex-column">
+								<div class="mainMenu-sublist-item-main pb-1 d-flex align-items-center justify-content-between">
+									<a class="text-truncate text-medium d-flex align-items-center gap-1" href="{{ route('front.products.index', ['category_id' => $parentCategory->id]) }}">
+										<i class="icon-dot-single icon-fs-xlarge"></i>
+										<span>{{ $parentCategory->title }}</span>
+									</a>
+									<button type="button" class="category-btn-child">
+										<i class="icon-angle-left icon-fs-medium-2"></i>
+										<i class="icon-angle-down icon-fs-medium-2"></i>
+									</button>
+								</div>
+								<ul class="menu-sublist-child d-flex flex-column pe-3">
+									@foreach ($parentCategory->children as $childCategory)
+										@if ($childCategory->children->isEmpty())
+											<li class="mainMenu-sublist-item me-3 text-medium">
+												<a class="text-truncate text-medium d-flex align-items-center gap-1" href="{{ route('front.products.index', ['category_id' => $parentCategory->id]) }}">
+													<i class="icon-dot-single icon-fs-xlarge"></i>
+													<span>{{ $parentCategory->title }}</span>
+												</a>
+											</li>
+										@else
+											{{-- دسته بندی های نوه باید نشون داده بشن --}}
+										@endif
+									@endforeach
+								</ul>
+							</li>
+						@endif	
+					@endforeach
+				</ul>
+			@endif
+		</li>
+		@foreach (count($menus) ? $menus['header'] : [] as $menuItem)
+			@php
+				$href = '/';
+				// switch ($menuItem->linkable_type) {
+				// 	case 'Modules\Category\Entities\Category':
+				// 		$href = route('front.products', ['category_id' => $menuItem->linkable_id]);
+				// 		break;
+				// 	case 'Modules\Blog\Entities\Post':
+				// 		$href = route('front.posts', ['id' => $menuItem->linkable_id]);
+				// 		break;
+				// 	case 'Custom\AboutUs':
+				// 		$href = url('/about-us');
+				// 		break;
+				// 	case 'Custom\ContactUs':
+				// 		$href = url('/contact');
+				// 		break;
+				// 	default:
+				// 		$href = $menuItem->link;
+				// 		break;
+				// }
+			@endphp
+			<li>
+				<a class="text-medium-2-strong d-flex gap-1 align-items-center" href="{{ $href }}">
+					<i class="icon-dot-single icon-fs-2xl"></i>
+					<span class="color-gray-900">{{ $menuItem->title }}</span>
+				</a>
+			</li>
+		@endforeach
+	</ul>
 </div>
 
 <!-- Search Modal -->

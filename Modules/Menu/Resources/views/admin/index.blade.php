@@ -2,14 +2,17 @@
 
 @section('content')
     <div class="page-header">
-        <x-breadcrumb :items="[['title' => 'لیست منو ها']]" />
-            <div>
-                <button id="submitButton" type="submit" class="btn btn-teal btn-sm align-items-center"><span>ذخیره مرتب سازی</span></button>
-                <x-create-button type="modal" target="createMenuModal" title="منو جدید" />
-                @if ($parentMenu)
-                    <a href="{{route('admin.menu.index',$parentMenu->group_id)}}" class="btn btn-warning btn-sm">برگشت</a>
-                @endif
-            </div>
+        <x-breadcrumb :items="[
+            ['title' => 'گروه های منو', 'route_link' => 'admin.menu.groups'],
+            ['title' => 'لیست منو ها']
+        ]" />
+        <div>
+            <button id="submitButton" type="submit" class="btn btn-teal btn-sm align-items-center"><span>ذخیره مرتب سازی</span></button>
+            <x-create-button type="modal" target="createMenuModal" title="منو جدید" />
+            @if ($parentMenu)
+                <a href="{{route('admin.menu.index',$parentMenu->group_id)}}" class="btn btn-warning btn-sm">برگشت</a>
+            @endif
+        </div>
     </div>
 
     <x-card>
@@ -107,11 +110,7 @@
 @endsection
 @section('scripts')
     <script>
-        var items = document.getElementById('items');
-        var sortable = Sortable.create(items, {
-            handle: '.glyphicon-move',
-            animation: 150
-        });
+        
         var items = document.getElementById('items');
         var sortable = Sortable.create(items, {
             handle: '.glyphicon-move',

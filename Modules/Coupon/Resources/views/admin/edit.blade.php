@@ -207,11 +207,11 @@
             categoriesTable.find('thead tr th').css('color', '#FFFFFF');
 
             let initialValue = couponTypeSelectOption.val();
-            let text = initialValue === 'flat' ? 'مبلغ : ' : 'درصد : ';
+            let text = initialValue === 'flat' ? 'مبلغ (تومان) : ' : 'درصد : ';
             $('#amount-label').text(text);
 
             couponTypeSelectOption.on('change', () => {
-                text = $('#type').val() === 'flat' ? 'مبلغ : ' : 'درصد : ';
+                text = $('#type').val() === 'flat' ? 'مبلغ (تومان) : ' : 'درصد : ';
                 $('#amount-label').text(text);
             });
 

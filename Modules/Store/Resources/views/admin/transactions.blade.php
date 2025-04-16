@@ -87,7 +87,13 @@
 							<td>{{ $transaction->id }}</td>
 							<td>{{ $transaction->store->variety->title }}</td>
 							<td>{{ $transaction->store->variety_id}}</td>
-							<td>{{ $transaction->creator?->name ?? '-' }}</td>
+							<td>
+                                @if ($transaction->creatorable instanceof Modules\Customer\Entities\Customer)
+                                    {{ $transaction->creatorable->full_name }}
+                                @else
+                                    {{ $transaction->creatorable->name }}
+                                @endif
+                            </td>
 							<td style="white-space: wrap;">{{ $transaction->description }}</td>
 							<td>{{ $transaction->quantity }}</td>
 							<td>

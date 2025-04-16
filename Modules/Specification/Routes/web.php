@@ -7,6 +7,7 @@ Route::webSuperGroup('admin', function () {
 
   Route::prefix('/specifications')->name('specifications.')->group(function () {
 
+    Route::post('/sort', [SpecificationController::class, 'sort'])->name('sort'); 
     Route::get('/', [SpecificationController::class, 'index'])->name('index'); 
     Route::get('/create', [SpecificationController::class, 'create'])->name('create');
     Route::post('/', [SpecificationController::class, 'store'])->name('store');

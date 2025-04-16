@@ -26,7 +26,7 @@ class UpdateItemsRequest extends FormRequest
   {
     $variety = Variety::query()->with('attributes')->findOrFail($this->variety_id);
     $this->variety = $variety;
-    $orderItem = $this->route('order_item');
+    $orderItem = $this->route('orderItem');
     $order = $orderItem->order;
     if ($orderItem->quantity == $this->quantity) {
       throw Helpers::makeValidationException('تعداد وارد شده برابر با تعداد فعلی محصول در سفارش می باشد');

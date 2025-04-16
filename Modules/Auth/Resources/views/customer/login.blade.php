@@ -28,7 +28,7 @@
             </figure>
           <a>
           <div class="w-p-100 d-flex flex-column gap-2 w-p-100">
-            <h2 class="text-medium-2-strong">
+            <h2 class="d-flex gap-1 text-medium-2-strong">
               <span>ورود</span>
               <span>|</span>
               <span>ثبت نام</span>

@@ -2,6 +2,9 @@
 
 namespace Modules\Slider\Entities;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Modules\Admin\Classes\ActivityLogHelper;
 use Modules\Core\Entities\BaseModel;
 use Modules\Core\Helpers\Helpers;
 use Modules\Core\Traits\HasAuthors;
@@ -15,40 +18,97 @@ class Slider extends BaseModel implements HasMedia
 {
   use InteractsWithMedia, HasLinks, SortableTrait, HasAuthors;
 
-  // protected $with = [
-  //   'media'
-  // ];
+  public const GROUP_DESKTOP = 'desktop';
+  public const GROUP_MOBILE = 'mobile';
+
+  private const MOBILE_SLIDERS_CACHE_NAME = 'allMobileSliders';
+  private const DESKTOP_SLIDERS_CACHE_NAME = 'allDestktopSliders';
+  private const HOME_SLIDERS_CACHE_NAME = 'home_slider';
 
   public $sortable = [
     'order_column_name' => 'order',
     'sort_when_creating' => true,
   ];
 
-  protected $casts = ['status' => 'boolean'];
-
-  // protected $appends = ['group_label', 'image', 'unique_type'];
-
-  protected $fillable = [
-    'title',
-    'description',
-    'group',
-    'link',
-    'status',
-    'custom_fields'
-  ];
-
   protected $hidden = ['media'];
+  protected $casts = ['status' => 'boolean'];
+  protected $appends = ['group_label', 'image', 'unique_type'];
+  protected $fillable = ['title', 'description', 'group', 'link', 'status', 'custom_fields'];
 
   protected static function booted()
   {
-    parent::booted();
+    static::created(fn (self $slider) => self::forgetCacheFromGroupName($slider->group));
+    static::updated(fn (self $slider) => self::forgetCacheFromGroupName($slider->group));
+    static::deleted(fn (self $slider) => self::forgetCacheFromGroupName($slider->group));
+  }
 
-    Helpers::clearCacheInBooted(static::class, 'home_slider');
+  private static function forgetCacheFromGroupName(string $groupName)
+  {
+    $cacheName = $groupName === self::GROUP_MOBILE ? self::MOBILE_SLIDERS_CACHE_NAME : self::DESKTOP_SLIDERS_CACHE_NAME;
+    Cache::forget($cacheName);
+    Helpers::clearCacheInBooted(static::class, self::HOME_SLIDERS_CACHE_NAME);
+  }
+
+  public static function getAvailableGroups()
+  {
+    return [self::GROUP_DESKTOP, self::GROUP_MOBILE];
+  }
+
+  public static function getAllSlidersByGroup($group)
+  {
+    $cacheName = $group === self::GROUP_DESKTOP ? self::DESKTOP_SLIDERS_CACHE_NAME : self::MOBILE_SLIDERS_CACHE_NAME;
+    return Cache::rememberForever($cacheName, function () use ($group) {
+      return self::query()->orderByDesc('order')->whereGroup($group)->get();
+    });
+  }
+
+  public static function getAllSliderGroups()
+  {
+    return Cache::rememberForever('allSliderGroups', function () {
+      $groups = [];
+      foreach (self::getAvailableGroups() as $group) {
+        $groups[] = (object) [
+          'title' => $group,
+          'label' => config('slider.groupLabels.' . $group)
+        ];
+      }
+      return (object) $groups;
+    });
+  }
+
+  public static function createOrUpdate(Request $request, Slider|null $slider = null)
+  {
+    if ($slider) {
+      $slider->update($request->all());
+      if ($request->hasFile('image')) {
+        $media = $slider->getMedia('main');
+        foreach ($media as $singleMedia) {
+          $singleMedia->delete();
+        }
+        $slider->addImage($request->file('image'));
+      }
+      ActivityLogHelper::updatedModel('اسلایدر بروز شد', $slider);
+    } else {
+      $slider = Slider::query()->create($request->all());
+      $slider->addImage($request->file('image'));
+      ActivityLogHelper::storeModel('اسلایدر ثبت شد', $slider);
+    }
+  }
+
+  public static function sort(Request $request)
+  {
+    $idsFromRequest = $request->input('orders');
+    $c = 999999;
+    foreach ($idsFromRequest as $id) {
+      $slider = Slider::query()->find($id);
+      $slider->order = $c--;
+      $slider->save();
+    }
   }
 
   public function getGroupLabelAttribute()
   {
-    return __('core::groups.' . $this->group);
+    return config('slider.groupLabels.' . $this->group);
   }
 
   public function registerMediaCollections(): void
@@ -65,10 +125,7 @@ class Slider extends BaseModel implements HasMedia
 
   public function addImage($image)
   {
-    if (!$image) {
-      return;
-    }
-
+    if (!$image) return;
     return $this->addMedia($image)->toMediaCollection('main');
   }
 
@@ -77,10 +134,15 @@ class Slider extends BaseModel implements HasMedia
     return $query->where('status', 1);
   }
 
+  public function scopeWhereGroup($query, $group)
+  {
+    return $query->where('group', $group);
+  }
+
   public function getUniqueTypeAttribute()
   {
     if (!$this->linkable_type) {
-      return 'link_url';
+      return 'self_link';
     }
     if ($this->linkable_id) {
       return $this->linkable_type;

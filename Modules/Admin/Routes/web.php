@@ -9,8 +9,8 @@ Route::webSuperGroup('admin', function () {
 
   Route::prefix('/admins')->name('admins.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
-    Route::get('/{admin}', [AdminController::class, 'show'])->name('show');
     Route::get('/create', [AdminController::class, 'create'])->name('create');
+    Route::get('/{admin}', [AdminController::class, 'show'])->name('show');
     Route::post('/', [AdminController::class, 'store'])->name('store');
     Route::get('/{admin}/edit', [AdminController::class, 'edit'])->name('edit');
     Route::put('/{admin}', [AdminController::class, 'update'])->name('update');
