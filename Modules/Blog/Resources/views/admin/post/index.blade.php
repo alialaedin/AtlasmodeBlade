@@ -103,87 +103,85 @@
             <x-table-component>
                 <x-slot name="tableTh">
                     <tr>
-                        @php($tableTh = ['ردیف', 'عنوان', 'دسته بندی', 'تعداد بازدید', 'وضعیت', 'تاریخ ثبت', 'عملیات'])
-                        @foreach ($tableTh as $th)
-                            <th>{{ $th }}</th>
-                        @endforeach
+                        <th>ردیف</th>
+                        <th>عنوان</th>
+                        <th>تصویر</th>
+                        <th>دسته بندی</th>
+                        <th>تعداد بازدید</th>
+                        <th>وضعیت</th>
+                        <th>تاریخ ثبت</th>
+                        <th>عملیات</th>
                     </tr>
                 </x-slot>
                 <x-slot name="tableTd">
-                    @forelse ($posts as $post)
-                        <tr>
-                            <td class="font-weight-bold">{{ $loop->iteration }}</td>
-                            <td style="white-space: wrap;">{{ $post->title }}</td>
-                            {{--                  <td class="text-center m-0 p-0"> --}}
-                            {{--                    @if ($post->image) --}}
-                            {{--                      <figure class="figure my-2"> --}}
-                            {{--                        <a target="_blank" href="{{ Storage::url($post->image['uuid'] .'/'. $post->image['file_name']) }}"> --}}
-                            {{--                          <img --}}
-                            {{--                            src="{{ Storage::url($post->image['uuid'] .'/'. $post->image['file_name']) }}" --}}
-                            {{--                            class="img-thumbnail" --}}
-                            {{--                            alt="image" --}}
-                            {{--                            width="50" --}}
-                            {{--                            style="max-height: 32px;" --}}
-                            {{--                          /> --}}
-                            {{--                        </a> --}}
-                            {{--                      </figure> --}}
-                            {{--                    @else --}}
-                            {{--                      <span> - </span> --}}
-                            {{--                    @endif --}}
-                            {{--                  </td> --}}
-                            <td>{{ $post->category->name }}</td>
-                            <td>{{ $post->views_count }}</td>
-                            <td>
-                                <span class="badge badge-{{ config('blog.status_color.' . $post->status) }}">
-                                    {{ config('blog.statuses.' . $post->status) }}
-                                </span>
-                            </td>
-                            <td>{{ verta($post->created_at)->format('Y/m/d H:i') }}</td>
-                            <td>
+					@foreach ($posts ?? [] as $post)
+						<tr>
+							<td class="font-weight-bold">{{ $loop->iteration }}</td>
+							<td style="white-space: wrap;">{{ $post->title }}</td>
+							<td>
+                                @php
+                                    $url = '/storage/' . $post->image->uuid . '/' . $post->image->file_name;
+                                @endphp
+                                <a href="{{ $url }}" target="_blank">
+                                    <div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="max-height: 40px; border-radius: 4px;">
+                                        <img src="{{ $url }}" style="height: 30px;" alt="{{ $url }}">
+                                    </div>
+                                </a>
+							</td>
+							<td>{{ $post->category->name }}</td>
+							<td>{{ $post->views_count }}</td>
+							<td>
+								<span class="badge badge-{{ config('blog.status_color.' . $post->status) }}">
+									{{ config('blog.statuses.' . $post->status) }}
+								</span>
+							</td>
+							<td>{{ verta($post->created_at)->format('Y/m/d H:i') }}</td>
+							<td>
 
-                                @can('read_comment')
-                                    <a href="{{ route('admin.post-comments.index', $post) }}"
-                                        class="btn btn-sm btn-icon btn-green text-white position-relative" style=""
-                                        data-toggle="tooltip" data-original-title="نظرات">
-                                        <i class="fa fa-comment"></i>
-                                        <span
-                                            class="font-weight-bold text-white fs-8 d-flex align-items-center justify-content-center position-absolute bg-black-9"
-                                            style="
-                            top: -11px;
-                            right: -8px;
-                            width: 18px;
-                            height: 18px;
-                            border-radius: 50px;">
-                                            {{ $post->comments_count }}
-                                        </span>
-                                    </a>
-                                @endcan
+								@can('read_comment')
+									<a href="{{ route('admin.post-comments.index', $post) }}"
+										class="btn btn-sm btn-icon btn-green text-white position-relative" style=""
+										data-toggle="tooltip" data-original-title="نظرات">
+										<i class="fa fa-comment"></i>
+										<span
+											class="font-weight-bold text-white fs-8 d-flex align-items-center justify-content-center position-absolute bg-black-9"
+											style="
+												top: -11px;
+												right: -8px;
+												width: 18px;
+												height: 18px;
+												border-radius: 50px;">
+											{{ $post->comments_count }}
+										</span>
+									</a>
+								@endcan
 
-                                @include('core::includes.show-icon-button', [
-                                    'model' => $post,
-                                    'route' => 'admin.posts.show',
-                                ])
+								@include('core::includes.show-icon-button', [
+									'model' => $post,
+									'route' => 'admin.posts.show',
+								])
 
-                                @can('modify_post')
-                                    @include('core::includes.edit-icon-button', [
-                                        'model' => $post,
-                                        'route' => 'admin.posts.edit',
-                                    ])
-                                @endcan
+								@can('modify_post')
+									@include('core::includes.edit-icon-button', [
+										'model' => $post,
+										'route' => 'admin.posts.edit',
+									])
+								@endcan
 
-                                @can('delete_post')
-                                    @include('core::includes.delete-icon-button', [
-                                        'model' => $post,
-                                        'route' => 'admin.posts.destroy',
-                                        'disabled' => false,
-                                    ])
-                                @endcan
+								@can('delete_post')
+									@include('core::includes.delete-icon-button', [
+										'model' => $post,
+										'route' => 'admin.posts.destroy',
+										'disabled' => false,
+									])
+								@endcan
 
-                            </td>
-                        </tr>
-                    @empty
-                        @include('core::includes.data-not-found-alert', ['colspan' => 7])
-                    @endforelse
+							</td>
+						</tr>
+					@endforeach
+					@if ($posts->isEmpty())
+						@include('core::includes.data-not-found-alert', ['colspan' => 8])
+					@endif
                 </x-slot>
                 <x-slot name="extraData">{{ $posts->onEachSide(0)->links('vendor.pagination.bootstrap-4') }}</x-slot>
             </x-table-component>

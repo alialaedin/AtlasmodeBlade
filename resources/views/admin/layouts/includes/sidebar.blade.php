@@ -2,7 +2,7 @@
   <div class="app-sidebar__user">
     <div class="dropdown user-pro-body text-center">
       <div class="user-info">
-        <span class="text-light fs-18">اطلس مد</span>
+        <span class="text-light fs-18">نارین سنتر</span>
       </div>
     </div>
   </div>
@@ -137,8 +137,8 @@
                 <ul class="sub-slide-menu">
                   @foreach ($menuGroups as $menuGroup)
                     <li>
-                      <a href="{{ route('admin.menus.index', ['group_id' => $menuGroup->id]) }}" class="sub-slide-item">
-                        {{ $menuGroup->title }}
+                      <a href="{{ route('admin.menus.index', ['menuGroup' => $menuGroup]) }}" class="sub-slide-item">
+                        {{ $menuGroup->label }}
                       </a>
                     </li>
                   @endforeach
@@ -146,7 +146,7 @@
               </li>   
             @endcan
             @can('read_advertise')
-              <li><a href="{{ route('admin.positions.index') }}" class="slide-item">بنر</a></li>
+              <li><a href="{{ route('admin.advertisements.index') }}" class="slide-item">بنر</a></li>
             @endcan
             @can('read_page')
               <li><a href="{{ route('admin.pages.index') }}" class="slide-item">صفحات</a></li>

@@ -736,21 +736,15 @@ class Helpers /*extends BaseHelpers*/
 
     public static function toGregorian(string $jDate): ?string
     {
-
-        $output = null;
-        $pattern = '#^(\\d{4})/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])$#';
-
-        if (preg_match($pattern, $jDate)) {
-            $jDateArray = explode('/', $jDate);
-            $dateArray = \Hekmatinasser\Verta\Facades\Verta::getGregorian(
-                $jDateArray[0],
-                $jDateArray[1],
-                $jDateArray[2]
-            );
-            $output = implode('/', $dateArray);
-        }
+        $date = explode(' ', $jDate)[0];
+        $jDateArray = explode('-', $date);
+        $dateArray = \Hekmatinasser\Verta\Facades\Verta::getGregorian(
+            $jDateArray[0],
+            $jDateArray[1],
+            $jDateArray[2]
+        );
+        $output = implode('/', $dateArray);
         return $output;
-
     }
 
 

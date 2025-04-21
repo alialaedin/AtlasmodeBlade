@@ -23,7 +23,7 @@
 						<input type="text" name="label" value="{{ request('label') }}" class="form-control" />
 					</div>
 					<div class="col-xl-3 col-lg-6 col-12 form-group">
-						<label for="type">نوع:</label>
+						<label for="type">نوع ویژگی:</label>
 						<select class="form-control" name="type" id="type">
 							<option value=""></option>
 							@foreach ($types as $type)
@@ -34,12 +34,12 @@
 						</select>
 					</div>
 					<div class="col-xl-3 col-lg-6 col-12 form-group">
-						<label for="style">نوع:</label>
+						<label for="style">نوع نمایش:</label>
 						<select class="form-control" name="style" id="style">
 							<option value="">انتخاب</option>
 							@foreach ($styles as $style)
 								<option value="{{ $style }}" {{ request('style') == $style ? 'selected' : null }}>
-										{{ config('attribute.translates.styles.' . $type) }}
+									{{ config('attribute.translates.styles.' . $style) }}
 								</option>
 							@endforeach
 						</select>

@@ -23,7 +23,7 @@ class Slider extends BaseModel implements HasMedia
 
   private const MOBILE_SLIDERS_CACHE_NAME = 'allMobileSliders';
   private const DESKTOP_SLIDERS_CACHE_NAME = 'allDestktopSliders';
-  private const HOME_SLIDERS_CACHE_NAME = 'home_slider';
+  private const HOME_SLIDERS_CACHE_NAME = 'homeSliders';
 
   public $sortable = [
     'order_column_name' => 'order',
@@ -32,21 +32,24 @@ class Slider extends BaseModel implements HasMedia
 
   protected $hidden = ['media'];
   protected $casts = ['status' => 'boolean'];
-  protected $appends = ['group_label', 'image', 'unique_type'];
+  protected $appends = ['group_label', 'image', 'unique_type', 'link_url'];
   protected $fillable = ['title', 'description', 'group', 'link', 'status', 'custom_fields'];
 
   protected static function booted()
   {
-    static::created(fn (self $slider) => self::forgetCacheFromGroupName($slider->group));
-    static::updated(fn (self $slider) => self::forgetCacheFromGroupName($slider->group));
-    static::deleted(fn (self $slider) => self::forgetCacheFromGroupName($slider->group));
+    static::created(fn(self $slider) => self::forgetCacheFromGroupName($slider->group));
+    static::updated(fn(self $slider) => self::forgetCacheFromGroupName($slider->group));
+    static::deleted(fn(self $slider) => self::forgetCacheFromGroupName($slider->group));
   }
 
   private static function forgetCacheFromGroupName(string $groupName)
   {
-    $cacheName = $groupName === self::GROUP_MOBILE ? self::MOBILE_SLIDERS_CACHE_NAME : self::DESKTOP_SLIDERS_CACHE_NAME;
-    Cache::forget($cacheName);
-    Helpers::clearCacheInBooted(static::class, self::HOME_SLIDERS_CACHE_NAME);
+    $adminCacheName = $groupName === self::GROUP_MOBILE
+      ? self::MOBILE_SLIDERS_CACHE_NAME
+      : self::DESKTOP_SLIDERS_CACHE_NAME;
+
+    Cache::forget($adminCacheName);
+    Cache::forget(self::HOME_SLIDERS_CACHE_NAME);
   }
 
   public static function getAvailableGroups()
@@ -73,6 +76,17 @@ class Slider extends BaseModel implements HasMedia
         ];
       }
       return (object) $groups;
+    });
+  }
+
+  public static function getAllSlidersForFront()
+  {
+    return Cache::rememberForever(self::HOME_SLIDERS_CACHE_NAME, function () {
+      return self::query()
+        ->active()
+        ->orderByDesc('order')
+        ->get()
+        ->groupBy('group');
     });
   }
 
@@ -109,6 +123,28 @@ class Slider extends BaseModel implements HasMedia
   public function getGroupLabelAttribute()
   {
     return config('slider.groupLabels.' . $this->group);
+  }
+
+  public function getLinkUrlAttribute()
+  {
+    switch ($this->unique_type) {
+      case 'IndexPost':
+        return route('front.posts.index');
+      case 'Post':
+        return route('front.posts.show', $this->linkable_id);
+      case 'IndexProduct':
+        return route('front.products.index');
+      case 'Product':
+        return route('front.products.show', $this->linkable_id);
+      case 'Category':
+        return route('front.products.index', ['category_id' => $this->linkable_id]);
+      case 'IndexAboutUs':
+        return '/about-us';
+      case 'IndexContactUs':
+        return '/contact-us';
+      default:
+        return $this->link;
+    }
   }
 
   public function registerMediaCollections(): void

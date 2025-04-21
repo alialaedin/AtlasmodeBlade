@@ -1,195 +1,165 @@
 @extends('admin.layouts.master')
 
-@section('content')
-    <div class="page-header">
-        <x-breadcrumb :items="[
-            ['title' => 'گروه های منو', 'route_link' => 'admin.menu.groups'],
-            ['title' => 'لیست منو ها']
-        ]" />
-        <div>
-            <button id="submitButton" type="submit" class="btn btn-teal btn-sm align-items-center"><span>ذخیره مرتب سازی</span></button>
-            <x-create-button type="modal" target="createMenuModal" title="منو جدید" />
-            @if ($parentMenu)
-                <a href="{{route('admin.menu.index',$parentMenu->group_id)}}" class="btn btn-warning btn-sm">برگشت</a>
-            @endif
-        </div>
-    </div>
-
-    <x-card>
-        @if ($parentMenu)
-        <x-slot name="cardTitle">لیست منو های ({{$parentMenu->title}})</x-slot>
-        @else
-        <x-slot name="cardTitle">لیست منو ها</x-slot>
-        @endif
-        <x-slot name="cardOptions"><x-card-options /></x-slot>
-        <x-slot name="cardBody">
-            @include('components.errors')
-            <form id="myForm" action="{{ route('admin.menu.sort') }}" method="POST">
-                @csrf
-                @method('PATCH')
-                <x-table-component idTbody="items">
-                    <x-slot name="tableTh">
-                        <tr>
-                            @php($tableTh = ['انتخاب','عنوان', 'تعداد فرزند ها','صفحه جدید', 'وضعیت', 'تاریخ ثبت', 'عملیات'])
-                            @foreach ($tableTh as $th)
-                                <th>{{ $th }}</th>
-                            @endforeach
-                        </tr>
-                    </x-slot>
-                    <x-slot name="tableTd">
-                        @forelse($menu_items as $menu_item)
-                            @php($group = $menu_item->group_id)
-                            <tr>
-                                <input type="hidden" value="{{ $menu_item->group }}" name="group">
-                                <td class="text-center"><i class="fe fe-move glyphicon-move text-dark"></i></td>
-                                <input type="hidden" value="{{ $menu_item->id }}" name="orders[]">
-                                @php($count = count($menu_item->children))
-                                <td class="">
-                                    @if ($count == 0)
-                                        {{ $menu_item->title }}
-                                    @else
-                                        <a class="text-info" data-original-title="مشاهده"
-                                            href="{{ route('admin.menu.index', [$group, $menu_item->id]) }}">{{ $menu_item->title }}</a>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($count == 0)
-                                        {{ $count }}
-                                    @else
-                                        <a class="text-info" data-original-title="مشاهده"
-                                            href="{{ route('admin.menu.index', [$group, $menu_item->id]) }}">{{ $count }}</a>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ($menu_item->new_tab)
-                                        <span class=""><i
-                                                class="text-success fs-26 fa fa-check-circle-o"></i></span>
-                                    @else
-                                        <span class=""><i class="text-danger fs-26 fa fa-close"></i></span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @include('core::includes.status', [
-                                        'status' => $menu_item->status,
-                                    ])
-                                </td>
-                                <td>{{ verta($menu_item->created_at)->format('Y/m/d H:i') }}</td>
-                                <td>
-                                    @include('core::includes.edit-modal-button', [
-                                        'target' => '#edit-menu-' . $menu_item->id,
-                                    ])
-                                    <button onclick="confirmDelete('delete-{{ $menu_item->id }}')"
-                                        class="btn btn-sm btn-icon btn-danger text-white" data-toggle="tooltip"
-                                        type="button" data-original-title="حذف"
-                                        {{ isset($disabled) ? 'disabled' : null }}>
-                                        {{ isset($title) ? $title : null }}
-                                        <i class="fa fa-trash-o {{ isset($title) ? 'mr-1' : null }}"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
-                            @include('core::includes.data-not-found-alert', ['colspan' => 7])
-                        @endforelse
-                    </x-slot>
-                </x-table-component>
-                <button class="btn btn-teal mt-5" type="submit">ذخیره مرتب سازی</button>
-            </form>
-        </x-slot>
-    </x-card>
-    @foreach ($menu_items as $menu_item)
-        <form action="{{ route('admin.menu.destroy', $menu_item->id) }}" method="POST" id="delete-{{ $menu_item->id }}"
-            style="display: none">
-
-            @csrf
-            @method('DELETE')
-        </form>
-    @endforeach
-    @include('menu::admin.create')
-    @include('menu::admin.edit')
-    <!-- row closed -->
+@section('styles')
+	<style>
+		.sortable li {
+			cursor: move;
+		}
+		.menu-title-box {
+			padding: 10px;
+			margin: 5px 0;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			background-color: #f9f9f9; 
+			font-weight: bold; 
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	</style>
 @endsection
+
+@section('content')
+
+<div class="page-header">
+	<x-breadcrumb :items="[['title' => 'منو های گروه ' . $menuGroup->label]]" />
+	<div>
+		@php $sortBtnClass = $menuItems->count() > 0 ? '' : 'd-none' @endphp
+		<button id="sort-btn" type="button" class="btn btn-teal btn-sm align-items-center btn-sm {{ $sortBtnClass }}">ذخیره مرتب سازی</button>
+		<x-create-button route="admin.menus.create" :parameter="['menuGroup' => $menuGroup]" title="ثبت منو جدید"/>
+	</div>
+</div>
+
+<x-card>
+	<x-slot name="cardTitle">لیست منو ها</x-slot>
+	<x-slot name="cardOptions"><x-card-options /></x-slot>
+	<x-slot name="cardBody">
+		<ul class="list-style-cricle sortable" data-id="root">
+			@foreach ($menuItems as $parentMenuItem)
+				<li data-id="{{ $parentMenuItem->id }}">
+					<div class="menu-title-box" style="opacity: {{ $parentMenuItem->status ? 1 : .5 }}">
+						<span>{{ $parentMenuItem->title }}</span>
+						<div>
+							<a 
+								class="btn btn-sm btn-icon btn-primary text-white" 
+								href="{{ route('admin.menus.create', ['menuGroup' => $menuGroup, 'parent_id' => $parentMenuItem->id]) }}">
+								<i class="fa fa-plus"></i>
+							</a>
+							<x-delete-button route="admin.menus.destroy" :model="$parentMenuItem" />
+							<x-edit-button route="admin.menus.edit" :model="$parentMenuItem" />
+						</div>
+					</div>
+					@if ($parentMenuItem->children->isNotEmpty())
+						<ul class="list-style-square sortable">
+							@foreach ($parentMenuItem->children as $childMenuItem)
+								<li data-id="{{ $childMenuItem->id }}">
+									<div class="menu-title-box" style="opacity: {{ $childMenuItem->status ? 1 : .5 }}">
+										<span>{{ $childMenuItem->title }}</span>
+										<div>
+											<a 
+												class="btn btn-sm btn-icon btn-primary text-white" 
+												href="{{ route('admin.menus.create', ['menuGroup' => $menuGroup, 'parent_id' => $childMenuItem->id]) }}">
+												<i class="fa fa-plus"></i>
+											</a>
+											<x-delete-button route="admin.menus.destroy" :model="$childMenuItem" />
+											<x-edit-button route="admin.menus.edit" :model="$childMenuItem" />
+										</div>
+									</div>
+									@if ($childMenuItem->children->isNotEmpty())
+										<ul class="list-cricle-square sortable">
+											@foreach ($childMenuItem->children as $grandChildMenuItem)
+												<li data-id="{{ $grandChildMenuItem->id }}">
+													<div class="menu-title-box" style="opacity: {{ $grandChildMenuItem->status ? 1 : .5 }}">
+														<span>{{ $grandChildMenuItem->title }}</span>
+														<div>
+															<x-delete-button route="admin.menus.destroy" :model="$grandChildMenuItem" />
+															<x-edit-button route="admin.menus.edit" :model="$grandChildMenuItem" />
+														</div>
+													</div>
+												</li>
+											@endforeach
+										</ul>
+									@endif
+								</li>
+							@endforeach
+						</ul>
+					@endif
+				</li>
+			@endforeach
+		</ul>
+	</x-slot>
+</x-card>
+
+@endsection
+
 @section('scripts')
-    <script>
-        
-        var items = document.getElementById('items');
-        var sortable = Sortable.create(items, {
-            handle: '.glyphicon-move',
-            animation: 150
-        });
-        document.getElementById('submitButton').addEventListener('click', function() {
-            document.getElementById('myForm').submit();
-        });
-        function toggleInput() {
-            let selectOption = document.getElementById('linkableType');
-            let linkInput = document.getElementById('link');
-            $('#divLinkable').hide();
-            // Reset linkableId
-            linkInput.value = '';
-            linkInput.disabled = true;
+	<script>
+		
+		document.addEventListener('DOMContentLoaded', () => {
 
-            if (selectOption.value === "self_link") {
-                linkInput.disabled = false;
-            } else if (selectOption.value === 'none') {
-                linkInput.disabled = true;
-            } else {
-                $('#divLinkable').show();
-                let linkables = @json($linkables);
-                let linkableId = document.getElementById('linkableId');
-                linkableId.innerHTML = '';
+			const sortables = document.querySelectorAll('.sortable');
+			const sortUrl = @json(route('admin.menus.sort'));
+			const menuGroupId = @json($menuGroup->id);
 
-                let findedItem = linkables.find(linkable => {
-                    return linkable.unique_type === document.getElementById('linkableType').value;
-                });
+			sortables.forEach(sortable => {
+				new Sortable(sortable, {
+					group: 'nested',
+					animation: 150,
+					fallbackOnBody: true,
+					swapThreshold: 0.65,
+				});
+			});
 
-                if (findedItem) {
-                    let option = '';
-                    if (findedItem.models !== null) {
-                        findedItem.models.forEach(model => {
-                            let title = model.title ?? (model.name ?? 'ندارد');
-                            option += `<option value="${model.id}">${title}</option>`;
-                        });
-                        linkableId.innerHTML = option;
-                    } else {
-                        linkableId.innerHTML = `<option value="" selected disabled>آیتمی وجود ندارد</option>`;
-                    }
-                }
-            }
-        }
+			document.getElementById('sort-btn').addEventListener('click', handleSortEnd);
 
-        function toggleEditInput(editItem, id) {
-            let selectOption2 = $(`#typeLink-${id}`).val();
-            let linkInput = $(`#linkEdit-${id}`);
-            $(`#divLinkableEditId-${id}`).hide();
-            linkInput.value = '';
-            linkInput.disabled = true;
-            if (selectOption2 == "self_link2") {
-                linkInput.removeAttr('disabled');
-            } else {
+			function handleSortEnd() {
+				document.getElementById('sort-btn').disabled = true;
+				const rootElement = document.querySelector('.list-style-cricle');
+				if (!rootElement) {
+					return;
+				}
 
-                linkInput.attr("disabled", "disabled");
-                $(`#divLinkableEditId-${id}`).show();
-                let linkables = @json($linkables);
-                let linkableId = document.getElementById(`linkableEditId-${id}`);
-                linkableId.innerHTML = '';
+				const data = buildMenuStructure(rootElement);
 
-                let findedItem = linkables.find(linkable => {
+				postData(sortUrl, {
+					menu_items: data,
+					group_id: menuGroupId
+				})
+				.then(response => {
+					popup('success', '', response.message);
+					document.getElementById('sort-btn').disabled = false;
+				})
+				.catch(error => console.error('Error:', error));
+			}
 
-                    return linkable.unique_type == $(`#typeLink-${id}`).val();
-                });
+			function buildMenuStructure(element) {
+				return Array.from(element.querySelectorAll(':scope > li')).map(item => {
+					const children = item.querySelector('ul') ? buildMenuStructure(item.querySelector('ul')) : [];
+					return {
+						id: item.dataset.id,
+						children: children
+					};
+				});
+			}
+			
+			async function postData(url = '', data = {}) {
+				const response = await fetch(url, {
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRF-TOKEN': '{{ csrf_token() }}'
+					},
+					body: JSON.stringify(data)
+				});
 
-                if (findedItem) {
-                    let option = '';
-                    if (findedItem.models != null) {
-                        findedItem.models.forEach(model => {
-                            let title = model.title ?? (model.name ?? 'ندارد');
-                            option += `<option value="${model.id}">${title}</option>`;
-                        });
-                        linkableId.innerHTML = option;
-                    } else {
-                        linkableId.innerHTML = `<option value="" selected disabled>آیتمی وجود ندارد</option>`;
-                    }
-                }
-            }
-        }
-    </script>
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+
+				return response.json();
+			}
+		
+		});
+
+	</script>
 @endsection

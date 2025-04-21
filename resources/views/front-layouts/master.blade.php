@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title', 'فروشگاه اطلس مد')</title>
+  <title>@yield('title', 'نارین سنتر')</title>
   @include('front-layouts.includes.styles')
   @yield('styles')
   @stack('styles')

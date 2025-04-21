@@ -44,6 +44,6 @@ class Recommendation extends Model
     foreach ($recommendationsIds as $id) {
       $recommendations->clone()->whereKey($id)->update(['order' => $order--]);
     }
-    Helpers::clearCacheInBooted(static::class, 'home_recommendations');
+    // Cache::forget(RecommendationGroup::ALL_GROUPS_CACHE_kEY);
   }
 }

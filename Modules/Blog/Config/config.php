@@ -2,26 +2,22 @@
 
 use Modules\Blog\Entities\Post;
 
-$statusPublished = Post::STATUS_PUBLISHED;
-$statusDraft = Post::STATUS_DRAFT;
-$statusPending = Post::STATUS_PENDING;
-$statusUnpublished = Post::STATUS_UNPUBLISHED;
-
 return [
-    'name' => 'Blog',
-    'orderCacheTime' => 6000,
 
-    'statuses' => [
-        $statusPublished => 'انتشار یافته',
-        $statusDraft => 'پیش نویس',
-        $statusPending => 'در انتظار تایید',
-        $statusUnpublished => 'منتشر نشده',
-    ],
+	'name' => 'Blog',
+	'orderCacheTime' => 6000,
 
-    'status_color' => [
-        $statusPublished => 'success',
-        $statusDraft => 'info',
-        $statusPending => 'warning',
-        $statusUnpublished => 'danger',
-    ]
+	'statuses' => [
+		Post::STATUS_PUBLISHED => 'انتشار یافته',
+		Post::STATUS_DRAFT => 'پیش نویس',
+		Post::STATUS_PENDING => 'در انتظار تایید',
+		Post::STATUS_UNPUBLISHED => 'منتشر نشده',
+	],
+
+	'status_color' => [
+		Post::STATUS_PUBLISHED => 'success',
+		Post::STATUS_DRAFT => 'info',
+		Post::STATUS_PENDING => 'warning',
+		Post::STATUS_UNPUBLISHED => 'danger',
+	]
 ];

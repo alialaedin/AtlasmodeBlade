@@ -20,8 +20,8 @@
         @php
           $orderDetails = [
             ['title' => 'شناسه سفارش', 'value' => $order->id],
-            ['title' => 'تاریخ ثبت', 'value' => verta($order->created_at)->format('Y/m/d H:i:')],
-            ['title' => 'تاریخ تحویل', 'value' => verta($order->delivered_at)->format('Y/m/d H:i:s')],
+            ['title' => 'تاریخ ثبت', 'value' => verta($order->created_at)->format('Y/m/d H:i')],
+            ['title' => 'تاریخ تحویل', 'value' => verta($order->delivered_at)->format('Y/m/d')],
             ['title' => 'وضعیت سفارش', 'value' => __('statuses.' . $order->status)],
             ['title' => 'شیوه ارسال', 'value' => $order->shipping->name],
           ];

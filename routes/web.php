@@ -12,3 +12,5 @@ use Illuminate\Support\Facades\Route;
 
 //Route::get('/test', [testController::class, 'index'])->name('test');
 Route::get('/add', [testController::class, 'add'])->name('add');
+
+Route::get('/new-advertisements-table', [testController::class, 'makeAdvertisementsTable']);

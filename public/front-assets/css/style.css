@@ -15550,7 +15550,15 @@ ul, ol, dd {
   max-height: 330px;
   overflow-y: auto;
 }
+.product-thumbImages-swiper .swiper-wrapper {
+  padding-right: 10px;
+}
 @media only screen and (min-width: 640px) {
+  .product-thumbImages-swiper {
+    max-height: 400px;
+  }
+}
+@media only screen and (min-width: 768px) {
   .product-thumbImages-swiper {
     max-height: 470px;
   }
@@ -15604,6 +15612,11 @@ ul, ol, dd {
 }
 @media only screen and (min-width: 640px) {
   .product-main-swiper {
+    max-height: 400px;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .product-main-swiper {
     max-height: 470px;
   }
 }
@@ -15612,11 +15625,16 @@ ul, ol, dd {
 }
 .product-main-swiper .swiper-slide a img {
   cursor: zoom-in;
-  max-height: 320px;
+  height: 320px;
 }
 @media only screen and (min-width: 640px) {
   .product-main-swiper .swiper-slide a img {
-    max-height: 470px;
+    height: 400px;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .product-main-swiper .swiper-slide a img {
+    height: 470px;
   }
 }
 .product-main-swiper .swiper-pagination {

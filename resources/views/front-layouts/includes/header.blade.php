@@ -61,13 +61,6 @@
 																{{ $grandChildCategory->title }}
 															</a>
 														</li>
-														<li class="mainMenu-sublist-item me-3 text-medium">
-															<a 
-																class="text-truncate color-gray-700 text-medium" 
-																href="{{ route('front.products.index', ['category_id' => $grandChildCategory->id]) }}">
-																{{ $grandChildCategory->title }}
-															</a>
-														</li>
 													@endforeach
 												</ul>
 											</li>
@@ -79,32 +72,60 @@
 					@endif
 				@endforeach
 
-				@foreach (count($menus) ? $menus['header'] : [] as $menuItem)
-					@php
-						$href = '/';
-						// switch ($menuItem->linkable_type) {
-						// 	case 'Modules\Category\Entities\Category':
-						// 		$href = route('front.products', ['category_id' => $menuItem->linkable_id]);
-						// 		break;
-						// 	case 'Modules\Blog\Entities\Post':
-						// 		$href = route('front.posts', ['id' => $menuItem->linkable_id]);
-						// 		break;
-						// 	case 'Custom\AboutUs':
-						// 		$href = url('/about-us');
-						// 		break;
-						// 	case 'Custom\ContactUs':
-						// 		$href = url('/contact');
-						// 		break;
-						// 	default:
-						// 		$href = $menuItem->link;
-						// 		break;
-						// }
-					@endphp
-					<li class="mainMenu-li">
-						<a href="{{ $href }}" class="mainMenu-item d-flex align-items-center gap-2">
-							<span class="text-medium">{{ $menuItem->title }}</span>
-						</a>
-					</li>
+				@foreach (count($menus) ? $menus['header'] : [] as $headerParentMenuItem)
+					@if ($headerParentMenuItem->children->isEmpty())
+						<li class="mainMenu-li">
+							<a href="{{ $headerParentMenuItem->link_url }}" class="mainMenu-item d-flex align-items-center gap-2">
+								<span class="text-medium">{{ $headerParentMenuItem->title }}</span>
+							</a>
+						</li>
+					@else
+						<li class="mainMenu-li-hasSubMenu">
+							<a href="{{ $headerParentMenuItem->link_url }}" class="mainMenu-item-hasSubMenu d-flex align-items-center gap-1">
+								<span class="text-medium">{{ $headerParentMenuItem->title }}</span>
+								<i class="icon-angle-down icon-fs-small color-gray-700"></i>
+							</a>
+							<div class="subMenu w-p-100 position-absolute py-6 px-5 bg-white">
+								<ul class="mainMenu-sublist w-p-100 h-p-100 d-flex flex-column flex-wrap">
+									@foreach ($headerParentMenuItem->children as $headerChildMenuItem)
+										@if ($headerChildMenuItem->children->isEmpty())
+											<li class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
+												<span class="horizontal-divider h-5 bg-black"></span>
+												<a 
+													class="text-truncate text-medium" 
+													href="{{ $headerChildMenuItem->link_url }}">
+													{{ $headerChildMenuItem->title }}
+												</a>
+											</li>
+										@else
+											<li class="d-flex flex-column">
+												<div class="mainMenu-sublist-item-main pb-1 d-flex align-items-center gap-2">
+													<span class="horizontal-divider h-5 bg-black"></span>
+													<a 
+														class="text-truncate text-medium" 
+														href="{{ $headerChildMenuItem->link_url }}">
+														{{ $headerChildMenuItem->title }}
+													</a>
+													<i class="icon-angle-left icon-fs-medium pb-1"></i>
+												</div>
+												<ul class="d-flex flex-column">
+													@foreach ($headerChildMenuItem->children as $headerGrandChildMenuItem)
+														<li class="mainMenu-sublist-item me-3 text-medium">
+															<a 
+																class="text-truncate color-gray-700 text-medium" 
+																href="{{ $headerGrandChildMenuItem->link_url }}">
+																{{ $headerGrandChildMenuItem->title }}
+															</a>
+														</li>
+													@endforeach
+												</ul>
+											</li>
+										@endif
+									@endforeach
+								</ul>
+							</div>
+						</li>
+					@endif
 				@endforeach
 
 			</ul>

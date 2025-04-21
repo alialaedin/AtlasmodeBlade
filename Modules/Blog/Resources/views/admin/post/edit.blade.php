@@ -147,11 +147,12 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="text-center">
-                            <button class="btn btn-warning" type="submit">بروزرسانی</button>
-                        </div>
+                      <div class="text-center">
+                        <button class="btn btn-sm btn-warning" type="submit">بروزرسانی</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="window.location.reload()">ریست فرم</ذ>
+                      </div>
                     </div>
-                </div>
+                  </div>
             </form>
         </x-slot>
     </x-card>

@@ -9,6 +9,7 @@
   type="button" 
   class="btn btn-danger btn-sm text-white" 
   data-original-title="حذف" 
+  style="padding-inline: 8px"
   @if ($disabled) disabled @endif
   onclick="confirmDelete('delete-{{ $model->id }}')" >
   @if ($hasTitle)

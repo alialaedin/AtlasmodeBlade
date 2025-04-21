@@ -10,6 +10,7 @@ use Modules\Core\Classes\DontAppend;
 use Modules\Core\Entities\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Modules\Blog\Entities\Post;
 
 class Comment extends BaseModel
 {
@@ -55,6 +56,11 @@ class Comment extends BaseModel
     $result = parent::getArrayableRelations();
 
     return $result;
+  }
+
+  public function post()
+  {
+    return $this->belongsTo(Post::class, 'commentable_id');
   }
 
   public function commentable(): MorphTo

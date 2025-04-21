@@ -1,147 +1,212 @@
 @extends('admin.layouts.master')
 @section('content')
-<div class="page-header">
-    <x-breadcrumb :items="[['title' => 'لیست جایگاه ها', 'route_link' => 'admin.positions.index'], ['title' => 'ویرایش بنر']]" />
-    @can('write_page')
-    <x-create-button type="modal" target="createAdvertisementsModal" title="بنر جدید" />
-    @endcan
-</div>
-<!--  Page-header closed -->
 
-<!-- row opened -->
+<div class="page-header">
+	<x-breadcrumb :items="[
+		['title' => 'بنر های تبلیغاتی', 'route_link' => 'admin.advertisements.index'],
+		['title' => 'ویرایش بنر تبلیغاتی'],
+	]"/>
+</div>
+
 <x-card>
-    <x-slot name="cardTitle">ویرایش بنرهای {{$position->name}} شماره {{$position->id}}</x-slot>
-    <x-slot name="cardOptions"><x-card-options /></x-slot>
-    <x-slot name="cardBody">
-        @include('components.errors')
-        <form action="{{ route('admin.advertisements.update_possibility',$position) }}" method="post">
-            @csrf
-            @method('PATCH')
-            <div class="table-responsive ">
-                <table id="example-2" class="table table-striped table-bordered text-nowrap text-center">
-                    <thead>
-                            <tr>
-                                <th class="border-top">ردیف</th>
-                                <th class="border-top">تصویر</th>
-                                <th class="border-top">در صد احتمال</th>
-                                <th class="border-top">عملیات</th>
-                            </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($position->advertisements as $item)
-                        <tr>
-                            <td class="font-weight-bold">{{$loop->iteration}}</td>
-                            <td>
-                                @if ($item->getMedia('picture')->first()->getUrl())
-                                <div>
-                                    <div class="col-12 mt-2">
-                                    <figure class="figure mt-1">
-                                        <img src="{{ $item->getMedia('picture')->first()->getUrl() }}" class="img-thumbnail" alt="image" width="150" style="max-height: 80px;" />
-                                    </figure>
-                                    </div>
-                                </div>
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td>
-                                <input type="hidden" name="banner_ids[]" value="{{ $item->id }}">
-                                <input id="banner-label"  name="banner_possibility[]" type="text" class="form-control" value="{{$item->possibility}}">
-                            </td>
-                            <td>
-                                @include('core::includes.edit-modal-button',[
-                                    'target' => "#edit-position-".$item->id
-                                ])
-                            <button
-                            onclick="confirmDelete('delete-{{ $item->id }}')"
-                            class="btn btn-sm btn-icon btn-danger text-white"
-                            data-toggle="tooltip"
-                            type="button"
-                            data-original-title="حذف"
-                            {{ isset($disabled) ? 'disabled' : null }}>
-                            {{ isset($title) ? $title : null}}
-                            <i class="fa fa-trash-o {{ isset($title) ? 'mr-1' : null }}"></i>
-                        </button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="text-center">
-                        <button class="btn btn-warning" type="submit">به روزرسانی</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </x-slot>
+	<x-slot name="cardTitle">ویرایش بنر تبلیغاتی</x-slot>
+	<x-slot name="cardOptions"><x-card-options /></x-slot>
+	<x-slot name="cardBody">
+		@include('components.errors')
+		<form action="{{ route('admin.advertisements.update',$advertise) }}" method="POST" enctype="multipart/form-data">
+
+			@csrf
+			@method('PUT')
+
+			<div class="row">
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<label>تصویر :</label>
+					<div class="custom-file">
+						<input type="file" name="picture" class="custom-file-input" accept="image/*" >
+						<label class="custom-file-label">انتخاب تصویر</label>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label for="start_show">تاریخ آغاز :</label>
+						<input class="form-control fc-datepicker" id="start_show" type="text" autocomplete="off" placeholder="انتخاب تاریخ آغاز" />
+						<input name="start" id="start_hide" type="hidden" value="{{ old('start', $advertise->start) }}" />
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label for="start_show">تاریخ پایان :</label>
+						<input class="form-control fc-datepicker" id="end_show" type="text" autocomplete="off" placeholder="انتخاب تاریخ پایان" />
+						<input name="end" id="end_hide" type="hidden" value="{{ old('end', $advertise->end) }}" />
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label>نوع لینک :</label>
+						<select id="linkableTypeSelect" name="linkable_type" class="form-control">
+							<option value="self_link" @if (old('linkable_type') == 'self_link' || $advertise->link) selected @endif>لینک دلخواه</option>
+							@foreach ($linkables as $linkable)
+								<option 
+									{{-- {{ $advertise->unique_type == $linkable['unique_type'] }} --}}
+									value="{{ $linkable['unique_type'] }}">
+									{{ $linkable['label'] }}
+								</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label>آیتم های لینک :</label>
+						<select id="linkableIdSelect" name="linkable_id" class="form-control">
+							<option value="">انتخاب</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label>لینک دلخواه :</label>
+						<input id="selfLinkInput" type="text" name="link" value="{{ old('link', $advertise->link) }}" class="form-control">
+					</div>
+				</div>
+
+				@if ($advertise->picture !== null)
+					<div class="col-12">
+						<p class="header pr-2 font-weight-bold fs-22">تصویر فعلی</p>
+						<div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="border-radius: 4px;">
+							<img src="{{ $advertise->picture_url }}">
+						</div>
+					</div>
+				@endif
+
+				@php
+					$checkboxes = [
+						['title' => 'status', 'label' => 'وضعیت', 'default' => $advertise->status],
+						['title' => 'new_tab', 'label' => 'تب جدید', 'default' => $advertise->new_tab],
+					];
+				@endphp
+
+				<div class="col-12">
+					<div class="form-group">
+						@foreach ($checkboxes as $checkbox)
+							<label class="custom-control custom-checkbox">
+								<input 
+									type="checkbox" 
+									class="custom-control-input" 
+									name="{{ $checkbox['title'] }}" 
+									value="1" 
+									{{ old($checkbox['title'], $checkbox['default']) == 1 ? 'checked' : null }} />
+								<span class="custom-control-label">{{ $checkbox['label'] }}</span>
+							</label>
+						@endforeach
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row">
+				<div class="col">
+					<div class="text-center">
+						<button class="btn btn-sm btn-warning" type="submit">بروزرسانی</button>
+						<button class="btn btn-sm btn-danger" type="button" onclick="window.location.reload()">ریست فرم</ذ>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</x-slot>
 </x-card>
-@foreach ($position->advertisements as $item)
-<form
-  action="{{ route('admin.advertise.destroy', $item->id) }}"
-  method="POST"
-  id="delete-{{ $item->id }}"
-  style="display: none">
-  @csrf
-  @method('DELETE')
-  <input type="hidden" name="position_id" value="{{$position->id}}">
-</form>
-@endforeach
-@foreach($position->advertisements as $item)
-<x-modal id="edit-position-{{ $item->id }}" size="lg">
-    <x-slot name="title">ویرایش بنر</x-slot>
-    <x-slot name="body">
-        <form action="{{route('admin.advertise.update', [$item->id])}}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PATCH')
-            <div class="modal-body">
-                <div class="col-12 form-group">
-                    <label class="control-label">لینک:<span class="text-danger">&starf;</span></label>
-                    <input type="text" class="form-control" name="link"  placeholder="لینک را اینجا وارد کنید" value="{{ old('link',$item->link) }}" required autofocus>
-                </div>
-                <div class="col-12 form-group">
-                    <label class="control-label">تصویر:</label>
-                    <input  class="form-control" type="file" name="image">
-                </div>
-                <input type="hidden" name="position_id" value="{{$position->id}}">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                        <label for="label" class="control-label"> تب جدید: </label>
-                        <label class="custom-control custom-checkbox">
-                            <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            name="new_tab"
-                            value="1"
-                            {{ old('new_tab', $item->new_tab) == 1 ? 'checked' : null }}
-                            />
-                            <span class="custom-control-label">فعال</span>
-                        </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="submit" class="btn btn-warning text-right item-right">به روزرسانی</button>
-                <button type="button" class="btn btn-outline-danger text-right item-right" data-dismiss="modal">برگشت</button>
-            </div>
-        </form>
-    </x-slot>
-</x-modal>
-@endforeach
-<!-- row closed -->
-@include('advertise::admin.advertise.create')
+
 @endsection
+
 @section('scripts')
+
   @include('core::includes.date-input-script', [
-    'dateInputId' => 'from_published_at_hide',
-    'textInputId' => 'from_published_at_show'
+    'dateInputId' => 'start_hide',
+    'textInputId' => 'start_show'
   ])
+
   @include('core::includes.date-input-script', [
-    'dateInputId' => 'from_end_at_hide',
-    'textInputId' => 'from_end_at_show'
+    'dateInputId' => 'end_hide',
+    'textInputId' => 'end_show'
   ])
+
+<script>
+
+	const advertise = @json($advertise);
+	const linkables = @json($linkables);
+
+	const linkableTypeSelect = $('#linkableTypeSelect');
+	const linkableIdSelect = $('#linkableIdSelect');
+	const selfLinkInput = $('#selfLinkInput');
+
+	if (advertise.link) {
+		linkableTypeSelect.prepend('<option value="">انتخاب</option>');
+		linkableTypeSelect.select2({ placeholder: 'نوع لینک را اتنخاب کنید' });
+	} else {
+		selfLinkInput.prop('disabled', true);
+		const selectedLinkable = linkables.find(l => l.linkable_type == advertise.linkable_type);
+		if (selectedLinkable.models !== null || selectedLinkable.models?.length > 0) {
+			linkableIdSelect.select2({ placeholder: 'آیتم مورد نظر را انتخاب کنید' });
+			selectedLinkable.models.forEach(model => {
+				const selected = advertise.linkable_id == model.id ? 'selected' : '';
+				linkableIdSelect.append(`<option value="${model.id}" ${selected}>${model.title}</option>`);
+			});
+		} else {
+			linkableIdSelect.select2({ placeholder: 'آیتمی برای انتخاب وجود ندارد' });
+		}
+	}
+
+	const changeSelfLinkInputDisabled = (bool) => selfLinkInput.prop('disabled', bool);
+	const isEmpty = (models) => !models || models.length === 0;
+	const getLinkableByUniqueType = (type) => linkables.find(l => l.unique_type == type);
+	const hasValidModels = (models) => models && models.length > 0;
+	const initializeSelect2 = (element, placeholder) => element.select2({ placeholder });
+
+	const emptyLinkableIdSelect = () => {
+		linkableIdSelect.empty();
+		linkableIdSelect.append('<option value="">انتخاب</option>');
+	}
+
+	function handleLinkableTypeSelect() {
+
+		linkableTypeSelect.on('select2:select', () => {
+
+			const value = linkableTypeSelect.val();
+
+			changeSelfLinkInputDisabled(value !== 'self_link');
+			emptyLinkableIdSelect();
+
+			if (value == 'self_link') {
+				initializeSelect2(linkableIdSelect, 'لطفا لینک دلخواه را پر کنید');
+				return;
+			}
+
+			const linkable = getLinkableByUniqueType(value);
+
+			if (isEmpty(linkable?.models ?? [])) {
+				initializeSelect2(linkableIdSelect, 'آیتمی برای انتخاب وجود ندارد');
+				return;
+			}
+
+			initializeSelect2(linkableIdSelect, 'آیتم مورد نظر را انتخاب کنید');
+			linkable.models.forEach((model) => {
+				linkableIdSelect.append(`<option value="${model.id}">${model.title}</option>`);
+			});
+
+		});
+	}
+
+	$(document).ready(() => {
+		handleLinkableTypeSelect();
+	});
+
+</script>
+
 @endsection

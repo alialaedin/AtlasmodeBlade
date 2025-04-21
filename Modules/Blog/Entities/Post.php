@@ -6,6 +6,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Modules\Comment\Entities\Commentable;
 use Modules\Comment\Entities\HasComment;
 use Modules\Core\Helpers\Helpers;
@@ -29,21 +30,22 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
     HasTags,
     InteractsWithViews;
 
-  const STATUS_DRAFT = 'draft';
-  const STATUS_PENDING = 'pending';
-  const STATUS_PUBLISHED = 'published';
-  const STATUS_UNPUBLISHED = 'unpublished';
+  public const STATUS_DRAFT = 'draft';
+  public const STATUS_PENDING = 'pending';
+  public const STATUS_PUBLISHED = 'published';
+  public const STATUS_UNPUBLISHED = 'unpublished';
 
-  // protected  $appends = ['image', 'views_count'];
-
-  // protected $hidden = ['media'];
+  private const HOME_POSTS_CACHE_KEY = 'homePosts';
 
   public $sortable = [
     'order_column_name' => 'order',
     'sort_when_creating' => true,
   ];
 
+  protected $appends = ['image', 'views_count'];
+  protected $hidden = ['media'];
   protected $withCount = ['comments'];
+  protected $dates = ['published_at'];
 
   protected $fillable = [
     'title',
@@ -54,10 +56,6 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
     'meta_description',
     'status',
     'special',
-    'published_at'
-  ];
-
-  protected $dates = [
     'published_at'
   ];
 
@@ -78,9 +76,7 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
     'updaterable_id'
   ];
 
-  protected $longFields = [
-    'body'
-  ];
+  protected $longFields = ['body'];
 
   public function sluggable(): array
   {
@@ -97,7 +93,7 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
       $post->tags()->detach();
       $post->comments()->delete();
     });
-    Helpers::clearCacheInBooted(static::class, 'home_post');
+    Helpers::clearCacheInBooted(static::class, self::HOME_POSTS_CACHE_KEY);
   }
 
   public static function getAvailableStatuses()
@@ -143,6 +139,19 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
       ->latest('id')
       ->take($take)
       ->get();
+  }
+
+  public static function getPostsForFront()
+  {
+    return Cache::rememberForever(self::HOME_POSTS_CACHE_KEY, function (){
+			return self::query()
+				->select(['id', 'post_category_id', 'title', 'status', 'published_at'])
+				->with('category', fn($q) => $q->select(['id', 'name']))
+				->published()
+				->latest('id')
+				->take(4)
+				->get();
+		});
   }
 
   public function getViewsCountAttribute()
@@ -202,9 +211,6 @@ class Post extends Model implements Sortable, HasMedia, HasComment, Viewable
   {
     return $this->status == self::STATUS_PUBLISHED && $this->published_at <= now();
   } 
-
-
-  //Relations
 
   public function category()
   {

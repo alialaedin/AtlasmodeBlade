@@ -74,9 +74,8 @@
 
                     <div class="col-12 col-md-6">
                         <div class="form-group">
-                            <label for="image" class="control-label"> تصویر: </label>
-                            <input type="file" id="image" class="form-control" name="image"
-                                value="{{ old('image') }}">
+                            <label for="image" class="control-label"> تصویر: <span class="text-danger">&starf;</span></label>
+                            <input type="file" id="image" class="form-control" name="image" value="{{ old('image') }}">
                         </div>
                     </div>
 
@@ -95,15 +94,14 @@
                     </div>
 
                     <div class="col-12">
-                        @include('components.editor', [
-                            'name' => 'body',
-                            'required' => 'true',
-                            'field_name' => 'body',
-                        ])
-                        {{-- <div class="form-group">
+                        <div class="form-group">
                             <label for="body" class="control-label">متن:<span class="text-danger">&starf;</span></label>
-                            <textarea name="body" class="form-control">{{ old('body') }}</textarea>
-                        </div> --}}
+                            @include('components.editor', [
+                                'name' => 'body',
+                                'required' => 'true',
+                                'field_name' => 'body',
+                            ])
+                        </div>
                     </div>
 
                     {{-- <div class="col-12">
@@ -133,13 +131,16 @@
                         </div> --}}
 
                 </div>
+
                 <div class="row">
                     <div class="col">
-                        <div class="text-center">
-                            <button class="btn btn-primary" type="submit">ثبت و ذخیره</button>
-                        </div>
+                      <div class="text-center">
+                        <button class="btn btn-sm btn-primary" type="submit">ثبت و ذخیره</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="window.location.reload()">ریست فرم</ذ>
+                      </div>
                     </div>
-                </div>
+                  </div>
+
             </form>
         </x-slot>
     </x-card>

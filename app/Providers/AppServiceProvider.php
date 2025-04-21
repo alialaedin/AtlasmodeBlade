@@ -87,32 +87,8 @@ class AppServiceProvider extends ServiceProvider
 				return Setting::query()->where('private', false)->get();
 			});
 
-			$menus = Helpers::cacheForever('home_menu', function () {
-				return MenuItem::query()
-					->orderByDesc('order')
-					->isParent()
-					->active()
-					->with('children', 'group')
-					->get()
-					->groupBy('group.title');
-			});
-
-			$selectedColumns = ['id', 'title', 'priority', 'parent_id'];
-			$categories = Category::query()
-				->select($selectedColumns)
-				->orderBy('priority')
-				->with([
-					'children' => function ($q) use ($selectedColumns) {
-						$q->select($selectedColumns)
-							->orderBy('priority')
-							->active()
-							->with('children', fn($q) => $q->active()->select($selectedColumns));
-					}
-				])
-				->parents()
-				->active()
-				->get();
-
+			$menus = MenuItem::getMenusForFront();
+			$categories = Category::getCategoriesForFront();
 			$user = Auth::guard('customer')->user();
 			$cartsCount = $user?->carts->count() ?? 0;
 			

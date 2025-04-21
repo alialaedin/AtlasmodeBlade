@@ -112,11 +112,9 @@
 					<x-product-search cols="col-12 col-md-6 col-xl-3" :has-label="false"/>
 				</div>
 				<div class="row">
-					<div class="col-12 col-md-6 col-xl-9">
-						<button class="btn btn-primary btn-block" type="submit">جستجو <i class="fa fa-search"></i></button>
-					</div>
-					<div class="col-12 col-md-6 col-xl-3">
-						<a href="{{ route('admin.orders.index') }}" class="btn btn-danger btn-block">حذف همه فیلتر ها <i class="fa fa-close"></i></a>
+					<div class="col-12 d-flex justify-content-center" style="gap: 8px">
+						<button class="btn btn-sm btn-primary" type="submit">جستجو و فیلتر <i class="fa fa-search"></i></button>
+						<a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-danger">حذف فیلتر ها <i class="fa fa-close"></i></a>
 					</div>
 				</div>
 			</form>
@@ -193,7 +191,7 @@
 									{{ config('order.statusLabels.' . $order->status) }}
 								</button>
 							</td>
-							<td>{{ $order->delivered_at ? verta($order->delivered_at)->format('Y/m/d H:i') : '-' }}</td>
+							<td>{{ $order->delivered_at ? verta($order->delivered_at)->format('Y/m/d') : '-' }}</td>
 							<td>
 								@include('core::includes.show-icon-button', [
 									'route' => 'admin.orders.show',

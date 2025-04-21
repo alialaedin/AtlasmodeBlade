@@ -43,7 +43,7 @@ class LinkValidator
 
   public function validate()
   {
-    if ($this->request->filled('linkable_type')) {
+    if ($this->request->filled('linkable_type') && $this->request->linkable_type != 'self_link') {
       $this->mergeLinkableType();
       $this->request->merge([
         'link' => null

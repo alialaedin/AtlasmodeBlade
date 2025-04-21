@@ -25,7 +25,7 @@ class AdminServiceProvider extends ServiceProvider
   public function boot()
   {
     //        $this->registerTranslations();
-    //        $this->registerConfig();
+    $this->registerConfig();
     $this->registerViews();
     if (AppServiceProvider::$runningInConsole) {
       $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));

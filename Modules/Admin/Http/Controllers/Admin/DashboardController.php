@@ -9,7 +9,10 @@ use Modules\Dashboard\Services\ReportService;
 use Modules\Home\Entities\SiteView;
 use Modules\Order\Entities\Order;
 use Carbon\Carbon;
+use Hekmatinasser\Verta\Facades\Verta;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
+use Modules\Core\Helpers\Helpers;
 use Modules\Customer\Entities\Customer;
 use Modules\ProductComment\Entities\ProductComment;
 use Spatie\Activitylog\Models\Activity;
@@ -25,12 +28,13 @@ class DashboardController extends Controller
 		$allOrdersCount = Order::count();
 		$todayOrdersCount = $this->getTodayOrdersCount();
 		$todayTotalSales = $this->getTodayTotalSales();
+		$thisMonthTotalSales = $this->getThisMonthTotalSales();
 		$activityLogs = $this->getLatestActivityLogs();
 		$lastLogins = $this->getLatLogins();
 
 		$newProductComments = $this->getNewProductComments();
 		$productCommentsCount = ProductComment::count();
-
+		
 		$newPostComments =  $this->getNewPostComments();
 		$postCommentsCount =  Comment::count();
 
@@ -46,51 +50,6 @@ class DashboardController extends Controller
 		$sumDataGender = $genderStatistics->males_count + $genderStatistics->females_count + $genderStatistics->unknowns_count;
 		$siteviews = $this->getSiteViews();
 
-		// barCharts data ====================================================================
-		$barCharts = Cache::get("barChart");
-		if (!$barCharts) {
-			$yearlySums = Order::query()
-				->selectRaw('DATE_FORMAT(created_at, "%Y") as year, SUM(total_amount - discount_amount + shipping_amount) as total_invoices_amount_per_year')
-				->whereIn('status', Order::ACTIVE_STATUSES)
-				->groupBy('year')
-				->orderBy('year', 'asc')
-				->pluck('total_invoices_amount_per_year')->toArray();
-
-			$startOfPersianMonth = verta()->startYear();
-			$monthlySums = [];
-			while ($startOfPersianMonth->format('m') <= verta()->format('m')) {
-				$monthlySums[] = Order::query()
-					->selectRaw(' SUM(total_amount - discount_amount + shipping_amount) as total_invoices_amount_per_month')
-					->whereIn('status', Order::ACTIVE_STATUSES)
-					->whereBetween('created_at', [$startOfPersianMonth->formatGregorian('Y-m-d H:i:s'), $startOfPersianMonth->addMonth()->formatGregorian('Y-m-d H:i:s')])
-					//                    ->groupBy('month')
-					//                    ->orderBy('month', 'asc')
-					->first()->total_invoices_amount_per_month;
-				$startOfPersianMonth = $startOfPersianMonth->addMonth();
-			}
-
-			$firstDayOfThisMonthInPersianDate = verta()->startMonth()->formatGregorian('Y-m-d H:i:s');
-			$dailySums = Order::query()
-				->selectRaw('DATE(created_at) as date, SUM(total_amount - discount_amount + shipping_amount) as total_invoices_amount_per_day')
-				->whereIn('status', Order::ACTIVE_STATUSES)
-				->where('created_at', '>=', $firstDayOfThisMonthInPersianDate)
-				->groupBy('date')
-				->orderBy('date', 'asc')
-				->pluck('total_invoices_amount_per_day')->toArray();
-
-			$yearsList = [];
-			$firstOrder = Order::query()->first();
-			$yearOfFirstOrder = verta(($firstOrder->created_at) ?? null)->format('Y');
-			$yearOfNow = verta()->format('Y');
-			while ($yearOfFirstOrder <= $yearOfNow) {
-				$yearsList[] = (int)$yearOfFirstOrder;
-				$yearOfFirstOrder++;
-			}
-
-			$barCharts = compact('yearlySums', 'monthlySums', 'dailySums', 'yearsList');
-			Cache::put("barChart", $barCharts, now()->addHour());
-		}
-
 		return view('admin::dashboard', compact([
 			'latestOrders',
 			'allOrdersCount',
@@ -99,13 +58,13 @@ class DashboardController extends Controller
 			'activityLogs',
 			'lastLogins',
 			'newProductComments',
+			'thisMonthTotalSales',
 			'productCommentsCount',
 			'postCommentsCount',
 			'newPostComments',
 			'dataGender',
 			'sumDataGender',
 			'siteviews',
-			'barCharts'
 		]));
 	}
 
@@ -141,28 +100,55 @@ class DashboardController extends Controller
 
 	private function getTodayTotalSales()
 	{
-		return Order::query()
-			->whereDate('created_at', Carbon::today())
-			->whereIn('status', Order::ACTIVE_STATUSES)
-			->selectRaw('SUM(total_amount - discount_amount + shipping_amount) AS total')
-			->value('total');
+		$totalSales = DB::table('orders as o')
+			->join('order_items as oi', 'oi.order_id', '=', 'o.id')
+			->whereDate('o.created_at', Carbon::today())
+			->whereIn('o.status', Order::ACTIVE_STATUSES)
+			->select([
+				DB::raw('SUM(oi.amount * oi.quantity) AS item_total'),
+				DB::raw('SUM(o.discount_amount) AS total_discount'),
+				DB::raw('SUM(o.shipping_amount) AS total_shipping')
+			])
+			->first();
+		
+		return $totalSales->item_total - $totalSales->total_discount + $totalSales->total_shipping;
 	}
+
+	private function getThisMonthTotalSales()
+	{
+		$startDate = Helpers::toGregorian(Verta::startMonth());
+		$endDate = Helpers::toGregorian(Verta::endMonth());
+
+		$totalSales = DB::table('orders as o')
+			->join('order_items as oi', 'oi.order_id', '=', 'o.id')
+			->whereBetween('o.created_at', [$startDate, $endDate])
+			->whereIn('o.status', Order::ACTIVE_STATUSES)
+			->select([
+				DB::raw('SUM(oi.amount * oi.quantity) AS item_total'),
+				DB::raw('SUM(o.discount_amount) AS total_discount'),
+				DB::raw('SUM(o.shipping_amount) AS total_shipping')
+			])
+			->first();
+		
+		return $totalSales->item_total - $totalSales->total_discount + $totalSales->total_shipping;
+	}
+
 
 	private function getLatestActivityLogs()
 	{
 		return Activity::query()
 			->select('id', 'causer_id', 'description', 'created_at')
 			->latest('id')
-			->take(6)
+			->take(10)
 			->get();
 	}
 
 	private function getLatLogins()
 	{
 		return PersonalAccessToken::query()
-			->select(['id', 'tokenable_id', 'tokenable_type', 'created_at'])
+			->select(['id', 'tokenable_id', 'tokenable_type', 'updated_at'])
 			->latest('id')
-			->take(4)
+			->take(10)
 			->with('tokenable')
 			->get();
 	}
@@ -181,8 +167,8 @@ class DashboardController extends Controller
 	{
 		return Comment::query()
 			->latest('id')
-			->whereStatus(Comment::STATUS_UNAPPROVED)
-			->with('commentable')
+			->whereIn('status', [Comment::STATUS_UNAPPROVED, Comment::STATUS_PENDING])
+			->with('post.creator')
 			->take(5)
 			->get();
 	}
@@ -202,10 +188,10 @@ class DashboardController extends Controller
 
 	private function getSiteViews()
 	{
-		$siteviewslist = array();
+		$siteviewslist = [];
 		$siteViews = SiteView::query()
 			->orderBy('id', 'DESC')
-			->where('date', '>=', now()->subDays(8)->endOfDay())
+			->where('date', '>=', now()->subDays(10)->endOfDay())
 			->get()
 			->groupBy('date');
 
@@ -216,6 +202,6 @@ class DashboardController extends Controller
 			}
 		}
 
-		return (object) $siteviewslist;
+		return $siteviewslist;
 	}
 }

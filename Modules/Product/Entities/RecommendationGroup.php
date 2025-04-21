@@ -23,9 +23,33 @@ class RecommendationGroup extends Model
     });
   }
 
-  public static function getForHomePage()
+  public static function getGroupsWithItemsForFront()
   {
-    return self::getAllGroups()->where('show_in_home', 1);
+    $recommendationGroups = self::getAllGroups()->where('show_in_home', 1)->filter(fn ($group) => $group->items_count > 0);
+		foreach ($recommendationGroups as $group) {
+			$productIds = Recommendation::where('group_id', $group->id)->latest('order')->pluck('product_id')->toArray();
+			$products = Product::query()
+				->select(['id', 'status', 'title'])
+				->whereIn('id', $productIds)
+				->available(true)
+				->take(8)
+        ->orderByRaw('FIELD(`id`, ' . implode(", ", $productIds) . ')')
+				->with([
+					'media',
+					'varieties' => function ($vQuery) {
+						$vQuery->select(['id', 'product_id', 'discount', 'discount_until', 'discount_type', 'price']);
+						$vQuery->with('store:id,variety_id,balance');
+						$vQuery->with('product:id');
+					}
+				])
+				->get()
+				->each(function ($product) {
+					$product->append(['main_image', 'final_price']);
+					$product->makeHidden(['varieties', 'activeFlash']);
+				});
+			$group->products = $products;
+		}
+		return $recommendationGroups;
   }
 
   public function items()

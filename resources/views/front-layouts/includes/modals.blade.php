@@ -42,7 +42,7 @@
 											</button>
 										</div>
 										<ul class="menu-sublist-child d-flex flex-column border-e-gray-300 pe-3">
-											@foreach ($colchildCategory->chidren as $grandChildCategory)
+											@foreach ($childCategory->chidren ?? [] as $grandChildCategory)
 												<li class="mainMenu-sublist-item me-3 text-medium">
 													<a class="text-truncate text-medium" href="{{ route('front.products.index', ['category_id' => $childCategory->id]) }}">
 														{{ $grandChildCategory->title }}
@@ -110,7 +110,7 @@
 											<li class="mainMenu-sublist-item me-3 text-medium">
 												<a class="text-truncate text-medium d-flex align-items-center gap-1" href="{{ route('front.products.index', ['category_id' => $parentCategory->id]) }}">
 													<i class="icon-dot-single icon-fs-xlarge"></i>
-													<span>{{ $parentCategory->title }}</span>
+													<span>{{ $childCategory->title }}</span>
 												</a>
 											</li>
 										@else
@@ -124,34 +124,72 @@
 				</ul>
 			@endif
 		</li>
-		@foreach (count($menus) ? $menus['header'] : [] as $menuItem)
-			@php
-				$href = '/';
-				// switch ($menuItem->linkable_type) {
-				// 	case 'Modules\Category\Entities\Category':
-				// 		$href = route('front.products', ['category_id' => $menuItem->linkable_id]);
-				// 		break;
-				// 	case 'Modules\Blog\Entities\Post':
-				// 		$href = route('front.posts', ['id' => $menuItem->linkable_id]);
-				// 		break;
-				// 	case 'Custom\AboutUs':
-				// 		$href = url('/about-us');
-				// 		break;
-				// 	case 'Custom\ContactUs':
-				// 		$href = url('/contact');
-				// 		break;
-				// 	default:
-				// 		$href = $menuItem->link;
-				// 		break;
-				// }
-			@endphp
-			<li>
-				<a class="text-medium-2-strong d-flex gap-1 align-items-center" href="{{ $href }}">
-					<i class="icon-dot-single icon-fs-2xl"></i>
-					<span class="color-gray-900">{{ $menuItem->title }}</span>
-				</a>
-			</li>
-		@endforeach
+
+		@if (isset($menus['header']) && $menus['header']->isNotEmpty())
+			@foreach ($menus['header'] as $headerParentMenuItem)
+				@if ($headerParentMenuItem->children->isEmpty())
+					<li>
+						<a class="text-medium-2-strong d-flex gap-1 align-items-center" href="{{ $headerParentMenuItem->link_url }}">
+							<i class="icon-dot-single icon-fs-2xl"></i>
+							<span class="color-gray-900">{{ $headerParentMenuItem->title }}</span>
+						</a>
+					</li>
+				@else
+					<li class="d-flex flex-column">
+						<div class="d-flex justify-content-between align-items-center">
+							<a class="text-medium-2-strong d-flex gap-1 align-items-center" href="{{ $headerParentMenuItem->link_url }}">
+								<i class="icon-dot-single icon-fs-2xl"></i>
+								<span class="color-gray-900">{{ $headerParentMenuItem->title }}</span>
+							</a>
+							<button type="button" class="category-btn">
+								<i class="icon-angle-left icon-fs-medium-2"></i>
+								<i class="icon-angle-down icon-fs-medium-2"></i>
+							</button>
+						</div>
+						<ul class="menu-sublist pe-3 w-p-100 h-p-100 d-flex flex-column flex-wrap">
+							@foreach ($headerParentMenuItem->children as $headerChildMenuItem)
+								@if ($headerChildMenuItem->children->isEmpty())
+									<li class="mainMenu-sublist-item-main pb-1 mt-1 d-flex align-items-center gap-1">
+										<i class="icon-dot-single icon-fs-xlarge color-secondary-500"></i>
+										<a class="text-truncate text-medium" href="{{ $headerChildMenuItem->link_url }}">
+											{{ $headerChildMenuItem->title }}
+										</a>
+									</li>
+								@else
+									<li class="d-flex flex-column">
+										<div class="mainMenu-sublist-item-main pb-1 d-flex align-items-center justify-content-between">
+											<a class="text-truncate text-medium d-flex align-items-center gap-1" href="{{ $headerChildMenuItem->link_url }}">
+												<i class="icon-dot-single icon-fs-xlarge"></i>
+												<span>{{ $headerChildMenuItem->title }}</span>
+											</a>
+											<button type="button" class="category-btn-child">
+												<i class="icon-angle-left icon-fs-medium-2"></i>
+												<i class="icon-angle-down icon-fs-medium-2"></i>
+											</button>
+										</div>
+										<ul class="menu-sublist-child d-flex flex-column pe-3">
+											@foreach ($headerChildMenuItem->children as $headerGrandChildMenuItem)
+												@if ($headerGrandChildMenuItem->children->isEmpty())
+													<li class="mainMenu-sublist-item me-3 text-medium">
+														<a class="text-truncate text-medium d-flex align-items-center gap-1" href="{{ $headerGrandChildMenuItem->link_url }}">
+															<i class="icon-dot-single icon-fs-xlarge"></i>
+															<span>{{ $headerGrandChildMenuItem->title }}</span>
+														</a>
+													</li>
+												@else
+													{{-- دسته بندی های نوه باید نشون داده بشن --}}
+												@endif
+											@endforeach
+										</ul>
+									</li>
+								@endif	
+							@endforeach
+						</ul>
+					</li>
+				@endif
+			@endforeach
+		@endif
+
 	</ul>
 </div>
 

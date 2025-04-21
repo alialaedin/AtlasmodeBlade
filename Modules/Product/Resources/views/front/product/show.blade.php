@@ -498,19 +498,21 @@
       methods: {
 
         activeLoginBtn() {
-          const btn = document.querySelector('.login-btn');
-          btn.addEventListener('click', function () {
-            const child = this.querySelectorAll('div')[1];
-            child.classList.toggle('active');
-            if (child.classList.contains('active')) {
-              this.style.borderBottomLeftRadius = 'unset';
-              this.style.borderTopLeftRadius = '18px';
-              this.style.borderBottomRightRadius = 'unset';
-              this.style.borderTopRightRadius = '18px';
-            } else {
-              this.style.borderRadius = '100px';
-            }
-          });
+          if (this.isLoggin) {
+            const btn = document.querySelector('.login-btn');
+            btn.addEventListener('click', function () {
+              const child = this.querySelectorAll('div')[1];
+              child.classList.toggle('active');
+              if (child.classList.contains('active')) {
+                this.style.borderBottomLeftRadius = 'unset';
+                this.style.borderTopLeftRadius = '18px';
+                this.style.borderBottomRightRadius = 'unset';
+                this.style.borderTopRightRadius = '18px';
+              } else {
+                this.style.borderRadius = '100px';
+              }
+            });
+          }
         },
         openSearchModal() {
           document.querySelector('.search').addEventListener('click', function () {

@@ -11,7 +11,7 @@
     class="btn btn-sm btn-icon btn-warning text-white" 
     data-target="{{ '#' . $target }}"
     data-toggle="modal" 
-    style="margin-inline: 1px">
+    style="margin-inline: 1px; padding-inline: 7px">
     @if ($hasTitle)
       <span>ویرایش</span>
     @endif
@@ -22,7 +22,7 @@
     href="{{ route($route, $model) }}"
     class="btn btn-sm btn-icon btn-warning text-white"
     data-toggle="tooltip"
-    style="margin-inline: 1px"
+    style="margin-inline: 1px; padding-inline: 7px"
     data-original-title="ویرایش">
     @if ($hasTitle)
       <span>ویرایش</span>

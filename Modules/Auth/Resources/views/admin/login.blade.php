@@ -11,6 +11,7 @@
 
 		<!-- Title -->
 		<title>{{ \Modules\Setting\Entities\Setting::getFromName('title') }}</title>
+		
 		<!--Favicon -->
 		<link href="{{asset('assets/plugins/bootstrap/css/bootstrap.css')}}" rel="stylesheet" />
 		<link rel="stylesheet" href="{{asset('assets/plugins/summernote/summernote-bs4.css')}}">

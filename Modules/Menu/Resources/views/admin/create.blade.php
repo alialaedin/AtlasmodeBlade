@@ -1,81 +1,181 @@
-<x-modal id="createMenuModal" size="md">
-    <x-slot name="title">ثبت منو جدید</x-slot>
-    <x-slot name="body">
-        <form action="{{ route('admin.menu.store') }}" method="post">
-            @csrf
-            <input type="hidden" value="{{ $groupId }}" name="group_id">
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="control-label">عنوان:<span class="text-danger">&starf;</span></label>
-                    <input type="text" class="form-control" name="title" placeholder="عنوان منو را اینجا وارد کنید"
-                        value="{{ old('title') }}" required autofocus>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">پدر:</label>
-                    <select name="parent_id" class="form-control select2">
-                        @if ($parentMenu)
-                        @foreach ($menu_items as $menu_item)  
-                            <option value="{{ $menu_item->id }}">  
-                                {{ $menu_item->title }}  
-                            </option>  
-                        @endforeach  
-                        <option value="{{ $parentMenu->id }}" selected>{{ $parentMenu->title }}</option>  
-                        @else
-                            @foreach ($menu_items as $menu_item)  
-                                <option value="{{ $menu_item->id }}">{{ $menu_item->title }}</option>  
-                            @endforeach  
-                            <option value="" class="text-muted" selected>ندارد</option>
-                        @endif
-                    </select>
-                </div>
-                <div class="row">
-                    <div class="col-12 form-group">
-                        <label class="control-label">نوع لینک :</label><span class="text-danger">&starf;</span>
-                        <select id="linkableType" onchange="toggleInput()" name="linkable_type" class="form-control">
-                            <option value="self_link" class="custom-menu">لینک دلخواه</option>
-                            @foreach ($linkables as $link)
-                                <option value="{{ $link['unique_type'] }}" class="model">{{ $link['label'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-12 form-group" id="divLinkable" style="display: none">
-                        <label class="control-label">آیتم های لینک :</label>
-                        <select id="linkableId" name="linkable_id" class="form-control select2">
-                            <option class="custom-menu">انتخاب</option>
-                        </select>
-                    </div>
-                    <div class="col-12 form-group">
-                        <label class="control-label">لینک دلخواه :</label>
-                        <input type="text" id="link" name="link" class="form-control" disabled>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="label" class="control-label"> وضعیت: </label>
-                            <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" name="status" value="1"
-                                    {{ old('status', 1) == 1 ? 'checked' : null }} />
-                                <span class="custom-control-label">فعال</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="label" class="control-label"> تب جدید: </label>
-                            <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" name="new_tab" value="1"
-                                    {{ old('new_tab', 1) == 1 ? '' : null }} />
-                                <span class="custom-control-label">فعال</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button class="btn btn-primary  text-right item-right">ثبت</button>
-                    <button class="btn btn-outline-danger  text-right item-right" data-dismiss="modal">برگشت</button>
-                </div>
-            </div>
-        </form>
-    </x-slot>
-</x-modal>
+@extends('admin.layouts.master')
+@section('content')
+
+<div class="page-header">
+	<x-breadcrumb :items="[
+		['title' => 'منو های گروه ' . $menuGroup->label, 'route_link' => 'admin.menus.index', 'parameter' => $menuGroup],
+		['title' => 'ایجاد منو جدید'],
+	]"/>
+</div>
+
+<x-card>
+	<x-slot name="cardTitle">ایجاد منو جدید</x-slot>
+	<x-slot name="cardOptions"><x-card-options /></x-slot>
+	<x-slot name="cardBody">
+		@include('components.errors')
+		<form action="{{ route('admin.menus.store') }}" method="POST" enctype="multipart/form-data">
+
+			@csrf
+			<input hidden name="group_id" value="{{ $menuGroup->id }}">
+
+			<div class="row">
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label>عنوان: <span class="text-danger">&starf;</span></label>
+						<input type="text" name="title" class="form-control" value="{{ old('title') }}">
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label>پدر: <span class="text-danger">&starf;</span></label>
+						<select name="parent_id" id="parent-menu-select" class="form-control">
+							<option value="">انتخاب</option>
+							<option value="none-parent" {{ old('parent_id') == 'none-parent' ? 'selected' : '' }}>بدون پدر</option>
+							@foreach ($menuItems ?? [] as $menuItem)
+								<option value="{{ $menuItem->id }}" {{ old('parent_id') || request('parent_id') == $menuItem->id ? 'selected' : '' }}>{{ $menuItem->title }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<label>آیکون :</label>
+					<div class="custom-file">
+						<input type="file" name="icon" class="custom-file-input" accept="image/*" >
+						<label class="custom-file-label">انتخاب تصویر</label>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label>نوع لینک :</label>
+						<select id="linkableTypeSelect" name="linkable_type" class="form-control">
+							<option value=""></option>
+							<option value="self_link" @if (old('linkable_type') == 'self_link') selected @endif>لینک دلخواه</option>
+							@foreach ($linkables as $linkable)
+								<option value="{{ $linkable['unique_type'] }}">{{ $linkable['label'] }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label>آیتم های لینک :</label>
+						<select id="linkableIdSelect" name="linkable_id" class="form-control">
+							<option value="">انتخاب</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-xl-4 col-lg-6 col-12">
+					<div class="form-group">
+						<label>لینک دلخواه :</label>
+						<input id="selfLinkInput" type="text" name="link" value="{{ old('link') }}" class="form-control">
+					</div>
+				</div>
+
+				@php
+					$checkboxes = [
+						['title' => 'status', 'label' => 'وضعیت'],
+						['title' => 'new_tab', 'label' => 'تب جدید'],
+					];
+				@endphp
+
+				<div class="col-12">
+					<div class="form-group">
+						@foreach ($checkboxes as $checkbox)
+							<label class="custom-control custom-checkbox">
+								<input 
+									type="checkbox" 
+									class="custom-control-input" 
+									name="{{ $checkbox['title'] }}" 
+									value="1" 
+									{{ old($checkbox['title'], 1) == 1 ? 'checked' : null }} />
+								<span class="custom-control-label">{{ $checkbox['label'] }}</span>
+							</label>
+						@endforeach
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row">
+				<div class="col">
+					<div class="text-center">
+						<button class="btn btn-sm btn-primary" type="submit">ثبت و ذخیره</button>
+						<button class="btn btn-sm btn-danger" type="button" onclick="window.location.reload()">ریست فرم</ذ>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</x-slot>
+</x-card>
+
+@endsection
+
+@section('scripts')
+
+<script>
+
+	const linkables = @json($linkables);
+
+	const linkableTypeSelect = $('#linkableTypeSelect');
+	const linkableIdSelect = $('#linkableIdSelect');
+	const selfLinkInput = $('#selfLinkInput');
+	const parentMenuSelect = $('#parent-menu-select');
+
+	const changeSelfLinkInputDisabled = (bool) => selfLinkInput.prop('disabled', bool);
+	const isEmpty = (models) => !models || models.length === 0;
+	const getLinkableByUniqueType = (type) => linkables.find(l => l.unique_type == type);
+	const hasValidModels = (models) => models && models.length > 0;
+	const initializeSelect2 = (element, placeholder) => element.select2({ placeholder });
+
+	const emptyLinkableIdSelect = () => {
+		linkableIdSelect.empty();
+		linkableIdSelect.append('<option value="">انتخاب</option>');
+	}
+
+	parentMenuSelect.select2({ placeholder: 'انتخاب پدر' });
+	linkableTypeSelect.select2({ placeholder: 'نوع لینک را انتخاب کنید' });
+	linkableIdSelect.select2({ placeholder: 'ابتدا نوع لینک را انتخاب کنید' });
+
+	function handleLinkableTypeSelect() {
+
+		linkableTypeSelect.on('select2:select', () => {
+
+			const value = linkableTypeSelect.val();
+
+			changeSelfLinkInputDisabled(value !== 'self_link');
+			emptyLinkableIdSelect();
+
+			if (value == 'self_link') {
+				initializeSelect2(linkableIdSelect, 'لطفا لینک دلخواه را پر کنید');
+				return;
+			}
+
+			const linkable = getLinkableByUniqueType(value);
+
+			if (isEmpty(linkable?.models ?? [])) {
+				initializeSelect2(linkableIdSelect, 'آیتمی برای انتخاب وجود ندارد');
+				return;
+			}
+
+			initializeSelect2(linkableIdSelect, 'آیتم مورد نظر را انتخاب کنید');
+			linkable.models.forEach((model) => {
+				linkableIdSelect.append(`<option value="${model.id}">${model.title}</option>`);
+			});
+
+		});
+	}
+
+	$(document).ready(() => {
+		handleLinkableTypeSelect();
+	});
+
+</script>
+
+@endsection

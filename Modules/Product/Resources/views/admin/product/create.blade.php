@@ -170,12 +170,12 @@
 								<textarea id="product-short-description" rows="2" class="form-control" v-model="product.short_description"></textarea>
 							</div>
 						</div>
-						{{-- <div class="col-12">
+						<div class="col-12">
 							<div class="form-group">
 								<label for="product-meta-description">توضیحات</label>
-								<textarea class="ckeditor form-control" id="product-description" v-model="product.description"></textarea>
+								<textarea class="ckeditor form-control" rows="10" id="product-description" v-model="product.description"></textarea>
 							</div>
-						</div> --}}
+						</div>
 					</div>
 
 				</x-slot>
