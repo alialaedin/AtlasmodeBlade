@@ -70,7 +70,7 @@
     </x-card>
 
     <x-card>
-        <x-slot name="cardTitle">دسته بندی های مطالب ({{ number_format($postCategories->total()) }})</x-slot>
+        <x-slot name="cardTitle">دسته بندی های مطالب ({{ number_format($postCategories->count()) }})</x-slot>
         <x-slot name="cardOptions"><x-card-options /></x-slot>
         <x-slot name="cardBody">
             @include('components.errors')
@@ -114,8 +114,6 @@
                         @include('core::includes.data-not-found-alert', ['colspan' => 8])
                     @endforelse
                 </x-slot>
-                <x-slot
-                    name="extraData">{{ $postCategories->onEachSide(0)->links('vendor.pagination.bootstrap-4') }}</x-slot>
             </x-table-component>
         </x-slot>
     </x-card>
