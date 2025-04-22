@@ -29,7 +29,7 @@
                 <a href="{{ route('front.posts.show', $post) }}" class="d-flex flex-column overflow-hidden position-relative">
                   <!-- Img -->
                   <figure class="blog-img overflow-hidden radius-medium position-relative">
-                    <img class="main-img w-p-100 h-p-100 radius-medium" loading="lazy" src="{{ asset('front-assets/images/homePage/panbe.jpg') }}" alt="{{ $post->slug }}">
+                    <img class="main-img w-p-100 h-p-100 radius-medium" loading="lazy" src="{{ '/storage/' . $post->image->uuid . '/' . $post->image->file_name }}" alt="{{ $post->slug }}">
                     <div class="position-absolute w-p-100 px-2 bottom-0 pb-1 svg-hover d-flex align-items-end justify-content-between">
                       <span class="text-button-1 color-white">اطلاعات بیشتر</span>
                       <i class="icon-arrow-left2 icon-fs-small color-white"></i>
