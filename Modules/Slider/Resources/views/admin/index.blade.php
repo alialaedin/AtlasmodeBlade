@@ -32,7 +32,7 @@
 							<td class="font-weight-bold">{{ $loop->iteration }}</td>
 							<td>{{ $slider->title }}</td>
 							<td>
-								@if ($slider->image->isNotEmpty())
+								@if ($slider->image != null)
 									@php
 										$url = '/storage/' . $slider->image->uuid . '/' . $slider->image->file_name;
 									@endphp
