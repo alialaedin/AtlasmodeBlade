@@ -103,7 +103,7 @@
                     <a href="{{ route('front.posts.show', $relatedPost->id) }}" class="d-flex flex-column overflow-hidden position-relative">
                       <!-- Img -->
                       <figure class="blog-img overflow-hidden radius-medium position-relative">
-                        <img class="main-img w-p-100 h-p-100 radius-medium" loading="lazy" src="{{ asset('front-assets/images/homePage/panbe.jpg') }}" alt="{{ $relatedPost->slug }}">
+                        <img class="main-img w-p-100 h-p-100 radius-medium" loading="lazy" src="{{ '/storage/' . $relatedPost->image->uuid . '/' . $relatedPost->image->file_name }}" alt="{{ $relatedPost->slug }}">
                         <div class="position-absolute w-p-100 px-2 bottom-0 pb-1 svg-hover d-flex align-items-end justify-content-between">
                           <span class="text-button-1 color-white">اطلاعات بیشتر</span>
                           <i class="icon-arrow-left2 icon-fs-small color-white"></i>
@@ -255,7 +255,7 @@
                 <article class="mb-2">
                   <a href="{{ route('front.posts.show',$latestPost) }}" class="d-flex gap-1 align-items-center">
                     <figure class="col-4 radius-medium">
-                      <img class="w-p-100 radius-medium" src="{{ asset('front-assets/images/wedblog-detail/4aef5276a13ad1e0dc2e2779b5f8c096.jpg') }}" alt="{{ $latestPost->title }}">
+                      <img class="w-p-100 radius-medium" src="{{ '/storage/' . $latestPost->image->uuid . '/' . $latestPost->image->file_name }}" alt="{{ $latestPost->title }}">
                     </figure>
                     <div class="col-8 d-flex flex-column gap-1">
                       <span class="text-truncate text-button-1 color-gray-700 w-p-100">{{ $latestPost->title }}</span>
