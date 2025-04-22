@@ -2,23 +2,28 @@
 
 namespace Modules\Blog\Entities;
 
-use Illuminate\Database\Eloquent\Builder;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Support\Facades\Cache;
 use Modules\Core\Exceptions\ModelCannotBeDeletedException;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Modules\Core\Traits\HasAuthors;
 use Modules\Core\Entities\BaseModel;
 use Modules\Blog\Entities\Post;
+use Modules\Core\Helpers\Helpers;
 
 class PostCategory extends BaseModel implements Sortable
 {
-  use HasAuthors, SortableTrait;
+  use HasAuthors, SortableTrait, Sluggable;
 
   protected $fillable = ['name', 'slug', 'status'];
   public $sortable = [
     'order_column_name' => 'order',
     'sort_when_creating' => true,
   ];
+
+  private const ADMIN_POST_CATEGORIES_CACHE_KEY = 'adminPostCategories';
+  private const FRONT_POST_CATEGORIES_CACHE_KEY = 'frontPostCategories';
 
   public function sluggable(): array
   {
@@ -31,10 +36,35 @@ class PostCategory extends BaseModel implements Sortable
 
   public static function booted(): void
   {
+    Helpers::clearCacheInBooted(self::class, self::ADMIN_POST_CATEGORIES_CACHE_KEY);
+    Helpers::clearCacheInBooted(self::class, self::FRONT_POST_CATEGORIES_CACHE_KEY);
+
     static::deleting(function (PostCategory $postCategory) {
       if ($postCategory->posts()->count() > 0) {
         throw new ModelCannotBeDeletedException('این دسته بندی دارای مطلب می باشد و نمی تواند حذف شود.');
       }
+    });
+  }
+
+  public static function getAllPostCategoriesForAdmin()
+  {
+    return Cache::rememberForever(self::ADMIN_POST_CATEGORIES_CACHE_KEY, function () {
+      return self::query()
+        ->select(['id', 'name', 'status', 'order', 'created_at'])
+        ->latest('id')
+        ->withCount('posts')
+        ->get();
+    });
+  }
+
+  public static function getAllPostCategoriesForFront()
+  {
+    return Cache::rememberForever(self::FRONT_POST_CATEGORIES_CACHE_KEY, function () {
+      return self::query()
+        ->select(['id', 'name', 'status', 'slug'])
+        ->latest('id')
+        ->active()
+        ->get();
     });
   }
 
@@ -47,38 +77,6 @@ class PostCategory extends BaseModel implements Sortable
   {
     return $this->posts()->count() === 0;
   }
-
-  public static function getActiveCategories()
-  {
-    return static::query()->select(['id', 'name', 'status', 'slug'])->active()->get();
-  }
-
-  public static function getAllCategories()
-  {
-    return static::query()->select(['id', 'name', 'status', 'slug'])->get();
-  }
-
-  public function scopeFilters($query)
-  {
-    $status = request('status');
-
-    return $query
-      ->when(request('id'), function (Builder $query) {
-        $query->where('id', request('id'));
-      })
-      ->when(request('title'), function (Builder $query) {
-        $query->where('title', 'LIKE', '%' . request('title') . '%');
-      })
-      ->when(isset($status), fn($query) => $query->where("status", $status))
-      ->when(request('start_date'), function (Builder $query) {
-        $query->whereDate('created_at', '>=', request('start_date'));
-      })
-      ->when(request('end_date'), function (Builder $query) {
-        $query->whereDate('created_at', '<=', request('end_date'));
-      });
-  }
-
-  //Relations
 
   public function posts()
   {

@@ -74,7 +74,7 @@
                             </td>
                         </tr>
                     @empty
-                        @include('core::includes.data-not-found-alert', ['colspan' => 7])
+                        @include('core::includes.data-not-found-alert', ['colspan' => 8])
                     @endforelse
                 </x-slot>
                 <x-slot name="extraData">{{ $contacts->onEachSide(0)->links('vendor.pagination.bootstrap-4') }}</x-slot>

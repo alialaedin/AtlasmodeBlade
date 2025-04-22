@@ -245,31 +245,32 @@
             @endforeach
           </ul>
         </div>
-
-        <!-- Articels List -->
-        <div class="aside-article-list d-flex flex-column gap-2 p-2 bg-white mt-3 overflow-hidden">
-          <!-- Title -->
-          <span class="title text-medium-2-strong color-gray-900 pb-2">آخرین مطالب</span>
-          <ul>
-            @foreach ($latestPosts as $latestPost)
-              <article class="mb-2">
-                <a href="{{ route('front.posts.show',$latestPost) }}" class="d-flex gap-1 align-items-center">
-                  <figure class="col-4 radius-medium">
-                    <img class="w-p-100 radius-medium" src="{{ asset('front-assets/images/wedblog-detail/4aef5276a13ad1e0dc2e2779b5f8c096.jpg') }}" alt="{{ $latestPost->title }}">
-                  </figure>
-                  <div class="col-8 d-flex flex-column gap-1">
-                    <span class="text-truncate text-button-1 color-gray-700 w-p-100">{{ $latestPost->title }}</span>
-                    <div class="d-flex justify-content-between align-items-center">
-                      @php($jalaliPublishedAt = verta($latestPost->published_at)->format('Y/m/d'))
-                      <time class="color-gray-600" datetime="{{ $jalaliPublishedAt }}">{{ $jalaliPublishedAt }}</time>
-                      <span class="text-button-1">اطلاعات بیشتر...</span>
+        @if ($latestPosts->isNotEmpty())
+          <!-- Articels List -->
+          <div class="aside-article-list d-flex flex-column gap-2 p-2 bg-white mt-3 overflow-hidden">
+            <!-- Title -->
+            <span class="title text-medium-2-strong color-gray-900 pb-2">آخرین مطالب</span>
+            <ul>
+              @foreach ($latestPosts as $latestPost)
+                <article class="mb-2">
+                  <a href="{{ route('front.posts.show',$latestPost) }}" class="d-flex gap-1 align-items-center">
+                    <figure class="col-4 radius-medium">
+                      <img class="w-p-100 radius-medium" src="{{ asset('front-assets/images/wedblog-detail/4aef5276a13ad1e0dc2e2779b5f8c096.jpg') }}" alt="{{ $latestPost->title }}">
+                    </figure>
+                    <div class="col-8 d-flex flex-column gap-1">
+                      <span class="text-truncate text-button-1 color-gray-700 w-p-100">{{ $latestPost->title }}</span>
+                      <div class="d-flex justify-content-between align-items-center">
+                        @php($jalaliPublishedAt = verta($latestPost->published_at)->format('Y/m/d'))
+                        <time class="color-gray-600" datetime="{{ $jalaliPublishedAt }}">{{ $jalaliPublishedAt }}</time>
+                        <span class="text-button-1">اطلاعات بیشتر...</span>
+                      </div>
                     </div>
-                  </div>
-                </a>
-              </article>
-            @endforeach
-          </ul>
-        </div>
+                  </a>
+                </article>
+              @endforeach
+            </ul>
+          </div>
+        @endif
 
       </aside>
 

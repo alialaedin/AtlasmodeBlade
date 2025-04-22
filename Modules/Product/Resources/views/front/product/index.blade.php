@@ -123,7 +123,7 @@
         </div>
 
         <!-- Size -->
-        <div class="size w-p-100 d-flex flex-column gap-2 px-2 pt-3 pb-3">
+        {{-- <div class="size w-p-100 d-flex flex-column gap-2 px-2 pt-3 pb-3">
           <!-- Title -->
           <span class="text-medium-2-strong color-gray-900 pb-2 border-b-gray-300">سایز</span>
           <!-- Size Lists -->
@@ -143,7 +143,7 @@
               </label>
             @endforeach
           </div>
-        </div>
+        </div> --}}
 
         <!-- Available Mode -->
         <div class="available w-p-100 d-flex flex-column gap-4 radius-medium px-2 pt-3 pb-3">

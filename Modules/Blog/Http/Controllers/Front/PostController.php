@@ -11,7 +11,7 @@ class PostController extends Controller
   public function index($categoryId = null)
   {
     $search = '%' . request('search') . '%';
-    $postCategories = PostCategory::getActiveCategories();
+    $postCategories = PostCategory::getAllPostCategoriesForFront();
     $posts = Post::query()
       ->select(['id', 'title', 'status', 'published_at', 'summary', 'post_category_id', 'slug'])
       ->published()
@@ -37,7 +37,7 @@ class PostController extends Controller
     $relatedPosts = Post::getRelatedPosts($post);
     $latestPosts = Post::getLatestPosts($post);
     $postComments = Post::getLatestComments($post);
-    $postCategories = PostCategory::getActiveCategories();
+    $postCategories = PostCategory::getAllPostCategoriesForFront();
 
     return view('blog::front.show', compact(['post', 'relatedPosts', 'latestPosts', 'postComments', 'postCategories']));
   }

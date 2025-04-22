@@ -32,14 +32,16 @@
 							<td class="font-weight-bold">{{ $loop->iteration }}</td>
 							<td>{{ $slider->title }}</td>
 							<td>
-								@php
-									$url = '/storage/' . $slider->image->uuid . '/' . $slider->image->file_name;
-								@endphp
-								<a href="{{ $url }}" target="_blank">
-									<div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="max-height: 60px; border-radius: 4px;">
-										<img src="{{ $url }}" style="height: 50px;" alt="{{ $url }}">
-									</div>
-								</a>
+								@if ($slider->image)
+									@php
+										$url = '/storage/' . $slider->image->uuid . '/' . $slider->image->file_name;
+									@endphp
+									<a href="{{ $url }}" target="_blank">
+										<div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="max-height: 60px; border-radius: 4px;">
+											<img src="{{ $url }}" style="height: 50px;" alt="{{ $url }}">
+										</div>
+									</a>
+								@endif
 							</td>
 							<td>@include('core::includes.status', ['status' => $slider->status])</td>
 							<td>{{ verta($slider->created_at)->format('Y/m/d H:i') }}</td>

@@ -203,7 +203,7 @@
 							</td>
 						</tr>
 					@empty
-						@include('core::includes.data-not-found-alert', ['colspan' => 8])
+						@include('core::includes.data-not-found-alert', ['colspan' => 11])
 					@endforelse
 				</x-slot>
 				<x-slot name="extraData">{{ $orders->onEachSide(0)->links('vendor.pagination.bootstrap-4') }}</x-slot>

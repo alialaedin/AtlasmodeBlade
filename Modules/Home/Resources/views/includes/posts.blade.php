@@ -15,7 +15,7 @@
                 <img 
                   class="main-img w-p-100 h-p-100 radius-medium" 
                   loading="lazy"
-                  src="{{ asset('front-assets/images/homePage/panbe.jpg') }}" 
+                  src="{{ '/storage/' . $post->image->uuid . '/' . $post->image->file_name }}" 
                   alt="{{ $post->slug ?? $post->title }}"
                 />
               </figure>

@@ -22,7 +22,7 @@ class PostController extends BaseController
       ->paginate()
       ->withQueryString();
 
-    $categories = PostCategory::getAllCategories();
+    $categories = PostCategory::getAllPostCategoriesForAdmin();
 
     return view('blog::admin.post.index', compact(['posts', 'categories']));
   }
@@ -79,7 +79,7 @@ class PostController extends BaseController
   public function create()
   {
     $statuses = Post::getAvailableStatuses();
-    $categories = PostCategory::getActiveCategories();
+    $categories = PostCategory::getAllPostCategoriesForAdmin();
 
     return view('blog::admin.post.create', compact(['statuses', 'categories']));
   }
@@ -87,7 +87,7 @@ class PostController extends BaseController
   public function edit(Post $post)
   {
     $statuses = Post::getAvailableStatuses();
-    $categories = PostCategory::getActiveCategories();
+    $categories = PostCategory::getAllPostCategoriesForAdmin();
 
     return view('blog::admin.post.edit', compact(['statuses', 'categories', 'post']));
   }

@@ -86,7 +86,7 @@
                                 </td>
                             </tr>
                         @empty
-                            @include('core::includes.data-not-found-alert', ['colspan' => 8])
+                            @include('core::includes.data-not-found-alert', ['colspan' => 9])
                         @endforelse
                     </x-slot>
                 </x-table-component>

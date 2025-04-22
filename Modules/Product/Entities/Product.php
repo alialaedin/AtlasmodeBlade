@@ -146,7 +146,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 				throw Helpers::makeValidationException('به علت وجود سفارش برای این محصول امکان حذف آن وجود ندارد');
 			}
 			if ($rec = $product->recommendations()->first()) {
-				$name = __('core::groups.' . $rec->group);
+				$name = $rec->group->label;
 				throw Helpers::makeValidationException("این محصول در لیست محصولات پیشهادی ($name) انتخاب شده است ");
 			}
 			ProductService::deleteCache();
@@ -241,7 +241,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 
 	public static function generateBarcode()
 	{
-		$lastProductBarcode = DB::table('products')->latest('barcode')->first()->barcode;
+		$lastProductBarcode = DB::table('products')->latest('barcode')->first()?->barcode ?? 1000;
 		$barcode = $lastProductBarcode + 1;
 		while (Product::where('barcode', $barcode)->exists()) $barcode++;
 		return $barcode;

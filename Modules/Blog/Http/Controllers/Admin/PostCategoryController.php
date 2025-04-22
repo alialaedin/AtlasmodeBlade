@@ -14,14 +14,7 @@ class PostCategoryController extends Controller
 {
   public function index(): View
   {
-    $postCategories = PostCategory::query()
-      ->filters()
-      ->select(['id', 'name', 'status', 'order', 'created_at'])
-      ->latest('id')
-      ->withCount('posts')
-      ->paginate()
-      ->withQueryString();
-
+    $postCategories = PostCategory::getAllPostCategoriesForAdmin();
     return view('blog::admin.post-category.index', compact('postCategories'));
   }
 

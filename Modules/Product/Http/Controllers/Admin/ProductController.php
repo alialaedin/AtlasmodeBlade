@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Modules\Admin\Classes\ActivityLogHelper;
 use Modules\Attribute\Entities\Attribute;
 use Modules\Brand\Entities\Brand;
 use Modules\Category\Entities\Category;
@@ -318,4 +319,10 @@ class ProductController extends Controller
 			$variety->setAppends(['title', 'quantity', 'final_price']);
 		return response()->json(compact('varieties'));
 	}
+
+	public function destroy(Product $product)
+	{
+		$product->delete();
+		return redirect()->back()->with('success', 'محصول با موفقیت حذف شد');
+	} 
 }
