@@ -8,68 +8,6 @@
     </div>
 
     <x-card>
-        <x-slot name="cardTitle">جستجوی پیشرفته</x-slot>
-        <x-slot name="cardOptions"><x-card-options /></x-slot>
-        <x-slot name="cardBody">
-            <form action="{{ route('admin.post-categories.index') }}" method="GET" class="col-12">
-                <div class="row">
-
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label>عنوان :</label>
-                            <input type="text" class="form-control" name="name" value="{{ request('name') }}">
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label>انتخاب وضعیت :</label>
-                            <select class="form-control" name="status">
-                                <option value="">همه</option>
-                                <option value="1" {{ request('status') == '1' ? 'selected' : null }}>فعال</option>
-                                <option value="0" {{ request('status') == '0' ? 'selected' : null }}>غیر فعال</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label for="start_date_show">از تاریخ :</label>
-                            <input class="form-control fc-datepicker" id="start_date_show" type="text"
-                                autocomplete="off" />
-                            <input name="start_date" id="start_date_hide" type="hidden"
-                                value="{{ request('start_date') }}" />
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label for="end_date_show">تا تاریخ :</label>
-                            <input class="form-control fc-datepicker" id="end_date_show" type="text"
-                                autocomplete="off" />
-                            <input name="end_date" id="end_date_hide" type="hidden" value="{{ request('end_date') }}" />
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xl-9 col-lg-8 col-md-6 col-12">
-                        <button class="btn btn-primary btn-block" type="submit">جستجو <i class="fa fa-search"></i></button>
-                    </div>
-
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-12">
-                        <a href="{{ route('admin.post-categories.index') }}" class="btn btn-danger btn-block">حذف همه فیلتر
-                            ها <i class="fa fa-close"></i></a>
-                    </div>
-
-                </div>
-            </form>
-        </x-slot>
-    </x-card>
-
-    <x-card>
         <x-slot name="cardTitle">دسته بندی های مطالب ({{ number_format($postCategories->count()) }})</x-slot>
         <x-slot name="cardOptions"><x-card-options /></x-slot>
         <x-slot name="cardBody">
