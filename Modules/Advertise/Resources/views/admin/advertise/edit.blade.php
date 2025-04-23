@@ -51,7 +51,7 @@
 							<option value="self_link" @if (old('linkable_type') == 'self_link' || $advertise->link) selected @endif>لینک دلخواه</option>
 							@foreach ($linkables as $linkable)
 								<option 
-									{{-- {{ $advertise->unique_type == $linkable['unique_type'] }} --}}
+									@if ($advertise->unique_type == $linkable['unique_type']) selected @endif
 									value="{{ $linkable['unique_type'] }}">
 									{{ $linkable['label'] }}
 								</option>
@@ -151,7 +151,7 @@
 		linkableTypeSelect.select2({ placeholder: 'نوع لینک را اتنخاب کنید' });
 	} else {
 		selfLinkInput.prop('disabled', true);
-		const selectedLinkable = linkables.find(l => l.linkable_type == advertise.linkable_type);
+		const selectedLinkable = linkables.find(l => l.unique_type == advertise.unique_type);
 		if (selectedLinkable.models !== null || selectedLinkable.models?.length > 0) {
 			linkableIdSelect.select2({ placeholder: 'آیتم مورد نظر را انتخاب کنید' });
 			selectedLinkable.models.forEach(model => {
@@ -174,9 +174,11 @@
 		linkableIdSelect.append('<option value="">انتخاب</option>');
 	}
 
+	linkableTypeSelect.select2();
+
 	function handleLinkableTypeSelect() {
 
-		linkableTypeSelect.on('select2:select', () => {
+		linkableTypeSelect.on('change', () => {
 
 			const value = linkableTypeSelect.val();
 

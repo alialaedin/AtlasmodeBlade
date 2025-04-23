@@ -4,6 +4,7 @@ namespace Modules\Menu\Entities;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Modules\Admin\Entities\Admin;
 use Modules\Core\Classes\DontAppend;
 use Modules\Core\Entities\BaseModel;
@@ -177,12 +178,16 @@ class MenuItem extends BaseModel implements HasMedia
   public function getUniqueTypeAttribute()
   {
     if (!$this->linkable_type) {
-      return 'link_url';
+      return 'self_link';
     }
     if ($this->linkable_id) {
-      return $this->linkable_type;
+      return basename($this->linkable_type);
     } else {
-      return 'Index' . $this->linkable_type;
+      if (Str::contains($this->linkable_type, 'Custom')) {
+        return 'Index' . explode('\\', $this->linkable_type)[1];
+      }else {
+        return 'Index' . basename($this->linkable_type);
+      }
     }
   }
 

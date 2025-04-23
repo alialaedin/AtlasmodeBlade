@@ -25,6 +25,7 @@ class SliderController extends Controller
 
   public function index($group)
   {
+    abort_unless(in_array($group, Slider::getAvailableGroups()), 404);
     $sliders = Slider::getAllSlidersByGroup($group);
     return view('slider::admin.index', compact(['sliders', 'group']));
   }

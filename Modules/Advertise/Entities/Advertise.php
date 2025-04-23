@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Modules\Admin\Classes\ActivityLogHelper;
 use Modules\Core\Entities\BaseModel;
 use Modules\Core\Helpers\Helpers;
@@ -173,9 +174,13 @@ class Advertise extends BaseModel implements HasMedia
       return 'self_link';
     }
     if ($this->linkable_id) {
-      return $this->linkable_type;
+      return basename($this->linkable_type);
     } else {
-      return 'Index' . $this->linkable_type;
+      if (Str::contains($this->linkable_type, 'Custom')) {
+        return 'Index' . explode('\\', $this->linkable_type)[1];
+      }else {
+        return 'Index' . basename($this->linkable_type);
+      }
     }
   }
 }
