@@ -32,7 +32,7 @@
 							<td class="font-weight-bold">{{ $loop->iteration }}</td>
 							<td>{{ $slider->title }}</td>
 							<td>
-								@if ($slider->image != null)
+								@if ($slider->image->resource)
 									@php
 										$url = '/storage/' . $slider->image->uuid . '/' . $slider->image->file_name;
 									@endphp
@@ -41,6 +41,8 @@
 											<img src="{{ $url }}" style="height: 50px;" alt="{{ $url }}">
 										</div>
 									</a>
+								@else
+									<span>-</span>
 								@endif
 							</td>
 							<td>@include('core::includes.status', ['status' => $slider->status])</td>
