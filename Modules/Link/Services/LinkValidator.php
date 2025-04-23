@@ -21,30 +21,9 @@ class LinkValidator
     $this->request = $request;
   }
 
-  private function mergeLinkableType()
-  {
-    $array = [
-      'IndexPost' => Post::class,
-      'Post' => Post::class,
-      'Category' => Category::class,
-      'Product' => Product::class,
-      'IndexProduct' => Product::class,
-      'Flash' => Flash::class,
-      'Page' => Page::class,
-      'IndexAdvertise' => Advertise::class,
-      'Advertise' => Advertise::class,
-      'IndexAboutUs' => 'Custom\AboutUs',
-      'IndexContactUs' => 'Custom\ContactUs',
-    ];
-    $this->request->merge([
-      'linkable_type' => $array[$this->request->linkable_type]
-    ]);
-  }
-
   public function validate()
   {
     if ($this->request->filled('linkable_type') && $this->request->linkable_type != 'self_link') {
-      $this->mergeLinkableType();
       $this->request->merge([
         'link' => null
       ]);
