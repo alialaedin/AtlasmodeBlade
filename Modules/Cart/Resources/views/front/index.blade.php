@@ -479,7 +479,7 @@
       </div>
 
     </div>
-    <button type="button" class="add-newAddress-btn bg-black color-white text-medium" @click="updateAddress(addressIndex)">بروزرسانی آدرس</button>
+    <button type="button" class="add-newAddress-btn bg-black color-white text-medium modal-close" @click="updateAddress(addressIndex)">بروزرسانی آدرس</button>
   </div>
 </template>
 
@@ -546,7 +546,7 @@
     </div>
 
   </div>
-  <button type="button" class="add-newAddress-btn bg-black color-white text-medium" @click="createNewAddress">بروزرسانی آدرس</button>
+  <button type="button" class="add-newAddress-btn bg-black color-white text-medium modal-close" @click="createNewAddress">ثبت آدرس</button>
 </div>
 
 <div class="modal modal-delivery-method radius-medium d-flex flex-column bg-white gap-2 px-6 pt-lg-4 pb-lg-4 pt-2 pb-1" data-id="delivery-method">
@@ -984,9 +984,10 @@
       goToInformationTab() {
 
         document.querySelector('.shipping-cart').classList.remove('active');  
-        document.querySelector('.shipping-cart-btn').classList.remove('active');  
+        // document.querySelector('.shipping-cart-btn').classList.remove('active');  
         document.querySelector('.send-information').classList.add('active');  
         document.querySelector('.send-information-btn').classList.add('active');  
+        document.querySelector('.top-cart .shipp-info').classList.add('active');
 
         const topCart = document.querySelector('.top-cart');  
         window.scrollTo({  
@@ -1001,7 +1002,7 @@
           document.querySelector('.modal[data-id="choose-address"]').classList.remove('active');  
           document.querySelector('.modal-overlay').classList.remove('active');  
           document.body.classList.remove('no-overflow');  
-          document.querySelector('.change-edit-btn').classList.add('bg-primary-500', 'color-white');  
+          document.querySelector('.change-edit-btn').classList.add('bg-black', 'color-white');  
         }, 100);  
       },
       async loadShippings() {
@@ -1150,9 +1151,10 @@
         if (!isValidate) return;
 
         document.querySelector('.send-information').classList.remove('active');  
-        document.querySelector('.send-information-btn').classList.remove('active');  
+        // document.querySelector('.send-information-btn').classList.remove('active');  
         document.querySelector('.payment-information').classList.add('active');  
         document.querySelector('.payment-information-btn').classList.add('active');  
+        document.querySelector('.top-cart .info-peyment').classList.add('active');
         
         window.scrollTo({  
           top: document.querySelector('.top-cart').offsetTop,  

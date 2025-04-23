@@ -2,6 +2,7 @@
 
 namespace Modules\Category\Entities;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -23,12 +24,13 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Category extends Model implements HasMedia
 {
-	use InteractsWithMedia, HasDefaultFields, HasAuthors, SortableTrait, HasViews;
+	use InteractsWithMedia, HasDefaultFields, HasAuthors, SortableTrait, HasViews, Sluggable;
 
 	public $sortable = [
 		'order_column_name' => 'order',
 		'sort_when_creating' => true,
 	];
+	
 	protected $fillable = [
 		'title',
 		'en_title',
@@ -97,7 +99,8 @@ class Category extends Model implements HasMedia
 				->active()
 				->latest('id')
 				->with('media')
-				->get();
+				->get()
+				->each(fn (self $category) => $category->append(['image']));
 		});
 	}
 
@@ -105,7 +108,7 @@ class Category extends Model implements HasMedia
 	{
 		return [
 			'slug' => [
-				'source' => 'title'
+				'source' => 'en_title'
 			]
 		];
 	}

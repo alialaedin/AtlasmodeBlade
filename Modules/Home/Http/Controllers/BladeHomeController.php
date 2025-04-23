@@ -21,6 +21,6 @@ class BladeHomeController extends Controller
 		$posts = Post::getPostsForFront();
 		$recommendationGroups = RecommendationGroup::getGroupsWithItemsForFront();
 
-		return view('home::index', compact(['advertisements', 'specialCategories', 'recommendationGroups', 'posts']));
+		return view('home::index', compact(['advertisements', 'specialCategories', 'recommendationGroups', 'posts', 'sliders']));
 	}
 }

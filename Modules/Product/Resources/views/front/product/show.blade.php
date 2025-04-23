@@ -319,7 +319,7 @@
         <h2 class="h4-strong color-gray-900">محصولات مشابه</h2>
         <a href="/products" class="see-more pb-1 text-medium-strong color-gray-900">مشاهده همه محصولات</a>
       </div>
-      <div class="similar-products-swiper swiper">
+      <div class="similar-products-swiper swiper py-2">
         <div class="swiper-wrapper pb-3">
           <template v-for="relatedProduct in relatedProducts" :key="relatedProduct.id">
             <div class="swiper-slide">

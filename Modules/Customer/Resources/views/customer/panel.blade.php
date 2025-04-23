@@ -51,8 +51,8 @@
         </button>
         <!-- Wallet -->
         <button type="button" data-btn="wallet" class="item d-flex gap-2 px-1 align-items-center py-2 border-b-gray-400">
-          <svg data-v-2aa0890d="" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" xmlns="http://www.w3.org/2000/svg" class="ml-1"><path data-v-2aa0890d="" fill-rule="evenodd" clip-rule="evenodd" d="M7.78489 2.5H16.2142C19.4044 2.5 22 5.15478 22 8.41891V15.5811C22 18.8452 19.4044 21.5 16.2142 21.5C15.8462 21.5 15.5476 21.1944 15.5476 20.8179C15.5476 20.4414 15.8462 20.1358 16.2142 20.1358C18.6693 20.1358 20.6667 18.0931 20.6667 15.5811V9.86499H17.3831C16.3049 9.8659 15.4258 10.7645 15.4249 11.8686C15.4258 12.9727 16.3049 13.8713 17.3831 13.8722H18.7476C19.1156 13.8722 19.4142 14.1778 19.4142 14.5543C19.4142 14.9308 19.1156 15.2364 18.7476 15.2364H17.3831C15.5689 15.2355 14.0924 13.7248 14.0916 11.8686C14.0924 10.0123 15.5689 8.50168 17.3831 8.50077H20.6667V8.41891C20.6667 5.90692 18.6693 3.86422 16.2142 3.86422H7.78489C5.80622 3.86422 4.14578 5.19934 3.56711 7.02831H12.3547C12.7227 7.02831 13.0213 7.3339 13.0213 7.71043C13.0213 8.08786 12.7227 8.39254 12.3547 8.39254H3.336C3.336 8.39709 3.33533 8.40141 3.33467 8.40573C3.334 8.41004 3.33333 8.41436 3.33333 8.41891V15.5811C3.33333 18.0931 5.32978 20.1358 7.78489 20.1358H12.0258C12.3938 20.1358 12.6924 20.4414 12.6924 20.8179C12.6924 21.1944 12.3938 21.5 12.0258 21.5H7.78489C4.59467 21.5 2 18.8452 2 15.5811V8.41891C2 5.15478 4.59467 2.5 7.78489 2.5ZM16.861 11.8071C16.861 11.4306 17.1596 11.125 17.5276 11.125H17.8308C18.1988 11.125 18.4974 11.4306 18.4974 11.8071C18.4974 12.1836 18.1988 12.4892 17.8308 12.4892H17.5276C17.1596 12.4892 16.861 12.1836 16.861 11.8071Z" fill="#444"></path></svg>
-          <span class="text-medium">کیف پول</span>
+          <svg data-v-2aa0890d="" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="0.3" xmlns="http://www.w3.org/2000/svg" class="ml-1"><path data-v-2aa0890d="" fill-rule="evenodd" clip-rule="evenodd" d="M7.78489 2.5H16.2142C19.4044 2.5 22 5.15478 22 8.41891V15.5811C22 18.8452 19.4044 21.5 16.2142 21.5C15.8462 21.5 15.5476 21.1944 15.5476 20.8179C15.5476 20.4414 15.8462 20.1358 16.2142 20.1358C18.6693 20.1358 20.6667 18.0931 20.6667 15.5811V9.86499H17.3831C16.3049 9.8659 15.4258 10.7645 15.4249 11.8686C15.4258 12.9727 16.3049 13.8713 17.3831 13.8722H18.7476C19.1156 13.8722 19.4142 14.1778 19.4142 14.5543C19.4142 14.9308 19.1156 15.2364 18.7476 15.2364H17.3831C15.5689 15.2355 14.0924 13.7248 14.0916 11.8686C14.0924 10.0123 15.5689 8.50168 17.3831 8.50077H20.6667V8.41891C20.6667 5.90692 18.6693 3.86422 16.2142 3.86422H7.78489C5.80622 3.86422 4.14578 5.19934 3.56711 7.02831H12.3547C12.7227 7.02831 13.0213 7.3339 13.0213 7.71043C13.0213 8.08786 12.7227 8.39254 12.3547 8.39254H3.336C3.336 8.39709 3.33533 8.40141 3.33467 8.40573C3.334 8.41004 3.33333 8.41436 3.33333 8.41891V15.5811C3.33333 18.0931 5.32978 20.1358 7.78489 20.1358H12.0258C12.3938 20.1358 12.6924 20.4414 12.6924 20.8179C12.6924 21.1944 12.3938 21.5 12.0258 21.5H7.78489C4.59467 21.5 2 18.8452 2 15.5811V8.41891C2 5.15478 4.59467 2.5 7.78489 2.5ZM16.861 11.8071C16.861 11.4306 17.1596 11.125 17.5276 11.125H17.8308C18.1988 11.125 18.4974 11.4306 18.4974 11.8071C18.4974 12.1836 18.1988 12.4892 17.8308 12.4892H17.5276C17.1596 12.4892 16.861 12.1836 16.861 11.8071Z" fill="#444"></path></svg>
+          <span>کیف پول</span>
         </button>
         <!-- Exit -->
         <button type="button" data-modal="exit" class="exit-btn d-flex gap-2 px-1 align-items-center py-2">
@@ -280,7 +280,7 @@
       </div>
 
       <div class="d-flex flex-column gap-3 mt-2 pb-2 border-b-gray-400 pe-2">
-        <div class="d-flex gap-1 align-items-center pb-2 border-b-gray-400">
+        <div class="d-flex flex-wrap gap-1 align-items-center pb-2 border-b-gray-400">
           <div class="d-flex align-items-center text-medium color-gray-700 gap-1">
             <span>کد سفارش</span>
             <span class="color-gray-900">@{{ selectedOrderToShowDetail.id }}</span>                       
@@ -296,7 +296,7 @@
           </div>
         </div>
         <div class="d-flex flex-column gap-1">
-          <div class="d-flex gap-1 align-items-center">
+          <div class="d-flex flex-wrap gap-1 align-items-center">
             <!-- Name -->
             <div class="d-flex align-items-center text-medium color-gray-700 gap-1">
               <span class="text-medium-strong">تحویل گیرنده:</span>
@@ -385,7 +385,7 @@
     <section data-id="favorites" class="favorite bg-white section col-lg-9 flex-column radius-medium border-gray-300 px-lg-5 py-5 px-2">
       <h2 class="text-medium-3 ">لیست علاقه مندی ها</h2>
       <div class="favorite-products grid gap-lg-3 gap-2 mt-3">
-        <div v-for="product in favorites" :key="product.id" class="g-col-lg-3 g-col-6">
+        <div v-for="product in favorites" :key="product.id" class="g-col-lg-3 g-col-md-6 g-col-12">
           <article>
             <a :href="'/products/' + product.id" class="product-cart d-flex flex-column align-items-center gap-2 bg-gray-200 p-1 position-relative w-p-100 radius-medium">
               <button type="button" @click.prevent="removeFromFavorites(product.id)" class="heart-btn position-absolute">
@@ -576,7 +576,7 @@
   <button 
     @click="updateCustomerInformation"
     type="button" 
-    class="save-info-btn bg-black color-white text-medium">
+    class="save-info-btn bg-black color-white text-medium modal-close">
     ثبت اطلاعات
   </button>
 </div>

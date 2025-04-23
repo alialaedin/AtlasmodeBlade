@@ -9,6 +9,7 @@ hamburgerMenu()
 suggestedSwiper()
 hoverImg()
 likeProduct()
+likedProduct();
 // Seperate Number 3 Digits
 $(document).ready(function(){
     $('.currency').each(function(){
@@ -17,6 +18,15 @@ $(document).ready(function(){
         $(this).text(formattedNumber);
     })
 });
+
+function likedProduct(){
+    let btn=$('.like-btn');
+    btn.click(function(event){
+        event.preventDefault()
+       $(this).children('.icon-heart').toggleClass('d-none');
+       $(this).children('.heart-red').toggleClass('d-block');
+    })
+}
 
 function likeProduct() {
     let btn = $('.like-btn');
@@ -372,7 +382,6 @@ function mainPage(){
             }
         });
     }
-   
 }
  // view Another Photo After Hover In Product Cart
  function hoverImg(){
