@@ -78,7 +78,7 @@ class NewProductService
     $this->productQuery->with([
       'varieties' => function ($varietiesQuery): void {
         $varietiesQuery->active()
-          ->select(['id', 'product_id', 'price', 'purchase_price', 'discount', 'discount_type', 'max_number_purchases', 'deleted_at'])
+          ->select(['id', 'product_id', 'price', 'purchase_price', 'discount', 'discount_type', 'discount_until', 'max_number_purchases', 'deleted_at'])
           ->with([
             'product' => function ($productQuery): void {
               $productQuery->select('id')->with('activeFlash');

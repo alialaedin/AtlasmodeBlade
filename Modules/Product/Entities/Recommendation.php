@@ -5,7 +5,7 @@ namespace Modules\Product\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Modules\Core\Helpers\Helpers;
+use Illuminate\Support\Facades\DB;
 use Modules\Core\Traits\HasDefaultFields;
 use Modules\Product\Entities\Product;
 
@@ -23,6 +23,37 @@ class Recommendation extends Model
   {
     static::created(fn () => Cache::forget(RecommendationGroup::ALL_GROUPS_CACHE_kEY));
     static::deleted(fn () => Cache::forget(RecommendationGroup::ALL_GROUPS_CACHE_kEY));
+  }
+
+  public static function insertNewProduct(Product $product)
+  {
+    $allRecommendationGroups = RecommendationGroup::getAllGroups();
+
+    $groupNewest = $allRecommendationGroups->where('name', 'newest')->first();
+    $groupMostDiscount = $allRecommendationGroups->where('name', 'most_discount')->first();
+
+    $groupNewestOrder = self::getLatestOrderByGroup($groupNewest);
+    $groupNewest->items()->create([
+      'product_id' => $product->id,
+      'order' => $groupNewestOrder
+    ]);
+
+    if ($product->discount && $product->discount_type) {
+      $groupMostDiscountOrder = self::getLatestOrderByGroup($groupMostDiscount);
+      $groupMostDiscount->items()->create([
+        'product_id' => $product->id,
+        'order' => $groupMostDiscountOrder
+      ]);
+    }
+  }
+
+  private function getLatestOrderByGroup(RecommendationGroup $group)
+  {
+    return DB::table('recommendations')
+      ->where('group_id', $group->id)
+      ->latest('order')
+      ->first()
+      ?->order + 1 ?? 999999;
   }
 
   public function product()

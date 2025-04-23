@@ -370,6 +370,7 @@
 																dir="rtl"
 																:id="'variety-discount-type' + attributes.id" 
 																class="custom-multiselect"
+																track-by="name"
 																v-model="product.variety_values[attributes.id].discount_type"
 																label="label"
 																placeholder="انتخاب نوع تخفیف"
@@ -416,6 +417,7 @@
 																:id="'variety-barcode' + attributes.id" 
 																type="text" 
 																class="form-control" 
+																readonly
 																v-model="product.variety_values[attributes.id].barcode"
 															/>
 														</div>
@@ -1017,7 +1019,7 @@
 					video: null,
 					video_cover: null,
 					chargeable: false,
-					low_stock_quantity_warning: null,
+					low_stock_quantity_warning: 1,
 					show_quantity: false,
           images: [],
           categories: [],
@@ -1113,15 +1115,15 @@
       getVarietyValue(attributeId) {
         if (!this.product.variety_values[attributeId]) {
           this.product.variety_values[attributeId] = {
-            price: null,
-						purchase_price: null,
+            price: this.product.unit_price ?? null,
+						purchase_price: this.product.purchase_price ?? null,
             barcode: '',
             SKU: '',
-            quantity: null,
+            quantity: this.product.quantity ?? null,
             images: [],
-						discount_type: '',
-						discount: null,
-						discount_until: null,
+						discount_type: this.product.discount_type ?? [],
+						discount: this.product.discount ?? null,
+						discount_until: this.product.discount_until ?? null,
           };
           this.product.variety_values = { ...this.product.variety_values };
         }

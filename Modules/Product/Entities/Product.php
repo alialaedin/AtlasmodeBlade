@@ -3,6 +3,7 @@
 namespace Modules\Product\Entities;
 
 use Carbon\Carbon;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Entities\Media;
@@ -42,7 +43,7 @@ use Modules\Product\Entities\Variety;
 
 class Product extends BaseModel implements HasMedia, Viewable
 {
-	use InteractsWithMedia, InteractsWithViews, HasMorphAuthors, HasTags, HasDefaultFields, LogsActivity;
+	use InteractsWithMedia, InteractsWithViews, HasMorphAuthors, HasTags, HasDefaultFields, LogsActivity, Sluggable;
 
 	protected $defaults = [
 		'chargeable' => 0
@@ -138,6 +139,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 				$product->published_at = now();
 			}
 		});
+		static::created(fn (self $product) => Recommendation::insertNewProduct($product));
 		static::updating(function () {
 			ProductService::deleteCache();
 		});

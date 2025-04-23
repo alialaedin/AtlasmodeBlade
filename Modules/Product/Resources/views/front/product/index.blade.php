@@ -250,8 +250,11 @@
                   </div>
                   <!-- Img -->
                   <figure class="product-img overflow-hidden position-relative">
-                    <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{ asset('front-assets/images/homePage/product-5125-thumb_lg.jpg') }}" alt="">
-                    <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{ asset('front-assets/images/homePage/product-5125-thumb_lg (1).jpg') }}" alt="">
+                    @php
+                      $imageUrl = $product->main_image ? '/storage/' . $product->main_image->uuid . '/' . $product->main_image->file_name : '';
+                    @endphp
+                    <img class="main-img w-p-100 h-p-100" loading="lazy" src="{{ $imageUrl }}" alt="">
+                    <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" src="{{ $imageUrl }}" alt="">
                     <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">مشاهده بیشتر</button>
                   </figure>
                   <div class="product-details d-flex flex-column px-2 mt-2">
