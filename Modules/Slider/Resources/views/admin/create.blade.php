@@ -38,19 +38,15 @@
             <div class="form-group">
               <label>نوع لینک :</label>
               <select id="linkableTypeSelect" name="linkable_type" class="form-control">
-                <option value="">انتخاب</option>
+                <option value=""></option>
                 <option value="self_link" @if (old('linkable_type') == 'self_link') selected @endif>لینک دلخواه</option>
                 @foreach ($linkables as $linkable)
-                  <option 
-                    @if (old('linkable_type') == $linkable['unique_type']) selected @endif
-                    value="{{ $linkable['unique_type'] }}">
-                    {{ $linkable['label'] }}
-                  </option>
+                  <option value="{{ $linkable['unique_type'] }}">{{ $linkable['label'] }}</option>
                 @endforeach
               </select>
             </div>
           </div>
-
+  
           <div class="col-xl-3 col-lg-6 col-12">
             <div class="form-group">
               <label>آیتم های لینک :</label>
@@ -59,11 +55,11 @@
               </select>
             </div>
           </div>
-
+  
           <div class="col-xl-3 col-lg-6 col-12">
             <div class="form-group">
               <label>لینک دلخواه :</label>
-              <input id="selfLinkInput" type="text" name="link" class="form-control">
+              <input id="selfLinkInput" type="text" name="link" value="{{ old('link') }}" class="form-control">
             </div>
           </div>
 
@@ -102,50 +98,52 @@
   
   <script>
 
-    const makeSelect2Label = (element, label) => $(element).select2({ placeholder: label });
+    const linkables = @json($linkables);
 
-    makeSelect2Label('#linkableTypeSelect', 'نوع لینک را اتنخاب کنید');
-    makeSelect2Label('#linkableIdSelect', 'ابتدا نوع لینک را انتخاب کنید');
+    const linkableTypeSelect = $('#linkableTypeSelect');
+    const linkableIdSelect = $('#linkableIdSelect');
+    const selfLinkInput = $('#selfLinkInput');
+
+    const changeSelfLinkInputDisabled = (bool) => selfLinkInput.prop('disabled', bool);
+    const isEmpty = (models) => !models || models.length === 0;
+    const getLinkableByUniqueType = (type) => linkables.find(l => l.unique_type == type);
+    const hasValidModels = (models) => models && models.length > 0;
+    const initializeSelect2 = (element, placeholder) => element.select2({ placeholder });
+
+    const emptyLinkableIdSelect = () => {
+      linkableIdSelect.empty();
+      linkableIdSelect.append('<option value="">انتخاب</option>');
+    }
+
+    linkableTypeSelect.select2({ placeholder: 'نوع لینک را انتخاب کنید' });
+    linkableIdSelect.select2({ placeholder: 'ابتدا نوع لینک را انتخاب کنید' });
 
     function handleLinkableTypeSelect() {
 
-      const linkableTypeSelect = $('#linkableTypeSelect');
-      const linkableIdSelect = $('#linkableIdSelect');
-      const selfLinkInput = $('#selfLinkInput');
-      const linkables = @json($linkables); 
+      linkableTypeSelect.on('select2:select', () => {
 
-      const changeSelfLinkInputDisabled = (bool) => selfLinkInput.prop('disabled', bool);
+        const value = linkableTypeSelect.val();
 
-      changeSelfLinkInputDisabled(true);
-
-      linkableTypeSelect.on('select2:select', (event) => {
-
-        const value = event.target.value;
         changeSelfLinkInputDisabled(value !== 'self_link');
+        emptyLinkableIdSelect();
 
-        if (value !== 'self_link') {
-
-          const linakbleUniqueType = value;
-          const linkable = linkables.find(l => l.unique_type === linakbleUniqueType);
-
-          const emptyLinkableIdSelect = () => {
-            linkableIdSelect.empty();
-            linkableIdSelect.append('<option value="">انتخاب</option>');
-          }
-
-          if (linkable.models == null || linkable.models?.length == 0) {
-            emptyLinkableIdSelect();
-            makeSelect2Label(linkableIdSelect, 'آیتمی برای انتخاب وجود ندارد');
-            return;
-          } 
-
-          emptyLinkableIdSelect();
-          makeSelect2Label(linkableIdSelect, 'آیتم مورد نظر را انتخاب کنید');
-          linkable.models.forEach(model => {
-            linkableIdSelect.append(`<option value="${model.id}">${model.title}</option>`);
-          });
-
+        if (value == 'self_link') {
+          initializeSelect2(linkableIdSelect, 'لطفا لینک دلخواه را پر کنید');
+          return;
         }
+
+        const linkable = getLinkableByUniqueType(value);
+
+        if (isEmpty(linkable?.models ?? [])) {
+          initializeSelect2(linkableIdSelect, 'آیتمی برای انتخاب وجود ندارد');
+          return;
+        }
+
+        initializeSelect2(linkableIdSelect, 'آیتم مورد نظر را انتخاب کنید');
+        linkable.models.forEach((model) => {
+          linkableIdSelect.append(`<option value="${model.id}">${model.title}</option>`);
+        });
+
       });
     }
 
