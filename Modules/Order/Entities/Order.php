@@ -181,7 +181,7 @@ class Order extends Payable implements ProductWallet
 			static::STATUS_NEW,
 			static::STATUS_CANCELED,
 			static::STATUS_FAILED,
-			static::STATUS_RESERVED
+			// static::STATUS_RESERVED
 		];
 	}
 
@@ -495,14 +495,18 @@ class Order extends Payable implements ProductWallet
 	// محاسبه قیمت نهایی
 	public function getTotalAmountAttribute(): int
 	{
-		$activeItems = $this->items->where('status', 1);
-		$totalItemsAmount = $activeItems
-			->reduce(function ($total, $item) {
-				return $total + ($item->amount * $item->quantity);
-			});
+		$totalItemsAmount = $this->total_items_amount;
 		$giftPackageAmount = isset($this->attributes['gift_package_price']) ? $this->attributes['gift_package_price'] : 0;
 
 		return ($totalItemsAmount + $this->attributes['shipping_amount']) + $giftPackageAmount - $this->attributes['discount_amount'];
+	}
+
+	public function getTotalItemsAmountAttribute()
+	{
+		$activeItems = $this->items->where('status', 1);
+		return $activeItems->reduce(function ($total, $item) {
+			return $total + ($item->amount * $item->quantity);
+		});
 	}
 
 	public function getTotalAmountForAdmin()

@@ -1,4 +1,4 @@
-<ol class="breadcrumb align-items-center pr-0">
+<ol class="breadcrumb align-items-center pr-0 mt-2">
     <li class="breadcrumb-item">
         <a href="{{ route('admin.dashboard') }}">
             <i class="fe fe-home ml-1"></i> داشبورد

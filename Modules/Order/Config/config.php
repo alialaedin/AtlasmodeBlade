@@ -26,6 +26,15 @@ return [
         Order::STATUS_RESERVED => 'btn-info',
     ],
 
+    'statusBgColor' => [
+        Order::STATUS_WAIT_FOR_PAYMENT => 'warning',
+        Order::STATUS_IN_PROGRESS => 'primary',
+        Order::STATUS_DELIVERED => 'success',
+        Order::STATUS_NEW => 'info',
+        Order::STATUS_CANCELED => 'pink',
+        Order::STATUS_FAILED => 'danger',
+    ],
+
     'orderPaginations' => [15, 30, 50, 100]
 
 ];

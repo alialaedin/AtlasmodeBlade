@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
 @section('content')
+
   @php
     $genders = [
       'male' => 'مرد',
@@ -7,14 +8,14 @@
       null => null,
     ];
   @endphp
-  @php
-    $items = [
-      ['title' => 'لیست مشتریان', 'route_link' => 'admin.customers.index'],
-      ['title' => 'اطلاعات مشتری', 'route_link' => null]
-    ];
-  @endphp
-  <x-breadcrumb :items="$items"/>
+
+  <x-breadcrumb :items="[
+    ['title' => 'لیست مشتریان', 'route_link' => 'admin.customers.index'],
+    ['title' => 'اطلاعات مشتری']
+  ]"/>
+
   @include('components.errors')
+
   <x-card>
     <x-slot name="cardTitle">اطلاعات مشتری</x-slot>
     <x-slot name="cardOptions">
@@ -107,6 +108,29 @@
     </x-slot>
   </x-card>
 
+  @php
+    $statistics = [
+      ['title' => 'تعداد برداشت از کیف پول', 'value' => number_format($walletStatistics['withdrawsCount']), 'color' => 'danger', 'icon' => 'bar-chart'],
+      ['title' => 'تعداد شارژ کیف پول', 'value' => number_format($walletStatistics['dipositsCount']), 'color' => 'info', 'icon' => 'bar-chart'],
+      ['title' => 'میزان برداشت از کیف پول', 'value' => number_format($walletStatistics['withdrawsAmount']), 'color' => 'secondary', 'icon' => 'dollar'],
+      ['title' => 'میزان شارژ کیف پول', 'value' => number_format($walletStatistics['dipositsAmount']), 'color' => 'success', 'icon' => 'dollar']
+    ];
+  @endphp
+
+  <div class="row">
+    @foreach ($statistics as $item)
+      <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <i class="fa fa-{{ $item['icon'] }} card-custom-icon icon-dropshadow-{{ $item['color'] }} text-{{ $item['color'] }} fs-60"></i>
+            <p class=" mb-1">{{ $item['title'] }}</p>
+            <h3 class="mb-1 font-weight-bold">{{ $item['value'] }}</h3>
+          </div>
+        </div>
+      </div>
+    @endforeach
+  </div>
+
   <x-card>
     <x-slot name="cardTitle">تراکنش های کیف پول</x-slot>
     <x-slot name="cardOptions"></x-slot>
@@ -152,6 +176,75 @@
             @endforelse
           </x-slot>
           <x-slot name="extraData"></x-slot>
+        </x-table-component>
+      </div>
+    </x-slot>
+  </x-card>
+
+  <div class="row">
+    @foreach ($orderStatistics as $statusName => $count)
+      <div class="col-12 col-lg-4 col-xl-2">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="h2 m-0 font-weight-bold">{{ $count }}</div>
+            <div class="text-{{ config('order.statusBgColor.' . $statusName)}} fs-16 mb-0">
+              {{ config('order.statusLabels.' . $statusName) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    @endforeach
+  </div>
+
+  <x-card>
+    <x-slot name="cardTitle">سفارشات</x-slot>
+    <x-slot name="cardOptions"></x-slot>
+    <x-slot name="cardBody">
+      <div class="row">
+        <x-table-component>
+          <x-slot name="tableTh">
+            <tr>
+              <th>ردیف</th>
+              <th>شناسه</th>
+              <th>تعداد آیتم</th>
+              <th>مبلغ سفارش</th>
+              <th>تخفیف</th>
+              <th>هزینه ارسال</th>
+              <th>جمع کل</th>
+              <th>وضعیت</th>
+              <th>تاریخ ثبت</th>
+              <th>عملیات</th>
+            </tr>
+          </x-slot>
+          <x-slot name="tableTd">
+            @forelse($customer->orders as $order)
+              <tr>
+                <td class="font-weight-bold">{{ $loop->iteration }}</td>
+                <td>
+                  <span class="btn btn-sm btn-dark">{{ $order->id }}</span>
+                </td>
+                <td>{{ $order->items_count }}</td>
+                <td>{{ number_format($order->total_items_amount) }}</td>
+                <td>{{ number_format($order->discount_amount) }}</td>
+                <td>{{ number_format($order->shipping_amount) }}</td>
+                <td>{{ number_format($order->total_amount) }}</td>
+                <td>
+                  <button class="{{ config('order.statusColors.' . $order->status) }} btn-sm btn">
+                    {{ config('order.statusLabels.' . $order->status) }}
+                  </button>
+                </td>
+                <td>{{ verta($order->created_at)->format('Y/m/d H:i') }}</td>
+                <td>
+                  @include('core::includes.show-icon-button', [
+                    'route' => 'admin.orders.show',
+                    'model' => $order,
+                  ])
+                </td>
+              </tr>
+            @empty
+              @include('core::includes.data-not-found-alert', ['colspan' => 10])
+            @endforelse
+          </x-slot>
         </x-table-component>
       </div>
     </x-slot>

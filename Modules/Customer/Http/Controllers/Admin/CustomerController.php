@@ -20,6 +20,7 @@ use Modules\Customer\Http\Requests\Admin\CustomerDepositRequest;
 use Modules\Customer\Http\Requests\Customer\CustomerStoreRequest;
 use Modules\Customer\Http\Requests\Customer\CustomerUpdateRequest;
 use Modules\Customer\Notifications\DepositWalletSuccessfulNotification;
+use Modules\Order\Entities\Order;
 
 class CustomerController extends Controller
 {
@@ -58,12 +59,34 @@ class CustomerController extends Controller
 
 	public function show($id)
 	{
-		$customer = Customer::query()->findOrFail($id);
+		$customer = Customer::query()
+			->select(['id', 'first_name', 'last_name', 'mobile', 'email', 'birth_date', 'card_number', 'national_code', 'gender'])
+			->with([
+				'orders' => function($oQuery) {
+					$oQuery->select(['id', 'customer_id', 'discount_amount', 'shipping_amount', 'status', 'created_at']);
+					$oQuery->withCount('items');
+					$oQuery->with('items', function ($oiQuery) {
+						$oiQuery->select(['id', 'order_id', 'status', 'amount', 'quantity']);
+					});
+					$oQuery->orderByDesc('id');
+				}
+			])
+			->findOrFail($id);
+		
 		$provinces = Province::query()->select('id', 'name')->active()->get();
 		$cities = City::select('id', 'name', 'province_id')->get();
 		$transactions = $customer->wallet->transactions->sortByDesc('id');
 
-		return view('customer::admin.customer.show', compact(['customer', 'transactions', 'cities', 'provinces']));
+		$walletStatistics = [
+			'withdrawsCount' => $transactions->where('type', 'withdraw')->count() ?? 0,
+			'withdrawsAmount' => abs($transactions->where('type', 'withdraw')->sum('amount')) ?? 0,
+			'dipositsCount' => $transactions->where('type', 'deposit')->count() ?? 0,
+			'dipositsAmount' => abs($transactions->where('type', 'deposit')->sum('amount')) ?? 0,
+		];
+
+		$orderStatistics = Order::getOrderStatisticsForCustomer($customer);
+
+		return view('customer::admin.customer.show', compact(['customer', 'transactions', 'cities', 'provinces', 'walletStatistics', 'orderStatistics']));
 	}
 
 	public function depositCustomerWallet(CustomerDepositRequest $request)

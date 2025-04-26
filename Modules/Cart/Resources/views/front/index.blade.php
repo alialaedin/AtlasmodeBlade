@@ -1072,7 +1072,8 @@
         };
 
         try {
-          const response = await fetch(`/customer/addresses`, {
+          const url = @json(route('customer.addresses.store'));
+          const response = await fetch(url, {
             method: 'POST',
             headers: this.getDefaultRequestHeaders(),
             body: JSON.stringify(data)
