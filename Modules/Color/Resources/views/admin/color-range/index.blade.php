@@ -32,15 +32,13 @@
             <td class="d-none sort-colorRange-id" data-id="{{ $colorRange->id }}"></td>
             <td class="font-weight-bold">{{ $loop->iteration }}</td>
             <td>{{ $colorRange->title }}</td>
-            <td>
-              @php
-                $url = '/storage/' . $colorRange->logo->uuid . '/' . $colorRange->logo->file_name;
-              @endphp
-              <a href="{{ $url }}" target="_blank">
-                <div class="bg-light pb-1 pt-1 img-holder img-show w-100" style="max-height: 60px; border-radius: 4px;">
-                  <img src="{{ $url }}" style="height: 50px;">
-                </div>
-              </a>
+            <td class="m-0 p-0">
+              <figure class="figure my-2">
+                <img 
+                  src="{{ Storage::url($colorRange->logo->uuid . '/' . $colorRange->logo->file_name) }}" 
+                  class="img-thumbnail" alt="image" width="60" style="max-height: 40px;"
+                />
+              </figure>
             </td>
             <td>@include('core::includes.status', ['status' => $colorRange->status])</td>
             <td>{{ verta($colorRange->created_at)->format('Y/m/d H:i') }}</td>
@@ -85,20 +83,20 @@
 			sortButton.prop('disabled', true);
 
 			$('#colorRanges-table tbody tr').each(function() {
-				colorRanges.push($(this).find('.sort-slider-id').data('id'));
+				colorRanges.push($(this).find('.sort-colorRange-id').data('id'));
 			});
 
 			try {
 				const url = @json(route('admin.color-ranges.sort'));
 				const response = await fetch(url, {
-					method: 'POST',
-					body: { 
-						color_range_ids: JSON.stringify(colorRanges),
-						_method: 'PATCH',
-						_token: @json(csrf_token())
-					},
+					method: 'PATCH',
+					body: JSON.stringify({ 
+            color_range_ids: colorRanges,
+          }),
 					headers: {
-						'Accept': 'application/json' 
+						'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': @json(csrf_token())
 					}
 				});
 
