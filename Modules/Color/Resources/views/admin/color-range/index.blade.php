@@ -36,7 +36,7 @@
               <figure class="figure my-2">
                 <img 
                   src="{{ Storage::url($colorRange->logo->uuid . '/' . $colorRange->logo->file_name) }}" 
-                  class="img-thumbnail" alt="image" width="60" style="max-height: 40px;"
+                  class="img-thumbnail" alt="image" width="60" style="max-height: 45px;"
                 />
               </figure>
             </td>

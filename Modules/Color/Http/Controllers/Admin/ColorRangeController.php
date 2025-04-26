@@ -47,6 +47,6 @@ class ColorRangeController extends Controller
 	public function sort(ColorRangeSortRequest $request)
 	{
 		ColorRange::sort($request);
-		return redirect()->route('admin.color-ranges.index')->with('success', 'طیف های رنگی با موفقیت مرتب سازی شدند');
+		return response()->success('طیف های رنگی با موفقیت مرتب سازی شدند'); 
 	} 
 }
