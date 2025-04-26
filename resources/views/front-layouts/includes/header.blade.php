@@ -8,7 +8,7 @@
 		<!-- Logo -->
 		<figure class=" d-flex">
 			<a href="{{ url('/') }}" class="logo-header d-flex">
-				<img class="w-p-100" src="{{$siteLogoUrl }}" alt="logo">
+				<img class="w-p-100" src="{{ Storage::url($settings->where('name', 'logo')->first()->value) }}" alt="logo">
 			</a>
 		</figure>
 
