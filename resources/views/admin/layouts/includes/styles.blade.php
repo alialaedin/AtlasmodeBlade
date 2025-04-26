@@ -44,4 +44,8 @@
     width: 100px; 
   }
 
+  /* .app-sidebar__user .user-pic::before {
+    content: none;
+  } */
+
 </style>

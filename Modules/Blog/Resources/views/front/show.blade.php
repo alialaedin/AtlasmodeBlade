@@ -10,6 +10,8 @@
         <a href="/" class="text-button-1 mt-1">خانه</a>
         <i class="icon-angle-double-left icon-fs-medium"></i>
         <a href="{{ route('front.posts.index') }}" class="text-button-1 mt-1">پست ها</a>
+        <i class="icon-angle-double-left icon-fs-medium"></i>
+        <a href="{{ route('front.posts.show', $post) }}" class="text-button-1 mt-1">{{ $post->title }}</a>
       </div>
     </div>
 

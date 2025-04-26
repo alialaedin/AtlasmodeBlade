@@ -33,8 +33,9 @@ class CategoryStoreRequest extends FormRequest
 		$this->merge([
 			'special' => $this->special ? 1 : 0,
 			'status' => $this->status ? 1 : 0,
+			'show_in_home' => $this->show_in_home ? 1 : 0,
 			'priority' => Category::max('priority') + 1,
-			'show_in_home' => $this->show_in_home ? 1 : 0
+			'parent_id' => $this->parent_id == 'none-parent' ? null : $this->parent_id
 		]);
 	}
 }

@@ -70,9 +70,11 @@ class AppServiceProvider extends ServiceProvider
 			$menuGroups = MenuGroup::getAllMenuGroups();
 			$sliderGroups = Slider::getAllSliderGroups();
 			$settingGroups = Setting::getGroups();
-			$siteLogoUrl = Setting::where('name', 'logo')->first()->value;
+			$siteLogoUrl = Setting::getFromName('logo');
+			$siteTitle = Setting::getFromName('title');
 
 			$view->with([
+				'siteTitle' => $siteTitle,
 				'siteLogoUrl' => $siteLogoUrl,
 				'settingGroups' => $settingGroups,
 				'menuGroups' => $menuGroups,

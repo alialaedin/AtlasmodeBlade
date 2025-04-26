@@ -9,7 +9,7 @@ class CategorySortRequest extends FormRequest
   public function rules()
   {
     return [
-      'categories' => 'required',
+      'categories' => 'required|array',
     ];
   }
 }

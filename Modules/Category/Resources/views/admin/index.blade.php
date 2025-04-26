@@ -1,210 +1,165 @@
 @extends('admin.layouts.master')
+
 @section('content')
-    <div class="page-header">
-        <x-breadcrumb :items="[['title' => 'لیست دسته بندی ها']]" />
-        <div>
-            @if ($categories->isNotEmpty())
-                <button id="submitButton" type="submit" class="btn btn-teal btn-sm">ذخیره مرتب سازی</button>
-            @endif
-            @can('write_category')
-                @if (isset($categories[0]->parent_id))
-                    <x-create-button   
-                        route="admin.categories.create"   
-                        title="دسته بندی جدید"   
-                        :routeParams="['parent_id' => $categories[0]->parent_id]"   
-                    />  
-                <a href="{{route('admin.categories.index')}}" class="btn btn-warning btn-sm">برگشت</a>
-                @else
-                    <x-create-button   
-                        route="admin.categories.create"   
-                        title="دسته بندی جدید"   
-                    />  
-                @endif
-            @endcan
-        </div>
-    </div>
 
-    <x-card>
-        @if (isset($parentCategory))
-            <x-slot name="cardTitle">لیست دسته بندی های ({{ $parentCategory->title }})</x-slot>
-        @else
-            <x-slot name="cardTitle">لیست دسته بندی ها</x-slot>
-        @endif
-        <x-slot name="cardOptions"><x-card-options /></x-slot>
-        <x-slot name="cardBody">
-            @include('components.errors')
-            <form id="myForm" action="{{ route('admin.categories.sort') }}" method="POST">
-                @csrf
-                <x-table-component idTbody="items">
-                    <x-slot name="tableTh">
-                        <tr>
-                            @php($tableTh = ['انتخاب','عنوان', 'تعداد', 'وضعیت', 'تاریخ ثبت', 'عملیات'])
-                            @foreach ($tableTh as $th)
-                                <th>{{ $th }}</th>
-                            @endforeach
-                        </tr>
-                    </x-slot>
-                    <x-slot name="tableTd">
-                        @forelse($categories as $category)
-                            <tr>
-                                <td class="text-center"><i class="fe fe-move glyphicon-move text-dark"></i></td>
-                                <input type="hidden" value="{{ $category->id }}" name="categories[]">
-                                @php($count = count($category->children))
-                                <td class="">
-                                    @if ($count == 0)
-                                        {{ $category->title }}
-                                    @else
-                                        <a class="text-info" data-original-title="مشاهده"
-                                            href="{{ route('admin.categories.index', $category) }}">{{ $category->title }}</a>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($count == 0)
-                                        {{ $count }}
-                                    @else
-                                        <a class="text-info" data-original-title="مشاهده"
-                                            href="{{ route('admin.categories.index', $category) }}">{{ $count }}</a>
-                                    @endif
-                                </td>
-                                <td>@include('core::includes.status', ['status' => $category->status])</td>
-                                <td>{{ verta($category->created_at)->format('Y/m/d H:i') }}</td>
-                                <td>
-                                    @include('core::includes.edit-icon-button', [
-                                        'model' => $category,
-                                        'route' => 'admin.categories.edit',
-                                    ])
-                                    <button onclick="confirmDelete('delete-{{ $category->id }}')"
-                                        class="btn btn-sm btn-icon btn-danger text-white" data-toggle="tooltip"
-                                        type="button" data-original-title="حذف">
-                                        <i class="fa fa-trash-o {{ isset($title) ? 'mr-1' : null }}"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
-                            @include('core::includes.data-not-found-alert', ['colspan' => 6])
-                        @endforelse
-                    </x-slot>
-                </x-table-component>
-                @if ($categories->isNotEmpty())
-                    <button class="btn btn-teal btn-sm mt-5" type="submit">ذخیره مرتب سازی</button>
-                @endif
-            </form>
-        </x-slot>
-    </x-card>
-    @foreach ($categories ?? [] as $category)
-        <form
-            action="{{ route('admin.categories.destroy', $category->id) }}"
-            method="POST"
-            id="delete-{{ $category->id }}"
-            style="display: none">
-            @csrf
-            @method('DELETE')
-        </form>
-    @endforeach    
+<div class="page-header">
+	<x-breadcrumb :items="[['title' => 'لیست دسته بندی های محصول']]" />
+	<div>
+		@php $sortBtnClass = $categories->count() > 0 ? '' : 'd-none' @endphp
+		<button id="sort-btn" type="button" class="btn btn-teal btn-sm align-items-center btn-sm {{ $sortBtnClass }}">ذخیره مرتب سازی</button>
+		<x-create-button route="admin.categories.create" title="ثبت دسته بندی جدید"/>
+	</div>
+</div>
+
+<x-card>
+	<x-slot name="cardTitle">لیست دسته بندی ها</x-slot>
+	<x-slot name="cardOptions"><x-card-options /></x-slot>
+	<x-slot name="cardBody">
+		<ul class="list-style-cricle sortable" data-id="root">
+			@foreach ($categories as $parentCategory)
+				<li data-id="{{ $parentCategory->id }}">
+					<div class="menu-title-box" style="opacity: {{ $parentCategory->status ? 1 : .5 }}">
+						<span>{{ $parentCategory->title }}</span>
+						<div>
+							<a 
+								class="btn btn-sm btn-icon btn-primary text-white" 
+								href="{{ route('admin.categories.create', ['parent_id' => $parentCategory->id]) }}">
+								<i class="fa fa-plus"></i>
+							</a>
+							<x-delete-button route="admin.categories.destroy" :model="$parentCategory" />
+							<x-edit-button route="admin.categories.edit" :model="$parentCategory" />
+						</div>
+					</div>
+					@if ($parentCategory->children->isNotEmpty())
+						<ul class="list-style-square sortable">
+							@foreach ($parentCategory->children as $childCategory)
+								<li data-id="{{ $childCategory->id }}">
+									<div class="menu-title-box" style="opacity: {{ $childCategory->status ? 1 : .5 }}">
+										<span>{{ $childCategory->title }}</span>
+										<div>
+											<a 
+												class="btn btn-sm btn-icon btn-primary text-white" 
+												href="{{ route('admin.categories.create', ['parent_id' => $childCategory->id]) }}">
+												<i class="fa fa-plus"></i>
+											</a>
+											<x-delete-button route="admin.categories.destroy" :model="$childCategory" />
+											<x-edit-button route="admin.categories.edit" :model="$childCategory" />
+										</div>
+									</div>
+									@if ($childCategory->children->isNotEmpty())
+										<ul class="list-style-cricle sortable">
+											@foreach ($childCategory->children as $grandChildCategory)
+												<li data-id="{{ $grandChildCategory->id }}">
+													<div class="menu-title-box" style="opacity: {{ $grandChildCategory->status ? 1 : .5 }}">
+														<span>{{ $grandChildCategory->title }}</span>
+														<div>
+															<x-delete-button route="admin.categories.destroy" :model="$grandChildCategory" />
+															<x-edit-button route="admin.categories.edit" :model="$grandChildCategory" />
+														</div>
+													</div>
+												</li>
+											@endforeach
+										</ul>
+									@endif
+								</li>
+							@endforeach
+						</ul>
+					@endif
+				</li>
+			@endforeach
+		</ul>
+	</x-slot>
+</x-card>
+
+   
 @endsection
+
 @section('scripts')
-<script>
-    var items = document.getElementById('items');
-    var sortable = Sortable.create(items, {
-        handle: '.glyphicon-move',
-        animation: 150
-    });
-    document.getElementById('submitButton').addEventListener('click', function() {
-        document.getElementById('myForm').submit();
-    });
-</script>
+	<script>
+		
+		document.addEventListener('DOMContentLoaded', () => {
+
+			const sortables = document.querySelectorAll('.sortable');
+			const sortUrl = @json(route('admin.categories.sort'));
+
+			sortables.forEach(sortable => {
+				new Sortable(sortable, {
+					group: 'nested',
+					animation: 150,
+					fallbackOnBody: true,
+					swapThreshold: 0.65,
+				});
+			});
+
+			document.getElementById('sort-btn').addEventListener('click', handleSortEnd);
+
+			function handleSortEnd() {
+				document.getElementById('sort-btn').disabled = true;
+				const rootElement = document.querySelector('.list-style-cricle');
+				if (!rootElement) {
+					return;
+				}
+
+				const data = buildCategoryStructure(rootElement);
+
+				postData(sortUrl, {
+					categories: data
+				})
+				.then(response => {
+					popup('success', '', response.message);
+					document.getElementById('sort-btn').disabled = false;
+				})
+				.catch(error => console.error('Error:', error));
+			}
+
+			function buildCategoryStructure(element) {
+				return Array.from(element.querySelectorAll(':scope > li')).map(item => {
+					const children = item.querySelector('ul') ? buildCategoryStructure(item.querySelector('ul')) : [];
+					return {
+						id: item.dataset.id,
+						children: children
+					};
+				});
+			}
+			
+			async function postData(url = '', data = {}) {
+				const response = await fetch(url, {
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRF-TOKEN': '{{ csrf_token() }}'
+					},
+					body: JSON.stringify(data)
+				});
+
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+
+				return response.json();
+			}
+		
+		});
+
+	</script>
 @endsection
-{{-- @section('scripts')
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-    <script src="{{ asset('assets/js/treeSorable/treeSortable.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/treeSorable/script.js') }}"></script> --}}
-{{-- <script>
-        $(document).ready(function() {
-            const usersTreeData = @json($categoriesTreeData);
-            console.log(usersTreeData);
 
-            const leftTreeId = '#left-tree';
-            const leftSortable = new TreeSortable({
-                treeSelector: leftTreeId,
-            });
-            const $leftTree = $(leftTreeId);
-            const $content = usersTreeData.map(leftSortable.createBranch);
-            $leftTree.html($content);
-            leftSortable.run();
-
-            // const delay = () => {
-            //     return new Promise(resolve => {
-            //         setTimeout(() => {
-            //             resolve();
-            //         }, 1000);
-            //     });
-            // };
-            $leftTree.on("sortupdate", function(event, ui) {
-                var sortedIDs = $leftTree.sortable( "toArray",{attribute :'id'} );
-                console.log(sortedIDs);
-
-
-            });
-
-            leftSortable.onSortCompleted(async (event, ui) => {
-                // await delay();
-                // console.log('ui.item', event)
-                // console.log('helper', ui.helper)
-
-                let token = $('meta[name="csrf-token"]').attr('content');
-
-                // const getAllOrders = () => {
-                //     const orders = [];
-                //     $leftTree.find('.branch').each(function(index) {
-                //         const id = $(this).data('id');
-                //         const depth = $(this).parentsUntil($leftTree, '.branch').length;
-                //         orders.push({ id, order: index, depth });
-                //     });
-                //     return orders;
-                // };
-
-                // console.log(getAllOrders());
-                // $.ajax({
-                //     url: '{{ route('admin.categories.sort') }}',
-                //     type: 'POST',
-                //     headers: { 'X-CSRF-TOKEN': token },
-                //     data: { categories: getAllOrders() },
-                //     success: function(response) {
-                //         console.log('Order updated successfully');
-                //     },
-                //     error: function(xhr, status, error) {
-                //         console.error('Error updating order:', error);
-                //     }
-                // });
-
-
-            });
-
-            leftSortable.addListener('click', '.add-child', function(event, instance) {
-                event.preventDefault();
-                instance.addChildBranch($(event.target));
-            });
-
-            leftSortable.addListener('click', '.add-sibling', function(event, instance) {
-                event.preventDefault();
-                instance.addSiblingBranch($(event.target));
-            });
-
-            leftSortable.addListener('click', '.remove-branch', function(event, instance) {
-                event.preventDefault();
-
-                const confirm = window.confirm('Are you sure you want to delete this branch?');
-                if (!confirm) {
-                    return;
-                }
-                instance.removeBranch($(event.target));
-            });
-
-
-
-            tippy('[data-tippy-content]');
-        });
-    </script>
-@endsection --}}
+@section('styles')
+	<style>
+		.sortable li {
+			cursor: move;
+		}
+		.menu-title-box {
+			padding: 10px;
+			margin: 5px 0;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			/* background-color: #f9f9f9;  */
+			background-color: transparent; 
+			font-weight: bold; 
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	</style>
+@endsection

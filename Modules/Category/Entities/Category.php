@@ -4,8 +4,11 @@ namespace Modules\Category\Entities;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Modules\Admin\Classes\ActivityLogHelper;
 use Modules\Admin\Entities\Admin;
 use Modules\Attribute\Entities\Attribute;
 use Modules\Brand\Entities\Brand;
@@ -30,7 +33,7 @@ class Category extends Model implements HasMedia
 		'order_column_name' => 'order',
 		'sort_when_creating' => true,
 	];
-	
+
 	protected $fillable = [
 		'title',
 		'en_title',
@@ -66,9 +69,18 @@ class Category extends Model implements HasMedia
 		Helpers::clearCacheInBooted(static::class, self::SPECIAL_CATEGORIES_CACHE_KEY);
 	}
 
-	public static function getCategoriesForAdmin() {}
+	public static function getCategoriesForAdmin()
+	{
+		return Cache::rememberForever(self::ADMIN_CATEGORIES_CACHE_KEY, function () {
+			return self::query()
+				->whereNull('parent_id')
+				->orderByDesc('order')
+				->with('children')
+				->get();
+		});
+	}
 
-	public static function getCategoriesForFront() 
+	public static function getCategoriesForFront()
 	{
 		return Cache::rememberForever(self::FRONT_CATEGORIES_CACHE_KEY, function () {
 			$selectedColumns = ['id', 'title', 'priority', 'parent_id'];
@@ -100,9 +112,90 @@ class Category extends Model implements HasMedia
 				->latest('id')
 				->with('media')
 				->get()
-				->each(fn (self $category) => $category->append(['image']));
+				->each(fn(self $category) => $category->append(['image']));
 		});
 	}
+
+	public static function getCategoriesToSetParent(self|null $category = null)
+	{
+		return self::query()
+			->select(['id', 'title', 'order'])
+			->orderByDesc('order')
+			->when($category, fn($q) => $q->whereKeyNot($category->id))
+			->get();
+	}
+
+	public static function storeOrUpdate(Request $request, self|null $category = null)
+	{
+		$isUpdating = (bool) $category;
+		$data = $request->validated();
+
+		if ($isUpdating) {
+			$category->update($data);
+			ActivityLogHelper::updatedModel('دسته بندی بروز شد', $category);
+		} else {
+			$category = self::createCategory($data, $request->filled('parent_id') ? $request->parent_id : null);
+			ActivityLogHelper::storeModel('دسته بندی ثبت شد', $category);
+		}
+
+		self::syncRelationships($category, $request);
+		self::handleFiles($request, $category);
+
+		return $category;
+	}
+
+	private static function createCategory(array $data, $parentId = null): self
+	{
+		$category = new self();
+		$category->fill($data);
+
+		if ($parentId) {
+			$parentLevel = DB::table('categories')->where('id', $parentId)->value('level');
+			$category->level = $parentLevel ? $parentLevel + 1 : 1;
+		}
+
+		$category->save();
+		return $category;
+	}
+
+	private static function syncRelationships(self $category, Request $request): void
+	{
+		$category->attributes()->sync($request->attribute_ids ?? []);
+		$category->specifications()->sync($request->specification_ids ?? []);
+		$category->brands()->sync($request->brand_ids ?? []);
+	}
+
+	private static function handleFiles(Request $request, self $category): void
+	{
+		if ($request->hasFile('icon')) {
+			$category->clearMediaCollection('icon');
+			$category->addIcon($request->file('icon'));
+		}
+		if ($request->hasFile('image')) {
+			$category->clearMediaCollection('image');
+			$category->addImage($request->file('image'));
+		}
+	}
+
+	public static function sort(array $categories, $parentId = null)
+  {
+    $order = 999999;
+    foreach ($categories as $categoryArr) {
+      $category = self::find($categoryArr['id']);
+      if (!$category) {
+        continue;
+      }
+
+      $category->update([
+        'order' => $order--,
+        'parent_id' => $parentId,
+      ]);
+
+      if (!empty($categoryArr['children'])) {
+        self::sort($categoryArr['children'], $category->id);
+      }
+    }
+  }
 
 	public function sluggable(): array
 	{
@@ -136,8 +229,8 @@ class Category extends Model implements HasMedia
 	public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
 	{
 		return $this->hasMany(Category::class, 'parent_id', 'id');
-			// ->orderBy('priority', 'DESC')
-			// ->with(['children', 'attributes.values', 'brands', 'specifications.values']);
+		// ->orderBy('priority', 'DESC')
+		// ->with(['children', 'attributes.values', 'brands', 'specifications.values']);
 	}
 
 	public function scopeParents($query, $parent_id = null)
@@ -204,20 +297,6 @@ class Category extends Model implements HasMedia
 			$query->active();
 		}
 		return $query;
-	}
-
-	public static function sort($categories)
-	{
-		$items = Category::whereIn('id', $categories)->get();
-		$itemMap = $items->keyBy('id');
-
-		foreach ($categories as $index => $id) {
-			if (isset($itemMap[$id])) {
-				$item = $itemMap[$id];
-				$item->priority = $index + 1;
-				$item->save();
-			}
-		}
 	}
 
 	public static function getAllCategoriesForProductList()

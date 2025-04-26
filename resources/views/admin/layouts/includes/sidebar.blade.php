@@ -1,8 +1,11 @@
 <aside class="app-sidebar">
   <div class="app-sidebar__user">
     <div class="dropdown user-pro-body text-center">
+      {{-- <div class="user-pic">
+        <img src="{{ Storage::url($siteLogoUrl) }}" class="avatar-xxl rounded-circle mb-1">
+      </div> --}}
       <div class="user-info">
-        <span class="text-light fs-18">نارین سنتر</span>
+        <span class="text-light fs-18">پنل مدیریت {{ $siteTitle }}</span>
       </div>
     </div>
   </div>
@@ -48,6 +51,7 @@
             @can('read_brand')
               <li><a href="{{ route('admin.brands.index') }}" class="slide-item"><span>برند ها</span></a></li>
             @endcan
+            <li><a href="{{ route('admin.color-ranges.index') }}" class="slide-item"><span>طیف رنگی</span></a></li>
           </ul>
         </li>
       @endcanany

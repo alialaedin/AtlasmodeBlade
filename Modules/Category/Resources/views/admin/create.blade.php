@@ -39,27 +39,16 @@
                         <div class="form-group">
                             <label for="parent_id" class="control-label"> پدر:</label>
                             <select class="form-control" name="parent_id" id="parent_id">
-                                @if ($isChildren)
-                                @foreach ($parentsCategories as $parentCategory)  
-                                    <option value="{{ $parentCategory->id }}"   
-                                        @if($parentCategory->parent_id == null) selected @endif>  
-                                        {{ $parentCategory->title }}  
-                                    </option>  
-                                    @endforeach  
-                                    <option value="" class="text-muted" >ندارد</option>
-                                @else
-                                    @foreach ($parentsCategories as $parentCategory)  
-                                        <option value="{{ $parentCategory->id }}">  
-                                            {{ $parentCategory->title }}  
-                                        </option>  
-                                    @endforeach  
-                                    <option value="" class="text-muted" selected>ندارد</option>
-                                @endif
+                                <option value="">انتخاب</option>
+                                <option value="none-parent" {{ old('parent_id') == 'none-parent' ? 'selected' : '' }}>بدون پدر</option>
+                                @foreach ($categories ?? [] as $category)
+                                    <option value="{{ $category->id }}" {{ old('parent_id') || request('parent_id') == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-3 col-md-6">
+                    <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label for="attribute_ids" class="control-label"> ویژگی:</label>
                             <select class="form-control select2" multiple name="attribute_ids[]" id="attribute_ids">
@@ -73,7 +62,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-3 col-md-6">
+                    <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label for="specification_ids" class="control-label"> مشخصات:</label>
                             <select class="form-control select2" multiple name="specification_ids[]" id="specification_ids">
@@ -87,7 +76,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-3 col-md-6">
+                    <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label for="image" class="control-label"> تصویر: </label>
                             <input type="file" id="image" class="form-control" name="image"
@@ -95,7 +84,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-3 col-md-6">
+                    <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label for="icon" class="control-label"> آیکون: </label>
                             <input type="file" id="icon" class="form-control" name="icon"
@@ -103,10 +92,14 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12">
                         <div class="form-group">
-                            <label for="description" class="control-label">توضیحات:</label>
-                            <textarea class="form-control" name="description" id="description" rows="2">{{ old('description') }}</textarea>
+                            <label for="description" class="control-label">توضیحات :</label>
+                            @include('components.editor', [
+                                'name' => 'description',
+                                'required' => 'false',
+                                'field_name' => 'description',
+                            ])
                         </div>
                     </div>
 
@@ -120,8 +113,7 @@
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label for="meta_title" class="control-label"> متا: </label>
-                            <input type="text" id="meta_title" class="form-control" name="meta_title"
-                                value="{{ old('meta_title') }}">
+                            <textarea class="form-control" name="meta_title" id="meta_title" rows="2">{{ old('meta_title') }}</textarea>
                         </div>
                     </div>
 
@@ -160,6 +152,9 @@
 @endsection
 @section('scripts')
     <script>
+        $('#parent_id').select2({
+            placeholder: 'انتخاب پدر',
+        });
         $('#attribute_ids').select2({
             placeholder: 'انتخاب ویژگی',
         });
