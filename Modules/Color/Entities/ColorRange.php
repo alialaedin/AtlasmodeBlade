@@ -102,6 +102,6 @@ class ColorRange extends Model implements Sortable, HasMedia
 
 	public function varieties()
 	{
-		return $this->belongsToMany(Variety::class);
+		return $this->belongsToMany(Variety::class, 'color_range_variety');
 	}
 }

@@ -22,6 +22,7 @@ use Modules\Attribute\Entities\Attribute;
 use Modules\Attribute\Entities\AttributeValue;
 use Modules\Cart\Entities\Cart;
 use Modules\Color\Entities\Color;
+use Modules\Color\Entities\ColorRange;
 use Modules\Core\Classes\CoreSettings;
 use Modules\Core\Entities\BaseModel;
 use Modules\Core\Traits\InteractsWithMedia;
@@ -190,6 +191,9 @@ class Variety extends BaseModel implements HasMedia
 
         if ($attributes = $varietyRequest['attributes']) {
             $variety->assignAttributes($attributes);
+        }
+        if (!empty($varietyRequest['color_range_ids']) && is_array($varietyRequest['color_range_ids'])) {
+            $variety->colorRanges()->attach($varietyRequest['color_range_ids']);
         }
         $variety->assignGifts($varietyRequest);
 
@@ -681,6 +685,11 @@ class Variety extends BaseModel implements HasMedia
     {
         return $this->gifts()->active();
     }
+
+    public function colorRanges()
+	{
+		return $this->belongsToMany(ColorRange::class, 'color_range_variety');
+	}
 
     //    public static function calculateDiscount($model, int $price, string $name): array
     //    {

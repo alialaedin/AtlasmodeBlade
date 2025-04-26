@@ -89,6 +89,9 @@ class ProductStoreRequest extends FormRequest
             'product.varieties.*.attributes.*'      => 'nullable',
             'product.varieties.*.attributes.*.id'   => 'required|exists:attributes,id',
             'product.varieties.*.attributes.*.value'=> 'required', //id , text
+            // color ranges
+            'product.varieties.*.color_range_ids'   => 'nullable|array',
+            'product.varieties.*.color_range_ids.*' => 'nullable|integer|exists:color_ranges,id',
             // Color
             'product.varieties.*.color_id'          => 'nullable|integer|exists:colors,id',
 

@@ -203,6 +203,7 @@ class ProductController extends Controller
 		$product->load([
 			'categories',
 			'varieties.attributes',
+			'varieties.colorRanges',
 			'unit',
 			'sizeCharts',
 			'brand',
