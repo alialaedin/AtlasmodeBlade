@@ -8,7 +8,7 @@
 		<!-- Logo -->
 		<figure class=" d-flex">
 			<a href="{{ url('/') }}" class="logo-header d-flex">
-			<img class="w-p-100" src="{{ asset('front-assets/images/header/logo.9208f443 (1).svg') }}" alt="logo">
+				<img class="w-p-100" src="{{$siteLogoUrl }}" alt="logo">
 			</a>
 		</figure>
 
@@ -182,7 +182,6 @@
 	<script>
 		$(document).ready(() => {
 
-			// Start Carts Count 
 			const getCartCookie = () => {
 				let cookieArr = document.cookie.split(";");  
 				for (let i = 0; i < cookieArr.length; i++) {  
@@ -200,15 +199,11 @@
 				$(span).text(cartsCount);
 			});
 			
-			// End Carts Count 
-
-			// Start Logout button
 			document.querySelector('#logout-modal-button')?.addEventListener('click', () => {
 				document.querySelector('.modal[data-id="exit"]').classList.add('active');
 				document.querySelector('.modal-overlay').classList.add('active');
 				document.body.classList.add('no-overflow');
 			});
-			// End Logout Button
 
 		});
 	</script>

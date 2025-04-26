@@ -201,7 +201,7 @@
 					{{-- attributes select-box --}}
 					<div class="row align-items-center mb-3">
 						<div class="col-xl-2">
-							<label for="attributes-select">ویژگی‌ها <span class="text-danger">&starf;</span></label>
+							<label for="attributes-select">ویژگی‌ها</label>
 						</div>
 						<div class="col-xl-10">
 							<multiselect

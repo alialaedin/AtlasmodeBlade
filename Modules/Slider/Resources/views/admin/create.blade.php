@@ -12,7 +12,7 @@
     <x-slot name="cardTitle">ثبت اسلایدر جدید</x-slot>
     <x-slot name="cardOptions"><x-card-options /></x-slot>
     <x-slot name="cardBody">
-      <form action="{{ route('admin.sliders.store') }}" method="POST" enctype="multipart/form-data">
+      <form id="submit-form" action="{{ route('admin.sliders.store') }}" method="POST" enctype="multipart/form-data">
 
         @csrf
         <input hidden name="group" value="{{$group}}">
@@ -37,9 +37,9 @@
           <div class="col-xl-3 col-lg-6 col-12">
             <div class="form-group">
               <label>نوع لینک :</label>
-              <select id="linkableTypeSelect" name="linkable_type" class="form-control">
+              <select id="linkableTypeSelect" name="linkable_unique_type" class="form-control">
                 <option value=""></option>
-                <option value="self_link" @if (old('linkable_type') == 'self_link') selected @endif>لینک دلخواه</option>
+                <option value="self_link" @if (old('linkable_unique_type') == 'self_link') selected @endif>لینک دلخواه</option>
                 @foreach ($linkables as $linkable)
                   <option value="{{ $linkable['unique_type'] }}">{{ $linkable['label'] }}</option>
                 @endforeach
@@ -50,6 +50,7 @@
           <div class="col-xl-3 col-lg-6 col-12">
             <div class="form-group">
               <label>آیتم های لینک :</label>
+              <input hidden name="linkable_type">
               <select id="linkableIdSelect" name="linkable_id" class="form-control">
                 <option value="">انتخاب</option>
               </select>
@@ -147,8 +148,24 @@
       });
     }
 
+    function submit(event) {
+      event.preventDefault();
+      const selectedUniqueType = linkableTypeSelect.val()?.trim();
+      if (selectedUniqueType && selectedUniqueType != 'self_link') {
+        const linkable = getLinkableByUniqueType(selectedUniqueType);
+        if (linkable) {
+          $(event.currentTarget).find('input[name=linkable_type]').val(linkable.linkable_type);
+        }
+      }
+      $(event.currentTarget).off('submit').submit();
+      $(event.currentTarget).on('submit', submit);
+    }
+    
     $(document).ready(() => {
       handleLinkableTypeSelect();
+      $("#submit-form").submit((event) => {
+        submit(event);
+      });
     });
 
   </script>

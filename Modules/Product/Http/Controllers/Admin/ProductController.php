@@ -5,14 +5,12 @@ namespace Modules\Product\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Modules\Product\Exports\ProductExport;
 use Modules\Product\Exports\ProductsExport;
-use Shetabit\Shopit\Modules\Product\Http\Controllers\Admin\ProductController as BaseProductController;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Admin\Classes\ActivityLogHelper;
 use Modules\Attribute\Entities\Attribute;
 use Modules\Brand\Entities\Brand;
 use Modules\Category\Entities\Category;
@@ -22,7 +20,6 @@ use Modules\Product\Http\Requests\Admin\ProductStoreRequest;
 use Modules\Product\Http\Requests\Admin\ProductUpdateRequest;
 use Modules\Specification\Entities\Specification;
 use Modules\Unit\Entities\Unit;
-use Throwable;
 use Modules\Product\Entities\Variety;
 use Modules\SizeChart\Entities\SizeChartType;
 
@@ -124,7 +121,7 @@ class ProductController extends Controller
 
 		$statusCounts = Product::getStatusCounts();
 		$categories = Category::query()->select(['id', 'title'])->latest('id')->get();
-		$statuses = Product::getAvailableStatuses();
+		$statuses = Product::getAvailableStatusesWithLabel();
 		$countAllProducts = Product::count();
 
 		return view('product::admin.product.index', compact([
@@ -136,13 +133,6 @@ class ProductController extends Controller
 		]));
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 * @param ProductStoreRequest $request
-	 * @param Product $product
-	 * @return JsonResponse
-	 * @throws Throwable
-	 */
 	public function store(ProductStoreRequest $request, Product $product): JsonResponse
 	{
 		// dd($request->product["video"]);
@@ -197,13 +187,48 @@ class ProductController extends Controller
 		return response()->success('محصول با موفقیت ایجاد شد', compact('product'));
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 * @param ProductUpdateRequest $request
-	 * @param Product $product
-	 * @return JsonResponse
-	 * @throws Throwable
-	 */
+	public function edit(Product $product)
+	{
+		$categories = Category::query()->select('id', 'title')->with(['attributes.values', 'specifications.values'])->get();
+		$attributes = Attribute::query()->select('id', 'name', 'label', 'type')->with('values')->get();
+		$brands = Brand::query()->select('id', 'name')->get();
+		$tags = Tag::query()->select('id', 'name')->get();
+		$units = Unit::query()->active()->select('id', 'name', 'status')->get();
+		$specifications = Specification::active()->where('public', 1)->with('values')->latest('order')->get();
+		$sizeChartTypes = SizeChartType::query()->select(['id', 'name'])->with('values:id,name,type_id')->latest()->get();
+		$productsStatuses = Product::getAvailableStatusesWithLabel();
+		$discountTypes = Product::getAvailableDiscountTypesWithLabel();
+
+		$product->load([
+			'categories',
+			'varieties.attributes',
+			'unit',
+			'sizeCharts',
+			'brand',
+			'tags',
+			'specifications.values'
+		]);
+
+		return view(
+			'product::admin.product.edit',
+			compact(
+				[
+					'product',
+					'categories',
+					'attributes',
+					'brands',
+					'tags',
+					'units',
+					'specifications',
+					'brands',
+					'sizeChartTypes',
+					'productsStatuses',
+					'discountTypes'
+				]
+			)
+		);
+	}
+
 	public function update(ProductUpdateRequest $request, Product $product)
 	{
 		try {

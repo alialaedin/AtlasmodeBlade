@@ -13,7 +13,7 @@
 	<x-slot name="cardOptions"><x-card-options /></x-slot>
 	<x-slot name="cardBody">
 		@include('components.errors')
-		<form action="{{ route('admin.menus.store') }}" method="POST" enctype="multipart/form-data">
+		<form id="submit-form" action="{{ route('admin.menus.store') }}" method="POST" enctype="multipart/form-data">
 
 			@csrf
 			<input hidden name="group_id" value="{{ $menuGroup->id }}">
@@ -51,9 +51,9 @@
 				<div class="col-xl-4 col-lg-6 col-12">
 					<div class="form-group">
 						<label>نوع لینک :</label>
-						<select id="linkableTypeSelect" name="linkable_type" class="form-control">
+						<select id="uniqueTypeSelect" name="unique_type" class="form-control">
 							<option value=""></option>
-							<option value="self_link" @if (old('linkable_type') == 'self_link') selected @endif>لینک دلخواه</option>
+							<option value="self_link" @if (old('unique_type') == 'self_link') selected @endif>لینک دلخواه</option>
 							@foreach ($linkables as $linkable)
 								<option value="{{ $linkable['unique_type'] }}">{{ $linkable['label'] }}</option>
 							@endforeach
@@ -64,6 +64,7 @@
 				<div class="col-xl-4 col-lg-6 col-12">
 					<div class="form-group">
 						<label>آیتم های لینک :</label>
+						<input hidden name="linkable_type">
 						<select id="linkableIdSelect" name="linkable_id" class="form-control">
 							<option value="">انتخاب</option>
 						</select>
@@ -123,7 +124,7 @@
 
 	const linkables = @json($linkables);
 
-	const linkableTypeSelect = $('#linkableTypeSelect');
+	const uniqueTypeSelect = $('#uniqueTypeSelect');
 	const linkableIdSelect = $('#linkableIdSelect');
 	const selfLinkInput = $('#selfLinkInput');
 	const parentMenuSelect = $('#parent-menu-select');
@@ -140,14 +141,14 @@
 	}
 
 	parentMenuSelect.select2({ placeholder: 'انتخاب پدر' });
-	linkableTypeSelect.select2({ placeholder: 'نوع لینک را انتخاب کنید' });
+	uniqueTypeSelect.select2({ placeholder: 'نوع لینک را انتخاب کنید' });
 	linkableIdSelect.select2({ placeholder: 'ابتدا نوع لینک را انتخاب کنید' });
 
 	function handleLinkableTypeSelect() {
 
-		linkableTypeSelect.on('select2:select', () => {
+		uniqueTypeSelect.on('select2:select', () => {
 
-			const value = linkableTypeSelect.val();
+			const value = uniqueTypeSelect.val();
 
 			changeSelfLinkInputDisabled(value !== 'self_link');
 			emptyLinkableIdSelect();
@@ -172,8 +173,24 @@
 		});
 	}
 
+	function submit(event) {
+		event.preventDefault();
+		const selectedUniqueType = uniqueTypeSelect.val()?.trim();
+		if (selectedUniqueType && selectedUniqueType != 'self_link') {
+			const linkable = getLinkableByUniqueType(selectedUniqueType);
+			if (linkable) {
+				$(event.currentTarget).find('input[name=linkable_type]').val(linkable.linkable_type);
+			}
+		}
+		$(event.currentTarget).off('submit').submit();
+    $(event.currentTarget).on('submit', submit);
+	}
+	
 	$(document).ready(() => {
 		handleLinkableTypeSelect();
+		$("#submit-form").submit((event) => {
+			submit(event);
+		});
 	});
 
 </script>
