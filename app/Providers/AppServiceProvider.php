@@ -73,7 +73,7 @@ class AppServiceProvider extends ServiceProvider
 			$siteLogoUrl = Setting::where('name', 'logo')->first()->value;
 
 			$view->with([
-				'siteLogo' => $siteLogoUrl,
+				'siteLogoUrl' => $siteLogoUrl,
 				'settingGroups' => $settingGroups,
 				'menuGroups' => $menuGroups,
 				'sliderGroups' => $sliderGroups,
