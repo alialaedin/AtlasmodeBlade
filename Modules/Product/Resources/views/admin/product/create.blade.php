@@ -258,6 +258,7 @@
 									<th>عنوان</th>
 									<th>قیمت (تومان)</th>
 									<th>بارکد - SKU</th>
+									<th>طیف رنگی</th>
 									<th>موجودی</th>
 									<th>عملیات</th>
 								</tr>
@@ -295,6 +296,23 @@
 												placeholder="SKU"
 											/>  
 										</td>  
+										<td>
+											<multiselect
+												dir="rtl"
+												class="custom-multiselect"
+												v-model="product.variety_values[attributes.id].color_range_ids"
+												label="title"
+												multiple
+												placeholder="انتخاب طیف رنگی"
+												select-label="انتخاب"
+												deselect-label="حذف"
+												selected-label="انتخاب شده"
+												track-by="id"
+												:options="colorRanges"
+												:close-on-select="false"
+												:searchable="true"
+											></multiselect>
+										</td>
 										<td>  
 											<input 
 												type="number" 
@@ -405,6 +423,29 @@
 																format="YYYY-MM-DD HH:mm"
 																display-format="jYYYY/jM/jD HH:mm"
 															/>
+														</div>
+													</div>
+
+													<div class="row align-items-center my-3">
+														<div class="col-xl-2">
+															<label class="d-flex" :for="'variety-color-range' + attributes.id">طیف رنگی :</label>
+														</div>
+														<div class="col-xl-10">
+															<multiselect
+																dir="rtl"
+																class="custom-multiselect"
+																v-model="product.variety_values[attributes.id].color_range_ids"
+																label="title"
+																multiple
+																placeholder="انتخاب طیف رنگی"
+																select-label="انتخاب"
+																deselect-label="حذف"
+																selected-label="انتخاب شده"
+																track-by="id"
+																:options="colorRanges"
+																:close-on-select="false"
+																:searchable="true"
+															></multiselect>
 														</div>
 													</div>
 
@@ -985,6 +1026,7 @@
     data() {
       return {
         message: "Hello Vue!",
+        colorRanges: @json($colorRanges),
         categories: @json($categories),
         attributes: @json($attributes),
         brands: @json($brands),
@@ -1326,7 +1368,7 @@
               purchase_price: variety.purchase_price,
               barcode: variety.barcode,
               SKU: variety.SKU,
-							color_id: null,
+							color_range_ids: [],
               quantity: variety.quantity,
               discount_type: variety.discount_type?.name || null,
 							discount_until: variety.discount_until,

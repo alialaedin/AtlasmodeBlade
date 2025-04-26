@@ -21,6 +21,7 @@ use Modules\Product\Http\Requests\Admin\ProductUpdateRequest;
 use Modules\Specification\Entities\Specification;
 use Modules\Unit\Entities\Unit;
 use Modules\Product\Entities\Variety;
+use Modules\Color\Entities\ColorRange;
 use Modules\SizeChart\Entities\SizeChartType;
 
 class ProductController extends Controller
@@ -300,6 +301,7 @@ class ProductController extends Controller
 		$sizeChartTypes = SizeChartType::query()->select(['id', 'name'])->with('values:id,name,type_id')->latest()->get();
 		$productsStatuses = Product::getAvailableStatusesWithLabel();
 		$discountTypes = Product::getAvailableDiscountTypesWithLabel();
+		$colorRanges = ColorRange::getColorRangesForAdmin();
 
 		return view(
 			'product::admin.product.create',
@@ -314,7 +316,8 @@ class ProductController extends Controller
 					'brands',
 					'sizeChartTypes',
 					'productsStatuses',
-					'discountTypes'
+					'discountTypes',
+					'colorRanges'
 				]
 			)
 		);
