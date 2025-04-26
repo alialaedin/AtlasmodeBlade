@@ -32,8 +32,13 @@ class CartController extends Controller
         $vQuery->with('attributes');
         $vQuery->with('product', function ($pQuery) {
           $pQuery->select(['id', 'title']);
+          $pQuery->with('media');
         });
       })->get();
+    
+    foreach ($carts as $cart) {
+      $cart->variety->product->append('main_image');
+    }
 
     // $cartsWarnings = (new WarningMessageCartService($carts))->checkAll();
     $hasFreeShippingProduct = Cart::hasfreeShippingProduct($carts);

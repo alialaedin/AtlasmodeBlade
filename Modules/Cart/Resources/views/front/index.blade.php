@@ -63,7 +63,7 @@
                 <!-- Img And Title -->
                 <div class="d-flex gap-2 align-items-center">
                   <a :href="'products/' + cart.variety.product_id">
-                    <img class="product-item-img radius-large" src="{{ asset('front-assets/images/product-detail/product-5120 (1).jpg') }}" alt="">
+                    <img class="product-item-img radius-large" :src="cart.variety.product.main_image?.url">
                   </a>
                   <!-- Title And Color And Size -->
                   <div class="d-flex flex-column justify-content-between pt-md-4 pt-7 pb-4">
@@ -633,6 +633,7 @@
       this.activeLoginBtn();
       this.openSearchModal();
       this.hdanleModalOverlayClickOperation();
+      console.log(this.carts);
     },
     data() {
       return {
