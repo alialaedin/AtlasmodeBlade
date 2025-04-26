@@ -121,7 +121,7 @@ class ProductController extends Controller
 
 		$statusCounts = Product::getStatusCounts();
 		$categories = Category::query()->select(['id', 'title'])->latest('id')->get();
-		$statuses = Product::getAvailableStatusesWithLabel();
+		$statuses = Product::getAvailableStatuses();
 		$countAllProducts = Product::count();
 
 		return view('product::admin.product.index', compact([
