@@ -74,7 +74,7 @@ class Category extends Model implements HasMedia
 		return Cache::rememberForever(self::ADMIN_CATEGORIES_CACHE_KEY, function () {
 			return self::query()
 				->whereNull('parent_id')
-				->orderByDesc('order')
+				->orderByDesc('priority')
 				->with('children')
 				->get();
 		});
@@ -267,8 +267,8 @@ class Category extends Model implements HasMedia
 
 	public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
 	{
-		return $this->hasMany(Category::class, 'parent_id', 'id');
-		// ->orderBy('priority', 'DESC')
+		return $this->hasMany(Category::class, 'parent_id', 'id')
+		->orderBy('priority', 'DESC');
 		// ->with(['children', 'attributes.values', 'brands', 'specifications.values']);
 	}
 
