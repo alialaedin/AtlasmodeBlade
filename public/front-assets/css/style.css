@@ -17574,7 +17574,8 @@ input[type=range]::-moz-range-thumb {
   top: 15px;
 }
 .product-cart .product-img {
-  height: 175px;
+  /* height: 175px; */
+  height: 289px;
   max-height: 289px;
   height: uset !important;
 }
