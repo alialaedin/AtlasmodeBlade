@@ -39,32 +39,4 @@ class CategoryUpdateRequest extends FormRequest
 		]);
 	}
 
-	public function passedValidation()
-	{
-		if ($this->input('parent_id')) {
-			$parentCategory = Category::findOrFail($this->input('parent_id'));
-			$categoryId = Helpers::getModelIdOnPut('category');
-			if (!$categoryId) {
-				return;
-			}
-			if ($parentCategory->id == $categoryId) {
-				throw Helpers::makeValidationException('خودش نمیتونه پدر خودش باشه !');
-			}
-			if ($parentCategory->parent_id == $categoryId) {
-				throw Helpers::makeValidationException('نمیشه هردو پدر هم باشن !');
-			}
-			// جلوگیری از لوپ بینهایت
-			$parentId = $parentCategory->parent_id;
-			while ($parentId != null) {
-				$tempMenu = Category::find($parentId);
-				if (!$tempMenu) {
-					continue;
-				}
-				if ($tempMenu->parent_id == $categoryId) {
-					throw Helpers::makeValidationException('انتخاب پدر از نوه نتیجه نبیره و ... مجاز نیست');
-				}
-				$parentId = $tempMenu->parent_id;
-			}
-		}
-	}
 }
