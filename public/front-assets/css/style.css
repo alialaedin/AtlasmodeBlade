@@ -15731,6 +15731,18 @@ ul, ol, dd {
   }
 }
 
+.color-details-modal {
+  left: 50%;
+  top: 50%;
+  min-width: 460px;
+  min-width: 260px;
+  height: 70%;
+  transform: translate(-50%, -50%);
+}
+.color-details-modal.active {
+  transform: translate(-50%, -50%);
+}
+
 .modal-mobile-category {
   left: 50%;
   top: 10%;

@@ -122,6 +122,24 @@
           <input type="text" class="title-input text-medium border-gray-300 w-p-100 px-4 py-1" placeholder="عنوان جستجو را بنویسید" value="{{ request('title') }}">
         </div>
 
+        <!-- Color -->
+        <div class="colors p-4 d-flex flex-column gap-2">
+          <span class="w-p-100 text-medium-2-strong color-gray-900 pb-2 border-b-gray-300">رنگ ها</span>
+          <ul class="color-list d-flex flex-wrap gap-3 px-1">
+            @foreach ($colorRanges as $colorRange)
+              <button type="button" class="color-btn d-flex flex-column gap-1 align-items-center">
+                <figure class="h-8 w-8">
+                  <img
+                    class="w-p-100 h-p-100 d-block border-gray-300" 
+                    src="{{ Storage::url($colorRange->logo->uuid .'/'. $colorRange->logo->file_name) }}"
+                  />
+                </figure>
+                <span class="text-subtitle">{{ $colorRange->title }}</span>
+              </button>
+            @endforeach
+          </ul>
+        </div>
+
         <!-- Size -->
         {{-- <div class="size w-p-100 d-flex flex-column gap-2 px-2 pt-3 pb-3">
           <!-- Title -->
@@ -288,6 +306,12 @@
         </div>
 
         {{ $products->onEachSide(0)->links('vendor.pagination.front-product-index') }}
+
+        @if (request('category_id'))
+          <div>
+            {!! $categories->where('id', request('category_id'))->first()->description !!}
+          </div>
+        @endif
 
       </div>
 
