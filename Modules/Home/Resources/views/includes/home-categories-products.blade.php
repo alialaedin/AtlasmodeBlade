@@ -1,16 +1,16 @@
-<section v-for="group in recommendationGroups" :key="recommendationGroups.id" class="most-saled d-flex flex-column gap-lg-6 gap-7 mt-12">
+<section v-for="category in showInHomeCategories" :key="category.id" class="most-saled d-flex flex-column gap-lg-6 gap-7 mt-12">
   <!-- Title -->
   <div class="d-flex align-items-center justify-content-between">
-    <h2 class="h4-strong color-gray-900">@{{ group.label }} های اطلس</h2>
+    <h2 class="h4-strong color-gray-900">@{{ category.title }}</h2>
     <a 
-      :href="'/products?sort=' + group.name" 
+      :href="'/products?category_id=' + category.id" 
       class="see-more pb-1 text-medium-strong color-gray-900">
       مشاهده بیشتر
     </a>
   </div>
   <div class="swiper products-swiper bg-gray-200 p-2">
     <div class="swiper-wrapper">
-      <div v-for="product in group.products" :key="product.id" class="swiper-slide">
+      <div v-for="product in category.products" :key="product.id" class="swiper-slide">
         <article class="product-cart">
           <a :href="'/products/' + product.id" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
             <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
@@ -23,13 +23,13 @@
               <img 
                 class="main-img w-p-100 h-p-100" 
                 loading="lazy" 
-                :src="product.main_image.url" 
+                :src="product.main_image?.url" 
                 :alt="product.title"
               />
               <img 
                 class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" 
                 loading="lazy" 
-                :src="product.main_image.url" 
+                :src="product.main_image?.url" 
                 :alt="product.title"
               />
               <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">

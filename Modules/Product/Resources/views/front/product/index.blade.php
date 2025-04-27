@@ -138,6 +138,10 @@
               </button>
             @endforeach
           </ul>
+          <button type="button" data-modal="color-details" class="color-detail w-p-100 d-flex align-items-center justify-content-center">
+            <span class="text-medium color-gray-800">جزییات رنگ ها</span>
+            <i class="icon-angle-left icon-fs-medium color-gray-700"></i>
+          </button>
         </div>
 
         <!-- Size -->

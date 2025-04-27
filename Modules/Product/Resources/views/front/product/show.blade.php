@@ -618,20 +618,20 @@
         },
         initRelatedProductsSwiper() {
           new Swiper('.similar-products-swiper', {
-            slidesPerView:'5.2',
+            slidesPerView:'4',
             freeMode: true,
             breakpoints:{
-              200: { slidesPerView: 2, spaceBetweenSlides: 10 },
-              360: { slidesPerView: 2, spaceBetweenSlides: 10 },
-              420: { slidesPerView: 2.2, spaceBetweenSlides: 10 },
+              200: { slidesPerView: 1.5, spaceBetweenSlides: 10 },
+              360: { slidesPerView: 1.8, spaceBetweenSlides: 10 },
+              420: { slidesPerView: 2, spaceBetweenSlides: 10 },
               640: { slidesPerView: 3, spaceBetweenSlides: 10 },
-              768: { slidesPerView:4, spaceBetweenSlides: 10 },
-              1024: { slidesPerView: 5, spaceBetweenSlides: 10 }
+              768: { slidesPerView:3.4, spaceBetweenSlides: 10 },
+              1024: { slidesPerView: 4, spaceBetweenSlides: 10 },
             },
             pagination:{
               el:".swiper-pagination",
               dynamicBullets: true,
-              dynamicMainBullets:2
+              dynamicMainBullets: 2,
             }
           });
         },

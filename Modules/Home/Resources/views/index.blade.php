@@ -5,6 +5,7 @@
     @include('home::includes.slider')
     @include('home::includes.special-categories')
     @include('home::includes.products')
+    @include('home::includes.home-categories-products')
     {{-- @include('home::includes.advertise') --}}
     @include('home::includes.posts')
     @include('front-layouts.includes.mobile-menu')
@@ -24,10 +25,13 @@
     createApp({
       mounted() {
         this.handleSlidersSwiper();
+        this.handleProductSwiper();
+        console.log(this.showInHomeCategories);
       },  
       data() {
         return {
-          recommendationGroups: @json($recommendationGroups)
+          recommendationGroups: @json($recommendationGroups),
+          showInHomeCategories: @json($showInHomeCategories)
         }
       },
       methods: {
@@ -42,6 +46,22 @@
               el: ".swiper-pagination",
               dynamicBullets: true,
             },
+          });
+        },
+        handleProductSwiper() {
+          new Swiper(".products-swiper",{
+            slidesPerView:4,
+            freeMode: true,
+            spaceBetween:15,
+            autoplay:true,
+            breakpoints:{
+              200: { slidesPerView: 1.5, spaceBetweenSlides: 10 },
+              360: { slidesPerView: 1.8, spaceBetweenSlides: 10 },
+              420: { slidesPerView: 2, spaceBetweenSlides: 10 },
+              640: { slidesPerView: 3, spaceBetweenSlides: 10 },
+              768: { slidesPerView:3.4, spaceBetweenSlides: 10 },
+              1024: { slidesPerView: 4, spaceBetweenSlides: 10 },
+            }
           });
         }
       }

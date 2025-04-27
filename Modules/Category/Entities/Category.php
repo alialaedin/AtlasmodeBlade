@@ -119,10 +119,49 @@ class Category extends Model implements HasMedia
 	public static function getCategoriesToSetParent(self|null $category = null)
 	{
 		return self::query()
-			->select(['id', 'title', 'order'])
+			->select(['id', 'title', 'order', 'status', 'show_in_home'])
 			->orderByDesc('order')
 			->when($category, fn($q) => $q->whereKeyNot($category->id))
 			->get();
+	}
+
+	public static function getShowInHomeCategories()
+	{
+		$showInHomeCategories = self::getCategoriesToSetParent()
+			->filter(fn(self $category) => $category->status && $category->show_in_home);
+
+		if ($showInHomeCategories->isEmpty()) {
+			return [];
+		}
+
+		foreach ($showInHomeCategories as $category) {
+			$productIds = $category->products->pluck('id')->toArray();
+			$products = Product::query()
+				->select(['id', 'status', 'title'])
+				->whereIn('id', $productIds)
+				->available(true)
+				->take(8)
+				->orderByDesc('id')
+				->with([
+					'media', 
+					'varieties' => function ($vQuery) {
+						$vQuery->select(['id', 'product_id', 'discount', 'discount_until', 'discount_type', 'price']);
+						$vQuery->with('store:id,variety_id,balance');
+						$vQuery->with('product:id');
+				}])
+				->get()
+				->each(function (Product $product) {
+					$product->append(['main_image', 'final_price']);
+					$product->makeHidden(['varieties', 'activeFlash']);
+				});
+
+			unset($category->products);
+			unset($category->children);
+
+			$category->products = $products;
+		}
+
+		return $showInHomeCategories;
 	}
 
 	public static function storeOrUpdate(Request $request, self|null $category = null)
@@ -178,24 +217,24 @@ class Category extends Model implements HasMedia
 	}
 
 	public static function sort(array $categories, $parentId = null)
-  {
-    $order = 999999;
-    foreach ($categories as $categoryArr) {
-      $category = self::find($categoryArr['id']);
-      if (!$category) {
-        continue;
-      }
+	{
+		$order = 999999;
+		foreach ($categories as $categoryArr) {
+			$category = self::find($categoryArr['id']);
+			if (!$category) {
+				continue;
+			}
 
-      $category->update([
-        'order' => $order--,
-        'parent_id' => $parentId,
-      ]);
+			$category->update([
+				'order' => $order--,
+				'parent_id' => $parentId,
+			]);
 
-      if (!empty($categoryArr['children'])) {
-        self::sort($categoryArr['children'], $category->id);
-      }
-    }
-  }
+			if (!empty($categoryArr['children'])) {
+				self::sort($categoryArr['children'], $category->id);
+			}
+		}
+	}
 
 	public function sluggable(): array
 	{
