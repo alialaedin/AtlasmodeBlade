@@ -26,6 +26,8 @@
       mounted() {
         this.handleSlidersSwiper();
         this.handleProductSwiper();
+        this.handleCategoriesProductSwiper();
+        // this.showInHomeCategories = this.showInHomeCategories.filter(c => c.products.length > 0);
         console.log(this.showInHomeCategories);
       },  
       data() {
@@ -63,7 +65,23 @@
               1024: { slidesPerView: 4, spaceBetweenSlides: 10 },
             }
           });
-        }
+        },
+        handleCategoriesProductSwiper() {
+          new Swiper(".categories-products-swiper",{
+            slidesPerView:4,
+            freeMode: true,
+            spaceBetween:15,
+            autoplay:true,
+            breakpoints:{
+              200: { slidesPerView: 1.5, spaceBetweenSlides: 10 },
+              360: { slidesPerView: 1.8, spaceBetweenSlides: 10 },
+              420: { slidesPerView: 2, spaceBetweenSlides: 10 },
+              640: { slidesPerView: 3, spaceBetweenSlides: 10 },
+              768: { slidesPerView:3.4, spaceBetweenSlides: 10 },
+              1024: { slidesPerView: 4, spaceBetweenSlides: 10 },
+            }
+          });
+        },
       }
     }).mount('#main-home');
   </script> 

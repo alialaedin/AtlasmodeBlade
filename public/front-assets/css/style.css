@@ -15535,18 +15535,18 @@ ul, ol, dd {
   }
 }
 
-.discounter-swiper, .suggested-swiper, .similar-products-swiper, .newest-swiper, .mostSaled-swiper, .products-swiper {
+.discounter-swiper, .suggested-swiper, .similar-products-swiper, .newest-swiper, .mostSaled-swiper, .products-swiper, .categories-products-swiper {
   width: 100%;
 }
-.discounter-swiper .swiper-slide article, .suggested-swiper .swiper-slide article, .similar-products-swiper .swiper-slide article, .newest-swiper .swiper-slide article, .mostSaled-swiper .swiper-slide article, .products-swiper .swiper-slide article {
+.discounter-swiper .swiper-slide article, .suggested-swiper .swiper-slide article, .similar-products-swiper .swiper-slide article, .newest-swiper .swiper-slide article, .mostSaled-swiper .swiper-slide article, .products-swiper .swiper-slide article, .categories-products-swiper .swiper-slide article {
   max-height: 375px !important;
 }
 @media only screen and (min-width: 1676px) {
-  .discounter-swiper .swiper-slide article, .suggested-swiper .swiper-slide article, .similar-products-swiper .swiper-slide article, .newest-swiper .swiper-slide article, .mostSaled-swiper .swiper-slide article .products-swiper .swiper-slide article {
+  .discounter-swiper .swiper-slide article, .suggested-swiper .swiper-slide article, .similar-products-swiper .swiper-slide article, .newest-swiper .swiper-slide article, .mostSaled-swiper .swiper-slide article .products-swiper .swiper-slide article, .categories-products-swiper .swiper-slide article {
     max-height: 390px !important;
   }
 }
-.discounter-swiper .swiper-slide article a, .suggested-swiper .swiper-slide article a, .similar-products-swiper .swiper-slide article a, .newest-swiper .swiper-slide article a, .mostSaled-swiper .swiper-slide article a, .products-swiper .swiper-slide article a {
+.discounter-swiper .swiper-slide article a, .suggested-swiper .swiper-slide article a, .similar-products-swiper .swiper-slide article a, .newest-swiper .swiper-slide article a, .mostSaled-swiper .swiper-slide article a, .products-swiper .swiper-slide article a, .categories-products-swiper .swiper-slide article a {
   height: 100% !important;
 }
 

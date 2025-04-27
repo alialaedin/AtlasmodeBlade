@@ -161,7 +161,7 @@ class Category extends Model implements HasMedia
 			$category->products = $products;
 		}
 
-		return $showInHomeCategories;
+		return $showInHomeCategories->toArray();
 	}
 
 	public static function storeOrUpdate(Request $request, self|null $category = null)
