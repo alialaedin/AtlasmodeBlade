@@ -139,7 +139,7 @@
                 <div class="row">
                     <div class="col">
                       <div class="text-center">
-                        <button class="btn btn-sm btn-primary" type="submit">ثبت و ذخیره</button>
+                        <button class="btn btn-sm btn-primary" type="submit" onclick="$(this).prop('disabled', true)">ثبت و ذخیره</button>
                         <button class="btn btn-sm btn-danger" type="button" onclick="window.location.reload()">ریست فرم</ذ>
                       </div>
                     </div>

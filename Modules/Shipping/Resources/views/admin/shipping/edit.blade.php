@@ -262,6 +262,7 @@
         function update(event) {
 
             event.preventDefault();
+            $(event.target).prop('disabled', true);
 
             if (isPublicCheckbox.is(':checked')) {
                 $('#update-form').submit();
