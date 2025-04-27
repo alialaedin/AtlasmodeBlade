@@ -9,6 +9,13 @@
         @endphp
         <x-breadcrumb :items="$items" />
     </div>
+    <div class="card mb-3">
+        <div class="card-body bg-warning py-3" style="border-radius: 13px">
+            <p class="fs-14 text-dark text-center font-weight-bold">
+                توجه داشته باشین برای اعمال شدن استان ها حتما تیک عمومی را بردارید
+            </p>
+        </div>
+    </div>
     <x-card>
         <x-slot name="cardTitle">ثبت حمل و نقل جدید</x-slot>
         <x-slot name="cardOptions"><x-card-options /></x-slot>
@@ -131,9 +138,10 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="text-center">
-                            <button class="btn btn-primary" type="button" onclick="storeShipping(event)">ثبت و ذخیره</button>
-                        </div>
+                      <div class="text-center">
+                        <button class="btn btn-sm btn-primary" type="submit">ثبت و ذخیره</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="window.location.reload()">ریست فرم</ذ>
+                      </div>
                     </div>
                 </div>
             </form>

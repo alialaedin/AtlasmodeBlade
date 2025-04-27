@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
 @section('content')
+
     <div class="page-header">
         @php
             $items = [
@@ -9,6 +10,15 @@
         @endphp
         <x-breadcrumb :items="$items" />
     </div>
+
+    <div class="card mb-3">
+        <div class="card-body bg-warning py-3" style="border-radius: 13px">
+            <p class="fs-14 text-dark text-center font-weight-bold">
+                توجه داشته باشین برای اعمال شدن استان ها حتما تیک عمومی را بردارید
+            </p>
+        </div>
+    </div>
+
     <x-card>
         <x-slot name="cardTitle">ویرایش حمل و نقل - کد {{ $shipping->id }}</x-slot>
         <x-slot name="cardOptions"><x-card-options /></x-slot>
@@ -140,11 +150,9 @@
                                 </x-slot>
                                 <x-slot name="tableTd">
                                     <tr id="example-provinces-table-tr">
-                                        <td class="d-none">
-                                            <input hidden class="province-id" value="">
-                                        </td>
                                         <td class="name"></td>
                                         <td class="price">
+                                            <input hidden class="province-id" value="">
                                             <input type="text" class="comma form-control province-price">
                                         </td>
                                         <td>
@@ -176,9 +184,10 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="text-center">
-                            <button class="btn btn-warning" type="submit" onclick="update(event)">بروزرسانی</button>
-                        </div>
+                      <div class="text-center">
+                        <button class="btn btn-sm btn-warning" type="submit" onclick="update(event)">بروزرسانی</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="window.location.reload()">ریست فرم</ذ>
+                      </div>
                     </div>
                 </div>
             </form>
@@ -268,8 +277,8 @@
                 let provinceId = $(this).find('.province-id').val(); 
                 let provincePrice = $(this).find('.province-price').val()?.replace(/,/g, "");
 
-                provinceIdInput.attr('name', `provinces[${index}][id]`).val(provinceId);
-                provincePriceInput.attr('name', `provinces[${index}][price]`).val(provincePrice);
+                provinceIdInput.attr('name', `provinces[${index}][id]`).attr('value', provinceId);
+                provincePriceInput.attr('name', `provinces[${index}][price]`).attr('value', provincePrice);
 
                 $('#update-form').append(provinceIdInput);
                 $('#update-form').append(provincePriceInput);

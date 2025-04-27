@@ -49,65 +49,6 @@
     </x-slot>
   </x-card>
 
-  <x-card>
-    <x-slot name="cardTitle">لیست آدرس ها</x-slot>
-    <x-slot name="cardOptions">
-      <div class="card-options" class="d-flex" style="gap: 5px;">
-        <button data-target="#createAddresseModal" data-toggle="modal"class="btn btn-outline-primary btn-sm"> آدرس جدید</button>
-      </div>
-    </x-slot>
-    <x-slot name="cardBody">
-      <div class="row">
-        <x-table-component>
-          <x-slot name="tableTh">
-            <tr>
-              <th>ردیف</th>
-              <th>شناسه</th>
-              <th>آدرس</th>
-              <th>گیرنده</th>
-              <th>موبایل</th>
-              <th>عملیات</th>
-            </tr>
-          </x-slot>
-          <x-slot name="tableTd">
-            @forelse ($customer->addresses->sortByDesc('id') as $address)
-              <tr>
-                <td class="font-weight-bold">{{ $loop->iteration }}</td>
-                <td>{{ $address->id }}</td>
-                <td>{{ $address->address }}</td>
-                <td>{{ $address->first_name . ' ' . $address->last_name }}</td>
-                <td>{{ $address->mobile}}</td>
-                <td>
-                  @include('core::includes.edit-modal-button',[
-                    'target' => "#edit-address-" . $address->id
-                  ])
-                  <button
-                    onclick="confirmDelete('delete-{{ $address->id }}')"
-                    class="btn btn-sm btn-icon btn-danger text-white"
-                    data-toggle="tooltip"
-                    data-original-title="حذف">
-                    <i class="fa fa-trash-o"></i>
-                  </button>
-                  <form
-                    action="{{ route('admin.addresses.destroy',[$customer, $address]) }}"
-                    method="POST"
-                    id="delete-{{ $address->id }}"
-                    style="display: none">
-                    @csrf
-                    @method('DELETE')
-                  </form>
-                </td>
-              </tr>
-            @empty
-              @include('core::includes.data-not-found-alert', ['colspan' => 6])
-            @endforelse
-          </x-slot>
-          <x-slot name="extraData"></x-slot>
-        </x-table-component>
-      </div>
-    </x-slot>
-  </x-card>
-
   @php
     $statistics = [
       ['title' => 'تعداد برداشت از کیف پول', 'value' => number_format($walletStatistics['withdrawsCount']), 'color' => 'danger', 'icon' => 'bar-chart'],
@@ -245,6 +186,65 @@
               @include('core::includes.data-not-found-alert', ['colspan' => 10])
             @endforelse
           </x-slot>
+        </x-table-component>
+      </div>
+    </x-slot>
+  </x-card>
+
+  <x-card>
+    <x-slot name="cardTitle">لیست آدرس ها</x-slot>
+    <x-slot name="cardOptions">
+      <div class="card-options" class="d-flex" style="gap: 5px;">
+        <button data-target="#createAddresseModal" data-toggle="modal"class="btn btn-outline-primary btn-sm"> آدرس جدید</button>
+      </div>
+    </x-slot>
+    <x-slot name="cardBody">
+      <div class="row">
+        <x-table-component>
+          <x-slot name="tableTh">
+            <tr>
+              <th>ردیف</th>
+              <th>شناسه</th>
+              <th>آدرس</th>
+              <th>گیرنده</th>
+              <th>موبایل</th>
+              <th>عملیات</th>
+            </tr>
+          </x-slot>
+          <x-slot name="tableTd">
+            @forelse ($customer->addresses->sortByDesc('id') as $address)
+              <tr>
+                <td class="font-weight-bold">{{ $loop->iteration }}</td>
+                <td>{{ $address->id }}</td>
+                <td>{{ $address->address }}</td>
+                <td>{{ $address->first_name . ' ' . $address->last_name }}</td>
+                <td>{{ $address->mobile}}</td>
+                <td>
+                  @include('core::includes.edit-modal-button',[
+                    'target' => "#edit-address-" . $address->id
+                  ])
+                  <button
+                    onclick="confirmDelete('delete-{{ $address->id }}')"
+                    class="btn btn-sm btn-icon btn-danger text-white"
+                    data-toggle="tooltip"
+                    data-original-title="حذف">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                  <form
+                    action="{{ route('admin.addresses.destroy',[$customer, $address]) }}"
+                    method="POST"
+                    id="delete-{{ $address->id }}"
+                    style="display: none">
+                    @csrf
+                    @method('DELETE')
+                  </form>
+                </td>
+              </tr>
+            @empty
+              @include('core::includes.data-not-found-alert', ['colspan' => 6])
+            @endforelse
+          </x-slot>
+          <x-slot name="extraData"></x-slot>
         </x-table-component>
       </div>
     </x-slot>

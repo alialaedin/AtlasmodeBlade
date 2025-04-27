@@ -9,7 +9,7 @@ class ShippingStoreRequest extends FormRequest
   public function rules()
   {
     return [
-      'name' => 'bail|required|string|max:191|unique:shippings',
+      'name' => 'bail|required|string|max:191|unique:shippings,name',
       'default_price' => 'nullable|integer|min:0',
       'free_threshold' => 'nullable|integer|min:1000',
       'minimum_delay' => 'nullable|integer|min:1',
