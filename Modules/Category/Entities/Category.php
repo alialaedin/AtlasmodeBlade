@@ -226,7 +226,7 @@ class Category extends Model implements HasMedia
 			}
 
 			$category->update([
-				'order' => $order--,
+				'priority' => $order--,
 				'parent_id' => $parentId,
 			]);
 

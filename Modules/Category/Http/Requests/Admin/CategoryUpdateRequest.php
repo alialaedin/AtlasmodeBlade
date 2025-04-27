@@ -3,8 +3,6 @@
 namespace Modules\Category\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Modules\Category\Entities\Category;
-use Modules\Core\Helpers\Helpers;
 
 class CategoryUpdateRequest extends FormRequest
 {
