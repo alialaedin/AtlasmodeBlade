@@ -8,7 +8,7 @@
       مشاهده بیشتر
     </a>
   </div>
-  <div class="swiper mostSaled-swiper bg-gray-200 py-2">
+  <div class="swiper mostSaled-swiper bg-gray-200 p-2">
     <div class="swiper-wrapper">
       <div v-for="product in group.products" :key="product.id" class="swiper-slide">
         <article class="product-cart">

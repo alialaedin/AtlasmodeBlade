@@ -49,6 +49,14 @@
             </div>
           </div>
 
+          <figure class="w-p-100 mt-4">
+            <img 
+              class="w-p-100" 
+              src="{{ Storage::url($post->image->uuid .'/' . $post->image->file_name) }}" 
+              alt="{{ $post->slug }}"
+            />
+          </figure>
+
           {!! $post->body !!}
 
           <!-- Share -->
