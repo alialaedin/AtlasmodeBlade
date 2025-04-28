@@ -153,6 +153,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 			// }
 			// ProductService::deleteCache();
 		});
+		static::deleted(fn (self $product) => $product->recommendations()->delete());
 	}
 
 	public function getActivitylogOptions(): LogOptions
