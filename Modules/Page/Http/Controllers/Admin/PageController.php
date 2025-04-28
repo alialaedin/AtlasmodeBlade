@@ -25,7 +25,7 @@ class PageController extends Controller
 
   public function store(PageRequest $request)
   {
-    $page = Page::queryy()->create($request->all());
+    $page = Page::query()->create($request->all());
     ActivityLogHelper::storeModel('صفحه ثبت شد', $page);
 
     return redirect()->route('admin.pages.index')->with('success', 'صفحه با موفقیت ثبت شد.');
