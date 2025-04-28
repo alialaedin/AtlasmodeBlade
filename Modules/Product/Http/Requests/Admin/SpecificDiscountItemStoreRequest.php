@@ -13,7 +13,6 @@ class SpecificDiscountItemStoreRequest extends FormRequest
 {
     public function rules()
     {   
-        dd($this->all());
         return [
             'type' => ['required', Rule::in(SpecificDiscountItem::getAvailableTypes())],
             'discount' => 'nullable|integer',

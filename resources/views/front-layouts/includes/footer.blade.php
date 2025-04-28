@@ -68,15 +68,11 @@
                   </b>
               </span>
               <ul class="menu-footer d-flex gap-2">
-                  <li>
-                      <a href="" class="text-button-1 color-gray-900">رویه  ارسال کالا</a>
-                  </li>
-                  <li>
-                      <a href="" class="text-button-1 color-gray-900">شیوه های پرداخت</a>
-                  </li>
-                  <li>
-                      <a href="" class="text-button-1 color-gray-900">قوانین و مقررات</a>
-                  </li>
+                @foreach (count($menus) && isset($menus['footer']) ? $menus['footer'] : [] as $footerMenuItem)
+                    <li>
+                        <a href="{{ $footerMenuItem->link_url }}" class="text-button-1 color-gray-900">{{ $footerMenuItem->title }}</a>
+                    </li>
+                @endforeach
               </ul>
           </nav>
           <!-- CopyRight -->
