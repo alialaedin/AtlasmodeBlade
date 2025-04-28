@@ -21,7 +21,7 @@ class ProductController extends Controller
 		$sortTypes = RecommendationGroup::query()->where('show_in_filter', 1)->pluck('label', 'name')->toArray();
 		$colorRanges = ColorRange::getColorRangesForFront();
 
-		$requestCategory = collect();
+		$requestCategory = [];
 		if (request('category_id')) {
 			$requestCategory = Category::getCategoriesToSetParent()->where('id', request('category_id'))->first();
 		}
