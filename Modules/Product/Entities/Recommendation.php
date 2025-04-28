@@ -47,7 +47,7 @@ class Recommendation extends Model
     }
   }
 
-  private function getLatestOrderByGroup(RecommendationGroup $group)
+  private static function getLatestOrderByGroup(RecommendationGroup $group)
   {
     return DB::table('recommendations')
       ->where('group_id', $group->id)
