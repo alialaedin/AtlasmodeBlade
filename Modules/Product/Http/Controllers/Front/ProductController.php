@@ -4,7 +4,6 @@ namespace Modules\Product\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
-use Modules\Attribute\Entities\Attribute;
 use Modules\Category\Entities\Category;
 use Modules\Color\Entities\ColorRange;
 use Modules\Product\Entities\Product;
@@ -18,12 +17,16 @@ class ProductController extends Controller
 	{
 		$priceFilter = (new ProductService())->maxAndMinPrice();
 		$products = (new NewProductService())->getProducts();
-		$sizeValues = Attribute::getSizeValues();
-		$categories = Category::query()->orderBy('priority')->with('children')->parents()->active()->get();
+		$categories = Category::getCategoriesForFront();
 		$sortTypes = RecommendationGroup::query()->where('show_in_filter', 1)->pluck('label', 'name')->toArray();
 		$colorRanges = ColorRange::getColorRangesForFront();
 
-		return view('product::front.product.index', compact(['products', 'colorRanges', 'priceFilter', 'sizeValues', 'categories', 'sortTypes']));
+		$requestCategory = collect();
+		if (request('category_id')) {
+			$requestCategory = Category::getCategoriesToSetParent()->where('id', request('category_id'))->first();
+		}
+
+		return view('product::front.product.index', compact(['products', 'colorRanges', 'priceFilter', 'categories', 'sortTypes', 'requestCategory']));
 	}
 
 	public function show($id)

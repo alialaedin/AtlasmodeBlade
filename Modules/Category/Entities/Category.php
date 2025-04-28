@@ -30,7 +30,7 @@ class Category extends Model implements HasMedia
 	use InteractsWithMedia, HasDefaultFields, HasAuthors, SortableTrait, HasViews, Sluggable;
 
 	public $sortable = [
-		'order_column_name' => 'order',
+		'order_column_name' => 'priority',
 		'sort_when_creating' => true,
 	];
 
@@ -119,8 +119,8 @@ class Category extends Model implements HasMedia
 	public static function getCategoriesToSetParent(self|null $category = null)
 	{
 		return self::query()
-			->select(['id', 'title', 'order', 'status', 'show_in_home'])
-			->orderByDesc('order')
+			->select(['id', 'title', 'priority', 'status', 'show_in_home'])
+			->orderByDesc('priority')
 			->when($category, fn($q) => $q->whereKeyNot($category->id))
 			->get();
 	}
@@ -143,12 +143,13 @@ class Category extends Model implements HasMedia
 				->take(8)
 				->orderByDesc('id')
 				->with([
-					'media', 
+					'media',
 					'varieties' => function ($vQuery) {
 						$vQuery->select(['id', 'product_id', 'discount', 'discount_until', 'discount_type', 'price']);
 						$vQuery->with('store:id,variety_id,balance');
 						$vQuery->with('product:id');
-				}])
+					}
+				])
 				->get()
 				->each(function (Product $product) {
 					$product->append(['main_image', 'final_price']);
@@ -268,7 +269,7 @@ class Category extends Model implements HasMedia
 	public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
 	{
 		return $this->hasMany(Category::class, 'parent_id', 'id')
-		->orderBy('priority', 'DESC');
+			->orderBy('priority', 'DESC');
 		// ->with(['children', 'attributes.values', 'brands', 'specifications.values']);
 	}
 

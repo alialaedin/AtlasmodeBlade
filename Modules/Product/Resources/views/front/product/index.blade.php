@@ -311,9 +311,9 @@
 
         {{ $products->onEachSide(0)->links('vendor.pagination.front-product-index') }}
 
-        @if (request('category_id'))
+        @if ($requestCategory->isNotEmpty())
           <div>
-            {!! $categories->where('id', request('category_id'))->first()->description !!}
+            {!! $requestCategory->description !!}
           </div>
         @endif
 

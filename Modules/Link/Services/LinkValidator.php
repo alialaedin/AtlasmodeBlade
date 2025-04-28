@@ -21,7 +21,7 @@ class LinkValidator
       $this->request->merge([
         'link' => null
       ]);
-      if (!$this->request->has('linkable_id')) {
+      if ($this->request->isNotFilled('linkable_id')) {
         $this->request->merge([
           'linkable_id' => null
         ]);

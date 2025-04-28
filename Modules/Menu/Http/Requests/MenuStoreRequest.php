@@ -16,7 +16,9 @@ class MenuStoreRequest extends FormRequest
       'parent_id' => 'nullable|exists:menu_items,id',
       'status' => 'nullable',
       'group_id' => 'required|exists:menu_groups,id',
-      'icon' => 'nullable|image'
+      'icon' => 'nullable|image',
+      'linkable_id' => 'nullable',
+      'linkable_type' => 'nullable',
     ];
   }
   public function prepareForValidation()
