@@ -163,6 +163,7 @@
           <span class="text-button">نشانی ایمیل شما منتشر نخواهد شد</span>
           <input hidden name="parent_id" value="">
           <form action="{{ route('front.comments.store', $post) }}" method="POST" class="grid comment-form mt-3">
+            @csrf
             <input type="text" name="name" class="g-col-md-5 g-col-12 bg-gray-200 p-1 text-medium" placeholder="نام کامل*" required>
             <input type="email" name="email" class="g-col-md-5 g-col-12 bg-gray-200 p-1 text-medium" placeholder=" آدرس ایمیل*" required>
             <textarea name="body" class="g-col-12 bg-gray-200 p-1 text-medium p-2" placeholder="دیدگاه شما*" rows="12" required></textarea>
