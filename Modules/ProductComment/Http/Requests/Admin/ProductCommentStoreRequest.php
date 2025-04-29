@@ -3,15 +3,16 @@
 namespace Modules\ProductComment\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Modules\Admin\Entities\Admin;
+use Modules\Customer\Entities\Customer;
 
 class ProductCommentStoreRequest extends FormRequest
 {
 	public function rules()
 	{
-		$isRateRequired = auth('customer')->check() ? true : false;
-
+		$isRateRequired = Auth::user() instanceof Customer ? true : false;
 		return [
 			'title' => 'nullable|string|min:5|max:195',
 			'body' => 'required|string|min:10',
