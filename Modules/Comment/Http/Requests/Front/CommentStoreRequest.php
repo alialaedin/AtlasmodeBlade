@@ -3,6 +3,8 @@
 namespace Modules\Comment\Http\Requests\Front;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Modules\Customer\Entities\Customer;
 
 class CommentStoreRequest extends FormRequest
 {
@@ -14,6 +16,16 @@ class CommentStoreRequest extends FormRequest
       'body' => 'required|string',
       'parent_id' => 'nullable|exists:comments,id'
     ];
+  }
+
+  protected function passedValidation()
+  {
+    if (Auth::guard('customer')->check()) {
+      $this->merge([
+        'creator_id'   => auth()->user()->id,
+        'creator_type' => Customer::class
+      ]);
+    }
   }
 
   public function authorize()

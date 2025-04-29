@@ -3,7 +3,7 @@
 namespace Modules\Comment\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use Modules\Admin\Classes\ActivityLogHelper;
 use Modules\Blog\Entities\Post;
 use Modules\Comment\Entities\Comment;
 use Modules\Comment\Http\Requests\Front\CommentStoreRequest;
@@ -17,12 +17,8 @@ class CommentController extends Controller
       return redirect()->back()->with('error', 'امکان پاسخگویی به جواب وجود ندارد');
     }
 
-    $comment = new Comment();
-    $comment->fill($request->validated());
-    $comment->creator()->associate(Auth::guard('customer')->user());
-    $comment->parent()->associate($parentComment);
-    $comment->commentable()->associate($parentComment->commentable);
-    $comment->save();
+    $comment = $post->comments()->create($request->all());
+    ActivityLogHelper::storeModel("نظر برای مطلب با شناسه $post->id توسط مشتری ثبت شدت", $comment);
 
     return redirect()->back()->with('success', 'نظر با موفقیت ثبت شده و پس از تایید نمایش داده خواهد شد');
   }

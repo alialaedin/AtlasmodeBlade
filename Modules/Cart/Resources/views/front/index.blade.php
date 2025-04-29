@@ -132,6 +132,14 @@
                       <span class="text-medium color-gray-900">تومان</span>
                     </div>
                   </div>
+                  <!-- Coupon Discount -->
+                  <div class="d-flex justify-content-between">
+                    <span class="text-medium color-gray-900">کد تخفیف:</span>
+                    <div class="d-flex align-items-center gap-1">
+                      <span class="currency text-medium-3 color-gray-900">@{{ totalOrderAmounts.couponDiscountPrice.toLocaleString() }}</span>
+                      <span class="text-medium color-gray-900">تومان</span>
+                    </div>
+                  </div>
                   <!-- Final Price -->
                   <div class="d-flex justify-content-between">
                   <span class="text-medium-strong color-gray-900">پرداخت نهایی:</span>
@@ -231,6 +239,14 @@
           <span class="text-medium color-gray-900">تخفیف:</span>
           <div class="d-flex align-items-center gap-1">
             <span class="currency text-medium-3 color-gray-900">@{{ totalOrderAmounts.totalItemsDiscountPrice.toLocaleString() }}</span>
+            <span class="text-medium color-gray-900">تومان</span>
+          </div>
+        </div>
+        <!-- Coupon Discount -->
+        <div class="d-flex justify-content-between">
+          <span class="text-medium color-gray-900">کد تخفیف:</span>
+          <div class="d-flex align-items-center gap-1">
+            <span class="currency text-medium-3 color-gray-900">@{{ totalOrderAmounts.couponDiscountPrice.toLocaleString() }}</span>
             <span class="text-medium color-gray-900">تومان</span>
           </div>
         </div>
@@ -341,6 +357,14 @@
             <span class="text-medium  color-gray-900">تخفیف:</span>
             <div class="d-flex align-items-center gap-1">
               <span class="currency text-medium-3  color-gray-900">@{{ totalOrderAmounts.totalItemsDiscountPrice.toLocaleString() }}</span>
+              <span class="text-medium color-gray-900">تومان</span>
+            </div>
+          </div>
+          <!-- Coupon Discount -->
+          <div class="d-flex justify-content-between">
+            <span class="text-medium color-gray-900">کد تخفیف:</span>
+            <div class="d-flex align-items-center gap-1">
+              <span class="currency text-medium-3 color-gray-900">@{{ totalOrderAmounts.couponDiscountPrice.toLocaleString() }}</span>
               <span class="text-medium color-gray-900">تومان</span>
             </div>
           </div>
@@ -788,6 +812,45 @@
 
         return true;
       },
+      async request(url, method, data = null, onSuccessRequest) {
+
+        let options = {
+          method: method,
+          headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': @json(csrf_token())
+          },
+        };
+
+        if (data === null) {
+          options.headers['Content-Type'] = 'application/json';
+        } else {
+          options.body = data instanceof FormData ? data : JSON.stringify(data);
+        }
+
+        const response = await fetch(url, options);
+        const result = await response.json();
+
+        if (!response.ok) {
+          switch (response.status) {
+            case 422:
+              this.showValidationError(result.errors);
+              break;
+            case 404:
+              this.popup('error', 'خطای 404', 'چنین چیزی وجود ندارد');
+              break;
+            case 500:
+              this.popup('error', 'خطای سرور', result.message);
+              break;
+            default: 
+              this.popup('error', 'خطای نا شناخته');
+              break;
+          }
+          return;
+        }
+
+        onSuccessRequest(result);
+      },
 
       // top svgs change tab
       goToShippingCartTabSvg(){
@@ -952,35 +1015,18 @@
           addBtn.style.opacity = '1';  
         }  
       },
-      async applyCoupon() {
-
+      applyCoupon() {
         const couponInput = document.querySelector('.discount-input');
         const couponCode = couponInput.value;
-
-        try {
-
-          const url = @json(route('customer.coupon_verify'));
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: this.getDefaultRequestHeaders(),
-            body: JSON.stringify({ code: couponCode }),
-          });
-
-          const result = await response.json();
-          if (!response.ok && response.status == 422) {
-            this.showValidationError(result.errors);
-          }
-
-          if (response.ok) {
-            this.copounCode = couponCode; 
-            this.discountPriceByCoupon = result.data.discount;
-            this.popup('success', 'عملیات موفق', result.message);
-          }
-
-        } catch (error) {
-          console.error('error:', error);
-        }
-
+        const url = @json(route('customer.coupon_verify'));
+        const fd = new FormData();
+        fd.append('code', couponCode);
+        fd.append('total_price', this.totalOrderAmounts.orderFinalPrice);
+        this.request(url, 'POST', fd, async (result) => {
+          this.copounCode = couponCode; 
+          this.discountPriceByCoupon = result.data.discount.discount;
+          this.popup('success', 'عملیات موفق', result.message);
+        });
       },
       goToInformationTab() {
 
@@ -1236,7 +1282,8 @@
           totalItemsPrice: totalItemsPrice,
           totalItemsDiscountPrice: totalItemsDiscountPrice,
           orderFinalPrice: orderFinalPrice,
-          shippingAmount: shippingAmount
+          shippingAmount: shippingAmount,
+          couponDiscountPrice: this.discountPriceByCoupon
         };
         
       },

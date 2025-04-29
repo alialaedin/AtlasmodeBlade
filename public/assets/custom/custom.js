@@ -16,9 +16,6 @@ function confirmDelete(formId) {
   }).then((result) => {  
     if (result.isConfirmed) {  
       document.getElementById(formId).submit();  
-      Swal.fire("آیتم با موفقیت حذف شد!", {  
-        icon: "success",  
-      });  
     }  
   });  
 } 
