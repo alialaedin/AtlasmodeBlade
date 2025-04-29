@@ -137,7 +137,7 @@ class Category extends Model implements HasMedia
 		foreach ($showInHomeCategories as $category) {
 			$productIds = $category->products->pluck('id')->toArray();
 			$products = Product::query()
-				->select(['id', 'status', 'title'])
+				->select(['id', 'status', 'title', 'discount', 'discount_until', 'discount_type'])
 				->whereIn('id', $productIds)
 				->available(true)
 				->take(8)

@@ -479,6 +479,10 @@ class Variety extends BaseModel implements HasMedia
             $discount = $variety->discount;
             $discountType = $variety->discount_type;
             $appliedDiscountType = 'variety';
+        }elseif ($product->discount && $product->discount_until >= now()) {
+            $discount = $product->discount;
+            $discountType = $product->discount_type;
+            $appliedDiscountType = 'product';
         }
         // discount on variety is not important here.
         $final_price = $variety->price;

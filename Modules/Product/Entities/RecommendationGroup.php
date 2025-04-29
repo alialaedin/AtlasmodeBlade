@@ -29,7 +29,7 @@ class RecommendationGroup extends Model
 		foreach ($recommendationGroups as $group) {
 			$productIds = Recommendation::where('group_id', $group->id)->latest('order')->pluck('product_id')->toArray();
 			$products = Product::query()
-				->select(['id', 'status', 'title'])
+				->select(['id', 'status', 'title', 'discount', 'discount_until', 'discount_type'])
 				->whereIn('id', $productIds)
 				->available(true)
 				->take(8)
