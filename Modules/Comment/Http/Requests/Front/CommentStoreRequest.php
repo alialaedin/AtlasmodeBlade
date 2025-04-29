@@ -4,6 +4,7 @@ namespace Modules\Comment\Http\Requests\Front;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Modules\Blog\Entities\Post;
 use Modules\Customer\Entities\Customer;
 
 class CommentStoreRequest extends FormRequest
@@ -22,8 +23,9 @@ class CommentStoreRequest extends FormRequest
   {
     if (Auth::guard('customer')->check()) {
       $this->merge([
-        'creator_id'   => auth()->user()->id,
-        'creator_type' => Customer::class
+        'creator_id'   => auth('customer')->user()->id,
+        'creator_type' => Customer::class,
+        'commentable_type' => Post::class
       ]);
     }
   }

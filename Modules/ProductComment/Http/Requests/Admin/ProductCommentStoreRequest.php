@@ -17,7 +17,7 @@ class ProductCommentStoreRequest extends FormRequest
 			'body' => 'required|string|min:10',
 			'rate' => [
 				Rule::requiredIf($isRateRequired),
-				'integer',
+				'nullable',
 				'digits_between:1,10'
 			],
 			'show_customer_name' => 'required|boolean',
