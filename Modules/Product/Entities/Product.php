@@ -131,7 +131,7 @@ class Product extends BaseModel implements HasMedia, Viewable
 	{
 		static::creating(function ($product) {
 			$user = auth()->user();
-			ProductService::deleteCache();
+			// ProductService::deleteCache();
 			if ($user instanceof Admin && ($user->can('approved_product'))) {
 				$product->approved_at = Carbon::now()->toDateTimeString();
 			}

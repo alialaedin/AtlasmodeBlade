@@ -15,7 +15,7 @@ class NewProductService
   {
     $this->sortBy = $sortBy ?? request('sort', 'newest');
     $this->perPage = $perPage ?? request('per_page', app(CoreSettings::class)->get('product.pagination', 12));
-    $this->productQuery = Product::query()->select(['id', 'status', 'title', 'discount', 'discount_until', 'discount_type']);
+    $this->productQuery = Product::query()->select(['id', 'status', 'title']);
   }
 
   private static function getAvailableSortStatuses(): array
@@ -81,7 +81,7 @@ class NewProductService
           ->select(['id', 'product_id', 'price', 'purchase_price', 'discount', 'discount_type', 'discount_until', 'max_number_purchases', 'deleted_at'])
           ->with([
             'product' => function ($productQuery): void {
-              $productQuery->select('id')->with('activeFlash');
+              $productQuery->select('id', 'discount', 'discount_until', 'discount_type')->with('activeFlash');
             },
             'store:id,variety_id,balance'
           ]);
