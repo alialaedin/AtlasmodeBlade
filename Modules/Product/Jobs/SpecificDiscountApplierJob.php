@@ -37,7 +37,6 @@ class SpecificDiscountApplierJob implements ShouldQueue
             ->orderBy('created_at')
             ->get();
 
-
         foreach ($specificDiscounts as $specificDiscount) {
             $types = $specificDiscount->types;
             foreach ($types as $type) {

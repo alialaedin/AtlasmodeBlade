@@ -172,9 +172,9 @@ class Variety extends BaseModel implements HasMedia
         $variety = new static;
         $variety->fill($varietyRequest);
         $variety->product()->associate($product);
-        if ($varietyRequest['color_id']) {
-            $variety->color()->associate($varietyRequest['color_id']);
-        }
+        // if ($varietyRequest['color_id']) {
+        //     $variety->color()->associate($varietyRequest['color_id']);
+        // }
         $variety->save();
         $store = (new self)->setStoreParams(
             $variety->id,

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\testController;
 use Illuminate\Support\Facades\Route;
-
+use Modules\Product\Jobs\SpecificDiscountApplierJob;
 
 //Route::post('get-posts',
 //    [\Modules\Blog\Http\Controllers\Front\PostController::class, 'pay']);
@@ -14,3 +14,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/add', [testController::class, 'add'])->name('add');
 
 Route::get('/new-advertisements-table', [testController::class, 'makeAdvertisementsTable']);
+Route::get('/dispatch-job', function() {
+  SpecificDiscountApplierJob::dispatch();
+});

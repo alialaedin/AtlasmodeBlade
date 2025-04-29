@@ -16,6 +16,6 @@ Route::webSuperGroup('admin', function () {
   });
 });
 
-Route::superGroup('customer', function () {
+Route::middleware('auth:customer')->name('customer.')->group(function() {
   Route::post('/coupon/verify', [CustomerCouponController::class, 'verify'])->name('coupon_verify');
 });
