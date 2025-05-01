@@ -9,15 +9,12 @@
         <i class="icon-home1 icon-fs-medium-2"></i>
         <a href="/" class="text-button-1 mt-1">خانه</a>
         <i class="icon-angle-double-left icon-fs-medium"></i>
-        <a href="{{ url('/products') }}" class="text-button-1 mt-1">
-          لیست محصولات
-        </a>
+        <a href="{{ url('/products') }}" class="text-button-1 mt-1">لیست محصولات</a>
       </div>
     </div>
 
     <form id="filter-form" action="{{ route('front.products.index') }}" method="GET" class="d-none">
       <input hidden name="category_id" value="{{ request('category_id') }}">
-      <input hidden name="attribute_value_id" value="{{ request('attribute_value_id') }}">
       <input hidden name="sort" value="{{ request('sort') }}" />
       <input hidden name="title" value="{{ request('title') }}" />
       <input hidden name="available" value="{{ request('available') }}" />
@@ -27,7 +24,7 @@
 
     <section class="container-2xl d-flex px-4 px-md-8 px-3xl-0 gap-3 mt-12 pb-12">
 
-      <aside class="aside d-lg-flex d-none flex-column align-items-center">
+      <aside id="filter-aside" class="aside d-lg-flex d-none flex-column align-items-center">
 
         <!-- Title -->
         <div class="w-p-100 d-flex gap-1 justify-content-center color-gray-900 pb-2 border-b-gray-300">
@@ -35,110 +32,67 @@
           <span class="text-medium-2-strong">فیلتر جستجو</span>
         </div>
 
-        <!-- Categories -->
-        <nav class="category w-p-100 my-2 d-flex flex-column gap-1">
+        <div class="category w-p-100 my-2 d-flex flex-column gap-1">
+          <!-- Title -->
           <span class="text-medium-2-strong color-gray-900">دسته بندی ها</span>
-          <ul class="category-lists d-flex flex-column py-1">
-            <button 
-              data-category-id=""
-              class="title d-flex align-items-center gap-1 text-medium color-primary-700 category-filter-item">
-              <i class="icon-dot-single icon-fs-medium"></i>
-              <span>همه دسته بندی ها</span>
-            </button>
-            @foreach ($categories as $parentCategory)
-              @if ($parentCategory->children->isEmpty())
-                <li class="category-lists-item-main pointer py-1">
-                  <button 
-                    data-category-id="{{ $parentCategory->id }}"
-                    class="d-flex align-items-center gap-1 text-medium color-gray-700 category-filter-item">
-                    <i class="icon-dot-single icon-fs-medium color-primary-700"></i>
-                    <span>{{ $parentCategory->title }}</span>
-                  </button>
-                </li>
-              @else
-                <li class="d-flex flex-column">
-                  <div class="category-lists-item-main d-flex py-1 justify-content-between pointer">
-                    <button 
-                      data-category-id="{{ $parentCategory->id }}"
-                      class="category-item text-medium d-flex align-items-center gap-1 color-gray-700 category-filter-item">
-                      <i class="icon-dot-single icon-fs-medium color-primary-700"></i>
-                      <span>{{ $parentCategory->title }}</span>
-                    </button>
-                    <button type="button" class="show-subList">
-                      <i class="icon-plus color-gray-700 icon-fs-medium"></i>
-                      <i class="icon-minus color-gray-700 icon-fs-medium"></i>
-                    </button>
-                  </div>
-                  <ul class="category-sublist mt-1 px-2">
-                    @foreach ($parentCategory->children as $childCategory)
-                      @if ($childCategory->children->isEmpty())
-                        <li class="category-sublist-item pointer mb-1">
-                          <button
-                            data-category-id="{{ $childCategory->id }}"
-                            class="d-flex align-items-center text-medium color-gray-700 category-filter-item">
-                            <i class="icon-dot-single icon-fs-medium color-primary-700"></i>
-                            <span>{{ $childCategory->title }}</span>
-                          </button>
-                        </li>
-                      @else
-                        <li class="category-sublist-item d-flex flex-column gap-1 pointer mb-1">
-                          <div class="d-flex justify-content-between">
-                            <button
-                              data-category-id="{{ $childCategory->id }}"
-                              class="d-flex align-items-center text-medium color-gray-700 category-filter-item">
-                              <i class="icon-dot-single icon-fs-medium color-primary-700"></i>
-                              <span>{{ $childCategory->title }}</span>
-                            </button>
-                            <button type="button" class="show-subList-child">
-                              <i class="icon-plus color-gray-700 icon-fs-small"></i>
-                              <i class="icon-minus color-gray-700 icon-fs-small"></i>
-                            </button>
-                          </div>
-                          <ul class="category-sublist-child mt-1 px-2">
-                            @foreach ($childCategory->children as $grandChildCategory)
-                              <li class="category-sublist-item pointer mb-1">
-                                <button
-                                  data-category-id="{{ $grandChildCategory->id }}" 
-                                  class="d-flex align-items-center text-button-1 color-gray-700 category-filter-item">
-                                  <i class="icon-dot-single icon-fs-medium color-primary-700"></i>
-                                  <span>{{ $grandChildCategory->title }}</span>
-                                </button>
-                              </li>
-                            @endforeach
-                          </ul>
-                        </li>
-                      @endif
-                    @endforeach
-                  </ul>
-                </li>
-              @endif
-            @endforeach
-          </ul>
-        </nav>
+          <!-- Category Lists -->
+          <form class="category-forms w-p-100 mt-2 d-flex flex-column gap-5">
+            <!-- Parents -->
+            <select v-model="parentCategoryId" placeholder="" class="p-2 w-p-100 bg-transparent border-gray-300">
+              <option selected value="" hidden>دسته بندی مورد نظر را انتخاب کنید</option>
+              <option 
+                v-for="category in allParentCategories" 
+                :key="category.id" 
+                :value="category.id" 
+                v-text="category.title"
+              ></option>
+            </select>
+            <!-- Childeren -->
+            <select v-if="childCategories.length > 0" v-model="childCategoryId" placeholder="" class="p-2 w-p-100 bg-transparent border-gray-300">
+              <option selected value="" hidden>دسته بندی مورد نظر را انتخاب کنید</option>
+              <option 
+                v-for="category in childCategories" 
+                :key="category.id" 
+                :value="category.id" 
+                v-text="category.title"
+              ></option>
+            </select>
+            <!-- Grand Childeren -->
+            <select v-if="grandChildCategories.length" v-model="grandChildCategoryId" placeholder="" class="p-2 w-p-100 bg-transparent border-gray-300">
+              <option selected value="" hidden>دسته بندی مورد نظر را انتخاب کنید</option>
+              <option 
+                v-for="category in grandChildCategories" 
+                :key="category.id" 
+                :value="category.id" 
+                v-text="category.title"
+              ></option>
+            </select>
+          </form>
+        </div>
 
         <!-- Title -->
         <div class="title w-p-100 d-flex flex-column gap-4 px-2 pt-3 pb-6">
           <span class="text-medium-2-strong color-gray-900">عنوان</span>
-          <input type="text" class="title-input text-medium border-gray-300 w-p-100 px-4 py-1" placeholder="عنوان جستجو را بنویسید" value="{{ request('title') }}">
+          <input type="text" v-model="filterByTitle" class="title-input text-medium border-gray-300 w-p-100 px-4 py-1" placeholder="عنوان جستجو را بنویسید">
         </div>
 
         <!-- Color -->
         <div class="colors p-4 d-flex flex-column gap-2">
           <span class="w-p-100 text-medium-2-strong color-gray-900 pb-2 border-b-gray-300">رنگ ها</span>
           <ul class="color-list d-flex flex-wrap gap-3 px-1">
-            @foreach ($colorRanges as $colorRange)
-              <button type="button" class="color-btn d-flex flex-column gap-1 align-items-center">
+            <template v-for="colorRange in colorRanges" :key="colorRange.id">
+              <button type="button" @click="toggleColorRange($event)" class="color-btn d-flex flex-column gap-1 align-items-center" :data-id="colorRange.id">
                 <figure class="h-8 w-8">
                   <img
                     class="w-p-100 h-p-100 d-block border-gray-300" 
-                    src="{{ Storage::url($colorRange->logo->uuid .'/'. $colorRange->logo->file_name) }}"
+                    :src="colorRange.logo.url"
                   />
                 </figure>
-                <span class="text-subtitle">{{ $colorRange->title }}</span>
+                <span class="text-subtitle">@{{ colorRange.title }}</span>
               </button>
-            @endforeach
+            </template>
           </ul>
-          <button type="button" data-modal="color-details" class="color-detail w-p-100 d-flex align-items-center justify-content-center">
+          <button type="button" @click="openColorDetailsModal" class="color-detail w-p-100 d-flex align-items-center justify-content-between">
             <span class="text-medium color-gray-800">جزییات رنگ ها</span>
             <i class="icon-angle-left icon-fs-medium color-gray-700"></i>
           </button>
@@ -173,8 +127,8 @@
           <div class="d-flex gap-3 align-items-center">
             <input 
               type="checkbox" 
-              id="available"
-              {{ request('available') == '1' ? 'checked' : '' }} 
+              id="available" 
+              v-model="filterByAvailable"
               class="available-btn customSwitch bg-gray-400" 
             />
             <label class="text-medium color-gray-900" name="available">فقط کالاهای موجود</label>
@@ -182,31 +136,31 @@
         </div>
 
         <!-- Price Range -->
-        {{-- <div class="price-range w-p-100 d-flex flex-column gap-3 px-2 pt-4 pb-3">
+        <div class="price-range w-p-100 d-flex flex-column gap-3 px-2 pt-4 pb-3">
           <span class="text-medium-2-strong color-gray-900">قیمت ها</span>
           <form class="range-input position-relative">
             <div class="slider">
               <div class="progress"></div>
             </div>
-            <input type="range" class="range-min pointer" min="{{ $priceFilter['min_price'] }}" max="{{ $priceFilter['max_price'] }}" value="{{ $priceFilter['min_price'] }}" step="10000">
-            <input type="range" class="range-max pointer" min="{{ $priceFilter['min_price'] }}" max="{{ $priceFilter['max_price'] }}" value="{{ $priceFilter['max_price'] }}" step="10000">
+            <input type="range" @input="handlePriceRange($event)" class="range-min pointer" :min="minPriceFilter" :max="maxPriceFilter" v-model="filterByMinPrice" step="10000">
+            <input type="range" @input="handlePriceRange($event)" class="range-max pointer" :min="minPriceFilter" :max="maxPriceFilter" v-model="filterByMaxPrice" step="10000">
           </form>
           <div class="price-text d-flex justify-content-between mt-2">
             <div class="d-flex gap-1 color-gray-900 text-button-1">
               <span>از قیمت:</span>
-              <span class="price-min currency">{{ $priceFilter['min_price'] }}</span>
+              <span class="price-min currency" v-text="minPriceFilter"></span>
               <span>تومان</span>
             </div>
             <div class="d-flex gap-1 color-gray-900 text-button-1">
               <span>تا:</span>
-              <span class="price-max currency">{{ $priceFilter['max_price'] }}</span>
+              <span class="price-max currency" v-text="maxPriceFilter"></span>
               <span>تومان</span>
             </div>
           </div>
-        </div> --}}
+        </div>
 
         <!-- Set Filters Button -->
-        <button type="button" class="setFilter-btn w-p-100 bg-black color-white  py-1 text-medium mt-2">اعمال فیلتر</button>
+        <button type="button" @click="filter" class="setFilter-btn w-p-100 bg-black color-white py-1 text-medium mt-2">اعمال فیلتر</button>
 
       </aside>
 
@@ -225,7 +179,7 @@
               <span class="bg-gray-400"></span>
             </button>
             <!-- Available Input -->
-            <div class="d-flex gap-1 align-items-center">
+            {{-- <div class="d-flex gap-1 align-items-center">
               <input 
                 type="checkbox" 
                 id="available" 
@@ -233,7 +187,7 @@
                 {{ request('available') == '1' ? 'checked': '' }}
               />
               <label class="text-button-1 color-gray-900 mt-1" name="available">نمایش محصولات موجود</label>
-            </div> 
+            </div>  --}}
           </div>
           <button type="button" data-modal="filter" class="d-lg-none d-flex gap-1 text-medium-strong color-gray-900">
             <i class="icon-filter icon-fs-medium"></i>
@@ -327,221 +281,272 @@
 @endsection
 
 @section('modals')
-  <div class="modal modal-mobile-filter bg-white d-flex flex-column gap-2 pb-lg-4 overflow-auto" data-id="filter">
-
-    <div class="d-flex position-sticky bg-white top-0 start-0 end-0 pb-2 pt-3 px-5 justify-content-between align-items-center">
-      <button type="button" class="modal-close">
-      <i class="icon-cancel icon-fs-medium-2 color-gray-700"></i>
-      </button>
-      <div class="d-flex align-items-center gap-2 flex-grow-1 justify-content-center">
-        <i class="icon-filter icon-fs-medium"></i>
-        <span class="text-medium-2-strong color-gray-900">فیلتر جستوجو</span>
-      </div>
+<!-- Color Details -->
+<div id="color-details-modal" class="modal color-details-modal bg-white d-flex flex-column radius-small overflow-hidden gap-2 pb-3 pt-4 px-4">
+  <!-- Header -->
+  <div class="px-3 pt-2 bg-white d-flex justify-content-between position-fixed top-0 start-0 end-0 align-items-center pb-2 border-b-gray-300">
+    <div class="d-flex flex-column gap-1">
+      <span class="text-medium">جزییات رنگ‌ها</span>
+      <p class="text-button color-gray-700">جزییات رنگ‌ها</p>
     </div>
-
-    <div class="d-flex flex-column gap-1 bg-gray-100 px-3 pb-2">
-      <!-- Title -->
-      <form class="title w-p-100 d-flex flex-column gap-4 px-2 pt-3 pb-6">
-        <span class="text-medium-2-strong color-gray-900">عنوان</span>
-        <input type="text" class="title-input text-medium border-gray-300 w-p-100 px-4 py-1" placeholder="عنوان جستجو را بنویسید">
-      </form>
-      <!-- Size -->
-      <div class="size w-p-100 d-flex flex-column gap-4 px-2 pt-3 pb-3">
-          <!-- Title -->
-          <span class="text-medium-2-strong color-gray-900 pb-2 border-b-gray-300">سایز</span>
-            <!-- Size Lists -->
-            <form class="w-p-100 size-list grid gap-2 mt-3">
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> 5XL</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> 4XL</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> 3XL</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> 2XL</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> XL</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> L</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> M</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span>S</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span>XS</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span>36</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span>38</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span>40</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span>42</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> 5XL</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> 4XL</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> 3XL</span>
-              </label>
-              <label for="" class="d-flex gap-1 g-col-3">
-                <input  type="checkbox" class="size-list-item customCheckbox radius-medium text-center text-medium" />
-                <span> 2XL</span>
-              </label>
-            </form>
-      </div>
-      <!-- Available Mode -->
-      <div class="available w-p-100 d-flex flex-column gap-4 radius-medium px-2 pt-3 pb-3">
-        <span class="text-medium-2-strong pb-2 color-gray-900 border-b-gray-300">حالت نمایش</span>
-        <div class="d-flex gap-3 align-items-center">
-          <!-- Available input -->
-          <input type="checkbox" id="available" class="available-btn customSwitch bg-gray-400" />
-          <label class="text-medium color-gray-900" name="available">فقط کالاهای موجود</label>
-        </div>
-      </div>
-        <!-- Price Range -->
-      <div class="price-range2 w-p-100 d-flex flex-column gap-3 px-4 pt-5 pb-3">
-        <span class="text-medium-2-strong color-gray-900">قیمت ها</span>
-        <div class="range-input2 position-relative">
-          <div class="slider2">
-            <div class="progress2"></div>
-          </div>
-          <input type="range" class="range-min2 pointer" min="10000" max="2000000" value="10000" step="10000">
-          <input type="range" class="range-max2 pointer" min="10000" max="2000000" value="2000000" step="10000">
-        </div>
-        <div class="price-text2 d-flex justify-content-between mt-2">
-          <div class="d-flex gap-1 color-gray-900 text-button-1">
-            <span>از قیمت:</span>
-            <span class="price-min currency">10000</span>
-            <span>تومان</span>
-          </div>
-          <div class="d-flex gap-1 color-gray-900 text-button-1">
-            <span>تا:</span>
-            <span class="price-max currency">2000000</span>
-            <span>تومان</span>
-          </div>
-        </div>
-      </div>
-      <button type="button" class="setFilter-btn w-p-100 bg-black color-white py-1 text-medium mt-2">اعمال فیلتر</button>
-    </div>
-
+    <button type="button" class="modal-close">
+      <i class="icon-cancel icon-fs-medium color-gray-700"></i>
+    </button>
   </div>
+  <!-- Description -->
+  <div class="d-flex flex-column gap-3 mt-12 overflow-auto">
+    @foreach ($colorRanges as $colorRange)
+      <div class="w-p-100 d-flex flex-column gap-1">
+        <div class="d-flex gap-1">
+          <figure class="border-gray-300 h-8 w-8">
+            <img src="{{ Storage::url($colorRange->logo->uuid .'/'. $colorRange->logo->file_name) }}" class="brown w-p-100 h-p-100 d-block border-gray-300" />
+          </figure>
+          <span class="text-subtitle">{{ $colorRange->title }}</span>
+        </div>
+        <p class="text-medium color-gray-700">{{ $colorRange->description }}</p>
+      </div>
+    @endforeach
+  </div>
+</div>
 @endsection
 
 @section('scripts')
-  <script>
-    productsPage();
-    hoverImg();
-  </script> 
 
 <script>
+  productsPage();
+  hoverImg();
+</script> 
 
-  const submitFilterForm = () => $('#filter-form').submit();
-  const appendNewFilter = (inputName, value) => $('#filter-form').find(`input[name=${inputName}]`).attr('value', value);
+<script src="{{ asset('assets/vue/vue3/vue.global.prod.js') }}"></script>
+<script src="{{ asset('assets/sweetalert2/sweetalert2.js') }}"></script>
 
-  function filterByCategoryId() {
-    $('.category-filter-item').each(function () {
-      $(this).click(() => {
-        const categoryId = $(this).data('category-id') ?? null;
-        appendNewFilter('category_id', categoryId);
-        submitFilterForm();
-      });
-    });
-  }
+<script>
+  const { createApp } = Vue;
+  createApp({
+    mounted() {
+      this.handleCategoriesFilter();
+    },
+    data() {
+      return {
 
-  function sortSystem() {
-    $('#sort-select').change(function() {
-      appendNewFilter('sort', $(this).val());
-      submitFilterForm();
-    });
-  } 
+        minPriceFilter: @json($priceFilter['minPrice']),
+        maxPriceFilter: @json($priceFilter['maxPrice']),
 
-  function handleFiltringWhenSetFilterClicked() {
-    $('.setFilter-btn').click(() => {
-      filterBySize();
-      filterByTitle();
-      filterByStoreBalance();
-      filterByPrice();
-      submitFilterForm();
-    });
-  }
+        colorRanges: @json($colorRanges),
+        requestCategoryId: @json(request('category_id')) ?? null,
+        filterByAvailable: @json(request('available', 0)) == 1 ? true : false,
+        filterByTitle: @json(request('title')) ?? '',
+        filterByMinPrice: @json(request('min_price', $priceFilter['minPrice'])),
+        filterByMaxPrice: @json(request('max_price', $priceFilter['maxPrice'])),
 
-  function filterBySize() {
-    const sizeAttributeValueIds = [];
-    $('.size-list-item').each(function() {
-      if ($(this).is(':checked')) {
-        sizeAttributeValueIds.push($(this).val());
+        parentCategoryId: '',
+        childCategoryId: '',
+        grandChildCategoryId: '',
+
+        allParentCategories: @json($parentCategories),
+        allChildCategories: @json($childCategories),
+        allGrandChildCategories: @json($grandChildCategories),
+
+        childCategories: [],
+        grandChildCategories: [],
+
       }
-    });
-    if (sizeAttributeValueIds.length < 1) {
-      appendNewFilter('attribute_value_id', '');
-    }else {
-      appendNewFilter('attribute_value_id', JSON.stringify(sizeAttributeValueIds));
+    },
+    watch: {
+      parentCategoryId(id) {
+        this.childCategories = this.allChildCategories?.filter(c => c.parent_id == id) ?? [];
+        this.childCategoryId = '',
+        this.grandChildCategories = [];
+        this.grandChildCategoryId = '';
+      },
+      childCategoryId(id) {
+        this.grandChildCategories = this.allGrandChildCategories?.filter(c => c.parent_id == id) ?? [];
+        this.grandChildCategoryId = '';
+      }
+    },
+    methods: {
+      async request(url, method, data = null, onSuccessRequest) {
+
+        let options = {
+          method: method,
+          headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': @json(csrf_token())
+          },
+        };
+
+        if (data === null) {
+          options.headers['Content-Type'] = 'application/json';
+        } else {
+          options.body = data instanceof FormData ? data : JSON.stringify(data);
+        }
+
+        const response = await fetch(url, options);
+        const result = await response.json();
+
+        if (!response.ok) {
+          switch (response.status) {
+            case 422:
+              this.showValidationError(result.errors);
+              break;
+            case 404:
+              this.popup('error', 'خطای 404', 'چنین چیزی وجود ندارد');
+              break;
+            case 500:
+              this.popup('error', 'خطای سرور', result.message);
+              break;
+            default: 
+              this.popup('error', 'خطای نا شناخته');
+              break;
+          }
+          return;
+        }
+
+        onSuccessRequest(result);
+      },
+      async handleCategoriesFilter() {
+        if (this.requestCategoryId) {
+          await this.setParentCategory();
+          await this.setChildCategory();
+          await this.setGrandChildCategory();
+        }
+      },
+      setParentCategory() {
+        const isParent = this.allParentCategories?.find(c => c.id == this.requestCategoryId);
+        if (isParent) {
+          this.parentCategoryId = this.requestCategoryId;
+          return;
+        } 
+
+        const isChild = this.allChildCategories?.find(c => c.id == this.requestCategoryId);
+        if (isChild) {
+          this.parentCategoryId = isChild.parent_id;
+          return;
+        } 
+
+        const isGrandChild = this.allGrandChildCategories?.find(c => c.id == this.requestCategoryId);
+        if (isGrandChild) {
+          const child = this.allChildCategories?.find(c => c.id == isGrandChild.parent_id);
+          if (child) {
+            this.parentCategoryId = child.parent_id;
+          }
+        }
+
+      },
+      setChildCategory() {
+        this.childCategories = this.allChildCategories?.filter(c => c.parent_id == this.parentCategoryId);
+        const isChild = this.allChildCategories?.find(c => c.id == this.requestCategoryId);
+        if (isChild) {
+          this.childCategoryId = isChild.id;
+          return;
+        } 
+
+        const isGrandChild = this.allGrandChildCategories?.find(c => c.id == this.requestCategoryId);
+        if (isGrandChild) {
+          this.childCategoryId = isGrandChild.parent_id;
+        }
+      },
+      setGrandChildCategory() {
+        this.grandChildCategories = this.allGrandChildCategories?.filter(c => c.parent_id == this.childCategoryId);
+        const isGrandChild = this.allGrandChildCategories?.find(c => c.id == this.requestCategoryId);
+        if (isGrandChild) {
+          this.grandChildCategoryId = isGrandChild.id;
+        }
+      },
+      openColorDetailsModal() {
+        document.querySelector('#color-details-modal').classList.add('active');  
+        document.querySelector('.modal-overlay').classList.add('active');
+        document.body.classList.add('no-overflow');
+      },
+      handlePriceRange(e) {
+
+        const rangeInput = document.querySelectorAll('.range-input input');       
+        const price = document.querySelectorAll('.price-text .currency');
+        const range = document.querySelector('.slider .progress');
+
+        let priceGap = 10000;
+
+        const minVal = parseInt(rangeInput[0].value);
+        const maxVal = parseInt(rangeInput[1].value);
+
+        if (maxVal - minVal < priceGap) {
+          if (e.target.className === "range-min") {
+            rangeInput[0].value = maxVal - priceGap;
+          } else {
+            rangeInput[1].value = minVal + priceGap;
+          }
+        } else {
+          range.style.right = (minVal / rangeInput[0].max) * 100 + "%";
+          range.style.left = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+          let min = minVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          let max = maxVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');    
+          price[0].textContent = min;
+          price[1].textContent = max;
+        }
+      },
+      toggleColorRange(e) {
+        const button = e.currentTarget;
+        button.classList.toggle('select');
+      },
+      getFinalCategoryId() {
+        if (this.grandChildCategoryId) {
+          return this.grandChildCategoryId
+        } else if (this.childCategoryId) {
+          return this.childCategoryId;
+        } else if (this.parentCategoryId) {
+          return this.parentCategoryId;
+        } else {
+          return null;
+        }
+      },
+      getColorRangeIds() {
+        const selectedColorRanges = document.querySelectorAll('.color-btn.select');
+        if (selectedColorRanges.length == 0) return [];
+
+        const ids = [];
+        selectedColorRanges.forEach(colorRangeBtn => {
+          ids.push(parseInt(colorRangeBtn.getAttribute('data-id')));
+        })
+
+        return ids;
+      },
+      filter() {
+
+        console.log(this.getColorRangeIds());
+        return;
+
+        const params = {
+          title: this.filterByTitle,
+          min_price: this.filterByMinPrice,
+          max_price: this.filterByMaxPrice,
+          available: this.filterByAvailable ? 1 : 0,
+          category_id: this.getFinalCategoryId(),
+          color_range_ids: this.getColorRangeIds(),
+        };
+
+        const queryString = Object.entries(params)
+          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+          .join("&");
+
+        const baseUrl = @json(route('front.products.index'));
+        const url = `${baseUrl}?${queryString}`;
+
+        window.location.replace(url);
+      },
+    },
+    computed: {
+
     }
-  }
-
-  function filterByTitle() {
-    const title = $('.title-input').val()?.trim();
-    appendNewFilter('title', title);
-  }
-
-  function filterByStoreBalance() {
-    const isAvailableChecked = $('.available-btn').is(':checked') ? 1 : '';
-    appendNewFilter('available', isAvailableChecked);
-  }
-
-  function filterByPrice() {
-    // appendNewFilter('min_price', $('.range-min').val());
-    // appendNewFilter('max_price', $('.range-max').val());
-  }
-
-  function showAvailableProducts() {
-    $('.available-btn2').change(function() {
-      console.log(1);
-      const available = $(this).is(':checked') ? 1 : 0;
-      appendNewFilter('available', available);
-      submitFilterForm();
-    });
-  }
-
-  $(document).ready(() => {
-    filterByCategoryId();
-    sortSystem();
-    showAvailableProducts();
-    handleFiltringWhenSetFilterClicked();
-  });
-
+  }).mount('#filter-aside')
 </script>
+
+<script>
+  $(document).ready(() => {
+    $('#sort-select').change(function() {
+      $('#filter-form').find('input[name=sort]').attr('value', $(this).val());
+      $('#filter-form').submit();
+    });
+  });
+</script> 
 
 @endsection

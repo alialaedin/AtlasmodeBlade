@@ -400,12 +400,17 @@ function mainPage(){
 }
 // Products Page
 function productsPage(){
-  showSublist()
-  priceRange()
-  priceRange2()
+//   priceRange()
+//   priceRange2()
   twoCloumn()
   threeCloumn()
-  checkedAvailableInput()
+//   ColorSelect()
+//   checkedAvailableInput()
+//   $(document).ready(function () {
+//     $('#main-category-modal').on('change', function () {
+//         $('#child-category-modal').css('display' , 'block'); // نمایش دومین select
+//     });
+// });
    //  Show More Products Step By Step  
     $(document).ready(function(){
         let productShow=8;
@@ -422,27 +427,12 @@ function productsPage(){
 
         });
     })
-    function showSublist(){
-        let buttonShow=$('.show-subList'),
-        btnChild=$('.show-subList-child');
-        buttonShow.each(function(){
-           $(this).click(function(){
-               let plusIcon=$(this).find('.icon-plus');
-               let crossIcon=$(this).find('.icon-minus');
-               plusIcon.toggleClass('deactive');
-               crossIcon.toggleClass('active');
-               $(this).closest('li').find('.category-sublist').toggleClass('active');
+    function ColorSelect() {
+        $('.color-list button').each(function() {
+            $(this).click(function(){
+                $(this).toggleClass('select');
             });
         });
-        btnChild.each(function(){
-            $(this).click(function(){
-                let plusIcon=$(this).find('.icon-plus');
-                let crossIcon=$(this).find('.icon-minus');
-                plusIcon.toggleClass('deactive');
-                crossIcon.toggleClass('active');
-                $(this).closest('li').find('.category-sublist-child').toggleClass('active');
-             });
-         })
     }
     function priceRange(){
         let rangeInput = document.querySelectorAll('.range-input input'),        

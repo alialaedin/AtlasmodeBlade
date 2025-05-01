@@ -111,6 +111,7 @@ class Category extends Model implements HasMedia
 				->active()
 				->latest('id')
 				->with('media')
+				->without('children')
 				->get()
 				->each(fn(self $category) => $category->append(['image']));
 		});
@@ -121,6 +122,7 @@ class Category extends Model implements HasMedia
 		return self::query()
 			->select(['id', 'title', 'priority', 'status', 'show_in_home'])
 			->orderByDesc('priority')
+			->without('children')
 			->when($category, fn($q) => $q->whereKeyNot($category->id))
 			->get();
 	}
@@ -163,6 +165,27 @@ class Category extends Model implements HasMedia
 		}
 
 		return $showInHomeCategories->toArray();
+	}
+
+	public static function getParentCategories()
+	{
+		return self::whereNull('parent_id')->without('children')->active()->get(['id', 'title']);
+	}
+
+	public static function getChildCategories()
+	{
+		return self::whereNotNull('parent_id')
+			->whereHas('parent', fn ($pQuery) => $pQuery->whereDoesntHave('parent'))
+			->active()
+			->get(['id', 'title', 'parent_id']);
+	}
+
+	public static function getGrandChildCategories()
+	{
+		return self::whereNotNull('parent_id')
+			->whereHas('parent', fn ($pQuery) => $pQuery->whereHas('parent'))
+			->active()
+			->get(['id', 'title', 'parent_id']);
 	}
 
 	public static function storeOrUpdate(Request $request, self|null $category = null)
@@ -339,16 +362,4 @@ class Category extends Model implements HasMedia
 		return $query;
 	}
 
-	public static function getAllCategoriesForProductList()
-	{
-		return static::query()
-			->select(['id', 'title', 'parent_id', 'status'])
-			->parents()
-			->active()
-			->withCount('products')
-			->with([
-				'children' => fn($q) => $q->select(['id', 'title', 'parent_id'])->withCount('products')
-			])
-			->get();
-	}
 }

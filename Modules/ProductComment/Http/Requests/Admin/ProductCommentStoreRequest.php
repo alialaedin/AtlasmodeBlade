@@ -12,12 +12,11 @@ class ProductCommentStoreRequest extends FormRequest
 {
 	public function rules()
 	{
-		$isRateRequired = Auth::user() instanceof Customer ? true : false;
 		return [
 			'title' => 'nullable|string|min:5|max:195',
 			'body' => 'required|string|min:10',
 			'rate' => [
-				Rule::requiredIf($isRateRequired),
+				Rule::requiredIf(Auth::user() instanceof Customer),
 				'digits_between:1,10'
 			],
 			'show_customer_name' => 'required|boolean',

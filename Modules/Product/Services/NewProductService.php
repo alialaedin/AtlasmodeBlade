@@ -15,7 +15,7 @@ class NewProductService
   {
     $this->sortBy = $sortBy ?? request('sort', 'newest');
     $this->perPage = $perPage ?? request('per_page', app(CoreSettings::class)->get('product.pagination', 12));
-    $this->productQuery = Product::query()->select(['id', 'status', 'title']);
+    $this->productQuery = Product::query()->select(['id', 'status', 'title', 'image_alt']);
   }
 
   private static function getAvailableSortStatuses(): array
@@ -42,15 +42,15 @@ class NewProductService
         ->select(['id', 'status', 'discount', 'discount_until', 'discount_type'])
         ->active()
         ->get()
-        ->map(fn ($product) => self::mapProductData($product));
+        ->map(fn($product) => self::mapProductData($product));
     });
   }
 
   private static function mapProductData($product)
   {
     $product->total_sales = $product->orderItems->where('status', 1)?->sum('quantity') ?? 0;
-    $product->discount = $product->varieties->max(fn ($variety) => $variety->final_price['discount'] ?? 0);
-    $product->final_price = $product->varieties->min(fn ($variety) => $variety->final_price['amount'] ?? 0);
+    $product->discount = $product->varieties->max(fn($variety) => $variety->final_price['discount'] ?? 0);
+    $product->final_price = $product->varieties->min(fn($variety) => $variety->final_price['amount'] ?? 0);
 
     return $product;
   }
@@ -61,7 +61,18 @@ class NewProductService
     $this->loadRelations();
     $this->sort();
 
-    return $this->productQuery->paginate($this->perPage)->withQueryString();
+    $products = $this->productQuery->paginate($this->perPage)->withQueryString();
+    $this->prepareForFront($products);
+
+    return $products;
+  }
+
+  private function prepareForFront($products)
+  {
+    $products->each(function (Product $product) {
+      $product->append(['final_price', 'main_image']);
+      $product->makeHidden(['varieties', 'active_flash']);
+    });
   }
 
   private function applyFilters()
@@ -74,7 +85,7 @@ class NewProductService
   }
 
   private function loadRelations()
-  { 
+  {
     $this->productQuery->with([
       'varieties' => function ($varietiesQuery): void {
         $varietiesQuery->active()
@@ -154,9 +165,9 @@ class NewProductService
   private function sortProductsByPrice()
   {
     return self::getActiveProductsData()
-      ->sortBy(fn ($product) => $product->final_price)
-      ->when(request('min_price'), fn ($c) => $c->where('final_price', '>=', request('min_price')))
-      ->when(request('max_price'), fn ($c) => $c->where('final_price', '<=', request('max_price')))
+      ->sortBy(fn($product) => $product->final_price)
+      ->when(request('min_price'), fn($c) => $c->where('final_price', '>=', request('min_price')))
+      ->when(request('max_price'), fn($c) => $c->where('final_price', '<=', request('max_price')))
       ->pluck('id')
       ->toArray();
   }

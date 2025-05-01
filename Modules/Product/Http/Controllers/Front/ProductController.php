@@ -8,25 +8,44 @@ use Modules\Category\Entities\Category;
 use Modules\Color\Entities\ColorRange;
 use Modules\Product\Entities\Product;
 use Modules\Product\Entities\RecommendationGroup;
+use Modules\Product\Entities\Variety;
 use Modules\Product\Services\NewProductService;
-use Modules\Product\Services\ProductService;
 
 class ProductController extends Controller
 {
 	public function index(): View
 	{
-		$priceFilter = (new ProductService())->maxAndMinPrice();
 		$products = (new NewProductService())->getProducts();
-		$categories = Category::getCategoriesForFront();
 		$sortTypes = RecommendationGroup::query()->where('show_in_filter', 1)->pluck('label', 'name')->toArray();
 		$colorRanges = ColorRange::getColorRangesForFront();
+
+		$allCategories = Category::getCategoriesToSetParent();
+		$parentCategories = Category::getParentCategories();
+		$childCategories = Category::getChildCategories();
+		$grandChildCategories = Category::getGrandChildCategories();
 
 		$requestCategory = [];
 		if (request('category_id')) {
 			$requestCategory = Category::getCategoriesToSetParent()->where('id', request('category_id'))->first();
+			abort_if(!$requestCategory, 404);
 		}
 
-		return view('product::front.product.index', compact(['products', 'colorRanges', 'priceFilter', 'categories', 'sortTypes', 'requestCategory']));
+		$priceFilter = [
+			'minPrice' => Variety::min('price'),
+			'maxPrice' => Variety::max('price'),
+		];
+
+		return view('product::front.product.index', compact([
+			'products', 
+			'colorRanges', 
+			'priceFilter', 
+			'sortTypes', 
+			'requestCategory', 
+			'allCategories',
+			'parentCategories',
+			'childCategories',
+			'grandChildCategories',
+		]));
 	}
 
 	public function show($id)
