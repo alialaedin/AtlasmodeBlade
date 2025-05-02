@@ -835,7 +835,7 @@
             }
             addresses.forEach(address => {
                 let option = $('<option></option>');
-                option.attr('value', address.id).text(`${address.address} - کد پستی : ${address.postal_code}`);
+                option.attr('value', address.id).text(`${address.city.province.name} - ${address.city.name} - ${address.address} - کد پستی : ${address.postal_code}`);
                 addressSelectBox.append(option);
             });
         }

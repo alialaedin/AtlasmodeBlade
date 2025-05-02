@@ -96,7 +96,7 @@
                                 <span class="custom-control-label">فعال</span>
                             </label>
                             <label class="custom-control custom-checkbox mr-5">
-                                <input id="is-public-checkbox" type="checkbox" class="custom-control-input" value="1"/>
+                                <input id="is-public-checkbox" type="checkbox" class="custom-control-input" checked value="1"/>
                                 <span class="custom-control-label">عمومی</span>
                             </label>
                         </div>
@@ -139,7 +139,7 @@
                 <div class="row">
                     <div class="col">
                       <div class="text-center">
-                        <button class="btn btn-sm btn-primary" type="submit" onclick="storeShipping(event)">ثبت و ذخیره</button>
+                        <button class="btn btn-sm btn-primary" type="submit" onclick="storeShipping">ثبت و ذخیره</button>
                         <button class="btn btn-sm btn-danger" type="button" onclick="window.location.reload()">ریست فرم</ذ>
                       </div>
                     </div>
@@ -166,9 +166,6 @@
         $(document).ready(() => {  
 
             $('#example-provinces-table-tr').remove(); 
-            $('#submit-form').on('submit', (event) => {
-                storeShipping(event);
-            });
 
             provinceSelectBox.change((event) => {  
 

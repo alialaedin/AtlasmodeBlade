@@ -223,7 +223,8 @@ class CustomerController extends Controller
 	public function getAddresses($customer_id)
   {
     $addresses = Address::query()
-      ->select(['id', 'customer_id', 'address', 'postal_code'])
+      ->select(['id', 'customer_id', 'address', 'postal_code', 'city_id'])
+			->with('city.province')
       ->where('customer_id', $customer_id)
       ->get();
 
