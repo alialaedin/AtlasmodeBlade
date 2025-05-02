@@ -1087,6 +1087,9 @@
               case 404:
                 this.popup('error', 'خطای 404', 'چنین چیزی وجود ندارد');
                 break;
+              case 409:
+                this.popup('error', '', result.message);
+                break;
               case 500:
                 this.popup('error', 'خطای سرور', result.message);
                 break;
