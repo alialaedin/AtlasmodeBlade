@@ -16,7 +16,7 @@
   <section class="container-2xl mt-9 bg-white py-2 px-4 px-md-8 px-3xl-0 d-flex flex-column gap-2">
      <h1 class="h4-strong color-gray-900">ارتباط با {{ $shopTitle }}</h1>
      <p class="text-button-1 color-gray-700">{{ $aboutUsText }}</p>
-     <form action="{{ route('front.comments.store') }}" method="POST" class="contact-us-form grid">
+     <form action="{{ route('front.contacts.store') }}" method="POST" class="contact-us-form grid">
       @csrf
       <input type="text" name="name" class="g-col-lg-4 g-col-12 p-2 border-gray-300 bg-gray-100 text-button-1" placeholder="نام:">
       <input type="text" name="phone_number" class="g-col-lg-4 g-col-12 p-2 border-gray-300 bg-gray-100 text-button-1" placeholder="شماره تماس:">
