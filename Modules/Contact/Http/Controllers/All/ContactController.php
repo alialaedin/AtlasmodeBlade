@@ -32,6 +32,7 @@ class ContactController extends Controller
     }
     $contact = $this->repository->create($request->all());
 
+    return resirect()->back()->with('success', 'پیام شما با موفقیت ارسال شد');
     return response()->success('پیام شما با موفقیت ارسال شد', ['contact' => $contact]);
   }
 

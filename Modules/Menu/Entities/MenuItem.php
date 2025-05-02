@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Modules\Admin\Classes\ActivityLogHelper;
+use Modules\Contact\Entities\Contact;
 use Modules\Link\Traits\HasLinks;
 use Spatie\MediaLibrary\HasMedia;
 
@@ -205,9 +206,9 @@ class MenuItem extends BaseModel implements HasMedia
       case 'Category':
         return route('front.products.index', ['category_id' => $this->linkable_id]);
       case 'IndexAboutUs':
-        return '/about-us';
+        return Contact::ABOUT_URL;
       case 'IndexContactUs':
-        return '/contact-us';
+        return Contact::CONTACT_URL;
       default:
         return $this->link;
     }

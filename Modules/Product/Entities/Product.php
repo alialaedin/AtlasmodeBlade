@@ -147,13 +147,11 @@ class Product extends BaseModel implements HasMedia, Viewable
 			if ($product->orderItems()->exists()) {
 				throw Helpers::makeValidationException('به علت وجود سفارش برای این محصول امکان حذف آن وجود ندارد');
 			}
-			// if ($rec = $product->recommendations()->whereNot()->first()) {
-			// 	$name = $rec->group->label;
-			// 	throw Helpers::makeValidationException("این محصول در لیست محصولات پیشهادی ($name) انتخاب شده است ");
-			// }
-			// ProductService::deleteCache();
 		});
-		static::deleted(fn (self $product) => $product->recommendations()->delete());
+		static::deleted(function (self $product) {
+			$product->recommendations()->delete();
+			$product->varieties()->delete();
+		});
 	}
 
 	public function getActivitylogOptions(): LogOptions

@@ -7,18 +7,11 @@ use Modules\Core\Entities\BaseModel as Model;
 
 class Contact extends Model
 {
-  protected $fillable = [
-    'name',
-    'phone_number',
-    'subject',
-    'body',
-    'customer_id',
-    'answer',
-  ];
+  protected $fillable = [ 'name', 'phone_number', 'subject', 'body', 'status'];
+  protected $with = ['customer'];
 
-  protected $with = [
-    'customer'
-  ];
+  public const CONTACT_URL = '/contact-us';
+  public const ABOUT_URL = '/about-us';
 
   public function customer()
   {

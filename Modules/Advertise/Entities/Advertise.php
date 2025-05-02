@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Admin\Classes\ActivityLogHelper;
+use Modules\Contact\Entities\Contact;
 use Modules\Core\Entities\BaseModel;
 use Modules\Core\Helpers\Helpers;
 use Modules\Core\Traits\InteractsWithMedia;
@@ -160,9 +161,9 @@ class Advertise extends BaseModel implements HasMedia
       case 'Category':
         return route('front.products.index', ['category_id' => $this->linkable_id]);
       case 'IndexAboutUs':
-        return '/about-us';
+        return Contact::ABOUT_URL;
       case 'IndexContactUs':
-        return '/contact-us';
+        return Contact::CONTACT_URL;
       default:
         return $this->link;
     }

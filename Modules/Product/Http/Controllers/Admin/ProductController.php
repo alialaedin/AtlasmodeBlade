@@ -31,15 +31,15 @@ class ProductController extends Controller
 	{
 		$q = \request('q');
 		if (empty($q)) return response()->error('ورودی نامعتبر است');
-		
+
 		$products = Product::query()
 			->select('id', 'title')
-			->when(is_numeric($q), fn ($q) => $q->orWhere('id', $q))
+			->when(is_numeric($q), fn($q) => $q->orWhere('id', $q))
 			->orWhere('title', 'LIKE', '%' . $q . '%')
 			->with('media')
 			->take(15)
 			->get()
-			->each(fn ($product) => $product->setAppends(['main_image']));
+			->each(fn($product) => $product->setAppends(['main_image']));
 
 		return response()->success('', compact('products'));
 	}
@@ -328,16 +328,16 @@ class ProductController extends Controller
 	{
 		$varieties = Variety::query()
 			->select([
-				'id', 
-				'product_id', 
-				'discount', 
-				'discount_until', 
+				'id',
+				'product_id',
+				'discount',
+				'discount_until',
 				'discount_type',
 				'price',
-				'max_number_purchases', 
+				'max_number_purchases',
 			])
 			->with([
-				'attributes', 
+				'attributes',
 				'product:id,title',
 				'store:id,variety_id,balance'
 			])
@@ -353,5 +353,5 @@ class ProductController extends Controller
 	{
 		$product->delete();
 		return redirect()->back()->with('success', 'محصول با موفقیت حذف شد');
-	} 
+	}
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Modules\Admin\Classes\ActivityLogHelper;
+use Modules\Contact\Entities\Contact;
 use Modules\Core\Entities\BaseModel;
 use Modules\Core\Traits\HasAuthors;
 use Modules\Core\Transformers\MediaResource;
@@ -140,9 +141,9 @@ class Slider extends BaseModel implements HasMedia
       case 'Category':
         return route('front.products.index', ['category_id' => $this->linkable_id]);
       case 'IndexAboutUs':
-        return '/about-us';
+        return Contact::ABOUT_URL;
       case 'IndexContactUs':
-        return '/contact-us';
+        return Contact::CONTACT_URL;
       default:
         return $this->link;
     }
