@@ -44,27 +44,22 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
+		Paginator::defaultView('pagination.default');
+		$this->handleSuperAdminGate();
+		$this->registerBladeDirectives();
+		$this->handleAdminGlobalVariables();
+		$this->handleFrontPanelGlobalVariables();
+	}
+
+	private function handleSuperAdminGate()
+	{
 		Gate::before(function ($user, $ability) {
 			return $user->hasRole('super_admin') ? true : null;
 		});
-		Paginator::defaultView('pagination.default');
-		isset($_GET['kk']) &&
-			DB::listen(function ($query) {
-				//            \Log::debug($query->sql);
-				//            \Log::debug($query->bindings);
-				dump($query->sql);
-				//            dump($query->time);
-				dump($query->bindings);
-				//            dump((debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 35)));
-				if (!isset(static::$totalQueries)) {
-					static::$totalQueries = 1;
-				} else {
-					static::$totalQueries += 1;
-				}
-				echo '<style>body {background: #1a202c}</style>';
-				echo '<script>window.total =  ' . static::$totalQueries . ';window.onload = () => alert(window.total) </script>';
-			});
+	}
 
+	private function handleAdminGlobalVariables()
+	{
 		view()->composer('admin.layouts.master', function ($view) {
 
 			$menuGroups = MenuGroup::getAllMenuGroups();
@@ -82,7 +77,10 @@ class AppServiceProvider extends ServiceProvider
 			]);
 
 		});
+	}
 
+	private function handleFrontPanelGlobalVariables()
+	{
 		view()->composer('front-layouts.master', function ($view) {
 
 			$settings = Helpers::cacheForever('settings', function () {
@@ -102,5 +100,10 @@ class AppServiceProvider extends ServiceProvider
 				'cartsCount' => $cartsCount
 			]);
 		});
+	}
+
+	private function registerBladeDirectives()
+	{
+		
 	}
 }

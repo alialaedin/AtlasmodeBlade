@@ -166,6 +166,9 @@
         $(document).ready(() => {  
 
             $('#example-provinces-table-tr').remove(); 
+            $('#submit-form').on('submit', (event) => {
+                storeShipping(event);
+            });
 
             provinceSelectBox.change((event) => {  
 

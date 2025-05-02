@@ -38,19 +38,19 @@ class OrderStoreRequest extends FormRequest
 				Rule::exists('coupons', 'code')
 			],
 			'payment_driver' => ['required', 'string', Rule::in(Payment::getAvailableDrivers())],
-			'delivered_at' => 'required|date_format:Y-m-d',
+			// 'delivered_at' => 'required|date_format:Y-m-d',
 			'pay_wallet' => 'required|boolean',
 			'reserved' => 'nullable|boolean'
 		];
 	}
 
 
-	public function prepareForValidation()
-	{
-		$this->merge([
-			'delivered_at' => now()->format('Y-m-d')
-		]);
-	}
+	// public function prepareForValidation()
+	// {
+	// 	$this->merge([
+	// 		'delivered_at' => now()->format('Y-m-d')
+	// 	]);
+	// }
 
 	public function passedValidation()
 	{

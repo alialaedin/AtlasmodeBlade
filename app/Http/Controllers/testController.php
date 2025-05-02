@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Modules\Product\Entities\Product;
 use Modules\Product\Entities\SpecificDiscountItem;
 use Illuminate\Support\Facades\Schema;
@@ -160,6 +161,7 @@ class testController extends Controller
 
 	public function add()
 	{
+		dd('DONE');
 
 		// Schema::create('recommendation_groups', function (Blueprint $table) {
 		//     $table->id();

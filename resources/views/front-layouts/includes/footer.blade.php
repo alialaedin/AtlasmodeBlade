@@ -71,7 +71,13 @@
               <ul class="menu-footer d-flex gap-2">
                 @foreach (count($menus) && isset($menus['footer']) ? $menus['footer'] : [] as $footerMenuItem)
                     <li>
-                        <a href="{{ $footerMenuItem->link_url }}" class="text-button-1 color-gray-900">{{ $footerMenuItem->title }}</a>
+                        <a 
+                            href="{{ $footerMenuItem->link_url }}" 
+                            class="text-button-1 color-gray-900"
+                            @if($footerMenuItem->new_tab) target="_blank" @endif
+                        >
+                            {{ $footerMenuItem->title }}
+                        </a>
                     </li>
                 @endforeach
               </ul>
@@ -83,9 +89,7 @@
               <span class="text-button color-gray-600 ">
                   طراحی شده:
                   <a href="https://shetabit.com/">
-                      <strong class="text-button color-black">
-                          شتاب
-                      </strong>
+                      <strong class="text-button color-black">شتاب</strong>
                   </a>
               </span>
           </div>

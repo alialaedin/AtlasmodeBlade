@@ -75,13 +75,21 @@
 				@foreach (count($menus) ? $menus['header'] : [] as $headerParentMenuItem)
 					@if ($headerParentMenuItem->children->isEmpty())
 						<li class="mainMenu-li">
-							<a href="{{ $headerParentMenuItem->link_url }}" class="mainMenu-item d-flex align-items-center gap-2">
+							<a 
+								href="{{ $headerParentMenuItem->link_url }}" 
+								class="mainMenu-item d-flex align-items-center gap-2" 
+								@if($headerParentMenuItem->new_tab) target="_blank" @endif
+							>
 								<span class="text-medium">{{ $headerParentMenuItem->title }}</span>
 							</a>
 						</li>
 					@else
 						<li class="mainMenu-li-hasSubMenu">
-							<a href="{{ $headerParentMenuItem->link_url }}" class="mainMenu-item-hasSubMenu d-flex align-items-center gap-1">
+							<a 
+								href="{{ $headerParentMenuItem->link_url }}" 
+								class="mainMenu-item-hasSubMenu d-flex align-items-center gap-1" 
+								@if($headerParentMenuItem->new_tab) target="_blank" @endif
+							>
 								<span class="text-medium">{{ $headerParentMenuItem->title }}</span>
 								<i class="icon-angle-down icon-fs-small color-gray-700"></i>
 							</a>
@@ -92,6 +100,7 @@
 											<li class="mainMenu-sublist-item-main pb-1 mt-3 d-flex align-items-center gap-2">
 												<span class="horizontal-divider h-5 bg-black"></span>
 												<a 
+													@if($headerChildMenuItem->new_tab) target="_blank" @endif
 													class="text-truncate text-medium" 
 													href="{{ $headerChildMenuItem->link_url }}">
 													{{ $headerChildMenuItem->title }}
@@ -102,6 +111,7 @@
 												<div class="mainMenu-sublist-item-main pb-1 d-flex align-items-center gap-2">
 													<span class="horizontal-divider h-5 bg-black"></span>
 													<a 
+														@if($headerChildMenuItem->new_tab) target="_blank" @endif
 														class="text-truncate text-medium" 
 														href="{{ $headerChildMenuItem->link_url }}">
 														{{ $headerChildMenuItem->title }}
@@ -112,6 +122,7 @@
 													@foreach ($headerChildMenuItem->children as $headerGrandChildMenuItem)
 														<li class="mainMenu-sublist-item me-3 text-medium">
 															<a 
+																@if($headerGrandChildMenuItem->new_tab) target="_blank" @endif
 																class="text-truncate color-gray-700 text-medium" 
 																href="{{ $headerGrandChildMenuItem->link_url }}">
 																{{ $headerGrandChildMenuItem->title }}

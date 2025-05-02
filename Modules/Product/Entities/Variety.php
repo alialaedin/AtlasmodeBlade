@@ -81,13 +81,13 @@ class Variety extends BaseModel implements HasMedia
     {
         parent::booted();
 
-        static::updating(function ($variety) {
+        static::updating(function (self $variety) {
             if ($variety->isDirty('max_number_purchases')) {
                 Cache::forget('variety-quantity-' . $variety->id);
             }
         });
 
-        static::deleting(function (\Modules\Product\Entities\Variety $variety) {
+        static::deleting(function (self $variety) {
             if (!$variety->orderItems()->exists() && !$variety->isForceDeleting()) {
                 $variety->forceDelete();
             }
@@ -96,6 +96,8 @@ class Variety extends BaseModel implements HasMedia
                 $cart->delete();
             });
         });
+
+        static::deleted(fn (self $variety) => $variety->store()->delete());
 
         static::creating(function ($variety) {
             if ($variety->isDirty('max_number_purchases')) {

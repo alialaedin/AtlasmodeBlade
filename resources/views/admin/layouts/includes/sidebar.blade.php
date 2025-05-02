@@ -243,7 +243,7 @@
             <i class="angle fa fa-angle-left"></i>
           </a>
           <ul class="slide-menu">
-            <li><a href="{{ route('admin.stores.index') }}" class="slide-item">محصولات</a></li>
+            <li><a href="{{ route('admin.stores.index') }}" class="slide-item"> موجودی محصولات</a></li>
             <li><a href="{{ route('admin.stores.transactions') }}" class="slide-item">تراکنش ها</a></li>
           </ul>
         </li>
