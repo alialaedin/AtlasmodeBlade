@@ -14,7 +14,7 @@ trait HasLinks
 	public function initializeHasLinks()
 	{
 		$this->mergeFillable(['link', 'linkable_id', 'linkable_type', 'new_tab']);
-		$this->append('slug');
+		$this->append(['slug', 'link_url', 'unique_type']);
 		$this->makeHidden('linkable');
 	}
 

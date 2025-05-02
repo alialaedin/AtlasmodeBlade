@@ -23,7 +23,7 @@ class Advertise extends BaseModel implements HasMedia
   protected $table = 'advertisements';
   protected $fillable = ['link', 'new_tab', 'status', 'start', 'end'];
   protected $hidden = ['media'];
-  protected $appends = ['picture', 'picture_url', 'unique_type'];
+  protected $appends = ['picture_url'];
 
   public const ADVERTISE_DESKTOP_RIGHT = 'advertise_desktop_right';
   public const ADVERTISE_DESKTOP_LEFT = 'advertise_desktop_left';
@@ -147,41 +147,4 @@ class Advertise extends BaseModel implements HasMedia
     return '/storage/' . $this->picture->uuid . '/' . $this->picture->file_name;
   }
 
-  public function getLinkUrlAttribute()
-  {
-    switch ($this->unique_type) {
-      case 'IndexPost':
-        return route('front.posts.index');
-      case 'Post':
-        return route('front.posts.show', $this->linkable_id);
-      case 'IndexProduct':
-        return route('front.products.index');
-      case 'Product':
-        return route('front.products.show', $this->linkable_id);
-      case 'Category':
-        return route('front.products.index', ['category_id' => $this->linkable_id]);
-      case 'IndexAboutUs':
-        return Contact::ABOUT_URL;
-      case 'IndexContactUs':
-        return Contact::CONTACT_URL;
-      default:
-        return $this->link;
-    }
-  }
-
-  public function getUniqueTypeAttribute()
-  {
-    if (!$this->linkable_type) {
-      return 'self_link';
-    }
-    if ($this->linkable_id) {
-      return basename($this->linkable_type);
-    } else {
-      if (Str::contains($this->linkable_type, 'Custom')) {
-        return 'Index' . explode('\\', $this->linkable_type)[1];
-      }else {
-        return 'Index' . basename($this->linkable_type);
-      }
-    }
-  }
 }

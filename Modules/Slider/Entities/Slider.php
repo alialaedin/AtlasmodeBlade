@@ -34,7 +34,7 @@ class Slider extends BaseModel implements HasMedia
 
   protected $hidden = ['media'];
   protected $casts = ['status' => 'boolean'];
-  protected $appends = ['group_label', 'image', 'unique_type', 'link_url'];
+  protected $appends = ['group_label', 'image'];
   protected $fillable = ['title', 'description', 'group', 'link', 'status', 'custom_fields'];
 
   protected static function booted()
@@ -127,28 +127,6 @@ class Slider extends BaseModel implements HasMedia
     return config('slider.groupLabels.' . $this->group);
   }
 
-  // public function getLinkUrlAttribute()
-  // {
-  //   switch ($this->unique_type) {
-  //     case 'IndexPost':
-  //       return route('front.posts.index');
-  //     case 'Post':
-  //       return route('front.posts.show', $this->linkable_id);
-  //     case 'IndexProduct':
-  //       return route('front.products.index');
-  //     case 'Product':
-  //       return route('front.products.show', $this->linkable_id);
-  //     case 'Category':
-  //       return route('front.products.index', ['category_id' => $this->linkable_id]);
-  //     case 'IndexAboutUs':
-  //       return Contact::ABOUT_URL;
-  //     case 'IndexContactUs':
-  //       return Contact::CONTACT_URL;
-  //     default:
-  //       return $this->link;
-  //   }
-  // }
-
   public function registerMediaCollections(): void
   {
     $this->addMediaCollection('main')->singleFile();
@@ -176,20 +154,4 @@ class Slider extends BaseModel implements HasMedia
   {
     return $query->where('group', $group);
   }
-
-  // public function getUniqueTypeAttribute()
-  // {
-  //   if (!$this->linkable_type) {
-  //     return 'self_link';
-  //   }
-  //   if ($this->linkable_id) {
-  //     return basename($this->linkable_type);
-  //   } else {
-  //     if (Str::contains($this->linkable_type, 'Custom')) {
-  //       return 'Index' . explode('\\', $this->linkable_type)[1];
-  //     }else {
-  //       return 'Index' . basename($this->linkable_type);
-  //     }
-  //   }
-  // }
 }
