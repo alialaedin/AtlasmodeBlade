@@ -651,7 +651,7 @@
 </div>
 
 <!-- Edit Address -->
-<div v-if="editAddressData.addressId != ''" data-id="edit-address-modal" class="modal modal-add-newAddress radius-medium d-flex flex-column bg-white gap-2 px-6 py-4">
+<div v-if="editAddressData.addressId != ''" id="edit-address-modal" class="modal modal-add-newAddress radius-medium d-flex flex-column bg-white gap-2 px-6 py-4">
   <!-- Header Modal -->
   <div class="header-modal d-flex justify-content-between pb-2">
     <span class="text-medium-3"> ویرایش آدرس پستی</span>
