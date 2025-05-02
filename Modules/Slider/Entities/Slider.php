@@ -2,12 +2,9 @@
 
 namespace Modules\Slider\Entities;
 
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 use Modules\Admin\Classes\ActivityLogHelper;
-use Modules\Contact\Entities\Contact;
 use Modules\Core\Entities\BaseModel;
 use Modules\Core\Traits\HasAuthors;
 use Modules\Core\Transformers\MediaResource;

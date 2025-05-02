@@ -362,7 +362,7 @@
                         </div>
                         <!-- Discount Percent -->
                         <span class="px-2 radius-u text-button-1 bg-secondary-100">
-                          @{{ relatedProdumainct.final_price.discount }} 
+                          @{{ relatedProduct.final_price.discount }} 
                           <span v-if="relatedProduct.final_price.discount_type === flat">تومان</span> 
                           <span v-else-if="relatedProduct.final_price.discount_type === percentage">%</span> 
                         </span> 

@@ -4,7 +4,6 @@ namespace Modules\Menu\Entities;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 use Modules\Admin\Entities\Admin;
 use Modules\Core\Classes\DontAppend;
 use Modules\Core\Entities\BaseModel;
@@ -14,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Modules\Admin\Classes\ActivityLogHelper;
-use Modules\Contact\Entities\Contact;
 use Modules\Link\Traits\HasLinks;
 use Spatie\MediaLibrary\HasMedia;
 
