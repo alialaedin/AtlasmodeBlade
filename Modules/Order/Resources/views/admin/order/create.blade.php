@@ -174,7 +174,7 @@
         <div class="row" style="margin-bottom: 200px;">
             <div class="col-12">
                 <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-sm btn-primary" onclick="storeNewOrder()">محاسبه سفارش</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="storeNewOrder()">ثبت سفارش</button>
                 </div>
             </div>
         </div>
@@ -944,16 +944,9 @@
                     'X-CSRF-TOKEN': @json(csrf_token())
                 },
                 success: (response) => {
-                    console.log(response);
-                    
-                    // if (response.data.link.length > 1) {
-                    //     // closeOrderShowcaseModal();
-                    //     showPayLinkModal();
-                    //     payLinkModal.find('#NewOrderSuccessMessage').text(response.message);
-                    //     payLinkModal.find('#NewOrderPayLink').text(response.data.link);
-                    // }else {
-                    //     window.location.href = @json(route('admin.orders.index'));
-                    // }
+                    popup('success', '', response.message)
+                    const orderPage = @json(route(('admin.orders.index')));
+                    window.location.replace(orderPage);
                 },
                 error: (error) => {
                     // closeOrderShowcaseModal();
