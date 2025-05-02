@@ -651,68 +651,70 @@
 </div>
 
 <!-- Edit Address -->
-<div v-if="editAddressData.addressId != ''" id="edit-address-modal" class="modal modal-add-newAddress radius-medium d-flex flex-column bg-white gap-2 px-6 py-4">
-  <!-- Header Modal -->
-  <div class="header-modal d-flex justify-content-between pb-2">
-    <span class="text-medium-3"> ویرایش آدرس پستی</span>
-    <button type="button" class="modal-close">
-      <i class="icon-cancel icon-fs-small color-gray-700"></i>
+<div id="edit-address-modal" class="modal modal-add-newAddress radius-medium d-flex flex-column bg-white gap-2 px-6 py-4">
+  <template v-if="editAddressData.addressId != ''">
+    <!-- Header Modal -->
+    <div class="header-modal d-flex justify-content-between pb-2">
+      <span class="text-medium-3"> ویرایش آدرس پستی</span>
+      <button type="button" class="modal-close">
+        <i class="icon-cancel icon-fs-small color-gray-700"></i>
+      </button>
+    </div>
+    <form class="newAddress-from grid gap-1 gap-lg-2 mt-1">
+      <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
+        <label>استان<span class="color-error-100">*</span></label>
+        <select class="p-2 bg-gray-100" v-model="editAddressData.provinceId" @change="loadCitiesForEditAddress">
+          <option
+            v-for="province in provinces"
+            v-text="province.name"
+            :selected="editAddressData.province.id == province.id"
+            :key="province.id"
+            :value="province.id">
+          </option>
+        </select>
+      </div>
+      <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
+        <label>شهر<span class="color-error-100">*</span></label>
+        <select class="p-2 bg-gray-100" v-model="editAddressData.cityId">
+          <option
+            v-for="city in editAddressData.province.cities"
+            v-text="city.name"
+            :selected="editAddressData.cityId == city.id"
+            :key="city.id"
+            :value="city.id">
+          </option>
+        </select>
+      </div>
+      <div class="d-flex flex-column gap-2 g-col-12">
+        <label for="address-input-2">آدرس کامل پستی<span class="color-error-100">*</span></label>
+        <input type="text" v-model="editAddressData.address" id="address-input-2" required minlength="10" class="p-2 bg-gray-100">
+      </div>
+      <div class="d-flex flex-column gap-2 g-col-12">
+        <label for="postal-code-2">کد پستی<span class="color-error-100">*</span></label>
+        <input type="text" v-model="editAddressData.postalCode" id="postal-code-2" required  class="p-2 bg-gray-100">
+      </div>
+      <div class="grid gap-2 pt-2 g-col-12">
+        <div class="d-flex flex-column gap-2 g-col-12 g-col-lg-6">
+          <label for="name-2">نام گیرنده<span class="color-error-100">*</span></label>
+          <input type="text" v-model="editAddressData.firstName" id="name-2" required class="p-2 bg-gray-100">
+        </div>
+        <div class="d-flex flex-column gap-2 g-col-12 g-col-lg-6">
+          <label for="last-name-2">نام‌خانوادگی گیرنده<span class="color-error-100">*</span></label>
+          <input type="text" v-model="editAddressData.lastName" id="last-name-2" required  class="p-2 bg-gray-100">
+        </div>
+        <div class="d-flex flex-column gap-1 g-col-12 g-col-lg-6">
+          <label for="phone-number-2">شماره موبایل<span class="color-error-100">*</span></label>
+          <input type="text" v-model="editAddressData.mobile" id="phone-number-2" required maxlength="11" class="p-2 bg-gray-100">
+        </div>
+      </div>
+    </form>
+    <button
+      @click="updateAddress"
+      type="button" 
+      class="add-newAddress-btn bg-black color-white text-medium">
+      بروزرسانی آدرس
     </button>
-  </div>
-  <form class="newAddress-from grid gap-1 gap-lg-2 mt-1">
-    <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
-      <label>استان<span class="color-error-100">*</span></label>
-      <select class="p-2 bg-gray-100" v-model="editAddressData.provinceId" @change="loadCitiesForEditAddress">
-        <option
-          v-for="province in provinces"
-          v-text="province.name"
-          :selected="editAddressData.province.id == province.id"
-          :key="province.id"
-          :value="province.id">
-        </option>
-      </select>
-    </div>
-    <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
-      <label>شهر<span class="color-error-100">*</span></label>
-      <select class="p-2 bg-gray-100" v-model="editAddressData.cityId">
-        <option
-          v-for="city in editAddressData.province.cities"
-          v-text="city.name"
-          :selected="editAddressData.cityId == city.id"
-          :key="city.id"
-          :value="city.id">
-        </option>
-      </select>
-    </div>
-    <div class="d-flex flex-column gap-2 g-col-12">
-      <label for="address-input-2">آدرس کامل پستی<span class="color-error-100">*</span></label>
-      <input type="text" v-model="editAddressData.address" id="address-input-2" required minlength="10" class="p-2 bg-gray-100">
-    </div>
-    <div class="d-flex flex-column gap-2 g-col-12">
-      <label for="postal-code-2">کد پستی<span class="color-error-100">*</span></label>
-      <input type="text" v-model="editAddressData.postalCode" id="postal-code-2" required  class="p-2 bg-gray-100">
-    </div>
-    <div class="grid gap-2 pt-2 g-col-12">
-      <div class="d-flex flex-column gap-2 g-col-12 g-col-lg-6">
-        <label for="name-2">نام گیرنده<span class="color-error-100">*</span></label>
-        <input type="text" v-model="editAddressData.firstName" id="name-2" required class="p-2 bg-gray-100">
-      </div>
-      <div class="d-flex flex-column gap-2 g-col-12 g-col-lg-6">
-        <label for="last-name-2">نام‌خانوادگی گیرنده<span class="color-error-100">*</span></label>
-        <input type="text" v-model="editAddressData.lastName" id="last-name-2" required  class="p-2 bg-gray-100">
-      </div>
-      <div class="d-flex flex-column gap-1 g-col-12 g-col-lg-6">
-        <label for="phone-number-2">شماره موبایل<span class="color-error-100">*</span></label>
-        <input type="text" v-model="editAddressData.mobile" id="phone-number-2" required maxlength="11" class="p-2 bg-gray-100">
-      </div>
-    </div>
-  </form>
-  <button
-    @click="updateAddress"
-    type="button" 
-    class="add-newAddress-btn bg-black color-white text-medium">
-    بروزرسانی آدرس
-  </button>
+  </template>
 </div>
 
 <!-- Exit Modal -->
