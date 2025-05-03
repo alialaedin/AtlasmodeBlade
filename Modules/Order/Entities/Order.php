@@ -505,6 +505,14 @@ class Order extends Payable implements ProductWallet
 	{
 		$activeItems = $this->items->where('status', 1);
 		return $activeItems->reduce(function ($total, $item) {
+			return $total + ($item->discount_amount * $item->quantity);
+		});
+	}
+
+	public function getTotalDiscountOnItemsAttribute()
+	{
+		$activeItems = $this->items->where('status', 1);
+		return $activeItems->reduce(function ($total, $item) {
 			return $total + ($item->amount * $item->quantity);
 		});
 	}

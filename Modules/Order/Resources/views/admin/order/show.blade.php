@@ -149,7 +149,7 @@
   </x-slot>
 </x-card>
 
-@php
+{{-- @php
   $orderStatistics = [
     ['title' => 'جمع اقلام (تومان)', 'value' => number_format($order->total_amount - $order->discount_amount - $order->shipping_amount), 'color' => 'info'],
     ['title' => 'جمع تخفیف (تومان)', 'value' => number_format($order->discount_amount), 'color' => 'danger'],
@@ -170,7 +170,7 @@
       </div>
     </div>
   @endforeach
-</div>
+</div> --}}
 
 <x-card>
   <x-slot name="cardTitle">اقلام سفارش</x-slot>
@@ -231,6 +231,38 @@
         @endforeach
       </x-slot>
     </x-table-component>
+
+    <div class="row mx-4 justify-content-center" style="margin-top: 50px">
+      <div class="col-12 col-xl-4">
+        <div class="card shadow-lg">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 my-1 d-flex justify-content-between align-items-center">
+                <b>مجموع قیمت کالا ها</b>
+                <span>{{ number_format($order->total_items_amount) }} تومان</span>
+              </div>
+              <div class="col-12 my-1 d-flex justify-content-between align-items-center">
+                <b>مجموع تخفیف روی کالا ها</b>
+                <span>{{ number_format($order->total_discount_on_items) }} تومان</span>
+              </div>
+              <div class="col-12 my-1 d-flex justify-content-between align-items-center">
+                <b>تخفیف روی سفارش</b>
+                <span>{{ number_format($order->discount_amount - $order->total_items_amount) }} تومان</span>
+              </div>
+              <div class="col-12 my-1 d-flex justify-content-between align-items-center">
+                <b>هزینه ارسال</b>
+                <span>{{ number_format($order->shipping_amount) }} تومان</span>
+              </div>
+              <div class="col-12 my-1 d-flex justify-content-between align-items-center">
+                <b>جمع کل</b>
+                <span>{{ number_format($order->total_amount) }} تومان</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </x-slot>
 </x-card>
 
