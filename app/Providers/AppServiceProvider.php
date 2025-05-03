@@ -67,6 +67,7 @@ class AppServiceProvider extends ServiceProvider
 			$settingGroups = Setting::getGroups();
 			$siteLogoUrl = Setting::getFromName('logo');
 			$siteTitle = Setting::getFromName('title');
+			$shopUrl = Setting::getFromName('shop_url');
 
 			$view->with([
 				'siteTitle' => $siteTitle,
@@ -74,6 +75,7 @@ class AppServiceProvider extends ServiceProvider
 				'settingGroups' => $settingGroups,
 				'menuGroups' => $menuGroups,
 				'sliderGroups' => $sliderGroups,
+				'shopUrl' => $shopUrl,
 			]);
 
 		});

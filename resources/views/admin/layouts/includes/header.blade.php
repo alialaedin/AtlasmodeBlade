@@ -23,6 +23,16 @@
               </button>
             </form>
           </div> --}}
+        <div>
+          <a
+            href="{{ $shopUrl }}"
+            target="_blank"
+            class="nav-link icon border-0"
+            data-toggle="tooltip"
+            data-original-title="سایت">
+            <i class="feather feather-home header-icon"></i>
+          </a>
+        </div>
         <div class="dropdown header-fullscreen">
           <a class="nav-link icon full-screen-link">
             <i class="feather feather-maximize fullscreen-button fullscreen header-icons"></i>

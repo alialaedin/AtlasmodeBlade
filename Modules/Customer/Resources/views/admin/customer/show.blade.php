@@ -215,7 +215,9 @@
             @forelse ($customer->addresses->sortByDesc('id') as $address)
               <tr>
                 <td class="font-weight-bold">{{ $loop->iteration }}</td>
-                <td>{{ $address->id }}</td>
+                <td>
+                  <span class="btn btn-sm btn-dark">{{ $address->id }}</span>
+                </td>
                 <td>{{ $address->address }}</td>
                 <td>{{ $address->first_name . ' ' . $address->last_name }}</td>
                 <td>{{ $address->mobile}}</td>
