@@ -214,18 +214,18 @@
             <td>
               <button 
                 data-item-id="{{ $item->id }}"
-                data-update-quantity-url="{{ route('admin.orders.update-item-quantity', $item) }}"
+                data-update-quantity-url="{{ route('admin.order-items.update-quantity', $item) }}"
                 class="btn btn-sm btn-dark edit-item-quantity-button">
                 ویرایش تعداد
               </button>
               <button
                 data-item-id="{{ $item->id }}"
-                data-update-status-url="{{ route('admin.orders.update-item-status', $item) }}"
+                data-update-status-url="{{ route('admin.order-items.update-status', $item) }}"
                 style="margin-left: 1px;"
                 class="edit-item-status-button btn btn-sm btn-warning">
                 تغییر وضعیت
               </button>
-              <x-delete-button route="admin.orders.delete-item" :model="$item" :has-title="true"/>
+              <x-delete-button route="admin.order-items.destroy" :model="$item" :has-title="true"/>
             </td>
           </tr>
         @endforeach
@@ -282,7 +282,7 @@
 <x-modal id="add-new-item-modal" size="md">
   <x-slot name="title">افزودن به سفارش</x-slot>
   <x-slot name="body">
-    <form action="{{ route('admin.orders.add-item', $order) }}" method="POST">
+    <form action="{{ route('admin.order-items.store', $order) }}" method="POST">
 
       @csrf
 
@@ -323,7 +323,7 @@
     <form action="" method="POST">
 
       @csrf
-      @method('PUT')
+      @method('PATCH')
 
       <div class="col-12 mb-2">
         <span>تعداد فعلی : </span>
