@@ -114,7 +114,6 @@ class ProfileController extends Controller
   public function edit()
   {
     $customer = $this->user;
-    $customer->loadCommonRelations();
 
     return response()->success('دریافت اطلاعات پروفایل مشتری', compact('customer'));
   }

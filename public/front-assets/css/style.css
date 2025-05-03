@@ -16992,7 +16992,7 @@ input[type=range]::-moz-range-thumb {
   top: 20px;
   max-height: 399px;
 }
-.shipping-cart .price-details div {
+.shipping-cart .price-details div:first-child {
   border-radius: 15px;
   background-color: #fafafa;
   box-shadow: 0 0 5px 0 rgba(128, 128, 128, 0.151);
