@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">  
 
-  <title>فروشگاه اطلس مد</title>
+  <title>فروشگاه نارین سنتر</title>
 
   <link rel="stylesheet" href="{{ asset('front-assets/css/style.css') }}">
   <link rel="stylesheet" href="{{ asset('front-assets/css/swiper-bundle.min.css') }}"/>

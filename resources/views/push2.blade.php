@@ -13,7 +13,7 @@ $tokens = DB::table('personal_access_tokens')
 
     $message =  (new FirebaseMessage())
         ->withTitle('زمان رزرو شما رو به پایان است')
-        ->withBody("سلام اطلسی عزیز مدت زمان سفارش رزرو شده شما به شناسه درحال اتمام است ");
+        ->withBody("سلام نارینی عزیز مدت زمان سفارش رزرو شده شما به شناسه درحال اتمام است ");
     $message->asNotification(array_values(array_unique($tokens)));
     dd($message);
 ?>

@@ -85,7 +85,7 @@
           <!-- CopyRight -->
           <div class="d-flex flex-lg-row flex-column justify-content-center justify-content-lg-start gap-1 align-items-center">
               <i class="icon-copyright icon-fs-medium-2 d-lg-block d-none"></i>
-              <p class="text-button color-gray-600 text-center">تمامی حقوق این سایت مربوط به سایت اطلس‌مد می باشد .</p>
+              <p class="text-button color-gray-600 text-center">تمامی حقوق این سایت مربوط به سایت نارین سنتر می باشد .</p>
               <span class="text-button color-gray-600 ">
                   طراحی شده:
                   <a href="https://shetabit.com/">
