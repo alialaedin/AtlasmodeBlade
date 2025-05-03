@@ -36,7 +36,7 @@ Route::webSuperGroup('admin', function () {
   });
 
   Route::prefix('/order-items')->name('order-items.')->group(function () {
-    Route::post('/{order}', [OrderItemController::class, 'addItem'])->name('store')->hasPermission('write_order');
+    Route::post('/{order}', [OrderItemController::class, 'store'])->name('store')->hasPermission('write_order');
     Route::patch('{orderItem}/update-status', [OrderItemController::class, 'updateStatus'])->name('update-status')->hasPermission('modify_order');
     Route::patch('/{orderItem}/update-quantity', [OrderItemController::class, 'updateQuantity'])->name('update-quantity')->hasPermission('modify_order');
     Route::delete('/{orderItem}', [OrderItemController::class, 'destroy'])->name('destroy')->hasPermission('modify_order');
