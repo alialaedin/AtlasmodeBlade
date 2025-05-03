@@ -17,6 +17,7 @@ use Modules\Store\Entities\StoreTransaction;
 use Modules\Admin\Classes\ActivityLogHelper;
 use Modules\Order\Entities\OrderLog;
 use Modules\Order\Entities\OrderItemLog;
+use Modules\Product\Entities\Product;
 use Shetabit\Shopit\Modules\Order\Events\OrderChangedEvent;
 
 class OrderItemController extends Controller
