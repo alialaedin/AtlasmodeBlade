@@ -1165,14 +1165,14 @@
           try {
 
             const url = `/addresses/${this.editAddressData.addressId}`;
-            const data = {
-              first_name: this.editAddressData.firstName,
-              last_name: this.editAddressData.lastName,
-              mobile: this.editAddressData.mobile,
-              postal_code: this.editAddressData.postalCode,
-              address: this.editAddressData.address,
-              city: this.editAddressData.cityId,
-            };
+            const fd = FormData();
+
+            fd.append('first_name', this.editAddressData.firstName);
+            fd.append('last_name', this.editAddressData.lastName);
+            fd.append('mobile', this.editAddressData.mobile);
+            fd.append('postal_code', this.editAddressData.postalCode);
+            fd.append('address', this.editAddressData.address);
+            fd.append('city', this.editAddressData.cityId);
 
             await this.request(url, 'PUT', data, async (result) => {
               this.popup('success', '', result.data.message);

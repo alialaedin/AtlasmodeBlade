@@ -40,12 +40,17 @@ Route::webSuperGroup('admin', function () {
 	});
 
   Route::prefix('/customer-roles')->name('customer-roles.')->group(function () {
-
     Route::get('/', [CustomerRoleController::class,'index'])->name('index')->middleware('permission:read_role');
     Route::post('/', [CustomerRoleController::class,'store'])->name('store')->middleware('permission:write_role');
     Route::put('/{customerRole}', [CustomerRoleController::class,'update'])->name('update')->middleware('permission:modify_role');
     Route::delete('/{customerRole}', [CustomerRoleController::class,'destroy'])->name('destroy')->middleware('permission:delete_role');
+	});
 
+
+  Route::prefix('/addresses')->name('addresses.')->group(function () {
+    Route::post('/', [AdminAddressController::class,'store'])->name('store')->middleware('permission:write_address');
+    Route::put('/{id}', [AdminAddressController::class,'update'])->name('update')->middleware('permission:modify_address');
+    Route::delete('/{id}', [AdminAddressController::class,'destroy'])->name('destroy')->middleware('permission:delete_address');
 	});
 
   Route::resource('addresses', 'AddressController')->only(['index','store', 'update']);
