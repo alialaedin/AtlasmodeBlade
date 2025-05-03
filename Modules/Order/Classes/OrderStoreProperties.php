@@ -23,7 +23,7 @@ class OrderStoreProperties
   public string|int $discountOnItems;
   public string|int $totalAmount;
   public string|int $totalItemsAmount;
-  public string|int $totalItemsAmountWithoutDiscount;
+  public string|int $totalItemsAmountWithDiscount;
   public string|int $itemsCount;
   public string|int $itemsQuantity;
 }

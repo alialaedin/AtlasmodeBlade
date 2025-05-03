@@ -34,7 +34,7 @@ class OrderValidationService
   protected $discountOnItems;
   protected $totalAmount;
   protected $totalItemsAmount;
-  protected $totalItemsAmountWithoutDiscount;
+  protected $totalItemsAmountWithDiscount;
   protected $itemsCount;
   protected $itemsQuantity;
 	public OrderStoreProperties $properties;
@@ -264,7 +264,7 @@ class OrderValidationService
 		$this->properties->discount_amount = $this->getDiscountAmount() ?? 0;
 		$this->properties->discountOnItems = $this->getDiscountOnItems() ?? 0;
 		$this->properties->totalItemsAmount = $this->getTotalItemsAmount();
-		$this->properties->totalItemsAmountWithoutDiscount = $this->getTotalItemsAmount() - $this->properties->discountOnItems;
+		$this->properties->totalItemsAmountWithDiscount = $this->getTotalItemsAmount() + $this->properties->discountOnItems;
 		$this->properties->itemsCount = $this->byAdmin ? count($this->varieties) : $this->customer->carts->count();
 		$this->properties->itemsQuantity = $this->byAdmin ? collect($this->varieties)->sum('quantity') : $this->customer->carts->sum('quantity');
 		$this->properties->totalAmount = $this->getTotalAmount();

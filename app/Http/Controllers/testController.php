@@ -45,22 +45,22 @@ class testController extends Controller
 
 	private function syncOrdersColumns()
 	{
+		// Schema::table('orders', function (Blueprint $table) {
+		// 	$table->dropColumn([
+		// 		'first_name',
+		// 		'last_name',
+		// 		'city',
+		// 		'province',
+		// 		'used_wallet_amount',
+		// 		'total_payable_amount',
+		// 	]);
+		// });
 		Schema::table('orders', function (Blueprint $table) {
-			$table->dropColumn([
-				'first_name',
-				'last_name',
-				'city',
-				'province',
-				'used_wallet_amount',
-				'total_payable_amount',
-			]);
-		});
-		Schema::table('orders', function (Blueprint $table) {
-			$table->unsignedBigInteger('discount_on_order');
-			$table->unsignedBigInteger('discount_on_items');
-			$table->unsignedBigInteger('discount_on_coupon');
-			$table->unsignedBigInteger('total_items_amount');
-			$table->unsignedBigInteger('total_items_amount_without_discount');
+			// $table->unsignedBigInteger('discount_on_order');
+			// $table->unsignedBigInteger('discount_on_items');
+			// $table->unsignedBigInteger('discount_on_coupon');
+			// $table->unsignedBigInteger('total_items_amount');
+			$table->unsignedBigInteger('total_items_amount_with_discount');
 		});
 	} 
 

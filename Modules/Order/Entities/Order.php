@@ -66,7 +66,7 @@ class Order extends Payable implements ProductWallet
 		'discount_on_items',
 		'discount_on_coupon',
 		'total_items_amount',
-		'total_items_amount_without_discount',
+		'total_items_amount_with_discount',
 		'total_amount',
 		'description',
 		'status',
@@ -578,7 +578,7 @@ class Order extends Payable implements ProductWallet
 				'discount_on_items' => $properties->discountOnItems,
 				'discount_on_coupon' => $properties->discountOnCoupon,
 				'total_items_amount' => $properties->totalItemsAmount,
-				'total_items_amount_without_discount' => $properties->totalItemsAmountWithoutDiscount,
+				'total_items_amount_with_discount' => $properties->totalItemsAmountWithDiscount,
 				'total_amount' => $properties->totalAmount,
 			]);
 			$order->customer()->associate($customer);
