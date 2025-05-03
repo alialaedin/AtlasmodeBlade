@@ -338,7 +338,7 @@ class ProductController extends Controller
 			])
 			->with([
 				'attributes',
-				'product:id,title',
+				'product:id,title,discount,discount_type,discount_until',
 				'store:id,variety_id,balance'
 			])
 			->where('product_id', request()->product_id)

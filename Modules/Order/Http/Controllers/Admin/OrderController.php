@@ -139,16 +139,21 @@ class OrderController extends Controller
       $oldAddress = $order->address;
       $oldShipping = $order->shipping_id;
       $oldDiscountAmount = $order->discount_amount;
-      $order->update([
+
+      $dataToUpdate = [
         'shipping_id' => $request->shipping_id,
         'address' => $request->address->toJson(),
-        'discount_amount' => $request->discount_amount,
         'description' => $request->description,
-      ]);
+      ];
 
+      $newDiscountAmount = (int)$order->total_discount_on_items + (int)$request->discount_amount;
+      if ($request->discount_amount > 0) {
+        $dataToUpdate['discount_amount'] = $newDiscountAmount;
+      }
+
+      $order->update($dataToUpdate);
       $parentOrder->recalculateShippingAmount();
 
-      //Create status logs
       if ($order->statusLogs->count() < 1) {
         $order->statusLogs()->createMany([
           ['status' => Order::STATUS_WAIT_FOR_PAYMENT],

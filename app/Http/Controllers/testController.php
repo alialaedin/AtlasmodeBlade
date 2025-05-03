@@ -43,6 +43,27 @@ class testController extends Controller
 		dd('DONE');
 	}
 
+	private function syncOrdersColumns()
+	{
+		Schema::table('orders', function (Blueprint $table) {
+			$table->dropColumn([
+				'first_name',
+				'last_name',
+				'city',
+				'province',
+				'used_wallet_amount',
+				'total_payable_amount',
+			]);
+		});
+		Schema::table('orders', function (Blueprint $table) {
+			$table->unsignedBigInteger('discount_on_order');
+			$table->unsignedBigInteger('discount_on_items');
+			$table->unsignedBigInteger('discount_on_coupon');
+			$table->unsignedBigInteger('total_items_amount');
+			$table->unsignedBigInteger('total_items_amount_without_discount');
+		});
+	} 
+
 	public function index()
 	{
 		$zeroBalanceVarietyIdsInStore = Store::query()->select(['variety_id'])->where('balance', '=', 0)->pluck('variety_id')->toArray();
@@ -161,6 +182,7 @@ class testController extends Controller
 
 	public function add()
 	{
+		$this->syncOrdersColumns();
 		dd('DONE');
 
 		// Schema::create('recommendation_groups', function (Blueprint $table) {

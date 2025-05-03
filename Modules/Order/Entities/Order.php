@@ -2,10 +2,8 @@
 
 namespace Modules\Order\Entities;
 
-use Illuminate\Support\Facades\Mail;
 use Modules\Core\Classes\CoreSettings;
 use Modules\Coupon\Entities\Coupon;
-use Modules\Order\Mail\NewOrderEmail;
 use Modules\GiftPackage\Entities\GiftPackage;
 use Bavix\Wallet\Traits\HasWallet;
 use Carbon\Carbon;
@@ -60,7 +58,16 @@ class Order extends Payable implements ProductWallet
 		'address',
 		'address_id',
 		'shipping_amount',
+		'sell_type_id',
 		'discount_amount',
+		'items_count',
+		'items_quantity',
+		'discount_on_order',
+		'discount_on_items',
+		'discount_on_coupon',
+		'total_items_amount',
+		'total_items_amount_without_discount',
+		'total_amount',
 		'description',
 		'status',
 		'status_detail',
@@ -90,7 +97,7 @@ class Order extends Payable implements ProductWallet
 		Order::STATUS_NEW
 	];
 
-	protected $appends = ['total_amount'];
+	// protected $appends = ['total_amount'];
 	protected $casts = [
 		'shipping_amount' => 'integer',
 		'discount_amount' => 'integer'
@@ -495,10 +502,11 @@ class Order extends Payable implements ProductWallet
 	// محاسبه قیمت نهایی
 	public function getTotalAmountAttribute(): int
 	{
-		$totalItemsAmount = $this->total_items_amount;
-		$giftPackageAmount = isset($this->attributes['gift_package_price']) ? $this->attributes['gift_package_price'] : 0;
+		return $this->attributes['total_amount'];
+		// $totalItemsAmount = $this->total_items_amount;
+		// $giftPackageAmount = isset($this->attributes['gift_package_price']) ? $this->attributes['gift_package_price'] : 0;
 
-		return ($totalItemsAmount + $this->attributes['shipping_amount']) + $giftPackageAmount - $this->attributes['discount_amount'];
+		// return ($totalItemsAmount + $this->attributes['shipping_amount']) + $giftPackageAmount - $this->attributes['discount_amount'];
 	}
 
 	public function getTotalItemsAmountAttribute()
@@ -507,6 +515,11 @@ class Order extends Payable implements ProductWallet
 		return $activeItems->reduce(function ($total, $item) {
 			return $total + ($item->amount * $item->quantity);
 		});
+	}
+
+	public function getDiscountAmountAttribute()
+	{
+		return $this->discount_on_order ?? 0 + $this->discount_on_coupon ?? 0 + $this->discount_on_items ?? 0;
 	}
 
 	public function getTotalDiscountOnItemsAttribute()
@@ -551,13 +564,22 @@ class Order extends Payable implements ProductWallet
 				'address' => $properties->address->toJson(),
 				'coupon_id' => $properties->coupon ? $properties->coupon->id : null,
 				'shipping_amount' => $properties->shipping_amount,
-				'discount_amount' => $properties->discount_amount,
+				'discount_amount' => $properties->discountAmount,
 				'delivered_at' => $request->delivered_at,
 				'status' => static::STATUS_WAIT_FOR_PAYMENT,
+				'sell_type_id' => null,
 				'reserved' => $request->reserved ?? 0,
 				'description' => $request->description,
 				'gift_package_id' => $request?->gift_package_id,
-				'gift_package_price' => $request->reserved ? 0 : $request->gift_package_price
+				'gift_package_price' => $request->reserved ? 0 : $request->gift_package_price,
+				'items_count' => $properties->itemsCount,
+				'items_quantity' => $properties->itemsQuantity,
+				'discount_on_order' => $properties->discountOnOrder,
+				'discount_on_items' => $properties->discountOnItems,
+				'discount_on_coupon' => $properties->discountOnCoupon,
+				'total_items_amount' => $properties->totalItemsAmount,
+				'total_items_amount_without_discount' => $properties->totalItemsAmountWithoutDiscount,
+				'total_amount' => $properties->totalAmount,
 			]);
 			$order->customer()->associate($customer);
 			$order->address()->associate($properties->address);

@@ -28,6 +28,15 @@ class OrderValidationService
 	protected $discountAmount;
 	protected $shippingAmount;
 	protected $customerAddress;
+
+	protected $discountOnOrder;
+  protected $discountOnCoupon;
+  protected $discountOnItems;
+  protected $totalAmount;
+  protected $totalItemsAmount;
+  protected $totalItemsAmountWithoutDiscount;
+  protected $itemsCount;
+  protected $itemsQuantity;
 	public OrderStoreProperties $properties;
 
 	public mixed $totalQuantity = 0;
@@ -253,15 +262,22 @@ class OrderValidationService
 			throw Helpers::makeValidationException('تاریخ تحویل انتخاب شده نامعتبر است.', 'shipping_id');
 		}
 		$this->properties->discount_amount = $this->getDiscountAmount() ?? 0;
+		$this->properties->discountOnItems = $this->getDiscountOnItems() ?? 0;
+		$this->properties->totalItemsAmount = $this->getTotalItemsAmount();
+		$this->properties->totalItemsAmountWithoutDiscount = $this->getTotalItemsAmount() - $this->properties->discountOnItems;
+		$this->properties->itemsCount = $this->byAdmin ? count($this->varieties) : $this->customer->carts->count();
+		$this->properties->itemsQuantity = $this->byAdmin ? collect($this->varieties)->sum('quantity') : $this->customer->carts->sum('quantity');
+		$this->properties->totalAmount = $this->getTotalAmount();
+		$this->properties->discountAmount = $this->properties->discountOnItems + $this->properties->discountOnOrder + $this->properties->discountOnCoupon;
 		$this->properties->address = $address;
 		$this->properties->shipping_amount = $this->getShippingAmount() ?? 0;
 	}
 
 	public function getDiscountAmount()
 	{
-		if ($this->discountAmount) {
-			return $this->discountAmount;
-		}
+		// if ($this->discountAmount) {
+		// 	return $this->discountAmount;
+		// }
 		$sumCartsPrice = $this->getRawSumCartsPrice();
 		$discount = 0;
 		if ($this->request['coupon_code']) {
@@ -275,9 +291,20 @@ class OrderValidationService
 			Coupon::dontAllowCouponAndDiscountTogether();
 		}
 		if (auth()->user() instanceof Admin) {
+			if ($this->discountOnOrder) {
+				$this->properties->discountOnOrder = $this->discountOnOrder;
+			} else {
+				$this->properties->discountOnOrder = $this->request['discount_amount'] ?? 0;
+			}
 			return $this->discountAmount = $this->request['discount_amount'];
 		}
 
+		if ($this->discountOnCoupon) {
+			$this->properties->discountOnCoupon = $this->discountOnCoupon;
+		} else {
+			$this->properties->discountOnCoupon = $discount;
+		}
+		
 		return $this->discountAmount = $discount;
 	}
 
@@ -306,4 +333,61 @@ class OrderValidationService
 		#todo $this->getSumCartsPrice() || $this->getRowSumCartsPrice() check in settings
 		return $this->shippingAmount = $shipping->getPrice($city, $this->getSumCartsPriceWithoutShipping(), $this->totalQuantity);
 	}
+
+	public function getDiscountOnItems()
+	{
+		if($this->discountOnItems) {
+			return $this->discountOnItems;
+		}
+
+		$discountOnItems = 0;
+
+		if (Auth::user() instanceof Admin) {
+			foreach ($this->request['varieties'] as $v) {
+				$variety = Variety::query()->withCommonRelations()->findOrFail($v['id']);
+				$discountOnItems += $variety->final_price['discount_price'] * $v['quantity'];
+			}
+		}
+
+		$carts = $this->customer->carts;
+		foreach ($carts as $cart) {
+			$discountOnItems += ($cart->discount_price * $cart->quantity);
+		}
+
+		return $this->discountOnItems = $discountOnItems;
+	}
+
+	public function getTotalItemsAmount()
+	{
+		if($this->totalItemsAmount) {
+			return $this->totalItemsAmount;
+		}
+
+		$totalAmount = 0;
+		if ($this->byAdmin) {
+			foreach ($this->varieties as $variety) {
+				$findVariety = Variety::query()->with(['product'])->find($variety['id']);
+				$totalAmount += $findVariety->final_price['amount'] * $variety['quantity'];
+			}
+		} else {
+			foreach ($this->customer->carts as $cart) {
+				$findVariety = Variety::query()->with(['product'])->find($cart->variety_id);
+				$totalAmount += $findVariety->final_price['amount'] * $cart->quantity;
+			}
+		}
+		
+		return $this->totalItemsAmount = $totalAmount;
+	}
+
+	public function getTotalAmount() 
+	{
+		if($this->totalAmount) {
+			return $this->totalAmount;
+		}
+
+		$shippingAmount = $this->getShippingAmount();
+
+		return $this->totalAmount = $this->totalItemsAmount + $shippingAmount - ($this->discountOnCoupon ?? 0) - ($this->discountOnOrder ?? 0);
+	}
+
 }

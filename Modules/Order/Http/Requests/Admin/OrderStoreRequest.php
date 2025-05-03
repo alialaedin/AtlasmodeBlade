@@ -33,7 +33,7 @@ class OrderStoreRequest extends FormRequest
           return $query->where('status', 1);
         })
       ],
-      'discount_amount' => 'nullable|integer|min:1',
+      'discount_amount' => 'nullable|integer|min:1000',
       'description' => 'nullable|string|max:65000',
       'varieties' => 'required|array',
       'varieties.*.id' => [
