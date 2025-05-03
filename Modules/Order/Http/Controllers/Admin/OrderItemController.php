@@ -15,6 +15,7 @@ use Modules\Core\Helpers\Helpers;
 use Modules\Store\Entities\Store;
 use Modules\Store\Entities\StoreTransaction;
 use Modules\Admin\Classes\ActivityLogHelper;
+use Modules\Customer\Entities\Customer;
 use Modules\Order\Entities\OrderLog;
 use Modules\Order\Entities\OrderItemLog;
 use Modules\Product\Entities\Product;

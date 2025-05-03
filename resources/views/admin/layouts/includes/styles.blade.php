@@ -44,6 +44,19 @@
     width: 100px; 
   }
 
+  .table-component {
+    min-height: 600px; 
+    max-height: 600px; 
+    overflow-y: auto;
+  }
+
+  .table-component table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 2;
+  }
+
   /* .app-sidebar__user .user-pic::before {
     content: none;
   } */
