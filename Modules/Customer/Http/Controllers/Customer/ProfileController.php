@@ -16,6 +16,7 @@ use Modules\Customer\Http\Requests\Customer\ProfileUpdateRequest;
 use Modules\Newsletters\Entities\UsersNewsletters;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Modules\Area\Entities\Province;
+use Modules\Customer\Entities\Withdraw;
 use Modules\Invoice\Entities\Payment;
 use Throwable;
 
@@ -85,10 +86,16 @@ class ProfileController extends Controller
       ->get()
       ->each(fn ($tr) => $tr['jalali_created_at'] = verta($tr->created_at)->format('H:i Y/m/d'));
 
+    $withdraws = Withdraw::query()
+      ->where('customer_id', $customer->id)
+      ->select(['id', 'amount', 'statuc', 'created_at'])
+      ->get();
+
     $customer['addresses'] = $addresses;
     $customer['favorites'] = $favorites;
     $customer['orders'] = $orders;
     $customer['transactions'] = $transactions;
+    $customer['withdraws'] = $withdraws;
 
     $orderStatistics = Order::getOrderStatisticsForCustomer($customer);
     $provinces = Province::getAllProvinces(true);

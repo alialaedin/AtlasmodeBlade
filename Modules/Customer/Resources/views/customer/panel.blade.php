@@ -51,8 +51,13 @@
         </button>
         <!-- Wallet -->
         <button type="button" data-btn="wallet" class="item d-flex gap-2 px-1 align-items-center py-2 border-b-gray-400">
-          <svg data-v-2aa0890d="" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="0.3" xmlns="http://www.w3.org/2000/svg" class="ml-1"><path data-v-2aa0890d="" fill-rule="evenodd" clip-rule="evenodd" d="M7.78489 2.5H16.2142C19.4044 2.5 22 5.15478 22 8.41891V15.5811C22 18.8452 19.4044 21.5 16.2142 21.5C15.8462 21.5 15.5476 21.1944 15.5476 20.8179C15.5476 20.4414 15.8462 20.1358 16.2142 20.1358C18.6693 20.1358 20.6667 18.0931 20.6667 15.5811V9.86499H17.3831C16.3049 9.8659 15.4258 10.7645 15.4249 11.8686C15.4258 12.9727 16.3049 13.8713 17.3831 13.8722H18.7476C19.1156 13.8722 19.4142 14.1778 19.4142 14.5543C19.4142 14.9308 19.1156 15.2364 18.7476 15.2364H17.3831C15.5689 15.2355 14.0924 13.7248 14.0916 11.8686C14.0924 10.0123 15.5689 8.50168 17.3831 8.50077H20.6667V8.41891C20.6667 5.90692 18.6693 3.86422 16.2142 3.86422H7.78489C5.80622 3.86422 4.14578 5.19934 3.56711 7.02831H12.3547C12.7227 7.02831 13.0213 7.3339 13.0213 7.71043C13.0213 8.08786 12.7227 8.39254 12.3547 8.39254H3.336C3.336 8.39709 3.33533 8.40141 3.33467 8.40573C3.334 8.41004 3.33333 8.41436 3.33333 8.41891V15.5811C3.33333 18.0931 5.32978 20.1358 7.78489 20.1358H12.0258C12.3938 20.1358 12.6924 20.4414 12.6924 20.8179C12.6924 21.1944 12.3938 21.5 12.0258 21.5H7.78489C4.59467 21.5 2 18.8452 2 15.5811V8.41891C2 5.15478 4.59467 2.5 7.78489 2.5ZM16.861 11.8071C16.861 11.4306 17.1596 11.125 17.5276 11.125H17.8308C18.1988 11.125 18.4974 11.4306 18.4974 11.8071C18.4974 12.1836 18.1988 12.4892 17.8308 12.4892H17.5276C17.1596 12.4892 16.861 12.1836 16.861 11.8071Z" fill="#444"></path></svg>
-          <span>کیف پول</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="0.3" xmlns="http://www.w3.org/2000/svg" class="ml-1"><path data-v-2aa0890d="" fill-rule="evenodd" clip-rule="evenodd" d="M7.78489 2.5H16.2142C19.4044 2.5 22 5.15478 22 8.41891V15.5811C22 18.8452 19.4044 21.5 16.2142 21.5C15.8462 21.5 15.5476 21.1944 15.5476 20.8179C15.5476 20.4414 15.8462 20.1358 16.2142 20.1358C18.6693 20.1358 20.6667 18.0931 20.6667 15.5811V9.86499H17.3831C16.3049 9.8659 15.4258 10.7645 15.4249 11.8686C15.4258 12.9727 16.3049 13.8713 17.3831 13.8722H18.7476C19.1156 13.8722 19.4142 14.1778 19.4142 14.5543C19.4142 14.9308 19.1156 15.2364 18.7476 15.2364H17.3831C15.5689 15.2355 14.0924 13.7248 14.0916 11.8686C14.0924 10.0123 15.5689 8.50168 17.3831 8.50077H20.6667V8.41891C20.6667 5.90692 18.6693 3.86422 16.2142 3.86422H7.78489C5.80622 3.86422 4.14578 5.19934 3.56711 7.02831H12.3547C12.7227 7.02831 13.0213 7.3339 13.0213 7.71043C13.0213 8.08786 12.7227 8.39254 12.3547 8.39254H3.336C3.336 8.39709 3.33533 8.40141 3.33467 8.40573C3.334 8.41004 3.33333 8.41436 3.33333 8.41891V15.5811C3.33333 18.0931 5.32978 20.1358 7.78489 20.1358H12.0258C12.3938 20.1358 12.6924 20.4414 12.6924 20.8179C12.6924 21.1944 12.3938 21.5 12.0258 21.5H7.78489C4.59467 21.5 2 18.8452 2 15.5811V8.41891C2 5.15478 4.59467 2.5 7.78489 2.5ZM16.861 11.8071C16.861 11.4306 17.1596 11.125 17.5276 11.125H17.8308C18.1988 11.125 18.4974 11.4306 18.4974 11.8071C18.4974 12.1836 18.1988 12.4892 17.8308 12.4892H17.5276C17.1596 12.4892 16.861 12.1836 16.861 11.8071Z" fill="#444"></path></svg>
+          <span class="text-medium">کیف پول</span>
+        </button>
+        <!-- Withdraws -->
+        <button type="button" data-btn="withdraws" class="item d-flex gap-2 px-1 align-items-center py-2 border-b-gray-400">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="0.3" xmlns="http://www.w3.org/2000/svg" class="ml-1"><path data-v-2aa0890d="" fill-rule="evenodd" clip-rule="evenodd" d="M7.78489 2.5H16.2142C19.4044 2.5 22 5.15478 22 8.41891V15.5811C22 18.8452 19.4044 21.5 16.2142 21.5C15.8462 21.5 15.5476 21.1944 15.5476 20.8179C15.5476 20.4414 15.8462 20.1358 16.2142 20.1358C18.6693 20.1358 20.6667 18.0931 20.6667 15.5811V9.86499H17.3831C16.3049 9.8659 15.4258 10.7645 15.4249 11.8686C15.4258 12.9727 16.3049 13.8713 17.3831 13.8722H18.7476C19.1156 13.8722 19.4142 14.1778 19.4142 14.5543C19.4142 14.9308 19.1156 15.2364 18.7476 15.2364H17.3831C15.5689 15.2355 14.0924 13.7248 14.0916 11.8686C14.0924 10.0123 15.5689 8.50168 17.3831 8.50077H20.6667V8.41891C20.6667 5.90692 18.6693 3.86422 16.2142 3.86422H7.78489C5.80622 3.86422 4.14578 5.19934 3.56711 7.02831H12.3547C12.7227 7.02831 13.0213 7.3339 13.0213 7.71043C13.0213 8.08786 12.7227 8.39254 12.3547 8.39254H3.336C3.336 8.39709 3.33533 8.40141 3.33467 8.40573C3.334 8.41004 3.33333 8.41436 3.33333 8.41891V15.5811C3.33333 18.0931 5.32978 20.1358 7.78489 20.1358H12.0258C12.3938 20.1358 12.6924 20.4414 12.6924 20.8179C12.6924 21.1944 12.3938 21.5 12.0258 21.5H7.78489C4.59467 21.5 2 18.8452 2 15.5811V8.41891C2 5.15478 4.59467 2.5 7.78489 2.5ZM16.861 11.8071C16.861 11.4306 17.1596 11.125 17.5276 11.125H17.8308C18.1988 11.125 18.4974 11.4306 18.4974 11.8071C18.4974 12.1836 18.1988 12.4892 17.8308 12.4892H17.5276C17.1596 12.4892 16.861 12.1836 16.861 11.8071Z" fill="#444"></path></svg>
+          <span class="text-medium">برداشت از کیف پول</span>
         </button>
         <!-- Exit -->
         <button type="button" data-modal="exit" class="exit-btn d-flex gap-2 px-1 align-items-center py-2">
@@ -509,6 +514,87 @@
 
     </section>
 
+    <!-- Withdraws -->
+    <section data-id="withdraws" class="wallet bg-white section col-lg-9 flex-column radius-medium border-gray-300 px-lg-5 py-5 px-2">
+
+      <div class="d-flex flex-column px-5 py-2 border-gray-300 radius-medium">
+        <span class="text-medium-strong w-p-100 border-b-gray-400 pb-1">برداشت های کیف پول</span>
+        <div class="d-flex flex-wrap gap-lg-0 gap-1 py-3 justify-content-around align-items-center">
+          <!-- Wallent Balance -->
+          <div class="d-flex gap-1 text-medium">
+            <span class="">موجودی کیف پول</span>
+            <!-- Value -->
+            <span class="currency">@{{ customer.wallet.balance }}</span>
+            <span>تومان</span>
+          </div>
+          <!-- Transactions Date -->
+          <div v-if="transactions.length > 0" class="d-flex gap-1 align-items-baseline color-gray-700">
+            <span class="text-button">تاریخ اخرین تراکنش شما:</span>
+            <time datetime="{{ verta($customer->transactions->first()?->created_at)->format('Y/m/d') }}">
+              {{ verta($customer->transactions->first()?->created_at)->format('%d %B %Y') }}
+            </time>
+          </div>
+          <button type="button" data-modal="wallet-modal" class="px-6 py-1  text-button color-white radius-u bg-primary-700">شارژ کیف پول</button>
+        </div>
+      </div>
+
+      <!-- Transactions Detail Dekstop -->
+      <table class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-4 border-gray-300 radius-medium">
+        <thead>
+          <tr class="d-flex gap-lg-8 gap-2 text-medium color-gray-700 bp-1 border-b-gray-400 px-lg-2">
+            <th>شناسه</th>
+            <th>نوع تراکنش</th>
+            <th>تاریخ تراکنش</th>
+            <th>مبلغ (تومان)</th>
+            <th>وضعیت</th>
+            {{-- <th>توضیحات</th> --}}
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="transaction in transactions" :key="transaction.id" class="d-flex gap-lg-11 gap-4 text-button pb-2 border-b-gray-400 px-lg-2">
+            <td>@{{ transaction.id }}</td>
+            <td v-if="transaction.type == 'deposit'" class="bg-success-100 radius-small color-white p-1">واریز</td>
+            <td v-else class="bg-primary-700 radius-small color-white p-1">برداشت</td>
+            <td>
+              <time :datetime="transaction.jalali_created_at">@{{ transaction.jalali_created_at }}</time>
+            </td>
+            <td class="currency">@{{ transaction.amount }}</td>
+            <td v-if="transaction.confirmed" class="bg-success-100 color-white radius-small p-1">موفق</td>
+            <td v-else class="bg-primary-700 color-white radius-small p-1">نا موفق</td>
+            {{-- <td class="descrip d-none d-xl-block text-wrap position-absolute">@{{ transaction.meta.description }}</td> --}}
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Transactions Detail Mobile -->
+      <div class="d-lg-none d-flex flex-column gap-2 px-2 py-2 mt-2 border-gray-300 radius-medium">
+        <h4 class="h4-strong">تراکنش ها</h4>
+        <!-- Withdraw Info -->
+        <div v-for="transaction in transactions" :key="transaction.id" class="grid p-2 border-gray-300 radius-medium gap-1">
+          <div class="g-col-6 d-flex gap-1 text-button align-items-center">
+            <span>نوع تراکنش:</span>
+            <span v-if="transaction.type == 'withdraw'" class="transaction color-warning-300 px-1 radius-medium">برداشت</span>
+            <span v-else class="transaction color-success-100 px-1 radius-medium">برداشت</span>
+          </div>
+          <div class="g-col-6 d-flex gap-1 text-button align-items-center">
+            <span class="text-nowrap">تاریخ :</span>
+            <time :datetime="transaction.jalali_created_at">@{{ transaction.jalali_created_at }}</time>
+          </div>
+          <div class="g-col-6 d-flex gap-1 text-button align-items-center">
+            <span>مبلغ:</span>
+            <span class="currency">@{{ Math.abs(transaction.amount) }}</span>
+          </div>
+          <div class="g-col-6 d-flex gap-1 text-button align-items-center">
+            <span>وضعیت:</span>
+            <span v-if="transaction.confirmed" class="status color-success-100 px-1 radius-medium">موفق</span>
+            <span v-else class="status color-warning-300 px-1 radius-medium">نا موفق</span>
+          </div>
+          {{-- <span class="g-col-12 text-center color-gray-700">@{{ transaction.meta.description }}</span> --}}
+        </div>
+      </div>
+
+    </section>
+
     @include('front-layouts.includes.mobile-menu')
 
   </main>
@@ -810,6 +896,7 @@
         this.setOrderStatistics();
         this.activeLoginBtn();
         this.closingModals();
+        console.log(this.withdraws);
       },
       data() {
         return {
@@ -818,6 +905,7 @@
           provinces: @json($provinces),
           existsAddresses: @json($customer->addresses ?? []),
           gateways: @json($gateways),
+          withdraws: @json($customer->withdraws),
           favorites: @json($customer->favorites),
           transactions: @json($customer->transactions),
           depositWalletAmount: '',

@@ -200,6 +200,11 @@ class Customer extends User implements CustomerWallet, Notifiable, HasMedia
 		return $this->hasMany(\Modules\Customer\Entities\Deposit::class);
 	}
 
+	public function withdraws()
+	{
+		return $this->hasMany(Withdraw::class);
+	}
+
 	public function smsTokens()
 	{
 		return $this->hasOne(
