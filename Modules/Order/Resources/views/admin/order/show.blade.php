@@ -247,7 +247,7 @@
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>تخفیف روی سفارش</b>
-                <span>{{ number_format($order->discount_amount - $order->total_items_amount) }} تومان</span>
+                <span>{{ number_format($order->discount_amount - $order->total_discount_on_items) }} تومان</span>
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>هزینه ارسال</b>
