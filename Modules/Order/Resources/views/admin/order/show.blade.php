@@ -239,11 +239,11 @@
             <div class="row">
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>تعداد کالا ها</b>
-                <span>{{ $order->items->where('status', 1)->count() }} تومان</span>
+                <span>{{ $order->items->where('status', 1)->count() }}</span>
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>جمع اقلام</b>
-                <span>{{ $order->items->where('status', 1)->sum('quantity') }} تومان</span>
+                <span>{{ $order->items->where('status', 1)->sum('quantity') }}</span>
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>مجموع قیمت کالا ها</b>
