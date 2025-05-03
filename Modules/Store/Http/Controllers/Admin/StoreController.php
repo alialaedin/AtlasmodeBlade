@@ -19,7 +19,13 @@ class StoreController extends Controller
 
 	public function index()
 	{
-		$stores = Store::query()->with('variety.attributes')->latest('id')->filters()->paginate(50)->withQueryString();
+		$stores = Store::query()
+			->with('variety.attributes')
+			->whereHas('variety', fn($vQuery) => $vQuery->whereNull('deleted_at'))
+			->latest('id')
+			->filters()
+			->paginate(50)
+			->withQueryString();
 
 		return view('store::admin.index', compact('stores'));
 	}
