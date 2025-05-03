@@ -6,15 +6,16 @@ use Modules\Customer\Http\Controllers\Customer\AddressController as CustomerAddr
 use Modules\Customer\Http\Controllers\Admin\CustomerController;
 use Modules\Customer\Http\Controllers\Admin\CustomerRoleController;
 use Modules\Customer\Http\Controllers\Customer\ProfileController;
-use Modules\Customer\Http\Controllers\Admin\WithdrawController;
+use Modules\Customer\Http\Controllers\Admin\WithdrawController as AdminWithdrawController;
+use Modules\Customer\Http\Controllers\Customer\WithdrawController as CustomerWithdrawController;
 
 Route::webSuperGroup('admin', function () {
 
   Route::get('/get-cities', [AdminAddressController::class, 'getCities'])->name('getCity');
 
 	Route::prefix('/withdraws')->name('withdraws.')->group(function () {
-		Route::get('/', [WithdrawController::class, 'index'])->name('index')->middleware('permission:read_withdraw');
-		Route::put('/{withdraw}', [WithdrawController::class, 'update'])->name('update')->middleware('permission:modify_withdraw');
+		Route::get('/', [AdminWithdrawController::class, 'index'])->name('index')->middleware('permission:read_withdraw');
+		Route::put('/{withdraw}', [AdminWithdrawController::class, 'update'])->name('update')->middleware('permission:modify_withdraw');
 	});
 
 	Route::get('/transactions', [CustomerController::class, 'transactionsWallet'])
@@ -68,6 +69,7 @@ Route::middleware('auth:customer')->name('customer.')->group(function () {
   });
 
   Route::post('/deposit', [ProfileController::class, 'depositWallet'])->name('wallet.deposit');
+  Route::post('/withdraw', [CustomerWithdrawController::class, 'store'])->name('wallet.withdraw');
   Route::get('/my-account', [ProfileController::class, 'myAccount'])->name('my-account');
   Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::get('/print-orders', [ProfileController::class, 'printOrders'])->name('print-orders');

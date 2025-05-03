@@ -66,7 +66,6 @@ class WithdrawController extends BaseController
 
             return response()->error('مشکلی رخ داد. ' . $throwable->getMessage(), $throwable->getTrace());
         }
-        $withdraw->loadCommonRelations();
 
         return response()->success('درخواست برداشت از حساب با موفقیت انجام شد', compact('withdraws', 'withdraw'));
     }

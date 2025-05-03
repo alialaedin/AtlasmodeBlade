@@ -477,7 +477,7 @@
             <td>
               <time :datetime="transaction.jalali_created_at">@{{ transaction.jalali_created_at }}</time>
             </td>
-            <td class="currency">@{{ transaction.amount }}</td>
+            <td class="currency">@{{ Math.abs(transaction.amount) }}</td>
             <td v-if="transaction.confirmed" class="bg-success-100 color-white radius-small p-1">موفق</td>
             <td v-else class="bg-primary-700 color-white radius-small p-1">نا موفق</td>
             {{-- <td class="descrip d-none d-xl-block text-wrap position-absolute">@{{ transaction.meta.description }}</td> --}}
@@ -528,13 +528,7 @@
             <span>تومان</span>
           </div>
           <!-- Transactions Date -->
-          <div v-if="transactions.length > 0" class="d-flex gap-1 align-items-baseline color-gray-700">
-            <span class="text-button">تاریخ اخرین تراکنش شما:</span>
-            <time datetime="{{ verta($customer->transactions->first()?->created_at)->format('Y/m/d') }}">
-              {{ verta($customer->transactions->first()?->created_at)->format('%d %B %Y') }}
-            </time>
-          </div>
-          <button type="button" data-modal="wallet-modal" class="px-6 py-1  text-button color-white radius-u bg-primary-700">شارژ کیف پول</button>
+          <button type="button" data-modal="withdraw-modal" class="px-6 py-1  text-button color-white radius-u bg-primary-700">برداشت</button>
         </div>
       </div>
 
@@ -543,53 +537,48 @@
         <thead>
           <tr class="d-flex gap-lg-8 gap-2 text-medium color-gray-700 bp-1 border-b-gray-400 px-lg-2">
             <th>شناسه</th>
-            <th>نوع تراکنش</th>
             <th>تاریخ تراکنش</th>
             <th>مبلغ (تومان)</th>
             <th>وضعیت</th>
-            {{-- <th>توضیحات</th> --}}
           </tr>
         </thead>
         <tbody>
-          <tr v-for="transaction in transactions" :key="transaction.id" class="d-flex gap-lg-11 gap-4 text-button pb-2 border-b-gray-400 px-lg-2">
-            <td>@{{ transaction.id }}</td>
-            <td v-if="transaction.type == 'deposit'" class="bg-success-100 radius-small color-white p-1">واریز</td>
-            <td v-else class="bg-primary-700 radius-small color-white p-1">برداشت</td>
+          <tr v-for="withdraw in withdraws" :key="withdraw.id" class="d-flex gap-lg-11 gap-4 text-button pb-2 border-b-gray-400 px-lg-2">
+            <td>@{{ withdraw.id }}</td>
             <td>
-              <time :datetime="transaction.jalali_created_at">@{{ transaction.jalali_created_at }}</time>
+              <time :datetime="withdraw.jalali_created_at">@{{ withdraw.jalali_created_at }}</time>
             </td>
-            <td class="currency">@{{ transaction.amount }}</td>
-            <td v-if="transaction.confirmed" class="bg-success-100 color-white radius-small p-1">موفق</td>
-            <td v-else class="bg-primary-700 color-white radius-small p-1">نا موفق</td>
-            {{-- <td class="descrip d-none d-xl-block text-wrap position-absolute">@{{ transaction.meta.description }}</td> --}}
+            <td class="currency">@{{ Math.abs(withdraw.amount) }}</td>
+            <td v-if="withdraw.status == 'pending'" class="bg-warning-100 color-white radius-small p-1">در انتظار بررسی</td>
+            <td v-else-if="withdraw.status == 'paid'" class="bg-success-100 color-white radius-small p-1">تایید شده</td>
+            <td v-else-if="withdraw.status == 'canceled'" class="bg-warning-300 color-white radius-small p-1">لغو شده</td>
           </tr>
         </tbody>
       </table>
 
       <!-- Transactions Detail Mobile -->
       <div class="d-lg-none d-flex flex-column gap-2 px-2 py-2 mt-2 border-gray-300 radius-medium">
-        <h4 class="h4-strong">تراکنش ها</h4>
+        <h4 class="h4-strong">برداشت ها</h4>
         <!-- Withdraw Info -->
-        <div v-for="transaction in transactions" :key="transaction.id" class="grid p-2 border-gray-300 radius-medium gap-1">
+        <div v-for="withdraw in withdraws" :key="withdraw.id" class="grid p-2 border-gray-300 radius-medium gap-1">
           <div class="g-col-6 d-flex gap-1 text-button align-items-center">
-            <span>نوع تراکنش:</span>
-            <span v-if="transaction.type == 'withdraw'" class="transaction color-warning-300 px-1 radius-medium">برداشت</span>
-            <span v-else class="transaction color-success-100 px-1 radius-medium">برداشت</span>
+            <span>شناسه:</span>
+            <span class="transaction px-1 radius-medium">@{{ withdraw.id }}</span>
           </div>
           <div class="g-col-6 d-flex gap-1 text-button align-items-center">
             <span class="text-nowrap">تاریخ :</span>
-            <time :datetime="transaction.jalali_created_at">@{{ transaction.jalali_created_at }}</time>
+            <time :datetime="withdraw.jalali_created_at">@{{ withdraw.jalali_created_at }}</time>
           </div>
           <div class="g-col-6 d-flex gap-1 text-button align-items-center">
             <span>مبلغ:</span>
-            <span class="currency">@{{ Math.abs(transaction.amount) }}</span>
+            <span class="currency">@{{ Math.abs(withdraw.amount) }}</span>
           </div>
           <div class="g-col-6 d-flex gap-1 text-button align-items-center">
             <span>وضعیت:</span>
-            <span v-if="transaction.confirmed" class="status color-success-100 px-1 radius-medium">موفق</span>
-            <span v-else class="status color-warning-300 px-1 radius-medium">نا موفق</span>
+            <span v-if="withdraw.status == 'pending'" class="status color-warning-100 px-1 radius-medium">در انتظار بررسی</span>
+            <span v-else-if="withdraw.status == 'paid'" class="status color-success-100 px-1 radius-medium">تایید شده</span>
+            <span v-else-if="withdraw.status == 'canceled'" class="status color-warning-300 px-1 radius-medium">لغو شده</span>
           </div>
-          {{-- <span class="g-col-12 text-center color-gray-700">@{{ transaction.meta.description }}</span> --}}
         </div>
       </div>
 
@@ -629,6 +618,16 @@
     </div>
   </div>
   <button @click="depositWallet" type="button" class="close-modal bg-black color-white text-medium  py-1">افزایش موجودی</button>
+</div>
+
+<!-- Withdraw Modal -->
+<div data-id="withdraw-modal" class="modal charge-wallet-modal radius-medium d-flex flex-column bg-white gap-5 px-6 py-4">
+  <h4 class="text-medium-3 text-center">برداشت از کیف پول</h4>
+  <form class="wallet-form d-flex flex-column gap-2">
+    <span class="text-medium">مبلغ برحسب تومان</span>
+    <input v-model="withdrawWalletAmount" type="text" autofocus class="priceinput border-gray-300 p-3 bg-gray-100 radius-small" placeholder="مبلغ را به تومان وارد کنید">
+  </form>
+  <button @click="withdrawWallet" type="button" class="close-modal bg-black color-white text-medium  py-1">افزایش موجودی</button>
 </div>
 
 <!-- User Info -->
@@ -896,7 +895,6 @@
         this.setOrderStatistics();
         this.activeLoginBtn();
         this.closingModals();
-        console.log(this.withdraws);
       },
       data() {
         return {
@@ -909,6 +907,7 @@
           favorites: @json($customer->favorites),
           transactions: @json($customer->transactions),
           depositWalletAmount: '',
+          withdrawWalletAmount: '',
           birthDate: '',
           updateInformation: {
             firstName: '',
@@ -1206,6 +1205,14 @@
           } catch (error) {
             console.error('error:', error);
           }
+        },
+        async withdrawWallet() {
+          const url = @json(route('customer.wallet.withdraw'));
+          const data = { amount: this.withdrawWalletAmount };
+          await this.request(url, 'POST', data, async (result) => {
+            this.popup('success', '', result.data.message);
+            this.withdraws = result.data.withdraws;
+          });
         },
         async updateCustomerInformation() {
           try {

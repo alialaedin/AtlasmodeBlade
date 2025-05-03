@@ -88,8 +88,9 @@ class ProfileController extends Controller
 
     $withdraws = Withdraw::query()
       ->where('customer_id', $customer->id)
-      ->select(['id', 'amount', 'statuc', 'created_at'])
-      ->get();
+      ->select(['id', 'amount', 'status', 'created_at'])
+      ->get()
+      ->each(fn ($tr) => $tr['jalali_created_at'] = verta($tr->created_at)->format('H:i Y/m/d'));;
 
     $customer['addresses'] = $addresses;
     $customer['favorites'] = $favorites;
