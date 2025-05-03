@@ -424,7 +424,7 @@
       <div class="col-12">
         <div class="form-group">
           <label class="font-weight-bold">تخفیف روی سفارش (تومان) : <span class="text-danger">&starf;</span></label>
-          <input type="text" name="discount_amount" class="form-control comma" value="{{ $order->discount_amount ? number_format($order->discount_amount) : null }}">
+          <input type="text" name="discount_amount" class="form-control comma" value="{{ number_format($order->discount_amount - $order->total_discount_on_items) ?? null }}">
         </div>
       </div>
       
