@@ -49,6 +49,7 @@ class StoreController extends Controller
 	{
 		$storeTransactions = StoreTransaction::query()
 			->orderByDesc('id')
+			->whereHas('store.variety', fn($vQuery) => $vQuery->whereNull('deleted_at'))
 			->filters()
 			->paginate(50)
 			->withQueryString();
