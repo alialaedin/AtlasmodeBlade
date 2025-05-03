@@ -16995,6 +16995,7 @@ input[type=range]::-moz-range-thumb {
 .shipping-cart .price-details div {
   border-radius: 15px;
   background-color: #fafafa;
+  box-shadow: 0 0 5px 0 rgba(128, 128, 128, 0.151);
 }
 .shipping-cart .price-details div .discount-input {
   border-top-right-radius: 5px;

@@ -50,11 +50,7 @@ class WithdrawStoreRequest extends FormRequest
       }
     }
     if (!$anyExists) {
-      throw new HttpResponseException(response()->error(
-        'وارد کردن شماره کارت یا شماره حساب در پروفایل الزامی است',
-        ['unknown' => ['وارد کردن شماره کارت یا شماره حساب در پروفایل الزامی است']],
-        433
-      )); // 433 means front should redirect to profile
+      throw Helpers::makeValidationException('وارد کردن شماره کارت یا شماره حساب در پروفایل الزامی است');
     }
   }
 

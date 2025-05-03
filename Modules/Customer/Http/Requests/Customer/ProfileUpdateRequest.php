@@ -11,8 +11,8 @@ class ProfileUpdateRequest extends FormRequest
   public function rules()
   {
     return [
-      'first_name' => 'required|string|max:191',
-      'last_name' => 'required|string|max:191',
+      'first_name' => 'nullable|string|max:191',
+      'last_name' => 'nullable|string|max:191',
       'email' => 'nullable|email|max:191',
       'national_code' => 'nullable|digits:10',
       'gender' => ['nullable', Rule::in(Customer::getAvailableGenders())],

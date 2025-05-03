@@ -117,6 +117,21 @@
         </div>
       </div>
 
+      <div class="d-flex border-b-gray-400 col-12">
+        <div class="col-6 d-flex flex-column gap-1 p-2">
+          <span class="text-medium color-gray-700">شماره کارت</span>
+          <div class="d-flex justify-content-between text-medium">
+            <span>@{{ customer.card_number ?? '-' }}</span>
+          </div>
+        </div>
+        {{-- <div class="col-6 d-flex flex-column gap-1 p-2">
+          <span class="text-medium color-gray-700">شماره شبا</span>
+          <div class="d-flex justify-content-between text-medium">
+            <span>@{{ customer.bank_account_number ?? '-' }}</span>
+          </div>
+        </div> --}}
+      </div>
+
       <!-- Birth Date -->
       {{-- <div class="birth-date col-6 d-flex flex-column gap-1 border-b-gray-400 p-2">
         <span class="text-medium color-gray-700">تاریخ تولد</span>
@@ -627,7 +642,7 @@
     <span class="text-medium">مبلغ برحسب تومان</span>
     <input v-model="withdrawWalletAmount" type="text" autofocus class="priceinput border-gray-300 p-3 bg-gray-100 radius-small" placeholder="مبلغ را به تومان وارد کنید">
   </form>
-  <button @click="withdrawWallet" type="button" class="close-modal bg-black color-white text-medium  py-1">افزایش موجودی</button>
+  <button @click="withdrawWallet" type="button" class="close-modal bg-black color-white text-medium  py-1">برداشت</button>
 </div>
 
 <!-- User Info -->
@@ -656,6 +671,14 @@
         <label for="national-code">کد ملی</label>
         <input type="text" v-model="updateInformation.nationalCode" id="national-code" class="p-2 bg-gray-100">
       </div>
+      <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
+        <label for="card-number">شماره کارت</label>
+        <input type="text" v-model="updateInformation.cardNumber" id="card-number" class="p-2 bg-gray-100">
+      </div>
+      {{-- <div class="d-flex flex-column gap-2 g-col-lg-6 g-col-12">
+        <label for="sheba-code">شماره شبا</label>
+        <input type="text" v-model="updateInformation.shebaCode" id="sheba-code" class="p-2 bg-gray-100">
+      </div> --}}
       {{-- <div class="d-flex flex-column gap-2 g-col-lg-4 g-col-6">
         <label for="birth-date">تاریخ تولد</label>
         <input type="date" v-model="updateInformation.firstName" id="birth-date pdpDefault" pdp-id="pdp-9250357"  class="p-2 pdp-el bg-gray-100">
@@ -914,6 +937,8 @@
             lastName: '',
             email: '',
             nationalCode: '',
+            shebaCode: '',
+            cardNumber: '',
           },
           newAddressData: {
             provinceId: '',
@@ -1058,12 +1083,15 @@
           this.updateInformation.lastName = this.customer?.last_name;
           this.updateInformation.email = this.customer?.email;
           this.updateInformation.nationalCode = this.customer?.national_code;
+          this.updateInformation.shebaCode = this.customer?.sheba_code;
+          this.updateInformation.cardNumber = this.customer?.card_number;
         },
         setNewCustomerInformation(requestCustomer) {
-          this.customer.first_name = requestCustomer.first_name
-          this.customer.last_name = requestCustomer.last_name
-          this.customer.national_code = requestCustomer.national_code
-          this.customer.email = requestCustomer.email
+          this.customer.first_name = requestCustomer.first_name;
+          this.customer.last_name = requestCustomer.last_name;
+          this.customer.national_code = requestCustomer.national_code;
+          this.customer.email = requestCustomer.email;
+          this.customer.card_number = requestCustomer.card_number;
         },
         setNewAddress(requestAddress) {
           this.existsAddresses.unshift(requestAddress);
@@ -1162,8 +1190,11 @@
 
           if (data === null) {
             options.headers['Content-Type'] = 'application/json';
+          } else if (data instanceof FormData) {
+            options.body = data;
           } else {
-            options.body = data instanceof FormData ? data : JSON.stringify(data);
+            options.body = JSON.stringify(data);
+            options.headers['Content-Type'] = 'application/json';
           }
 
           const response = await fetch(url, options);
@@ -1207,12 +1238,18 @@
           }
         },
         async withdrawWallet() {
+
           const url = @json(route('customer.wallet.withdraw'));
-          const data = { amount: this.withdrawWalletAmount };
+          const data = { 
+            amount: parseInt(this.withdrawWalletAmount.replace(/,/g, "")) 
+          };
+
           await this.request(url, 'POST', data, async (result) => {
+            this.closeModal('.modal[data-id=withdraw-modal]');
             this.popup('success', '', result.data.message);
             this.withdraws = result.data.withdraws;
           });
+          
         },
         async updateCustomerInformation() {
           try {
@@ -1224,6 +1261,7 @@
             formData.append('last_name', this.updateInformation.lastName);
             formData.append('email', this.updateInformation.email);
             formData.append('national_code', this.updateInformation.nationalCode);
+            formData.append('card_number', this.updateInformation.cardNumber);
 
             await this.request(url, 'PUT', formData, async (result) => {
               this.setNewCustomerInformation(result.data.customer);

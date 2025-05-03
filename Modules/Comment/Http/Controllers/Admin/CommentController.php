@@ -31,6 +31,7 @@ class CommentController extends Controller
       ->select('id', 'name', 'email', 'body', 'commentable_type', 'commentable_id', 'parent_id', 'status', 'created_at')
       ->where('commentable_type', Post::class)
       ->latest('id')
+      ->whereNull('parent_id')
       ->with(['children', 'parent', 'commentable'])
       ->paginate();
 
