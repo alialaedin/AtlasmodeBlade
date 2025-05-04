@@ -99,17 +99,19 @@ class DashboardController extends Controller
 	private function getTodayTotalSales()
 	{
 		$totalSales = DB::table('orders as o')
-			->join('order_items as oi', 'oi.order_id', '=', 'o.id')
+			// ->join('order_items as oi', 'oi.order_id', '=', 'o.id')
 			->whereDate('o.created_at', Carbon::today())
 			->whereIn('o.status', Order::ACTIVE_STATUSES)
 			->select([
-				DB::raw('SUM(oi.amount * oi.quantity) AS item_total'),
-				DB::raw('SUM(o.discount_amount) AS total_discount'),
-				DB::raw('SUM(o.shipping_amount) AS total_shipping')
+				DB::raw('SUM(o.total_items_amount) as total_items_amount'),
+				DB::raw('SUM(o.discount_on_order) as discount_on_order'),
+				DB::raw('SUM(o.discount_on_coupon) as discount_on_coupon'),
+				DB::raw('SUM(o.discount_on_items) as discount_on_items'),
+				DB::raw('SUM(o.shipping_amount) as shipping_amount'),
 			])
 			->first();
 		
-		return $totalSales->item_total - $totalSales->total_discount + $totalSales->total_shipping;
+		return $totalSales->total_items_amount - $totalSales->discount_on_order - $totalSales->discount_on_coupon - $totalSales->discount_on_items + $totalSales->shipping_amount;
 	}
 
 	private function getThisMonthTotalSales()
