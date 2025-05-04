@@ -505,7 +505,7 @@ class Order extends Payable implements ProductWallet
 		$totalItemsAmount = $this->attributes['total_items_amount'];
 		$giftPackageAmount = isset($this->attributes['gift_package_price']) ? $this->attributes['gift_package_price'] : 0;
 
-		return $totalItemsAmount + $this->attributes['shipping_amount'] + $giftPackageAmount - $this->attributes['discount_amount'];
+		return $totalItemsAmount + $this->attributes['shipping_amount'] + $giftPackageAmount - $this->discount_amount;
 	}
 
 	public function getDiscountAmountAttribute()
