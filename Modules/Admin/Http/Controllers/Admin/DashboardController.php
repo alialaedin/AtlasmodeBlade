@@ -34,7 +34,7 @@ class DashboardController extends Controller
 
 		$newProductComments = $this->getNewProductComments();
 		$productCommentsCount = ProductComment::count();
-		
+
 		$newPostComments =  $this->getNewPostComments();
 		$postCommentsCount =  Comment::count();
 
@@ -110,7 +110,7 @@ class DashboardController extends Controller
 				DB::raw('SUM(o.shipping_amount) as shipping_amount'),
 			])
 			->first();
-		
+
 		return $totalSales->total_items_amount - $totalSales->discount_on_order - $totalSales->discount_on_coupon - $totalSales->discount_on_items + $totalSales->shipping_amount;
 	}
 
@@ -124,13 +124,15 @@ class DashboardController extends Controller
 			->whereBetween('o.created_at', [$startDate, $endDate])
 			->whereIn('o.status', Order::ACTIVE_STATUSES)
 			->select([
-				DB::raw('SUM(oi.amount * oi.quantity) AS item_total'),
-				DB::raw('SUM(o.discount_amount) AS total_discount'),
-				DB::raw('SUM(o.shipping_amount) AS total_shipping')
+				DB::raw('SUM(o.total_items_amount) as total_items_amount'),
+				DB::raw('SUM(o.discount_on_order) as discount_on_order'),
+				DB::raw('SUM(o.discount_on_coupon) as discount_on_coupon'),
+				DB::raw('SUM(o.discount_on_items) as discount_on_items'),
+				DB::raw('SUM(o.shipping_amount) as shipping_amount'),
 			])
 			->first();
-		
-		return $totalSales->item_total - $totalSales->total_discount + $totalSales->total_shipping;
+
+		return $totalSales->total_items_amount - $totalSales->discount_on_order - $totalSales->discount_on_coupon - $totalSales->discount_on_items + $totalSales->shipping_amount;
 	}
 
 
