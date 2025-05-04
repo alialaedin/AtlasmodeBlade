@@ -11,7 +11,6 @@ use Modules\Order\Entities\OrderItem;
 use Modules\Order\Http\Requests\Admin\AddItemsRequest;
 use Modules\Order\Http\Requests\Admin\UpdateItemsRequest;
 use Modules\Order\Http\Requests\Admin\UpdateItemStatusRequest;
-use Modules\Core\Helpers\Helpers;
 use Modules\Store\Entities\Store;
 use Modules\Store\Entities\StoreTransaction;
 use Modules\Admin\Classes\ActivityLogHelper;
@@ -265,7 +264,7 @@ class OrderItemController extends Controller
 			$order->$orderMethod('total_items_amount', $orderItem->amount * $orderItem->quantity);
 			$order->$orderMethod('total_items_amount_with_discount', ($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity);
 			$order->$orderMethod('items_count', 1);
-			$order->$orderMethod('discount_on_items', $orderItem->quantity);
+			$order->$orderMethod('items_quantity', $orderItem->quantity);
 
 			$oldShippingAmount = $parentOrder->shipping_amount;
 			$newShippingAmount = $parentOrder->calculateShippingAmount();

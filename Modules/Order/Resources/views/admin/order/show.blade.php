@@ -616,14 +616,11 @@
 							product_id: productSelectBox.val()
 						},
 						success: function(response) {
-
 							if (Array.isArray(response.varieties) && response.varieties.length > 0) {
-
-
 								varietySelectBox.empty();
 								let options = '<option value="">انتخاب</option>';
 								response.varieties.forEach((variety) => {
-									options += `<option value="${variety.id}">${variety.title}</option>`;
+									options += `<option value="${variety.id}">${variety.title} | موجودی : ${variety.quantity}</option>`;
 								});
 								varietySelectBox.append(options);
 								varietySelectBox.select2({ placeholder: 'تنوع را انتخاب کنید' });
