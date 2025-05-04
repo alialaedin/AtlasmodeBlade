@@ -73,7 +73,7 @@ trait HasLinks
       return basename($this->linkable_type);
     } else {
       if (Str::contains($this->linkable_type, 'Custom')) {
-        return 'Index' . explode('\\', $this->linkable_type)[1];
+        return 'Index' . $this->linkable_type;
       }else {
         return 'Index' . basename($this->linkable_type);
       }
