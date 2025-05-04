@@ -204,7 +204,9 @@
         @foreach($order->items as $item)
           <tr style="{{ !$item->status ? 'background-color: #e195a2' : null }}">
             <td class="font-weight-bold">{{ $loop->iteration }}</td>
-            <td>{{ $item->variety->title }}</td>
+            <td>
+              <a href="{{ route('admin.products.edit', $item->variety->product) }}">{{ $item->variety->title }}</a>
+            </td>
             <td>
               <span class="badge badge-{{ $item->status ? 'success' : 'danger' }}">
                 {{ $item->status ? 'فعال' : 'غیر فعال' }}
