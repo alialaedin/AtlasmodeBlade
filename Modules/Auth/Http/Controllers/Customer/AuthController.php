@@ -12,12 +12,14 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Modules\Auth\Http\Requests\Customer\CustomerVerifyRequest;
+use Modules\Setting\Entities\Setting;
 
 class AuthController extends Controller
 {
 	public function showLoginForm()
 	{
-		return view('auth::customer.login');
+		$siteLogoUrl = Setting::getFromName('logo');
+		return view('auth::customer.login', compact('siteLogoUrl'));
 	}
 
 	public function sendToken(CustomerSendTokenRequest $request)

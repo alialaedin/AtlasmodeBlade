@@ -45,19 +45,19 @@ trait HasLinks
 	public function getLinkUrlAttribute()
   {
     switch ($this->unique_type) {
-      case 'IndexPost':
+      case 'IndexModules\Blog\Entities\Post':
         return route('front.posts.index');
-      case 'Post':
+      case 'Modules\Blog\Entities\Post':
         return route('front.posts.show', $this->linkable_id);
-      case 'IndexProduct':
+      case 'IndexModules\Product\Entities\Product':
         return route('front.products.index');
-      case 'Product':
+      case 'Modules\Product\Entities\Product':
         return route('front.products.show', $this->linkable_id);
-      case 'Category':
+      case 'Modules\Category\Entities\Category':
         return route('front.products.index', ['category_id' => $this->linkable_id]);
-      case 'IndexAboutUs':
+      case 'IndexCustom\AboutUs':
         return Contact::ABOUT_URL;
-      case 'IndexContactUs':
+      case 'IndexCustom\ContactUs':
         return Contact::CONTACT_URL;
       default:
         return $this->link;

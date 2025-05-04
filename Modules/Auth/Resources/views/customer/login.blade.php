@@ -24,7 +24,7 @@
         >
           <a href="/" class="mx-auto">
             <figure>
-              <img src="{{ asset('front-assets/images/header/logo.9208f443 (1).svg') }}" alt="logo">
+              <img src="{{ Storage::url($siteLogoUrl) }}" alt="logo">
             </figure>
           <a>
           <div class="w-p-100 d-flex flex-column gap-2 w-p-100">
@@ -50,7 +50,7 @@
             <button @click="activeMobileForm" type="button" class="back-btn"><i class="icon-arrow-right2 icon-fs-medium"></i></button>
             <a href="/">
               <figure>
-                <img src="{{ asset('front-assets/images/header/logo.9208f443 (1).svg') }}" alt="logo">
+                <img src="{{ Storage::url($siteLogoUrl) }}" alt="logo">
               </figure>
             <a>
           </div>
