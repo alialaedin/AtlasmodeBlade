@@ -72,11 +72,9 @@ class DashboardController extends Controller
 	{
 		return Order::query()
 			->whereNull('parent_id')
-			->select('id', 'status', 'created_at', 'shipping_amount', 'discount_amount')
 			->with([
 				'items' => fn($iQuery) => $iQuery->select(['id', 'order_id', 'status', 'amount', 'quantity'])
 			])
-			->withCount('items')
 			->whereIn('status', Order::ACTIVE_STATUSES)
 			->latest('id')
 			->take(8)
