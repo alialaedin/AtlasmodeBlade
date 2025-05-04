@@ -502,32 +502,15 @@ class Order extends Payable implements ProductWallet
 	// محاسبه قیمت نهایی
 	public function getTotalAmountAttribute(): int
 	{
-		return $this->attributes['total_amount'];
-		// $totalItemsAmount = $this->total_items_amount;
-		// $giftPackageAmount = isset($this->attributes['gift_package_price']) ? $this->attributes['gift_package_price'] : 0;
+		$totalItemsAmount = $this->attributes['total_items_amount'];
+		$giftPackageAmount = isset($this->attributes['gift_package_price']) ? $this->attributes['gift_package_price'] : 0;
 
-		// return ($totalItemsAmount + $this->attributes['shipping_amount']) + $giftPackageAmount - $this->attributes['discount_amount'];
-	}
-
-	public function getTotalItemsAmountAttribute()
-	{
-		$activeItems = $this->items->where('status', 1);
-		return $activeItems->reduce(function ($total, $item) {
-			return $total + ($item->amount * $item->quantity);
-		});
+		return $totalItemsAmount + $this->attributes['shipping_amount'] + $giftPackageAmount - $this->attributes['discount_amount'];
 	}
 
 	public function getDiscountAmountAttribute()
 	{
-		return $this->discount_on_order ?? 0 + $this->discount_on_coupon ?? 0 + $this->discount_on_items ?? 0;
-	}
-
-	public function getTotalDiscountOnItemsAttribute()
-	{
-		$activeItems = $this->items->where('status', 1);
-		return $activeItems->reduce(function ($total, $item) {
-			return $total + ($item->discount_amount * $item->quantity);
-		});
+		return $this->attributes['discount_on_order'] + $this->attributes['discount_on_coupon'] + $this->attributes['discount_on_items'];
 	}
 
 	public function getTotalAmountForAdmin()

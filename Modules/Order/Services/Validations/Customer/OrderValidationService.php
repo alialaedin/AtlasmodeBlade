@@ -385,9 +385,7 @@ class OrderValidationService
 			return $this->totalAmount;
 		}
 
-		$shippingAmount = $this->getShippingAmount();
-
-		return $this->totalAmount = $this->totalItemsAmount + $shippingAmount - ($this->discountOnCoupon ?? 0) - ($this->discountOnOrder ?? 0);
+		return $this->totalAmount = $this->getTotalItemsAmount() + $this->getShippingAmount() - ($this->discountOnCoupon ?? 0) - ($this->discountOnOrder ?? 0);
 	}
 
 }
