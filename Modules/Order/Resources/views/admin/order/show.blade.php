@@ -42,7 +42,7 @@
       <x-slot name="cardTitle">اطلاعات مشتری</x-slot>
       <x-slot name="cardOptions">
         <div class="card-options">
-          <a class="btn btn-sm btn-icon btn-outline-info">مشاهده مشتری</a>
+          <a href="{{ route('admin.customers.show', $order->customer) }}" target="_blank" class="btn btn-sm btn-icon btn-outline-info">مشاهده مشتری</a>
         </div>
       </x-slot>
       <x-slot name="cardBody">
