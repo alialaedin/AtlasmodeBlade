@@ -620,7 +620,7 @@
 								varietySelectBox.empty();
 								let options = '<option value="">انتخاب</option>';
 								response.varieties.forEach((variety) => {
-									options += `<option value="${variety.id}">${variety.title} | موجودی : ${variety.quantity}</option>`;
+									options += `<option value="${variety.id}">${variety.title} | موجودی : ${variety.quantity} | قیمت : ${variety.final_price.amount.toLocaleString()}</option>`;
 								});
 								varietySelectBox.append(options);
 								varietySelectBox.select2({ placeholder: 'تنوع را انتخاب کنید' });

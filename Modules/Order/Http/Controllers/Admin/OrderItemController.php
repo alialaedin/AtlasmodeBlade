@@ -75,7 +75,6 @@ class OrderItemController extends Controller
 				'quantity' => $orderItem->quantity,
 				'variety_id' => $orderItem->variety_id
 			]);
-			$order->load('items');
 
 			$orderLog = OrderLog::addLog(
 				$order,
