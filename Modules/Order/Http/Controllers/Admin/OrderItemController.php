@@ -51,11 +51,9 @@ class OrderItemController extends Controller
 				])
 			]);
 
-			$order->discount_on_items += $orderItem->discount_amount * $orderItem->quantity;
-			$order->total_items_amount += $orderItem->amount * $orderItem->quantity;
-			$order->total_items_amount_with_discount += (($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity);
-
-			$order->save();
+			$order->increment('discount_on_items', $orderItem->discount_amount * $orderItem->quantity);
+			$order->increment('total_items_amount', $orderItem->amount * $orderItem->quantity);
+			$order->increment('total_items_amount_with_discount', (($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity));
 			$order->increment('items_count', 1);
 			$order->increment('items_quantity', $orderItem->quantity);
 
@@ -182,7 +180,10 @@ class OrderItemController extends Controller
 			$method = $diffQuantity > 0 ? Store::TYPE_DECREMENT : Store::TYPE_INCREMENT;
 			$absDiffQuantity = abs($diffQuantity);
 
-			$order->$method('discount_on_items', $orderItem->discount_amount * $absDiffQuantity);
+			if ($orderItem->discount_amount) {
+				$order->$method('discount_on_items', $orderItem->discount_amount * $absDiffQuantity);
+			}
+
 			$order->$method('total_items_amount', $orderItem->amount * $absDiffQuantity);
 			$order->$method('total_items_amount_with_discount', ($orderItem->amount - $orderItem->discount_amount) * $absDiffQuantity);
 			$order->$method('items_quantity', $absDiffQuantity);
@@ -258,7 +259,9 @@ class OrderItemController extends Controller
 
 			$orderMethod = $request->status ? 'increment' : 'decrement';
 
-			$order->$orderMethod('discount_on_items', $orderItem->discount_amount * $orderItem->quantity);
+			if ($orderItem->discount_amount) {
+				$order->$orderMethod('discount_on_items', $orderItem->discount_amount * $orderItem->quantity);
+			}
 			$order->$orderMethod('total_items_amount', $orderItem->amount * $orderItem->quantity);
 			$order->$orderMethod('total_items_amount_with_discount', ($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity);
 			$order->$orderMethod('items_count', 1);
