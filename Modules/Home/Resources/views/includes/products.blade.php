@@ -23,13 +23,13 @@
               <img 
                 class="main-img w-p-100 h-p-100" 
                 loading="lazy" 
-                :src="product.main_image.url" 
+                :src="product.main_image?.url" 
                 :alt="product.title"
               />
               <img 
                 class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" 
                 loading="lazy" 
-                :src="product.main_image.url" 
+                :src="product.main_image?.url" 
                 :alt="product.title"
               />
               <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">
