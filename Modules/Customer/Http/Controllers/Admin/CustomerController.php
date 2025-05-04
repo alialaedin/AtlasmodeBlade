@@ -62,14 +62,7 @@ class CustomerController extends Controller
 		$customer = Customer::query()
 			->select(['id', 'first_name', 'last_name', 'mobile', 'email', 'birth_date', 'card_number', 'national_code', 'gender'])
 			->with([
-				'orders' => function($oQuery) {
-					$oQuery->select(['id', 'customer_id', 'discount_amount', 'shipping_amount', 'status', 'created_at']);
-					$oQuery->withCount('items');
-					$oQuery->with('items', function ($oiQuery) {
-						$oiQuery->select(['id', 'order_id', 'status', 'amount', 'quantity']);
-					});
-					$oQuery->orderByDesc('id');
-				}
+				'orders' => fn($oQuery) => $oQuery->with('items')->orderByDesc('id')
 			])
 			->findOrFail($id);
 		
