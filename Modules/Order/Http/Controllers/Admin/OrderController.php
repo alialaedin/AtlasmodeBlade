@@ -132,18 +132,14 @@ class OrderController extends Controller
       $oldTotalAmount = $order->total_amount;
       $oldAddress = $order->address;
       $oldShipping = $order->shipping_id;
-      $oldDiscountAmount = $order->discount_amount;
+      $oldDiscountAmountOnOrder = $order->discount_on_order;
 
       $dataToUpdate = [
         'shipping_id' => $request->shipping_id,
         'address' => $request->address->toJson(),
         'description' => $request->description,
+        'discount_on_order' => $request->discount_on_order,
       ];
-
-      $newDiscountAmount = (int)$order->total_discount_on_items + (int)$request->discount_amount;
-      if ($request->discount_amount > 0) {
-        $dataToUpdate['discount_amount'] = $newDiscountAmount;
-      }
 
       $order->update($dataToUpdate);
       $parentOrder->recalculateShippingAmount();
@@ -169,7 +165,7 @@ class OrderController extends Controller
       OrderLog::addLog(
         $order,
         $order->total_amount - $oldTotalAmount,
-        $order->discount_amount - $oldDiscountAmount,
+        $order->discount_on_order - $oldDiscountAmountOnOrder,
         $order->address != $oldAddress ? $order->address : null,
         $order->shipping_id != $oldShipping ? $order->shipping_id : null
       );

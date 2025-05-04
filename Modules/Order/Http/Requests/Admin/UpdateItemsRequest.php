@@ -25,11 +25,14 @@ class UpdateItemsRequest extends FormRequest
   public function passedValidation()
   {
     $variety = Variety::query()->with('attributes')->findOrFail($this->variety_id);
-    $this->variety = $variety;
+    $this->merge(['variety' => $variety]);
     $orderItem = $this->route('orderItem');
     $order = $orderItem->order;
     if ($orderItem->quantity == $this->quantity) {
       throw Helpers::makeValidationException('تعداد وارد شده برابر با تعداد فعلی محصول در سفارش می باشد');
+    }
+    if ($this->quantity > $orderItem->quantity && $variety->quantity < $this->quantity - $orderItem->quantity) {
+      throw Helpers::makeValidationException("تعداد سفارش این تنوع بیشتر از موجودی است. موجودی این تنوع : {$variety->quantity}");
     }
     if ($order->status == Order::STATUS_CANCELED || $order->status == Order::STATUS_FAILED) {
       throw Helpers::makeValidationException("زمانی که وضعیت محصول کنسل یا خطا است نمیتوانید به آن آیتم اضافه کنید");

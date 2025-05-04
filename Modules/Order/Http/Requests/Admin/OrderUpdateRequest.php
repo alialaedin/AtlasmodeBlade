@@ -31,7 +31,7 @@ class OrderUpdateRequest extends FormRequest
           return $query->where('status', 1);
         })
       ],
-      'discount_amount' => 'nullable|integer|min:0',
+      'discount_on_order' => 'nullable|integer|min:0',
       'description' => 'nullable|string|max:65000',
     ];
   }
@@ -48,7 +48,7 @@ class OrderUpdateRequest extends FormRequest
     $order = Order::query()->findOrFail($orderId);
 
     $this->merge([
-      'discount_amount' => $this->filled('discount_amount') ? str_replace(',', '', $this->discount_amount) : null,
+      'discount_on_order' => $this->filled('discount_on_order') ? str_replace(',', '', $this->discount_on_order) : null,
       'order' => $order
     ]);
   }
@@ -64,7 +64,7 @@ class OrderUpdateRequest extends FormRequest
     $customer = $order->customer;
 
     $totalAmount = $order->total_amount;
-    if ($this->discount_amount > $totalAmount) {
+    if ($this->discount_on_order > $totalAmount) {
       throw Helpers::makeValidationException('تخفیف نمیتواند از قیمت مجموع فاکتور بیشتر باشد');
     }
 

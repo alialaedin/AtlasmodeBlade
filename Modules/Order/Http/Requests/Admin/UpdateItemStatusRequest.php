@@ -40,7 +40,7 @@ class UpdateItemStatusRequest extends FormRequest
       throw Helpers::makeValidationException('تنوع این آیتم حذف شده است.');
     }
     if ($order->status == Order::STATUS_CANCELED || $order->status == Order::STATUS_FAILED) {
-      throw Helpers::makeValidationException("زمانی که وضعیت محصول کنسل یا خطا است نمیتوانید وضعیت آیتم اضافه کنید");
+      throw Helpers::makeValidationException("زمانی که وضعیت سفارش کنسل یا خطا است نمیتوانید وضعیت آیتم آن را تغییر دهید");
     }
     $this->merge([
       'variety' => $variety

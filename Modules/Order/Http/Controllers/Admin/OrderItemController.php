@@ -42,7 +42,7 @@ class OrderItemController extends Controller
 				'product_id' => $request->product_id,
 				'variety_id' => $variety->id,
 				'quantity' => $request->quantity,
-				'amount' => $variety->final_price['amount'],
+				'amount' => $variety->final_price['base_amount'],
 				'flash_id' => $activeFlash->id ?? null,
 				'discount_amount' => $variety->final_price['discount_price'],
 				'extra' => collect([
@@ -50,15 +50,24 @@ class OrderItemController extends Controller
 					'color' => $variety->color()->exists() ? $variety->color->name : null
 				])
 			]);
-			$newShippingAmount = $parentOrder->recalculateShippingAmount();
 
-			$calculateAmount = $orderItem->amount * $orderItem->quantity + ($newShippingAmount - $oldShippingAmount);
+			$order->discount_on_items += $orderItem->discount_amount * $orderItem->quantity;
+			$order->total_items_amount += $orderItem->amount * $orderItem->quantity;
+			$order->total_items_amount_with_discount += (($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity);
+
+			$order->save();
+			$order->increment('items_count', 1);
+			$order->increment('items_quantity', $orderItem->quantity);
+
+			$newShippingAmount = $order->recalculateShippingAmount();
+
+			$calculateAmount = ($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity + ($newShippingAmount - $oldShippingAmount);
 			/**
 			 * @var Customer $customer
 			 */
 			$customer = $order->customer;
 			$customer->withdraw($calculateAmount, [
-				'name' => $customer->getFullNameAttribute(),
+				'name' => $customer->full_name,
 				'mobile' => $customer->mobile,
 				'description' => "اضافه کردن محصول {$variety->title} به سفارش " . $order->id
 			]);
@@ -108,10 +117,18 @@ class OrderItemController extends Controller
 
 			$orderItem->delete();
 
+			$order->discount_on_items -= $orderItem->discount_amount * $orderItem->quantity;
+			$order->total_items_amount -= $orderItem->amount * $orderItem->quantity;
+			$order->total_items_amount_with_discount -= (($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity);
+
+			$order->save();
+			$order->decrement('items_count', 1);
+			$order->decrement('items_quantity', $orderItem->quantity);
+
 			$newShippingAmount = $order->recalculateShippingAmount();
 			$diffShippingAmount = $oldShippingAmount - $newShippingAmount;
 
-			$calculateAmount = ($orderItem->amount * $orderItem->quantity) + $diffShippingAmount;
+			$calculateAmount = (($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity) + $diffShippingAmount;
 
 			$customer = $order->customer;
 			$description = "به دلیل حذف آیتم سفارش از سفارش به شناسه {$order->id}";
@@ -153,76 +170,49 @@ class OrderItemController extends Controller
 		$oldShippingAmount = $parentOrder->shipping_amount;
 		try {
 			DB::beginTransaction();
-			$diffQuantity = 0;
-			/**
-			 * @var OrderItem $orderItem
-			 */
+
 			$variety = $request->variety;
+			$oldQuantity = $orderItem->quantity;
+			$newQuantity = $request->quantity;
+			$diffQuantity = $oldQuantity - $newQuantity;
 
-			if ($orderItem->quantity > $request->quantity) {
-				$newQuantity = $request->quantity; // - 2 = 5 - 3 for orderItem
-				$diffQuantity = $orderItem->quantity - $request->quantity; // - 2 = 5 - 3
-				$diffAmount = ($diffQuantity * $orderItem->amount);
+			$orderItem->quantity = $newQuantity;
+			$orderItem->save();
 
-				$orderItem->update([
-					'quantity' => $newQuantity,
-				]);
-				/**
-				 * Store Increment
-				 * Wallet Increment
-				 */
-				$wallet = ['type' => 'increment', 'amount' => ($diffAmount + ($parentOrder->recalculateShippingAmount() - $oldShippingAmount))];
-			} elseif ($orderItem->quantity < $request->quantity) {
-				$newQuantity = $request->quantity;
+			$method = $diffQuantity > 0 ? Store::TYPE_DECREMENT : Store::TYPE_INCREMENT;
+			$absDiffQuantity = abs($diffQuantity);
 
-				$diffQuantity = $request->quantity - $orderItem->quantity; // +2 = 4 - 2
-				$diffAmount = ($diffQuantity * $orderItem->amount);
-				if ($variety->quantity < $diffQuantity) {
-					throw Helpers::makeValidationException("تعداد سفارش این تنوع بیشتر از موجودی است. موجودی این تنوع : {$variety->quantity}");
-				}
-				$orderItem->update([
-					'quantity' => $newQuantity,
-				]);
-				/**
-				 * Store Decrement
-				 * Wallet Decrement
-				 * Variety quantity Increment
-				 */
+			$order->$method('discount_on_items', $orderItem->discount_amount * $absDiffQuantity);
+			$order->$method('total_items_amount', $orderItem->amount * $absDiffQuantity);
+			$order->$method('total_items_amount_with_discount', ($orderItem->amount - $orderItem->discount_amount) * $absDiffQuantity);
+			$order->$method('items_quantity', $absDiffQuantity);
 
-				$wallet = ['type' => 'decrement', 'amount' => ($diffAmount + ($parentOrder->recalculateShippingAmount() - $oldShippingAmount))];
-			}
-			/**
-			 * @var Customer $customer
-			 */
+			$diffAmount = ($orderItem->amount - $orderItem->discount_amount) * $absDiffQuantity;
+			$shippingAmount = $parentOrder->recalculateShippingAmount();
+
+			$wallet['type'] = $method;
+			$wallet['amount'] = $diffAmount + $shippingAmount - $oldShippingAmount;
+
 			$customer = $orderItem->order->customer()->first();
-			if ($wallet['type'] == 'increment') {
 
-				$customer->deposit($wallet['amount'], [
-					'name' => $customer->getFullNameAttribute(),
-					'mobile' => $customer->mobile,
-					'description' => "از محصول {$variety->title} به تعداد {$request->quantity} از سفارش کم شد"
-				]);
+			$walletMethod = $wallet['type'] == Store::TYPE_INCREMENT ? 'deposit' : 'withdraw';
+			$description = $wallet['type'] == Store::TYPE_INCREMENT
+				? "از محصول {$variety->title} به تعداد {$request->quantity} از سفارش کم شد"
+				: "از محصول {$variety->title} به تعداد {$request->quantity} به سفارش اضافه شد";
 
-				Store::insertModel((object)[
-					'type' => $wallet['type'],
-					'description' => "از محصول {$variety->title} به تعداد {$diffQuantity} از سفارش کم شد",
-					'quantity' => $diffQuantity,
-					'variety_id' => $variety->id
-				]);
-			} elseif ($wallet['type'] == 'decrement') {
-				$customer->withdraw($wallet['amount'], [
-					'name' => $customer->getFullNameAttribute(),
-					'mobile' => $customer->mobile,
-					'description' => "از محصول {$variety->title} به تعداد {$request->quantity} به سفارش اضافه شد"
-				]);
+			$customer->$walletMethod($wallet['amount'], [
+				'name' => $customer->full_name,
+				'mobile' => $customer->mobile,
+				'description' => $description
+			]);
 
-				Store::insertModel((object)[
-					'type' => $wallet['type'],
-					'description' => "از محصول {$variety->title} به تعداد {$diffQuantity} به سفارش اضافه شد",
-					'quantity' => $diffQuantity,
-					'variety_id' => $variety->id
-				]);
-			}
+			Store::insertModel((object) [
+				'type' => $wallet['type'],
+				'description' => $description,
+				'quantity' => $absDiffQuantity,
+				'variety_id' => $variety->id,
+				'order_id' => $order->id
+			]);
 
 			$order->load('items');
 			$orderLog = OrderLog::addLog(
@@ -256,8 +246,6 @@ class OrderItemController extends Controller
 
 		try {
 			$variety = $request->variety;
-			$oldAddress = $order->address;
-			$oldShipping = $order->shipping_id;
 			$oldDiscountAmount = $order->discount_amount;
 
 			DB::beginTransaction();
@@ -265,78 +253,55 @@ class OrderItemController extends Controller
 				return redirect()->back()->with('success', 'وضعیت با موفقیت تغییر کرد');
 			}
 
-			$orderItem->update(['status' => $request->status]);
+			$orderItem->status = $request->status;
+			$orderItem->save();
+
+			$orderMethod = $request->status ? 'increment' : 'decrement';
+
+			$order->$orderMethod('discount_on_items', $orderItem->discount_amount * $orderItem->quantity);
+			$order->$orderMethod('total_items_amount', $orderItem->amount * $orderItem->quantity);
+			$order->$orderMethod('total_items_amount_with_discount', ($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity);
+			$order->$orderMethod('items_count', 1);
+			$order->$orderMethod('discount_on_items', $orderItem->quantity);
+
 			$oldShippingAmount = $parentOrder->shipping_amount;
 			$newShippingAmount = $parentOrder->calculateShippingAmount();
-			$diffShippingAmount = ($request->status == 1) ? ($newShippingAmount - $oldShippingAmount) : ($oldShippingAmount - $newShippingAmount);
-			$calculateAmount = $orderItem->amount * $orderItem->quantity + $diffShippingAmount;
+			$diffShippingAmount = abs($newShippingAmount - $oldShippingAmount);
 
-			if ($request->status == 1) {
-				$quantity = $orderItem->quantity;
-				$amount = $calculateAmount;
-				$wallet = ['type' => 'decrement', 'amount' => $amount];
-				$store = ['type' => 'decrement', 'quantity' => $quantity];
-			} elseif ($request->status == 0) {
-				$quantity = $orderItem->quantity;
-				$amount = $calculateAmount;
-				$wallet = ['type' => 'increment', 'amount' => $amount];
-				$store = ['type' => 'increment', 'quantity' => $quantity];
-			}
-			/** @var Customer $customer */
-			$customer = $orderItem->order->customer()->first();
-			if ($wallet['type'] == 'decrement') {
-				$customer->withdraw($wallet['amount'], [
-					'name' => $customer->getFullNameAttribute(),
-					'mobile' => $customer->mobile,
-					'description' => "با تغییر وضعیت آیتم سفارش  به تعداد {$quantity} عدد به محصول {$variety->title} اضافه شد"
-				]);
+			$calculateAmount = (($orderItem->amount - $orderItem->discount_amount) * $orderItem->quantity) + $diffShippingAmount;
 
-				Store::insertModel((object)[
-					'type' => $store['type'],
-					'description' => "با تغییر وضعیت آیتم سفارش  به تعداد {$quantity} عدد به محصول {$variety->title} اضافه شد",
-					'quantity' => $store['quantity'],
-					'variety_id' => $variety->id
-				]);
-			}
+			$walletMethod = $request->status ? 'withdraw' : 'deposit';
+			$type = $request->status ? Store::TYPE_DECREMENT : Store::TYPE_INCREMENT;
+			$description = $type == Store::TYPE_DECREMENT
+				? "با تغییر وضعیت آیتم سفارش  به تعداد {$orderItem->quantity} عدد از محصول {$variety->title} کم شد"
+				: "با تغییر وضعیت آیتم سفارش  به تعداد {$orderItem->quantity} عدد به محصول {$variety->title} اضافه شد";
 
-			if ($wallet['type'] == 'increment') {
-				$customer->deposit($wallet['amount'], [
-					'name' => $customer->getFullNameAttribute(),
-					'mobile' => $customer->mobile,
-					'description' => "با تغییر وضعیت آیتم سفارش به تعداد {$quantity} عدد از محصول {$variety->title} کم شد"
-				]);
+			$customer = $orderItem->order->customer;
+			$customer->$walletMethod($calculateAmount, [
+				'name' => $customer->full_name,
+				'mobile' => $customer->mobile,
+				'description' => $description
+			]);
 
-				Store::insertModel((object)[
-					'type' => $store['type'],
-					'description' => "با تغییر وضعیت آیتم سفارش  به تعداد {$quantity} عدد از محصول {$variety->title} کم شد",
-					'quantity' => $store['quantity'],
-					'variety_id' => $variety->id
-				]);
-			}
+			Store::insertModel((object)[
+				'type' => $type,
+				'description' => $description,
+				'quantity' => $orderItem->quantity,
+				'variety_id' => $variety->id,
+				'order_id' => $order->id
+			]);
+
 			$parentOrder->recalculateShippingAmount();
-			$order->load('items');
-			$orderLog = OrderLog::addLog(
-				$order,
-				($order->total_amount - $oldTotalAmount),
-				$order->discount_amount - $oldDiscountAmount,
-				$order->address != $oldAddress ? $order->address : null,
-				$order->shipping_id != $oldShipping ? $order->shipping_id : null
-			);
+			$orderLog = OrderLog::addLog($order, ($order->total_amount - $oldTotalAmount), $order->discount_amount - $oldDiscountAmount);
+			$orderItemLogStatus = $request->status ? OrderItemLog::TYPE_NEW : OrderItemLog::TYPE_DELETE;
+			OrderItemLog::addLog($orderLog, $orderItem, $orderItemLogStatus, $orderItem->quantity);
 
-			if ($request->status == 0) {
-				$status = OrderItemLog::TYPE_DELETE;
-			} else {
-				$status = OrderItemLog::TYPE_NEW;
-			}
-
-			OrderItemLog::addLog($orderLog, $orderItem, $status, $orderItem->quantity);
 			DB::commit();
 		} catch (Exception $e) {
 			DB::rollBack();
 			Log::error($e->getTraceAsString());
 			return redirect()->back()->with('error', 'عملیات ناموفق ' . $e->getMessage());
 		}
-
 		return redirect()->back()->with('success', 'وضعیت با موفقیت تغییر کرد');
 	}
 }
