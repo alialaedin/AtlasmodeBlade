@@ -41,7 +41,9 @@
     <x-card>
       <x-slot name="cardTitle">اطلاعات مشتری</x-slot>
       <x-slot name="cardOptions">
-        <a class="btn btn-sm btn-icon btn-outline-info">مشاهده مشتری</a>
+        <div class="card-options">
+          <a class="btn btn-sm btn-icon btn-outline-info">مشاهده مشتری</a>
+        </div>
       </x-slot>
       <x-slot name="cardBody">
         @php
