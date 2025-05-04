@@ -120,7 +120,7 @@ class DashboardController extends Controller
 		$endDate = Helpers::toGregorian(Verta::endMonth());
 
 		$totalSales = DB::table('orders as o')
-			->join('order_items as oi', 'oi.order_id', '=', 'o.id')
+			// ->join('order_items as oi', 'oi.order_id', '=', 'o.id')
 			->whereBetween('o.created_at', [$startDate, $endDate])
 			->whereIn('o.status', Order::ACTIVE_STATUSES)
 			->select([
