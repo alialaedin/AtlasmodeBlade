@@ -163,7 +163,6 @@
 						<th>گیرنده</th>
 						<th>تعداد آیتم</th>
 						<th>مبلغ کل (تومان)</th>
-						<th>شماره پیگیری</th>
 						<th>تاریخ ثبت</th>
 						<th>وضعیت</th>
 						<th>تاریخ ارسال</th>
@@ -176,15 +175,18 @@
 							<td>
 								<input type="checkbox" class="checkbox order-change-status-checkbox" value="{{ $order->id }}">
 							</td>
-							<td>{{ $order->id }}</td>
-							<td>{{ $order->customer->mobile }}</td>
+							<td>
+								<span class="btn btn-sm btn-dark">{{ $order->id }}</span>
+							</td>
+							<td>
+								<a href="{{ route('admin.customers.show', $order->customer) }}">{{ $order->customer->mobile }}</a>
+							</td>
 							<td>
 								@php( $address = json_decode($order->address) ) 
 								{{ $address->first_name .' '. $address->last_name }}
 							</td>
 							<td>{{ $order->items_count }}</td>
 							<td>{{ number_format($order->total_amount) }}</td>
-							<td>{{ $order->active_payment?->tracking_code ?? '-' }}</td>
 							<td>{{ verta($order->created_at)->format('Y/m/d H:i') }}</td>
 							<td>
 								<button class="{{ config('order.statusColors.' . $order->status) }} btn-sm btn">

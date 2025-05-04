@@ -40,7 +40,9 @@
   <div class="col-xl-4 col-12">
     <x-card>
       <x-slot name="cardTitle">اطلاعات مشتری</x-slot>
-      <x-slot name="cardOptions"><x-card-options /></x-slot>
+      <x-slot name="cardOptions">
+        <a class="btn btn-sm btn-icon btn-outline-info">مشاهده مشتری</a>
+      </x-slot>
       <x-slot name="cardBody">
         @php
           $customer = $order->customer;
@@ -180,6 +182,7 @@
     </div>
   </x-slot>
   <x-slot name="cardBody">
+
     <x-table-component>
       <x-slot name="tableTh">
         <tr>
@@ -239,11 +242,11 @@
             <div class="row">
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>تعداد کالا ها</b>
-                <span>{{ $order->items->where('status', 1)->count() }}</span>
+                <span>{{ $order->items_count }}</span>
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>جمع اقلام</b>
-                <span>{{ $order->items->where('status', 1)->sum('quantity') }}</span>
+                <span>{{ $order->items_quantity }}</span>
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>مجموع قیمت کالا ها</b>
@@ -251,11 +254,15 @@
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>مجموع تخفیف روی کالا ها</b>
-                <span>{{ number_format($order->total_discount_on_items) }} تومان</span>
+                <span>{{ number_format($order->discount_on_items) }} تومان</span>
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>تخفیف روی سفارش</b>
-                <span>{{ number_format($order->discount_amount - $order->total_discount_on_items) }} تومان</span>
+                <span>{{ number_format($order->discount_on_order) }} تومان</span>
+              </div>
+              <div class="col-12 my-1 d-flex justify-content-between align-items-center">
+                <b>تخفیف روی کپن</b>
+                <span>{{ number_format($order->discount_on_coupon) }} تومان</span>
               </div>
               <div class="col-12 my-1 d-flex justify-content-between align-items-center">
                 <b>هزینه ارسال</b>
@@ -424,7 +431,7 @@
       <div class="col-12">
         <div class="form-group">
           <label class="font-weight-bold">تخفیف روی سفارش (تومان) : <span class="text-danger">&starf;</span></label>
-          <input type="text" name="discount_amount" class="form-control comma" value="{{ number_format($order->discount_amount - $order->total_discount_on_items) ?? null }}">
+          <input type="text" name="discount_amount" class="form-control comma" value="{{ number_format($order->discount_on_order) }}">
         </div>
       </div>
       

@@ -32,14 +32,8 @@ class OrderController extends Controller
 {
   public function index()
   {
-    $ordersQuery = Order::query()
-      ->withCount('items')
-      ->applyFilter()
-      ->parents()
-      ->filters()
-      ->latest('id');
-
-    $orders = $ordersQuery->paginate(request('perPage', 15))->withQueryString();
+    $ordersQuery = Order::query()->applyFilter()->parents()->filters()->latest('id');
+    $orders = $ordersQuery->paginate(request('perPage', 50))->withQueryString();
     $copyOrderQuery = clone $ordersQuery;
     Helpers::removeWhere($copyOrderQuery->getQuery(), 'status');
     $orderStatuses = Order::getAllStatuses($copyOrderQuery);
