@@ -3317,6 +3317,10 @@
   border: 1px solid #65aa57;
 }
 
+.border-red {
+  border: 1px solid #cf1d1d;
+}
+
 html {
   font-size: 12px;
 }
@@ -16685,11 +16689,13 @@ input[type=range]::-moz-range-thumb {
   border: 1px solid #d1d1d1;
   width: 45px;
   height: 45px;
+  transition: all .4s;
 }
 .product-details .product-sizes .size-btn span {
   height: fit-content !important;
   display: block;
   margin-top: 2px;
+  transition: all .4s;
 }
 .product-details .product-sizes .size-btn.active {
   background-color: var(--main-color-code);

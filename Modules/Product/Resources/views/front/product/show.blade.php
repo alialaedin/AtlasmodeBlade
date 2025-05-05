@@ -95,7 +95,7 @@
               <span class="px-2 radius-u text-button-1 bg-success-300 color-white">@{{ productFinalPrice.discount_price?.toLocaleString() }}</span> 
             </template>
             <div class="d-flex gap-1 align-items-center">
-              <span class="horizontal-divider h-4 bg-gray-300"></span>
+              <span v-if="productFinalPrice.discount_price > 0" class="horizontal-divider h-4 bg-gray-300"></span>
               <ins class="currency text-medium-3-strong color-primary-500">@{{ productFinalPrice.amount?.toLocaleString() }}</ins>
               <span class="text-medium-2 color-gray-900">تومان </span>
             </div>
@@ -121,6 +121,7 @@
                       active: checkAttributeIsActive(attribute.id, value), 
                       disabled: checkAttributeIsDisable(attribute.id, value) 
                     }"
+                    :disabled="checkAttributeIsDisable(attribute.id, value)"
                     type="button"
                     class="size-btn text-center text-button radius-circle"
                     @click="setActiveAttributes(attribute.id, value)">
@@ -165,9 +166,8 @@
                 <i class="icon-minus icon-fs-medium-2"></i>
               </button>
             </div>
-            <p class="quantity text-button-1 border-green p-2 mt-1 w-p-fit active">
-              از این محصول @{{ selectedVariety.store.balance }} عدد در انبار باقی است
-            </p>
+            <p v-if="selectedVariety.store.balance > 0" class="quantity text-button-1 border-green p-2 mt-1 w-p-fit active">از این محصول @{{ selectedVariety.store.balance }} عدد در انبار باقی است</p>
+            <p v-else class="quantity text-button-1 border-green p-2 mt-1 w-p-fit active">موجودی این محصول تمام شده است</p>
           </div>
         </template>
 
@@ -194,7 +194,7 @@
           <span class="px-1 pb-1 text-medium-strong">مشخصات</span>
         </li>
         <li @click="showComments" class="comments-title position-relative d-flex flex-column gap-1 justify-content-center pointer">
-          <span class="px-1 pb-1 text-medium-strong">نظرات کار بران</span>
+          <span class="px-1 pb-1 text-medium-strong">نظرات کاربران</span>
         </li>
       </ul>
 
