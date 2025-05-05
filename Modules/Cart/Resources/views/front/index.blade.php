@@ -594,7 +594,7 @@
             @click="closeChooseShippingModal"
           />
           <figure>
-            <img src="{{ asset('front-assets/images/cart/پیک-گرگان.png') }}" alt="">
+            <img :src="shipping.logo.url">
           </figure>
           <label :for="'shipping-' + shippingIndex" class="text-medium pointer">@{{ shipping.name }}</label>
           <span class="tooltip" data-position="bottom">@{{ shipping.description }}</span>
