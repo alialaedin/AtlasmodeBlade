@@ -27,6 +27,7 @@
         this.handleSlidersSwiper();
         this.handleProductSwiper();
         this.handleCategoriesProductSwiper();
+        this.handleSpecialCategoriesSwiper();
         // this.showInHomeCategories = this.showInHomeCategories.filter(c => c.products.length > 0);
         console.log(this.showInHomeCategories);
       },  
