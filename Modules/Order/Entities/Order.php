@@ -97,7 +97,7 @@ class Order extends Payable implements ProductWallet
 		Order::STATUS_NEW
 	];
 
-	// protected $appends = ['total_amount'];
+	protected $appends = ['total_amount'];
 	protected $casts = [
 		'shipping_amount' => 'integer',
 		'discount_amount' => 'integer'

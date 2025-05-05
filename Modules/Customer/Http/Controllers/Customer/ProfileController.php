@@ -45,7 +45,7 @@ class ProfileController extends Controller
       ->get();
     
     $orders = $customer->orders()
-      ->select(['id', 'customer_id', 'discount_amount', 'total_amount', 'shipping_amount', 'status', 'created_at', 'address_id'])
+      // ->select(['id', 'customer_id', 'discount_amount', 'total_amount', 'shipping_amount', 'status', 'created_at', 'address_id'])
       ->with([
         'items' => function ($iQuery) {
           $iQuery->active();

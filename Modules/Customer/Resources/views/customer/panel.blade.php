@@ -914,6 +914,7 @@
         closeAllPopovers();
         this.setCustomerBirthDate();
         this.setCustomerInformationForUpdate();
+        this.setOrdersDiscountAmount();
         this.setFilteredOrders();
         this.setOrderStatistics();
         this.activeLoginBtn();
@@ -1136,6 +1137,11 @@
             })
           });
 
+        },
+        setOrdersDiscountAmount() {
+          this.allOrders?.forEach(order => {
+            order.discount_amount = order.discount_on_order + order.discount_on_coupon + order.discount_on_items;
+          })
         },
 
         choosePortal(event) {
