@@ -3769,6 +3769,26 @@ ul, ol, dd {
   }
 }
 
+.h6 {
+  font-size: 18px;
+  font-weight: 400;
+}
+@media only screen and (min-width: 1024px) {
+  .h6 {
+    font-size: 20px;
+  }
+}
+
+.h6-strong {
+  font-size: 18px;
+  font-weight: 800;
+}
+@media only screen and (min-width: 1024px) {
+  .h6-strong {
+    font-size: 20px;
+  }
+}
+
 .text-button {
   font-size: 13px;
   font-weight: 400;
@@ -17592,7 +17612,7 @@ input[type=range]::-moz-range-thumb {
   bottom: 0;
   width: 150%;
   height: 150%;
-  background-color: black;
+  background-color: #2e165b;
   transform-origin: right;
   transform: skew(-45deg) scaleX(0);
   z-index: -1;

@@ -1,7 +1,7 @@
 <section v-for="category in showInHomeCategories" :key="category.id" class="most-saled d-flex flex-column gap-lg-6 gap-7 mt-12">
   <!-- Title -->
   <div class="d-flex align-items-center justify-content-between">
-    <h2 class="h4-strong color-gray-900">@{{ category.title }}</h2>
+    <h2 class="h6-strong color-gray-900">@{{ category.title }}</h2>
     <a 
       :href="'/products?category_id=' + category.id" 
       class="see-more pb-1 text-medium-strong color-gray-900">
