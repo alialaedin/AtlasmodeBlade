@@ -1,4 +1,4 @@
-<section v-for="group in recommendationGroups" :key="recommendationGroups.id" class="most-saled d-flex flex-column gap-lg-6 gap-7 mt-12">
+<section v-for="group in recommendationGroups" :key="recommendationGroups.id" class="most-saled d-flex flex-column gap-lg-4 gap-7 mt-12">
   <!-- Title -->
   <div class="d-flex align-items-center justify-content-between">
     <h2 class="h6-strong color-gray-900">@{{ group.label }} های نارین سنتر</h2>

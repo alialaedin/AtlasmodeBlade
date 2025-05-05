@@ -17009,6 +17009,9 @@ input[type=range]::-moz-range-thumb {
 .shipping-cart .product-list::-webkit-scrollbar {
   display: none;
 }
+.shipping-cart .product-list .delete-allProducts i {
+  transition: color .5s;
+}
 .shipping-cart .product-list .delete-allProducts:hover i {
   color: red !important;
 }
@@ -17027,6 +17030,12 @@ input[type=range]::-moz-range-thumb {
   width: 30px;
   height: 30px;
   border: 0.5px solid #e2e1e1;
+}
+.shipping-cart .product-list .product-item .delete-product {
+  transition: background-color .4s;
+}
+.shipping-cart .product-list .product-item .delete-product i {
+  transition: color .6s;
 }
 .shipping-cart .product-list .product-item .delete-product:hover {
   background-color: red;
@@ -17091,9 +17100,10 @@ input[type=range]::-moz-range-thumb {
   font-weight: 800;
   padding-top: 8px;
   padding-bottom: 8px;
+  transition: background-color .6s;
 }
 .shipping-cart .continue-process-btn:hover {
-  background-color: #21ab64;
+  background-color: var(--second-color-code);
 }
 @media only screen and (min-width: 768px) {
   .shipping-cart .continue-process-btn {
@@ -17120,6 +17130,17 @@ input[type=range]::-moz-range-thumb {
   opacity: 0.5;
 }
 
+.send-information .address-and-shiiping-details {
+  border-radius: 15px;
+  background-color: #fafafa;
+  box-shadow: 0 0 5px 0 rgba(128, 128, 128, 0.151);
+}
+
+.send-information .price-details {
+  border-radius: 15px;
+  background-color: #fafafa;
+  box-shadow: 0 0 5px 0 rgba(128, 128, 128, 0.151);
+}
 .send-information {
   display: none;
 }
@@ -17134,7 +17155,7 @@ input[type=range]::-moz-range-thumb {
   padding: 5px 0;
   margin: 0 auto;
   border: 1px solid #c8c5c5;
-  transition: border 0.3s linear;
+  transition: all 0.3s linear;
 }
 .send-information .addresses .change-edit-btn:hover {
   border: 1px solid black;
@@ -17160,7 +17181,7 @@ input[type=range]::-moz-range-thumb {
   width: 95%;
   padding: 5px 0;
   margin: 0 auto;
-  transition: border 0.3s linear;
+  transition: all 0.3s linear;
 }
 .send-information .delivery-method .choose-method-btn:hover {
   border: 1px solid black;
@@ -17187,9 +17208,10 @@ input[type=range]::-moz-range-thumb {
   font-weight: 800;
   padding-top: 8px;
   padding-bottom: 8px;
+  transition: background-color .6s;
 }
 .send-information .delivery-btn:hover {
-  background-color: #21ab64;
+  background-color: var(--second-color-code);
 }
 @media only screen and (min-width: 768px) {
   .send-information .delivery-btn {
@@ -17659,6 +17681,7 @@ input[type=range]::-moz-range-thumb {
 
 .see-more {
   border-bottom: 2px black solid;
+  transition: color .4s;
 }
 .see-more:hover {
   color: black;

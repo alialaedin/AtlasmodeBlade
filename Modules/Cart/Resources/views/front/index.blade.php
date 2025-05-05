@@ -152,7 +152,7 @@
                   <input type="text" placeholder="کد تخفیف را وارد کنید" class="discount-input bg-gray-200 p-2">
                   <button type="button" class="discount-btn bg-gray-700 color-white text-medium py-1 px-md-3 px-1" @click="applyCoupon">ثبت کد تخفیف</button>
                 </div>
-                <button type="button" class="continue-process-btn bg-black color-white text-medium mt-4" @click="goToInformationTab">ادامه فرآیند خرید</button>
+                <button type="button" class="continue-process-btn bg-main color-white text-medium mt-4" @click="goToInformationTab">ادامه فرآیند خرید</button>
               </div>
             </div>
           </div>
@@ -173,7 +173,7 @@
     <section class="send-information flex-lg-row flex-column container-2xl mb-4 mt-4 gap-5 px-lg-2 px-4">
 
       <!-- Addresses And Sending Methods -->
-      <div class="d-flex bg-gray-100 p-2 radius-small flex-column gap-3 col-lg-8">
+      <div class="address-and-shiiping-details d-flex bg-gray-100 p-5 radius-small flex-column gap-3 col-lg-8">
 
         <!-- Address -->
         <div class="d-flex flex-column gap-1">
@@ -225,7 +225,7 @@
       </div>
 
         <!-- Price Details -->
-      <div class="price-details position-sticky bg-gray-100 radius-small col-lg-4 d-flex flex-column  p-5 gap-lg-3 gap-1">
+      <div class="price-details position-sticky bg-gray-100 radius-small col-lg-4 d-flex flex-column p-5 gap-1">
         <!-- Total Price -->
         <div class="d-flex justify-content-between">
           <span class="text-medium color-gray-900">مجموع قیمت ها :</span>
@@ -258,7 +258,7 @@
             <span class="text-medium-strong color-gray-900">تومان</span>
           </div>
         </div>
-        <button type="button"  class="delivery-btn bg-black color-white text-medium mt-4" @click="goToPaymentTab">مرحله بعـد</button>
+        <button type="button" class="delivery-btn bg-main color-white text-medium mt-4" @click="goToPaymentTab">مرحله بعـد</button>
       </div>
 
     </section>
