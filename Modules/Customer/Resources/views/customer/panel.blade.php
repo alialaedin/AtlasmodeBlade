@@ -473,7 +473,7 @@
       </div>
 
       <!-- Transactions Detail Dekstop -->
-      <table class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-1 border-gray-300 radius-medium">
+      <table v-if="transactions.length" class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-1 border-gray-300 radius-medium">
         <thead>
           <tr class="d-flex gap-lg-8 gap-2 text-medium color-gray-700 bp-1 border-b-gray-400 px-lg-2">
             <th>شناسه</th>
@@ -504,7 +504,7 @@
       </table>
 
       <!-- Transactions Detail Mobile -->
-      <div class="d-lg-none d-flex flex-column gap-2 px-2 py-2 mt-2 border-gray-300 radius-medium">
+      <div v-if="transactions.length" class="d-lg-none d-flex flex-column gap-2 px-2 py-2 mt-2 border-gray-300 radius-medium">
         <h4 class="h4-strong">تراکنش ها</h4>
         <!-- Withdraw Info -->
         <div v-for="transaction in transactions" :key="transaction.id" class="grid p-2 border-gray-300 radius-medium gap-1">
@@ -550,7 +550,7 @@
         </div>
       </div>
 
-      <table class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-1 border-gray-300 radius-medium">
+      <table v-if="withdraws.length" class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-1 border-gray-300 radius-medium">
         <thead>
           <tr class="d-flex gap-lg-8 gap-2 text-medium color-gray-700 bp-1 border-b-gray-400 px-lg-2">
             <th>شناسه</th>
@@ -576,7 +576,7 @@
       </table>
 
       <!-- Transactions Detail Mobile -->
-      <div class="d-lg-none d-flex flex-column gap-2 px-2 py-2 mt-2 border-gray-300 radius-medium">
+      <div v-if="withdraws.length" class="d-lg-none d-flex flex-column gap-2 px-2 py-2 mt-2 border-gray-300 radius-medium">
         <h4 class="h4-strong">برداشت ها</h4>
         <!-- Withdraw Info -->
         <div v-for="withdraw in withdraws" :key="withdraw.id" class="grid p-2 border-gray-300 radius-medium gap-1">
