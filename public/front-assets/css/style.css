@@ -140,6 +140,22 @@
   color: #000;
 }
 
+.color-main {
+  color: var(--main-color-code);
+}
+
+.bg-main {
+  background-color: var(--main-color-code);
+}
+
+.color-second {
+  color: var(--second-color-code);
+}
+
+.bg-second {
+  background-color: var(--second-color-code);
+}
+
 .bg-gray-100 {
   background-color: #f9f9f9;
 }
@@ -280,19 +296,19 @@
 }
 
 .bg-purple {
-  background-color: #2e165b;
+  background-color: var(--main-color-code);
 }
 
 .bg-purple-dark {
-  background-color: #120632;
+  background-color: var(--second-color-code);
 }
 
 .color-purple {
-  color: #2e165b;
+  color: var(--main-color-code);
 }
 
 .color-purple-dark {
-  color: #120632;
+  color: var(--second-color-code);
 }
 
 .h-p-25 {
@@ -3319,7 +3335,7 @@ html {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #2e165b;
+  background-color: var(--main-color-code);
 }
 
 *::-webkit-scrollbar-track {
@@ -3451,7 +3467,7 @@ ul, ol, dd {
 
 .icon-angle-double-left:before {
   content: "\f100";
-  color: #120632;
+  color: var(--second-color-code);
 }
 
 .icon-angle-double-right:before {
@@ -3480,7 +3496,7 @@ ul, ol, dd {
 
 .icon-home1:before {
   content: "\e900";
-  color: #120632;
+  color: var(--second-color-code);
 }
 
 .icon-mail:before {
@@ -3573,12 +3589,12 @@ ul, ol, dd {
 
 .icon-map-pin:before {
   content: "\e90f";
-  color: #120632;
+  color: var(--second-color-code);
 }
 
 .icon-phone-call:before {
   content: "\e910";
-  color: #120632;
+  color: var(--second-color-code);
 }
 
 .icon-star:before {
@@ -3964,6 +3980,10 @@ ul, ol, dd {
   --bs-breakpoint-2xl: 1336px;
   --bs-breakpoint-3xl: 1440px;
   --bs-breakpoint-4xl: 1676px;
+
+  --main-color-code: #2e165b;
+  --second-color-code: #120632;
+
 }
 
 .row {
@@ -16473,9 +16493,9 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50%;
 }
 .customRadio:checked {
-  background-color: #120632;
+  background-color: var(--second-color-code);
   border: 2px solid white;
-  outline: 2px solid #120632;
+  outline: 2px solid var(--second-color-code);
 }
 @media only screen and (min-width: 768px) {
   .customRadio {
@@ -16529,7 +16549,7 @@ input[type=range]::-moz-range-thumb {
   transition: background-color 0.3s linear;
 }
 .aside .setFilter-btn:hover {
-  background-color: #120632;
+  background-color: var(--second-color-code);
 }
 
 .products {
@@ -16546,7 +16566,7 @@ input[type=range]::-moz-range-thumb {
   gap: 2px;
 }
 .products .display-sort .two-cloumn.select, .products .display-sort .select.three-cloumn {
-  background-color: #2e165b;
+  background-color: var(--main-color-code);
 }
 .products .display-sort .two-cloumn.select span, .products .display-sort .select.three-cloumn span {
   background-color: white;
@@ -16658,7 +16678,7 @@ input[type=range]::-moz-range-thumb {
   margin-top: 2px;
 }
 .product-details .product-sizes .size-btn.active {
-  background-color: #2e165b;
+  background-color: var(--main-color-code);
   color: white;
   font-weight: 600;
 }
@@ -16690,7 +16710,7 @@ input[type=range]::-moz-range-thumb {
 }
 @media only screen and (min-width: 1024px) {
   .product-details .product-sizes .size-btn:hover {
-    background-color: #2e165b;
+    background-color: var(--main-color-code);
     opacity: .74;
     color: white;
   }
@@ -16751,7 +16771,7 @@ input[type=range]::-moz-range-thumb {
   transition: background-color 0.3s linear;
 }
 .product-details .add-toCart:hover {
-  background-color: #120632;
+  background-color: var(--second-color-code);
 }
 
 .specifications-title, .description-title, .comments-title {
@@ -16897,6 +16917,10 @@ input[type=range]::-moz-range-thumb {
 }
 .login-register .login-register-form .login-btn {
   padding: 5px 0;
+  transition: background-color .5s;
+}
+.login-register .login-register-form .login-btn:hover {
+  background-color: var(--second-color-code);
 }
 @media only screen and (min-width: 768px) {
   .login-register .login-register-form {
@@ -16918,6 +16942,10 @@ input[type=range]::-moz-range-thumb {
 }
 .login-register .token-form .token-btn {
   padding: 5px 0;
+  transition: background-color .5s;
+}
+.login-register .token-form .token-btn:hover {
+  background-color: var(--second-color-code);
 }
 .login-register .token-form .send-token-again {
   display: none;
@@ -17110,7 +17138,7 @@ input[type=range]::-moz-range-thumb {
 }
 .send-information .addresses .change-edit-btn:hover {
   border: 1px solid black;
-  background-color: #120632;
+  background-color: var(--second-color-code);
   opacity: .74;
   color: white;
 }
@@ -17136,7 +17164,7 @@ input[type=range]::-moz-range-thumb {
 }
 .send-information .delivery-method .choose-method-btn:hover {
   border: 1px solid black;
-  background-color: #120632;
+  background-color: var(--second-color-code);
   opacity: .74;
   /* background-color: #a4a4a4; */
   color: white;
@@ -17612,7 +17640,7 @@ input[type=range]::-moz-range-thumb {
   bottom: 0;
   width: 150%;
   height: 150%;
-  background-color: #2e165b;
+  background-color: var(--main-color-code);
   transform-origin: right;
   transform: skew(-45deg) scaleX(0);
   z-index: -1;

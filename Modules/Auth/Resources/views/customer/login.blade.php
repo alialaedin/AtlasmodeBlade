@@ -38,7 +38,7 @@
               <span class="color-gray-700 text-medium mb-1">لطفا شماره تماس خود را وارد کنید.</span>
               <input v-model="mobile" type="text" autofocus class="w-p-100 bg-gray-100 number-input p-2 text-medium" required maxlength="11">
             </div>
-            <button type="submit" class="login-btn mt-5 bg-black color-white text-medium-strong">ورود</button>
+            <button type="submit" class="login-btn p-2 mt-2 bg-main color-white text-medium-strong">ورود</button>
           </div>
         </form>
 
@@ -72,12 +72,12 @@
               </div>
               <input type="text" v-model="smsToken" autofocus class="token-input bg-gray-100 p-2 text-medium">
             </div>
-            <div class="d-flex gap-1 mt-2">
+            {{-- <div class="d-flex gap-1 mt-2">
               <span class="text-button">ارسال مجدد کد:</span>
               <span class="timer text-button">2:00</span>
               <button type="button" class="send-token-again text-button color-gray-700">درخواست مجدد</button>
-            </div>
-            <button type="submit" class="token-btn mt-5 bg-black text-center color-white text-medium-strong">تایید</button>
+            </div> --}}
+            <button type="submit" class="token-btn mt-2 bg-main p-2 text-center color-white text-medium-strong">تایید</button>
           </div>
         </form>
 

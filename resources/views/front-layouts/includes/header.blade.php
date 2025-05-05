@@ -171,13 +171,13 @@
 
 			<!-- When Is Login -->
 			@if ($user !== null)
-				<button type="button" class="login-btn bg-purple me-2 px-3 py-2 mb-1 position-relative radius-u d-none d-lg-block">
+				<button type="button" class="login-btn bg-main me-2 px-3 py-2 mb-1 position-relative radius-u d-none d-lg-block">
 					<div class="d-flex align-items-center color-white gap-1">
 						<i class="icon-user icon-fs-medium-2"></i>
 						<span class="text-button"> حساب کاربری</span>
 						<i class="icon-caret-down icon-fs-xsmall"></i>
 					</div>
-					<div class="position-absolute flex-column bg-purple px-3 gap-3 pb-2 pt-3">
+					<div class="position-absolute flex-column bg-main px-3 gap-3 pb-2 pt-3">
 						<a href="{{ route('customer.my-account') }}" class="color-white text-button text-nowrap">مشاهده حساب کاربری</a>
 						<span id="logout-modal-button" class="color-white text-button">خروج</span>
 					</div>

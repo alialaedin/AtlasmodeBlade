@@ -8,7 +8,7 @@
 		<form class="email-form col-lg-6 mb-2 col-12 me-lg-3 mt-lg-8 d-flex align-items-center border-b-gray-400 justify-content-between">
 			<i class="icon-mail icon-fs-medium color-gray-600"></i>
 			<input type="text" class="flex-grow-1 me-1" placeholder="ایمیل خود را وارد کنید..." />
-			<button type="button" class="subscribe-btn py-1 px-2 bg-purple color-white text-button-1">عضویت</button>
+			<button type="button" class="subscribe-btn py-1 px-2 bg-main color-white text-button-1">عضویت</button>
 		</form>
   </div>
   <section class="w-p-100 d-flex px-2 gap-lg-4 gap-2 flex-lg-row flex-column align-items-lg-center">
