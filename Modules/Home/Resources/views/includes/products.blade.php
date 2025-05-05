@@ -40,25 +40,25 @@
               <!-- Title -->
               <h5 class="text-medium-2-strong color-gray-900 text-truncate">@{{ product.title }}</h5> 
               <div class="d-flex flex-wrap gap-lg-1 align-items-center">
+                
+                <template v-if="product.final_price.discount > 0">
+                  <!-- Discount Price -->
+                  <div class="d-flex align-items-center color-gray-700">
+                    <s class="text-medium  currency">@{{ product.final_price.base_amount }}</s>
+                  </div>
+                  <!-- Discount Percent -->
+                  <span class="px-2 radius-u text-button-1 bg-success-300 color-white">
+                    @{{ product.final_price.discount.toLocaleString() }}
+                    <template v-if="product.final_price.discount_type === 'flat'"> تومان</template>
+                    <template v-else> %</template>
+                  </span> 
+                  <i class="icon-angle-double-left icon-fs-small pb-1"></i>
+                </template>
                 <!-- Price -->
                 <div class="d-flex gap-1 align-items-center">
                   <ins class="currency text-medium-2 color-primary-500">@{{ product.final_price.amount }}</ins>
                   <span class="text-medium color-gray-800">تومان </span>
                 </div>
-                <template v-if="product.final_price.discount > 0">
-                  <!-- Discount Price -->
-                  <div class="d-flex align-items-center color-gray-700">
-                    <i class="icon-angle-double-right icon-fs-small pb-1"></i>
-                    <s class="text-medium  currency">@{{ product.final_price.base_amount }}</s>
-                  </div>
-                  <!-- Discount Percent -->
-                  <span class="px-2 radius-u text-button-1 bg-secondary-100">
-                    @{{ product.final_price.discount.toLocaleString() }}
-                    <template v-if="product.final_price.discount_type === 'flat'"> تومان</template>
-                    <template v-else> %</template>
-                  </span> 
-                  <div></div>
-                </template>
               </div>
             </div>
           </a>

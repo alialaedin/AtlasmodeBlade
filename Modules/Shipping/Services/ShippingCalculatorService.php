@@ -152,7 +152,7 @@ class ShippingCalculatorService
 
 
 
-    public static function getShippableShippingsForFront(Customer $customer, $carts, Address|null $chosenAddress = null,)
+    public static function getShippableShippingsForFront(Customer $customer, $carts, ?Address $chosenAddress = null)
     {
         if ($chosenAddress) {
             $shippings = Shipping::getShippableShippingsForAddress($chosenAddress);

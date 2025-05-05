@@ -85,20 +85,20 @@
           </div>
           <!-- Price  -->
           <div class="d-flex flex-wrap gap-2 align-items-center pb-2 border-b-gray-300">
-            <div class="d-flex gap-1 align-items-center">
-              <ins class="currency text-medium-3-strong color-primary-500">@{{ productFinalPrice.amount?.toLocaleString() }}</ins>
-              <span class="text-medium-2 color-gray-900">تومان </span>
-            </div>
             <template v-if="productFinalPrice.discount_price > 0">
               <div class="d-flex gap-1 align-items-center color-gray-700">
-                <span class="horizontal-divider h-4 bg-gray-300"></span>
                 <s class="text-medium-2 d-flex gap-1 currency">
                   <span class="currency">@{{ productFinalPrice.base_amount?.toLocaleString() }}</span>
                   <span class="">تومان </span>
                 </s>
               </div>
-              <span class="px-2 radius-u text-button-1 bg-secondary-100">@{{ productFinalPrice.discount_price?.toLocaleString() }}</span> 
+              <span class="px-2 radius-u text-button-1 bg-success-300 color-white">@{{ productFinalPrice.discount_price?.toLocaleString() }}</span> 
             </template>
+            <div class="d-flex gap-1 align-items-center">
+              <span class="horizontal-divider h-4 bg-gray-300"></span>
+              <ins class="currency text-medium-3-strong color-primary-500">@{{ productFinalPrice.amount?.toLocaleString() }}</ins>
+              <span class="text-medium-2 color-gray-900">تومان </span>
+            </div>
           </div>
           <div>
             <p class="text-medium color-gray-600" v-text="product.short_description"></p>
@@ -175,7 +175,7 @@
         <button
           @click="addToCart" 
           type="button"  
-          class="add-toCart mt-4 d-lg-flex d-none gap-2 align-items-center justify-content-center bg-black text-medium color-white">
+          class="add-toCart mt-4 d-lg-flex d-none gap-2 align-items-center justify-content-center bg-purple text-medium color-white">
           <i class="icon-troli icon-fs-medium"></i>    
           <span>افزودن به سبد خرید</span>
         </button>
@@ -365,15 +365,10 @@
                     <!-- Title -->
                     <h5 class="text-medium-2-strong color-gray-900 text-truncate">@{{ relatedProduct.title }}</h5> 
                     <div class="d-flex flex-wrap gap-lg-1 align-items-center">
-                      <!-- Price -->
-                      <div class="d-flex gap-1 align-items-center">
-                        <ins class="currency text-medium-2 color-primary-500">@{{ relatedProduct.final_price.amount }}</ins>
-                        <span class="text-medium color-gray-800"> تومان</span>
-                      </div>
+                      
                       <template v-if="relatedProduct.final_price.discount_price > 0">
                         <!-- Discount Price -->
                         <div class="d-flex align-items-center color-gray-700">
-                          <i class="icon-angle-double-right icon-fs-small pb-1"></i>
                           <s class="text-medium currency">@{{ relatedProduct.final_price.base_amount }}</s>
                         </div>
                         <!-- Discount Percent -->
@@ -382,8 +377,13 @@
                           <span v-if="relatedProduct.final_price.discount_type === flat">تومان</span> 
                           <span v-else-if="relatedProduct.final_price.discount_type === percentage">%</span> 
                         </span> 
-                        <div></div>
+                        <i class="icon-angle-double-left icon-fs-small pb-1"></i>
                       </template>
+                      <!-- Price -->
+                      <div class="d-flex gap-1 align-items-center">
+                        <ins class="currency text-medium-2 color-primary-500">@{{ relatedProduct.final_price.amount }}</ins>
+                        <span class="text-medium color-gray-800"> تومان</span>
+                      </div>
                     </div>
                   </div>
                 </a>
@@ -399,7 +399,7 @@
     <button 
       type="button" 
       @click="addToCart" 
-      class="add-toCart-mobile d-lg-none gap-2 py-3 bg-black position-fixed bottom-0 start-0 end-0 d-flex align-items-center justify-content-center color-white">
+      class="add-toCart-mobile d-lg-none gap-2 py-3 bg-purple position-fixed bottom-0 start-0 end-0 d-flex align-items-center justify-content-center color-white">
       <i class="icon-troli icon-fs-medium-2"></i>
       <span> افزودن به سبد خرید</span>
     </button>

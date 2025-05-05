@@ -210,19 +210,25 @@
 
 <!-- Exit Modal -->
 <div class="modal modal-exit radius-medium d-flex flex-column bg-white gap-4 px-6 py-4" data-id="exit">
-	<div class="d-flex justify-content-between border-b-gray-400 px-2">
-		<h4 class="h4 text-center"> حساب کاربری خارج شوید؟</h4>
+	<div class="d-flex justify-content-between border-b-gray-400">
+		<h4 class="h4 text-center" style="font-size: 20px"> حساب کاربری خارج شوید؟</h4>
 		<button type="button" class="modal-close">
 			<i class="icon-cancel icon-fs-small"></i>
 		</button>
 	</div>
-	<p class="text-button">با خروج از حساب کاربری, به سبد خرید فعلی خود دسترسی نخواهید داشت.</p>
-	<div class="d-flex justify-content-between px-lg-4">
-		<button type="button" class="cancel-modal-btn modal-close bg-secondary-300 color-white text-medium radius-medium px-6 py-1">انصراف</button>
+	<p class="text-button" style="font-size: 14px">با خروج از حساب کاربری, به سبد خرید فعلی خود دسترسی نخواهید داشت.</p>
+	<div class="d-flex justify-content-center gap-4">
 		<button 
+			style="font-size: 14px"
 			type="button" 
-			class="exit-modal-btn bg-error-100 color-white text-medium px-6 py-1 radius-medium">
-			خروج از حساب
+			class="cancel-modal-btn modal-close bg-success-300 color-white text-medium radius-medium px-6 py-1">
+			انصراف
+		</button>
+		<button 
+			style="font-size: 14px"
+			type="button" 
+			class="exit-modal-btn bg-error-100 color-white text-medium px-7 py-1 radius-medium">
+			خروج
 		</button>
 	</div>
 </div>

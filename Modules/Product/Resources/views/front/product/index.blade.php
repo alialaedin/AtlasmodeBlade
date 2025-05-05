@@ -160,7 +160,7 @@
         </div>
 
         <!-- Set Filters Button -->
-        <button type="button" @click="filter" class="setFilter-btn w-p-100 bg-black color-white py-1 text-medium mt-2">اعمال فیلتر</button>
+        <button type="button" @click="filter" class="setFilter-btn w-p-100 bg-purple color-white py-1 text-medium mt-2">اعمال فیلتر</button>
 
       </aside>
 
@@ -237,23 +237,23 @@
                     <!-- Title -->
                     <h5 class="text-medium-2-strong color-gray-900 text-truncate">{{ $product->title }}</h5> 
                     <div class="d-flex flex-wrap gap-lg-1 align-items-center">
+                      @if ($product->final_price['discount'])
+                        <!-- Discount Price -->
+                        <div class="d-flex align-items-center color-gray-700">
+                          <s class="text-medium currency">{{ $product->final_price['base_amount'] }}</s>
+                        </div>
+                        <!-- Discount Percent -->
+                        <span class="px-2 radius-u text-button-1 bg-success-300 color-white">
+                          {{ number_format($product->final_price['discount']) }}
+                          {{ $product->final_price['discount_type'] == 'flat' ? 'تومان' : '%' }}
+                        </span> 
+                        <i class="icon-angle-double-left icon-fs-small pb-1"></i>
+                      @endif
                       <!-- Price -->
                       <div class="d-flex gap-1 align-items-center">
                         <ins class="currency text-medium-2 color-primary-500">{{ $product->final_price['amount'] }}</ins>
                         <span class="text-medium color-gray-800">تومان</span>
                       </div>
-                      @if ($product->final_price['discount'])
-                        <!-- Discount Price -->
-                        <div class="d-flex align-items-center color-gray-700">
-                          <i class="icon-angle-double-right icon-fs-small pb-1"></i>
-                          <s class="text-medium currency">{{ $product->final_price['base_amount'] }}</s>
-                        </div>
-                        <!-- Discount Percent -->
-                        <span class="px-2 radius-u text-button-1 bg-secondary-100">
-                          {{ number_format($product->final_price['discount']) }}
-                          {{ $product->final_price['discount_type'] == 'flat' ? 'تومان' : '%' }}
-                        </span> 
-                      @endif
                       <div></div>
                     </div>
                   </div>

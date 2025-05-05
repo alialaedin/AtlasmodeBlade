@@ -271,9 +271,28 @@
 .bg-success-200 {
   background-color: #21ab64;
 }
+.bg-success-300 {
+  background-color: #00bf6f;
+}
 
 .bg-black {
   background-color: #000;
+}
+
+.bg-purple {
+  background-color: #2e165b;
+}
+
+.bg-purple-dark {
+  background-color: #120632;
+}
+
+.color-purple {
+  color: #2e165b;
+}
+
+.color-purple-dark {
+  color: #120632;
 }
 
 .h-p-25 {
@@ -3300,7 +3319,7 @@ html {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: black;
+  background-color: #2e165b;
 }
 
 *::-webkit-scrollbar-track {
@@ -3432,6 +3451,7 @@ ul, ol, dd {
 
 .icon-angle-double-left:before {
   content: "\f100";
+  color: #120632;
 }
 
 .icon-angle-double-right:before {
@@ -3460,6 +3480,7 @@ ul, ol, dd {
 
 .icon-home1:before {
   content: "\e900";
+  color: #120632;
 }
 
 .icon-mail:before {
@@ -3552,12 +3573,12 @@ ul, ol, dd {
 
 .icon-map-pin:before {
   content: "\e90f";
-  color: #666;
+  color: #120632;
 }
 
 .icon-phone-call:before {
   content: "\e910";
-  color: #666;
+  color: #120632;
 }
 
 .icon-star:before {
@@ -16150,8 +16171,8 @@ option .modal-mobile-filter .category .category-forms select:hover {
   border-bottom: 1px solid #f0f0f1;
 }
 .modal-add-newAddress .add-newAddress-btn {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   width: 80%;
   margin: 0 auto;
 }
@@ -16194,10 +16215,12 @@ option .modal-mobile-filter .category .category-forms select:hover {
 }
 .modal-exit .cancel-modal-btn {
   transition: all 0.2s linear;
+  opacity: .74;
   max-height: 40px;
 }
 .modal-exit .cancel-modal-btn:hover {
-  background-color: #15be95;
+  /* background-color: #15be95; */
+  opacity: 1;
   box-shadow: 0 0 7px 0 rgba(21, 190, 149, 0.8);
 }
 
@@ -16430,9 +16453,9 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50%;
 }
 .customRadio:checked {
-  background-color: black;
+  background-color: #120632;
   border: 2px solid white;
-  outline: 2px solid black;
+  outline: 2px solid #120632;
 }
 @media only screen and (min-width: 768px) {
   .customRadio {
@@ -16486,7 +16509,7 @@ input[type=range]::-moz-range-thumb {
   transition: background-color 0.3s linear;
 }
 .aside .setFilter-btn:hover {
-  background-color: #888888;
+  background-color: #120632;
 }
 
 .products {
@@ -16503,7 +16526,7 @@ input[type=range]::-moz-range-thumb {
   gap: 2px;
 }
 .products .display-sort .two-cloumn.select, .products .display-sort .select.three-cloumn {
-  background-color: black;
+  background-color: #2e165b;
 }
 .products .display-sort .two-cloumn.select span, .products .display-sort .select.three-cloumn span {
   background-color: white;
@@ -16615,7 +16638,7 @@ input[type=range]::-moz-range-thumb {
   margin-top: 2px;
 }
 .product-details .product-sizes .size-btn.active {
-  background-color: black;
+  background-color: #2e165b;
   color: white;
   font-weight: 600;
 }
@@ -16647,7 +16670,8 @@ input[type=range]::-moz-range-thumb {
 }
 @media only screen and (min-width: 1024px) {
   .product-details .product-sizes .size-btn:hover {
-    background-color: rgb(47, 47, 47);
+    background-color: #2e165b;
+    opacity: .74;
     color: white;
   }
   .product-details .product-sizes .size-btn:hover span {
@@ -16707,7 +16731,7 @@ input[type=range]::-moz-range-thumb {
   transition: background-color 0.3s linear;
 }
 .product-details .add-toCart:hover {
-  background-color: #888888;
+  background-color: #120632;
 }
 
 .specifications-title, .description-title, .comments-title {
@@ -17066,7 +17090,8 @@ input[type=range]::-moz-range-thumb {
 }
 .send-information .addresses .change-edit-btn:hover {
   border: 1px solid black;
-  background-color: #a4a4a4;
+  background-color: #120632;
+  opacity: .74;
   color: white;
 }
 @media only screen and (min-width: 640px) {
@@ -17091,7 +17116,9 @@ input[type=range]::-moz-range-thumb {
 }
 .send-information .delivery-method .choose-method-btn:hover {
   border: 1px solid black;
-  background-color: #a4a4a4;
+  background-color: #120632;
+  opacity: .74;
+  /* background-color: #a4a4a4; */
   color: white;
 }
 @media only screen and (min-width: 640px) {

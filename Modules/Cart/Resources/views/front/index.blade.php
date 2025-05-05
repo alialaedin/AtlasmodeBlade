@@ -78,7 +78,7 @@
                 <div class="price d-flex justify-content-around radius-small">
                   <div class="product-item-price d-flex align-items-center gap-md-3 gap-1 text-medium py-2">
                     <template v-if="cart.discount_price > 0">
-                      <span class="bg-secondary-100 radius-u px-md-2 px-1 text-button-1">
+                      <span class="bg-success-300 color-white radius-u px-md-2 px-1 text-button-1">
                         @{{ cart.discount_price.toLocaleString() }}
                       </span>
                       <s class="color-gray-700 text-linethrough currency">
@@ -148,11 +148,11 @@
                     <span class="text-medium-strong color-gray-900">تومان</span>
                   </div>
                 </div>
-                <div class="discount-form mx-auto">
+                <div class="discount-form mx-auto mt-4">
                   <input type="text" placeholder="کد تخفیف را وارد کنید" class="discount-input bg-gray-200 p-2">
                   <button type="button" class="discount-btn bg-gray-700 color-white text-medium py-1 px-md-3 px-1" @click="applyCoupon">ثبت کد تخفیف</button>
                 </div>
-                <button type="button" class="continue-process-btn bg-black color-white text-medium" @click="goToInformationTab">ادامه فرآیند خرید</button>
+                <button type="button" class="continue-process-btn bg-black color-white text-medium mt-4" @click="goToInformationTab">ادامه فرآیند خرید</button>
               </div>
             </div>
           </div>
@@ -258,7 +258,7 @@
             <span class="text-medium-strong color-gray-900">تومان</span>
           </div>
         </div>
-        <button type="button"  class="delivery-btn bg-black color-white text-medium" @click="goToPaymentTab">مرحله بعـد</button>
+        <button type="button"  class="delivery-btn bg-black color-white text-medium mt-4" @click="goToPaymentTab">مرحله بعـد</button>
       </div>
 
     </section>
@@ -381,7 +381,7 @@
               <span class="text-medium-strong color-gray-900">تومان</span>
             </div>
           </div>
-          <button type="button" class="pay-btn bg-black color-white text-medium" @click="createOrder">پرداخت</button>
+          <button type="button" class="pay-btn bg-black color-white text-medium mt-4" @click="createOrder">پرداخت</button>
         </div>
       </div>
     </section>
@@ -503,7 +503,7 @@
       </div>
 
     </div>
-    <button type="button" class="add-newAddress-btn bg-black color-white text-medium modal-close" @click="updateAddress(addressIndex)">بروزرسانی آدرس</button>
+    <button type="button" class="add-newAddress-btn bg-purple color-white text-medium modal-close" @click="updateAddress(addressIndex)">بروزرسانی آدرس</button>
   </div>
 </template>
 
@@ -570,7 +570,7 @@
     </div>
 
   </div>
-  <button type="button" class="add-newAddress-btn bg-black color-white text-medium modal-close" @click="createNewAddress">ثبت آدرس</button>
+  <button type="button" class="add-newAddress-btn bg-purple color-white text-medium modal-close" @click="createNewAddress">ثبت آدرس</button>
 </div>
 
 <div class="modal modal-delivery-method radius-medium d-flex flex-column bg-white gap-2 px-6 pt-lg-4 pb-lg-4 pt-2 pb-1" data-id="delivery-method">
@@ -1049,7 +1049,7 @@
           document.querySelector('.modal[data-id="choose-address"]').classList.remove('active');  
           document.querySelector('.modal-overlay').classList.remove('active');  
           document.body.classList.remove('no-overflow');  
-          document.querySelector('.change-edit-btn').classList.add('bg-black', 'color-white');  
+          document.querySelector('.change-edit-btn').classList.add('bg-purple-dark', 'color-white');  
         }, 100);  
       },
       async loadShippings() {
@@ -1089,7 +1089,7 @@
           document.querySelector('.modal[data-id="delivery-method"]').classList.remove('active');  
           document.querySelector('.modal-overlay').classList.remove('active');  
           document.body.classList.remove('no-overflow');  
-          document.querySelector('.choose-method-btn').classList.add('bg-black', 'color-white');  
+          document.querySelector('.choose-method-btn').classList.add('bg-purple-dark', 'color-white');  
         }, 100); 
       },
       toggleCitiesSelectBox(event, addressIndex) {
