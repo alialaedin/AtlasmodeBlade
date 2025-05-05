@@ -14,9 +14,9 @@
 
 @section('scripts')
 
-  <script>
+  {{-- <script>
     mainPage()
-  </script>
+  </script> --}}
 
   <script src="{{ asset('assets/vue/vue3/vue.global.prod.js') }}"></script>
 
@@ -82,7 +82,20 @@
             }
           });
         },
-      }
+        handleSpecialCategoriesSwiper() {
+          new Swiper(".categories-swiper",{
+            slidesPerView: "5.3",
+            freeMode:true,
+            breakpoints:{
+              200: { slidesPerView: 2, spaceBetweenSlides: 10 },
+              360: { slidesPerView: 2.5, spaceBetweenSlides: 10 },
+              640: { slidesPerView: 3.3, spaceBetweenSlides: 10 },
+              768: { slidesPerView: 4.3, spaceBetweenSlides: 10 },
+              1024: { slidesPerView: 5.3, spaceBetweenSlides: 10 },
+            }
+          });
+        },
+      },
     }).mount('#main-home');
   </script> 
 @endsection

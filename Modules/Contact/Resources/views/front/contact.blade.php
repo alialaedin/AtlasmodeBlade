@@ -13,7 +13,7 @@
           </a>
       </div>
   </div>
-  <section class="container-2xl mt-9 bg-white py-2 px-4 px-md-8 px-3xl-0 d-flex flex-column gap-2">
+  <section class="container-2xl mt-9 bg-white py-3 px-4 px-md-8 py-md-5 d-flex flex-column gap-2">
      <h1 class="h4-strong color-gray-900">ارتباط با {{ $shopTitle }}</h1>
      <p class="text-button-1 color-gray-700">{{ $aboutUsText }}</p>
      <form action="{{ route('front.contacts.store') }}" method="POST" class="contact-us-form grid">

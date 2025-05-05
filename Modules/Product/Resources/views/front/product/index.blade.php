@@ -496,24 +496,21 @@
         } else if (this.parentCategoryId) {
           return this.parentCategoryId;
         } else {
-          return null;
+          return '';
         }
       },
       getColorRangeIds() {
         const selectedColorRanges = document.querySelectorAll('.color-btn.select');
-        if (selectedColorRanges.length == 0) return [];
+        if (selectedColorRanges.length == 0) return '';
 
         const ids = [];
         selectedColorRanges.forEach(colorRangeBtn => {
           ids.push(parseInt(colorRangeBtn.getAttribute('data-id')));
         })
 
-        return ids;
+        return ids.join(',');
       },
       filter() {
-
-        console.log(this.getColorRangeIds());
-        return;
 
         const params = {
           title: this.filterByTitle,
@@ -525,6 +522,7 @@
         };
 
         const queryString = Object.entries(params)
+          .filter(([_, value]) => value !== null && value !== undefined && value !== '')
           .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
           .join("&");
 

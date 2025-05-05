@@ -324,6 +324,16 @@ class Product extends BaseModel implements HasMedia, Viewable
 		});
 	}
 
+	public function scopeFilterByColorRanges($query)
+	{
+		$requestColorRangeIds = request()->color_range_ids ?? [];
+		if (is_string($requestColorRangeIds)) 
+			$requestColorRangeIds = explode(',', $requestColorRangeIds);
+		if ($requestColorRangeIds) {
+			$query->whereHas('varieties.colorRanges', fn ($q) => $q->whereIn('id', $requestColorRangeIds));
+		}
+	}
+
 	public function scopeFilters($query)
 	{
 		return $query

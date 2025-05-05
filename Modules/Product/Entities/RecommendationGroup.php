@@ -33,7 +33,7 @@ class RecommendationGroup extends Model
 				->whereIn('id', $productIds)
 				->available(true)
 				->take(8)
-        ->orderByRaw('FIELD(`id`, ' . implode(", ", $productIds) . ')')
+        ->when(!empty($productIds), fn ($q) => $q->orderByRaw('FIELD(`id`, ' . implode(", ", $productIds) . ')'))
 				->with([
 					'media',
 					'varieties' => function ($vQuery) {

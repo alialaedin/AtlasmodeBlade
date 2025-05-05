@@ -77,7 +77,7 @@ class NewProductService
 
   private function applyFilters()
   {
-    $this->productQuery->filters()->active();
+    $this->productQuery->filters()->active()->filterByColorRanges();
     if (request('min_price') || request('max_price')) {
       $productIdsFilteredByPrice = $this->sortProductsByPrice();
       $this->productQuery->whereIn('id', $productIdsFilteredByPrice);

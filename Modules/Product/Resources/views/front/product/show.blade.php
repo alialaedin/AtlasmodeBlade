@@ -190,7 +190,7 @@
         <li v-if="product.description != null" @click="showDescription" class="description-title position-relative d-flex flex-column gap-1 justify-content-center pointer">
           <span class="px-1 pb-1 text-medium-strong">نقد و بررسی</span>
         </li>
-        <li @click="showSpecifications" class="specifications-title active position-relative d-flex flex-column justify-content-center align-items-center pointer">
+        <li v-if="product.specifications.length" @click="showSpecifications" class="specifications-title active position-relative d-flex flex-column justify-content-center align-items-center pointer">
           <span class="px-1 pb-1 text-medium-strong">مشخصات</span>
         </li>
         <li @click="showComments" class="comments-title position-relative d-flex flex-column gap-1 justify-content-center pointer">
