@@ -23,7 +23,7 @@
         <button 
           type="button" 
           data-modal="wallet-modal"
-          class="bg-black color-white radius-circle d-flex justify-content-center align-items-center w-4 h-4">
+          class="deposit-wallet-icon-btn bg-main color-white radius-circle d-flex justify-content-center align-items-center w-4 h-4">
           <i class="icon-plus icon-fs-small"></i>
         </button>
       </div>
@@ -473,7 +473,7 @@
       </div>
 
       <!-- Transactions Detail Dekstop -->
-      <table class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-4 border-gray-300 radius-medium">
+      <table class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-1 border-gray-300 radius-medium">
         <thead>
           <tr class="d-flex gap-lg-8 gap-2 text-medium color-gray-700 bp-1 border-b-gray-400 px-lg-2">
             <th>شناسه</th>
@@ -485,17 +485,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="transaction in transactions" :key="transaction.id" class="d-flex gap-lg-11 gap-4 text-button pb-2 border-b-gray-400 px-lg-2">
+          <tr v-for="transaction in transactions" :key="transaction.id" class="d-flex gap-lg-12 gap-4 text-button py-2 border-b-gray-400 px-lg-2">
             <td>@{{ transaction.id }}</td>
-            <td v-if="transaction.type == 'deposit'" class="bg-success-100 radius-small color-white p-1">واریز</td>
-            <td v-else class="bg-primary-700 radius-small color-white p-1">برداشت</td>
             <td>
+              <span v-if="transaction.type == 'deposit'" class="bg-success-100 radius-small color-white py-1 px-4">واریز</span>
+              <span v-else class="bg-primary-700 radius-small color-white py-1 px-3">برداشت</span>
+            </td>
+            <td style="white-space: nowrap">
               <time :datetime="transaction.jalali_created_at">@{{ transaction.jalali_created_at }}</time>
             </td>
             <td class="currency">@{{ Math.abs(transaction.amount) }}</td>
-            <td v-if="transaction.confirmed" class="bg-success-100 color-white radius-small p-1">موفق</td>
-            <td v-else class="bg-primary-700 color-white radius-small p-1">نا موفق</td>
-            {{-- <td class="descrip d-none d-xl-block text-wrap position-absolute">@{{ transaction.meta.description }}</td> --}}
+            <td>
+              <span v-if="transaction.confirmed" class="bg-success-100 color-white radius-small py-1 px-4">موفق</span>
+              <span v-else class="bg-primary-700 color-white radius-small py-1 px-3">نا موفق</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -547,8 +550,7 @@
         </div>
       </div>
 
-      <!-- Transactions Detail Dekstop -->
-      <table class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-4 border-gray-300 radius-medium">
+      <table class="transactions-detail-desktop d-lg-flex d-none flex-column px-5 py-2 mt-2 gap-1 border-gray-300 radius-medium">
         <thead>
           <tr class="d-flex gap-lg-8 gap-2 text-medium color-gray-700 bp-1 border-b-gray-400 px-lg-2">
             <th>شناسه</th>
@@ -558,15 +560,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="withdraw in withdraws" :key="withdraw.id" class="d-flex gap-lg-11 gap-4 text-button pb-2 border-b-gray-400 px-lg-2">
+          <tr v-for="withdraw in withdraws" :key="withdraw.id" class="d-flex gap-lg-12 gap-4 text-button py-2 border-b-gray-400 px-lg-2">
             <td>@{{ withdraw.id }}</td>
-            <td>
+            <td style="white-space: nowrap">
               <time :datetime="withdraw.jalali_created_at">@{{ withdraw.jalali_created_at }}</time>
             </td>
             <td class="currency">@{{ Math.abs(withdraw.amount) }}</td>
-            <td v-if="withdraw.status == 'pending'" class="bg-warning-100 color-white radius-small p-1">در انتظار بررسی</td>
-            <td v-else-if="withdraw.status == 'paid'" class="bg-success-100 color-white radius-small p-1">تایید شده</td>
-            <td v-else-if="withdraw.status == 'canceled'" class="bg-warning-300 color-white radius-small p-1">لغو شده</td>
+            <td>
+              <span v-if="withdraw.status == 'pending'" class="bg-warning-100 color-white radius-small py-1 px-3">در انتظار بررسی</span>
+              <span v-else-if="withdraw.status == 'paid'" class="bg-success-100 color-white radius-small py-1 px-3">تایید شده</span>
+              <span v-else-if="withdraw.status == 'canceled'" class="bg-warning-300 color-white radius-small py-1 px-3">لغو شده</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -632,7 +636,7 @@
       </template>
     </div>
   </div>
-  <button @click="depositWallet" type="button" class="close-modal bg-black color-white text-medium  py-1">افزایش موجودی</button>
+  <button @click="depositWallet" type="button" class="close-modal bg-main color-white text-medium py-1">افزایش موجودی</button>
 </div>
 
 <!-- Withdraw Modal -->
@@ -642,7 +646,7 @@
     <span class="text-medium">مبلغ برحسب تومان</span>
     <input v-model="withdrawWalletAmount" type="text" autofocus class="priceinput border-gray-300 p-3 bg-gray-100 radius-small" placeholder="مبلغ را به تومان وارد کنید">
   </form>
-  <button @click="withdrawWallet" type="button" class="close-modal bg-black color-white text-medium  py-1">برداشت</button>
+  <button @click="withdrawWallet" type="button" class="close-modal bg-main color-white text-medium  py-1">برداشت</button>
 </div>
 
 <!-- User Info -->
@@ -687,8 +691,8 @@
   <button 
     @click="updateCustomerInformation"
     type="button" 
-    class="save-info-btn bg-black color-white text-medium modal-close">
-    ثبت اطلاعات
+    class="save-info-btn bg-main color-white text-medium">
+    بروزرسانی اطلاعات
   </button>
 </div>
 
@@ -753,7 +757,7 @@
   <button
     @click="storeNewAddress"
     type="button" 
-    class="add-newAddress-btn bg-black color-white text-medium">
+    class="add-newAddress-btn bg-main color-white text-medium">
     ثبت آدرس
   </button>
 </div>
@@ -819,7 +823,7 @@
     <button
       @click="updateAddress"
       type="button" 
-      class="add-newAddress-btn bg-black color-white text-medium">
+      class="add-newAddress-btn bg-main color-white text-medium">
       بروزرسانی آدرس
     </button>
   </template>
@@ -1090,6 +1094,7 @@
         setNewCustomerInformation(requestCustomer) {
           this.customer.first_name = requestCustomer.first_name;
           this.customer.last_name = requestCustomer.last_name;
+          this.customer.full_name = requestCustomer.first_name + ' ' + requestCustomer.last_name;
           this.customer.national_code = requestCustomer.national_code;
           this.customer.email = requestCustomer.email;
           this.customer.card_number = requestCustomer.card_number;
@@ -1229,78 +1234,57 @@
 
           onSuccessRequest(result);
         },
-        async depositWallet() {
-          try {
-
-            const url = @json(route('customer.wallet.deposit'));
-            const formData = new FormData();
-
-            formData.append('amount', this.depositWalletAmount);
-            await this.request(url, 'POST', formData, async (result) => {
-              console.log(result);
-            });
-          } catch (error) {
-            console.error('error:', error);
-          }
+        depositWallet() {
+          const url = @json(route('customer.wallet.deposit'));
+          const data = { amount: this.depositWalletAmount };
+          this.request(url, 'POST', data, async (result) => {
+            console.log(result);
+          });
         },
-        async withdrawWallet() {
+        withdrawWallet() {
 
           const url = @json(route('customer.wallet.withdraw'));
           const data = { 
             amount: parseInt(this.withdrawWalletAmount.replace(/,/g, "")) 
           };
 
-          await this.request(url, 'POST', data, async (result) => {
+          this.request(url, 'POST', data, async (result) => {
             this.closeModal('.modal[data-id=withdraw-modal]');
             this.popup('success', '', result.data.message);
             this.withdraws = result.data.withdraws;
           });
           
         },
-        async updateCustomerInformation() {
-          try {
-
-            const url = @json(route('customer.profile.update'));
-            const formData = new FormData();
-
-            formData.append('first_name', this.updateInformation.firstName);
-            formData.append('last_name', this.updateInformation.lastName);
-            formData.append('email', this.updateInformation.email);
-            formData.append('national_code', this.updateInformation.nationalCode);
-            formData.append('card_number', this.updateInformation.cardNumber);
-
-            await this.request(url, 'PUT', formData, async (result) => {
-              this.setNewCustomerInformation(result.data.customer);
-              this.popup('success', '', result.data.message);
-            });
-
-          } catch (error) {
-            console.error('error:', error);
-          }
+        updateCustomerInformation() {
+          const url = @json(route('customer.profile.update'));
+          const data = {
+            first_name: this.updateInformation.firstName,
+            last_name: this.updateInformation.lastName,
+            email: this.updateInformation.email,
+            national_code: this.updateInformation.nationalCode,
+            card_number: this.updateInformation.cardNumber,
+          };
+          this.request(url, 'PUT', data, async (result) => {
+            this.setNewCustomerInformation(result.data.customer);
+            this.popup('success', '', result.message);
+            this.closeModal('.modal[data-id=user-info]');
+          });
         },
-        async storeNewAddress() {
-          try {
-
-            const url = @json(route('customer.addresses.store'));
-            const formData = new FormData();
-
-            formData.append('first_name', this.newAddressData.firstName);
-            formData.append('last_name', this.newAddressData.lastName);
-            formData.append('mobile', this.newAddressData.mobile);
-            formData.append('postal_code', this.newAddressData.postalCode);
-            formData.append('address', this.newAddressData.address);
-            formData.append('city', this.newAddressData.cityId);
-
-            await this.request(url, 'POST', formData, async (result) => {
-              this.setNewAddress(result.data.address);
-              this.popup('success', '', result.data.message);
-            });
-
-          } catch (error) {
-            console.error('error:', error);
-          }
+        storeNewAddress() {
+          const url = @json(route('customer.addresses.store'));
+          const formData = new FormData();
+          formData.append('first_name', this.newAddressData.firstName);
+          formData.append('last_name', this.newAddressData.lastName);
+          formData.append('mobile', this.newAddressData.mobile);
+          formData.append('postal_code', this.newAddressData.postalCode);
+          formData.append('address', this.newAddressData.address);
+          formData.append('city', this.newAddressData.cityId);
+          this.request(url, 'POST', formData, async (result) => {
+            this.setNewAddress(result.data.address);
+            this.popup('success', '', result.data.message);
+          });
         },
-        async updateAddress() {
+        updateAddress() {
           try {
 
             const url = `/addresses/${this.editAddressData.addressId}`;
@@ -1313,7 +1297,7 @@
             fd.append('address', this.editAddressData.address);
             fd.append('city', this.editAddressData.cityId);
 
-            await this.request(url, 'PUT', data, async (result) => {
+            this.request(url, 'PUT', data, async (result) => {
               this.popup('success', '', result.data.message);
             });
 
@@ -1321,10 +1305,10 @@
             console.error('error:', error);
           }
         },
-        async deleteAddress(addressId) {
+        deleteAddress(addressId) {
           try {
             const url = `/addresses/${addressId}`;
-            await this.request(url, 'DELETE', null, async (result) => {
+            this.request(url, 'DELETE', null, async (result) => {
               this.popup('success', '', result.message);
               this.existsAddresses = this.existsAddresses.filter(a => a.id != addressId);
             });
@@ -1332,10 +1316,10 @@
             console.error('error:', error);
           }
         },
-        async removeFromFavorites(productId) {
+        removeFromFavorites(productId) {
           this.popupWithConfirmCallback('warning', 'آیا میخواهید محصول را از علاقه مندی ها حذف کنید ؟', 'بله', async () => {
             try {
-              await this.request(`/favorites/${productId}`, 'DELETE', null, async (result) => {
+              this.request(`/favorites/${productId}`, 'DELETE', null, async (result) => {
                 this.popup('success', '', result.message);
                 this.favorites = this.favorites.filter(p => p.id != productId);
               });
@@ -1344,10 +1328,10 @@
             }
           });
         },
-        async logout() {
+        logout() {
           try {
             const url = @json(route('customer.logout'));
-            await this.request(url, 'POST', null, async (result) => {
+            this.request(url, 'POST', null, async (result) => {
               this.popup('success', '', result.message);
               window.location.replace('/');
             });
