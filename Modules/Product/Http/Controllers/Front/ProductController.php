@@ -66,12 +66,14 @@ class ProductController extends Controller
 				'show_quantity',
 				'approved_at',
 				'description',
+				'short_description',
 				'published_at'
 			])
 			->active()
 			->with([
 				'categories' => fn($cQuery) => $cQuery->select(['id', 'title', 'parent_id']),
 				'varieties' => fn($vQuery) => $vQuery->select(['id', 'product_id', 'price', 'discount', 'discount_type', 'discount_until']),
+				'varieties.media',
 				'varieties.store' => fn($sQuery) => $sQuery->select(['id', 'variety_id', 'balance']),
 				'varieties.attributes' => fn($aQuery) => $aQuery->select(['id', 'name', 'label', 'style']),
 				'specifications.pivot.specificationValues',
@@ -83,8 +85,8 @@ class ProductController extends Controller
 			->append(['images', 'final_price', 'main_image']);
 
 		foreach ($product->varieties as $variety) {
+			$variety->append(['quantity', 'final_price', 'images']);
 			$variety->makeHidden('product');
-			$variety->append(['quantity', 'final_price']);
 			foreach ($variety->attributes as $attribute) {
 				$attribute->makeHidden('values');
 			}

@@ -27,6 +27,13 @@
                 <img class="w-p-100" :src="image.url" :alt="product.image_alt">   
               </figure>
             </div>
+            <template v-for="variety in product.varieties" :key="variety.id">
+              <div v-for="varietyImage in variety.images" :key="varietyImage.id" class="swiper-slide">
+                <figure class="w-p-100">
+                  <img class="w-p-100" :src="varietyImage.url" :alt="product.image_alt">   
+                </figure>
+              </div>
+            </template>
           </div>
           <div class="swiper-scrollbar"></div>
         </div>
@@ -40,6 +47,15 @@
                 </a>
               </figure>
             </div>
+            <template v-for="variety in product.varieties">
+              <div v-for="varietyImage in variety.images" :key="varietyImage.id" class="swiper-slide">
+                <figure>
+                  <a :href="varietyImage.url" class="w-p-100" data-lightbox="product-image">
+                    <img class="w-p-100" :src="varietyImage.url" :alt="product.image_alt">   
+                  </a>
+                </figure>
+              </div>
+            </template>
           </div>
           <div class="swiper-pagination"></div>
         </div>
@@ -69,23 +85,23 @@
           </div>
           <!-- Price  -->
           <div class="d-flex flex-wrap gap-2 align-items-center pb-2 border-b-gray-300">
-            <!-- Price -->
             <div class="d-flex gap-1 align-items-center">
-              <ins class="currency text-medium-3-strong color-primary-500" v-text="product.final_price.amount"></ins>
+              <ins class="currency text-medium-3-strong color-primary-500">@{{ productFinalPrice.amount?.toLocaleString() }}</ins>
               <span class="text-medium-2 color-gray-900">تومان </span>
             </div>
-            <template v-if="product.final_price.discount_price > 0">
-              <!-- Discount Price -->
+            <template v-if="productFinalPrice.discount_price > 0">
               <div class="d-flex gap-1 align-items-center color-gray-700">
                 <span class="horizontal-divider h-4 bg-gray-300"></span>
                 <s class="text-medium-2 d-flex gap-1 currency">
-                  <span class="currency" v-text="product.final_price.base_amount"></span>
+                  <span class="currency">@{{ productFinalPrice.base_amount?.toLocaleString() }}</span>
                   <span class="">تومان </span>
                 </s>
               </div>
-              <!-- Discount Percent -->
-              <span class="px-2 radius-u text-button-1 bg-secondary-100" v-text="product.final_price.discount_price"></span> 
+              <span class="px-2 radius-u text-button-1 bg-secondary-100">@{{ productFinalPrice.discount_price?.toLocaleString() }}</span> 
             </template>
+          </div>
+          <div>
+            <p class="text-medium color-gray-600" v-text="product.short_description"></p>
           </div>
         </div>
 
@@ -171,7 +187,7 @@
     <section class="container-2xl d-flex flex-column gap-4 mt-lg-12 mt-6 px-4 px-md-8 px-3xl-0">
 
       <ul class="second-section-list d-flex justify-content-center gap-4 text-medium px-3">
-        <li v-if="product.description != null" @click="showDesscription" class="description-title position-relative d-flex flex-column gap-1 justify-content-center pointer">
+        <li v-if="product.description != null" @click="showDescription" class="description-title position-relative d-flex flex-column gap-1 justify-content-center pointer">
           <span class="px-1 pb-1 text-medium-strong">نقد و بررسی</span>
         </li>
         <li @click="showSpecifications" class="specifications-title active position-relative d-flex flex-column justify-content-center align-items-center pointer">
@@ -326,7 +342,7 @@
               <article class="product-cart">
                 <a :href="'/products/' + relatedProduct.id" class="bg-gray-100 d-flex flex-column overflow-hidden position-relative">
                   <!-- Hover Buttons -->
-                  <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
+                  {{-- <div class="hover-buttons d-flex flex-column gap-2 justify-content-center position-absolute">
                     <button type="button" class="d-flex flex-column gap-1">
                       <i class="icon-star icon-fs-xsmall"></i>
                       <i class="icon-star icon-fs-xsmall"></i>
@@ -338,11 +354,11 @@
                       <i class="icon-heart icon-fs-medium-2"></i>
                       <!-- <svg class="heart-red" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-10f8db86=""><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8498 2.50071C16.4808 2.50071 17.1108 2.58971 17.7098 2.79071C21.4008 3.99071 22.7308 8.04071 21.6198 11.5807C20.9898 13.3897 19.9598 15.0407 18.6108 16.3897C16.6798 18.2597 14.5608 19.9197 12.2798 21.3497L12.0298 21.5007L11.7698 21.3397C9.4808 19.9197 7.3498 18.2597 5.4008 16.3797C4.0608 15.0307 3.0298 13.3897 2.3898 11.5807C1.2598 8.04071 2.5898 3.99071 6.3208 2.76971C6.6108 2.66971 6.9098 2.59971 7.2098 2.56071H7.3298C7.6108 2.51971 7.8898 2.50071 8.1698 2.50071H8.2798C8.9098 2.51971 9.5198 2.62971 10.1108 2.83071H10.1698C10.2098 2.84971 10.2398 2.87071 10.2598 2.88971C10.4808 2.96071 10.6898 3.04071 10.8898 3.15071L11.2698 3.32071C11.3616 3.36968 11.4647 3.44451 11.5538 3.50918C11.6102 3.55015 11.661 3.58705 11.6998 3.61071C11.7161 3.62034 11.7327 3.63002 11.7494 3.63978C11.8352 3.68983 11.9245 3.74197 11.9998 3.79971C13.1108 2.95071 14.4598 2.49071 15.8498 2.50071ZM18.5098 9.70071C18.9198 9.68971 19.2698 9.36071 19.2998 8.93971V8.82071C19.3298 7.41971 18.4808 6.15071 17.1898 5.66071C16.7798 5.51971 16.3298 5.74071 16.1798 6.16071C16.0398 6.58071 16.2598 7.04071 16.6798 7.18971C17.3208 7.42971 17.7498 8.06071 17.7498 8.75971V8.79071C17.7308 9.01971 17.7998 9.24071 17.9398 9.41071C18.0798 9.58071 18.2898 9.67971 18.5098 9.70071Z" data-v-10f8db86="" fill="#ee1212"></path></svg> -->
                     </button>
-                  </div>
+                  </div> --}}
                   <!-- Img -->
                   <figure class="product-img overflow-hidden position-relative">
-                    <img class="main-img w-p-100 h-p-100" loading="lazy" :src="relatedProduct.main_image.url" :alt="relatedProduct.image_alt">
-                    <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" :src="relatedProduct.main_image.url" :alt="relatedProduct.image_alt">
+                    <img class="main-img w-p-100 h-p-100" loading="lazy" :src="relatedProduct.main_image?.url" :alt="relatedProduct.image_alt">
+                    <img class="hover-img w-p-100 h-p-100 hidden position-absolute top-0 start-0" loading="lazy" :src="relatedProduct.main_image?.url" :alt="relatedProduct.image_alt">
                     <button type="button" class="see-more-product text-nowrap text-center position-absolute bg-white radius-small ps-2 pe-1 py-1 text-medium">مشاهده بیشتر</button>
                   </figure>
                   <div class="product-details d-flex flex-column px-2 mt-2">
@@ -409,7 +425,7 @@
     <!-- Item-->
     <div class="item w-p-100 d-flex flex-lg-row flex-column align-items-center justify-content-between radius-medium px-2 py-1">
       <div class="w-p-100 d-flex ms-lg-1 gap-lg-2 gap-4 align-items-center">
-        <img class="item-img radius-medium" :src="product.main_image.url" :alt="product.image_alt">
+        <img class="item-img radius-medium" :src="product.main_image?.url" :alt="product.image_alt">
         <span class="text-medium-strong">@{{ product.title }}</span>
       </div>
       <div class="price d-flex flex-row flex-lg-column text-subtitle gap-lg-0 gap-1 align-items-center">
@@ -478,6 +494,7 @@
         this.activeLoginBtn();
         this.openSearchModal();
         this.hdanleModalOverlayClickOperation();
+        this.productFinalPrice = this.product.final_price;
       },
       data() {
         return {
@@ -488,10 +505,33 @@
           isLoggin: @json(auth()->guard('customer')->check()),
           uniqueAttributes: {},
           activeAttributes: [],
+          main: null,
+          thumb: null,
+          productFinalPrice: {},
           commentData: {
             title: '',
             body: '',
             showName: false,
+          }
+        }
+      },
+      watch: {
+        selectedVariety(newVariety) {
+          if (Object.keys(newVariety).length) {
+            this.productFinalPrice = newVariety.final_price;
+            setTimeout(() => {
+              const firstImage = newVariety.images[0];
+              if (firstImage) {
+                const allImagesSlides = [...document.querySelectorAll('.product-thumbImages-swiper .swiper-wrapper .swiper-slide')];
+                const targetIndex = allImagesSlides.findIndex(slide => {
+                  const img = slide.querySelector('figure img');
+                  return img && img.src === firstImage.url;
+                });
+                if (targetIndex !== -1 && this.main) {
+                  this.main.slideTo(targetIndex);
+                }
+              }
+            }, 0);
           }
         }
       },
@@ -577,8 +617,7 @@
         initProductImagesSwiper() {
 
           let thumbImg = document.querySelectorAll('.product-thumbImages-swiper .swiper-wrapper .swiper-slide');
-
-          let thumb = new Swiper('.product-thumbImages-swiper', {
+          this.thumb = new Swiper('.product-thumbImages-swiper', {
             slidesPerView: 'auto',
             direction: 'vertical',
             freeMode: true,
@@ -590,10 +629,10 @@
             mousewheel: true,
           });
 
-          let main = new Swiper('.product-main-swiper', {
+          this.main = new Swiper('.product-main-swiper', {
             slidesPerView: '1',
             freeMode: true,
-            thumbs: { swiper: thumb },
+            thumbs: { swiper: this.thumb },
             pagination: {
               el: ".swiper-pagination",
               dynamicBullets: true,
@@ -601,10 +640,9 @@
             },
           });
 
-          thumbImg.forEach(function(slide) {
-            slide.addEventListener('mouseenter', function() {
-              const index = Array.from(thumbImg).indexOf(slide);
-              main.slideTo(index);
+          thumbImg.forEach((thumb, index) => {
+            thumb.addEventListener('mouseenter', () => {
+              this.main.slideTo(index);
             });
           });
 
