@@ -17224,6 +17224,12 @@ input[type=range]::-moz-range-thumb {
   }
 }
 
+.payment-information .order-details, .payment-information .orderType-priceDetails > div {
+  border-radius: 15px;
+  background-color: #fafafa;
+  box-shadow: 0 0 5px 0 rgba(128, 128, 128, 0.151);
+}
+
 .payment-information {
   display: none;
 }
@@ -17280,9 +17286,10 @@ input[type=range]::-moz-range-thumb {
   font-weight: 800;
   padding-top: 8px;
   padding-bottom: 8px;
+  transition: background-color .6s;
 }
 .payment-information .orderType-priceDetails .price-details .pay-btn:hover {
-  background-color: #21ab64;
+  background-color: var(--second-color-code);
 }
 @media only screen and (min-width: 768px) {
   .payment-information .orderType-priceDetails .price-details .pay-btn {

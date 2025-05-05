@@ -265,7 +265,7 @@
 
     <!-- Payment Information -->
     <section class="payment-information flex-lg-row flex-column container-2xl my-4 gap-5 px-lg-2 px-4">
-      <div class="d-flex bg-gray-100 p-2 radius-small flex-column gap-3 col-lg-8 mt-2 mt-lg-0 mb-lg-0">
+      <div class="order-details d-flex bg-gray-100 p-5 radius-small flex-column gap-3 col-lg-8 mt-2 mt-lg-0 mb-lg-0">
         <!-- Payment Way And Portal -->
         <div class="d-flex flex-column gap-3">
           <!-- Title -->
@@ -334,7 +334,7 @@
             <!-- Items -->
             <div class="order-items d-flex gap-2">
               <div v-for="(cart, cartIndex) in carts" :key="cartIndex" class="order-item position-relative radius-small">
-                <img class="w-p-100 h-p-100 radius-small" src="{{ asset('front-assets/images/product-detail/product-5120 (1).jpg') }}">
+                <img class="w-p-100 h-p-100 radius-small" :src="cart.variety.product.main_image?.url">
                 <span class="text-button bottom-0 start-0 position-absolute bg-gray-100 radius-small">@{{ cart.quantity }}</span>
               </div>
             </div>
@@ -343,7 +343,7 @@
       </div>
       <div class="orderType-priceDetails position-sticky col-lg-4 d-flex flex-column gap-3">
         <!-- Price Details -->
-        <div class="price-details bg-gray-100 radius-small d-flex flex-column p-5 gap-2">
+        <div class="price-details bg-gray-100 radius-small d-flex flex-column p-5 gap-1">
           <!-- Total Price -->
           <div class="d-flex justify-content-between">
             <span class="text-medium color-gray-900">مجموع قیمت ها :</span>
@@ -381,7 +381,7 @@
               <span class="text-medium-strong color-gray-900">تومان</span>
             </div>
           </div>
-          <button type="button" class="pay-btn bg-black color-white text-medium mt-4" @click="createOrder">پرداخت</button>
+          <button type="button" class="pay-btn bg-main color-white text-medium mt-4" @click="createOrder">پرداخت</button>
         </div>
       </div>
     </section>
