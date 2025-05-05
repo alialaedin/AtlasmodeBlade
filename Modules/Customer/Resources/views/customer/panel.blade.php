@@ -1244,9 +1244,7 @@
         withdrawWallet() {
 
           const url = @json(route('customer.wallet.withdraw'));
-          const data = { 
-            amount: parseInt(this.withdrawWalletAmount.replace(/,/g, "")) 
-          };
+          const data = { amount: parseInt(this.withdrawWalletAmount.replace(/,/g, "")) };
 
           this.request(url, 'POST', data, async (result) => {
             this.closeModal('.modal[data-id=withdraw-modal]');
@@ -1256,6 +1254,7 @@
           
         },
         updateCustomerInformation() {
+
           const url = @json(route('customer.profile.update'));
           const data = {
             first_name: this.updateInformation.firstName,
@@ -1264,6 +1263,7 @@
             national_code: this.updateInformation.nationalCode,
             card_number: this.updateInformation.cardNumber,
           };
+
           this.request(url, 'PUT', data, async (result) => {
             this.setNewCustomerInformation(result.data.customer);
             this.popup('success', '', result.message);
@@ -1271,15 +1271,18 @@
           });
         },
         storeNewAddress() {
+
           const url = @json(route('customer.addresses.store'));
-          const formData = new FormData();
-          formData.append('first_name', this.newAddressData.firstName);
-          formData.append('last_name', this.newAddressData.lastName);
-          formData.append('mobile', this.newAddressData.mobile);
-          formData.append('postal_code', this.newAddressData.postalCode);
-          formData.append('address', this.newAddressData.address);
-          formData.append('city', this.newAddressData.cityId);
-          this.request(url, 'POST', formData, async (result) => {
+          const data = {
+            first_name: this.newAddressData.firstName,
+            last_name: this.newAddressData.lastName,
+            mobile: this.newAddressData.mobile,
+            postal_code: this.newAddressData.postalCode,
+            address: this.newAddressData.address,
+            city: this.newAddressData.cityId,
+          };
+
+          this.request(url, 'POST', data, async (result) => {
             this.setNewAddress(result.data.address);
             this.popup('success', '', result.data.message);
           });
@@ -1288,14 +1291,14 @@
           try {
 
             const url = `/addresses/${this.editAddressData.addressId}`;
-            const fd = FormData();
-
-            fd.append('first_name', this.editAddressData.firstName);
-            fd.append('last_name', this.editAddressData.lastName);
-            fd.append('mobile', this.editAddressData.mobile);
-            fd.append('postal_code', this.editAddressData.postalCode);
-            fd.append('address', this.editAddressData.address);
-            fd.append('city', this.editAddressData.cityId);
+            const data = {
+              first_name: this.editAddressData.firstName,
+              last_name: this.editAddressData.lastName,
+              mobile: this.editAddressData.mobile,
+              postal_code: this.editAddressData.postalCode,
+              address: this.editAddressData.address,
+              city: this.editAddressData.cityId,
+            };
 
             this.request(url, 'PUT', data, async (result) => {
               this.popup('success', '', result.data.message);
