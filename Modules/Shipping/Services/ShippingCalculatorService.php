@@ -47,126 +47,128 @@ use Modules\Shipping\Entities\Shipping;
  | This topic is none of this class's business. i.e. this topic that you want to sell products with what price is not related to the ShippingCalculatorService
  | and you should set the price where you want to use of this class.
  * */
+
 class ShippingCalculatorService
 {
-//    public array $items;
+	//    public array $items;
 
-    public function __construct(
-        public Address $address,
-        public Shipping $shipping,
-        public Customer $customer,
-        public Collection $items,
-    ) {
-        if (! $shipping->checkShippableAddress($address->city)) {
-            throw Helpers::makeValidationException('شیوه ارسال انتخاب شده نامعتبر است.', 'shipping_id');
-        }
-    }
-
-
-    public function addItem(Cart $cart) {
-        $this->items[] = $cart;
-    }
-
-    public function addItemsByCarts($carts){
-        foreach($carts as $cart){
-            $this->addItem($cart);
-        }
-    }
+	public function __construct(
+		public Address $address,
+		public Shipping $shipping,
+		public Customer $customer,
+		public Collection $items,
+	) {
+		if (! $shipping->checkShippableAddress($address->city)) {
+			throw Helpers::makeValidationException('شیوه ارسال انتخاب شده نامعتبر است.', 'shipping_id');
+		}
+	}
 
 
-    public function calculate()
-    {
-        if ($this->shipping->free_shipping) return $this->responseCreator(0);
+	public function addItem(Cart $cart)
+	{
+		$this->items[] = $cart;
+	}
 
-        $sumOrderItemsWithoutShipping = $this->sumOrderItemsCalculator();
-
-        if ($this->shipping->free_threshold < $sumOrderItemsWithoutShipping) return $this->responseCreator(0);
-
-        if($this->address->city_id == 264 && $sumOrderItemsWithoutShipping >= Setting::getFromName('free_shipping_amount_for_gorgan'))
-            return $this->responseCreator(0);
-
-        if ($sumOrderItemsWithoutShipping >= Setting::getFromName('free_shipping_amount_for_other_cities'))
-            return $this->responseCreator(0);
-
-        $final_shipping_amount = $this->shipping->default_price;
-
-        return $this->responseCreator($final_shipping_amount);
-    }
-
-    private function sumOrderItemsCalculator() : int
-    {
-        if (\request()->has('sumOrderItems')) return request()->sumOrderItems;
-
-        $total = 0;
-        foreach ($this->items as $item) {
-            $total += ($item->quantity * $item->price);
-        }
-        return $total;
-    }
-
-    private function responseCreator($shipping_amount, $shipping_packet_amount = 0, $shipping_more_packet_price = 0, $shipping_first_packet_size = 0)
-    {
-        return [
-            'shipping_amount' => $shipping_amount,
-            'shipping_packet_amount' => $shipping_packet_amount,
-            'shipping_more_packet_price' => $shipping_more_packet_price,
-            'shipping_first_packet_size' => $shipping_first_packet_size,
-        ];
-    }
-
-    public static function getCartsWeight($carts):array
-    {
-        $weight = 0;
-
-        $over =0;
-        $overweight_shipping_amount = Setting::getFromName('overweight_shipping_amount') ? : 999;
-        foreach ($carts as $item) {
-            $variety = $item->variety;
-            $iweight = Setting::getFromName('defualt_product_weight') ? Setting::getFromName('defualt_product_weight') : 120;
-            if($variety?->weight){
-                $iweight = $variety->weight;
-            }elseif($variety->product?->weight){
-                $iweight = $variety->product->weight;
-            }
-            $weight = $weight + ($item->quantity * $iweight);
+	public function addItemsByCarts($carts)
+	{
+		foreach ($carts as $cart) {
+			$this->addItem($cart);
+		}
+	}
 
 
-            \request()->merge(['orderWeight' => $weight]);
+	public function calculate()
+	{
+		$sumOrderItemsWithoutShipping = $this->sumOrderItemsCalculator();
+
+		if ($this->shipping->is_free) return $this->responseCreator(0);
+		if ($this->shipping->free_threshold < $sumOrderItemsWithoutShipping) return $this->responseCreator(0);
+
+		if ($this->address->city_id == 264 && $sumOrderItemsWithoutShipping >= Setting::getFromName('free_shipping_amount_for_gorgan'))
+			return $this->responseCreator(0);
+
+		if ($sumOrderItemsWithoutShipping >= Setting::getFromName('free_shipping_amount_for_other_cities'))
+			return $this->responseCreator(0);
+
+		$final_shipping_amount = $this->shipping->default_price;
+
+		return $this->responseCreator($final_shipping_amount);
+	}
+
+	private function sumOrderItemsCalculator(): int
+	{
+		if (\request()->has('sumOrderItems')) return request()->sumOrderItems;
+
+		$total = 0;
+		foreach ($this->items as $item) {
+			$total += ($item->quantity * $item->price);
+		}
+		return $total;
+	}
+
+	private function responseCreator($shipping_amount, $shipping_packet_amount = 0, $shipping_more_packet_price = 0, $shipping_first_packet_size = 0)
+	{
+		return [
+			'shipping_amount' => $shipping_amount,
+			'shipping_packet_amount' => $shipping_packet_amount,
+			'shipping_more_packet_price' => $shipping_more_packet_price,
+			'shipping_first_packet_size' => $shipping_first_packet_size,
+		];
+	}
+
+	public static function getCartsWeight($carts): array
+	{
+		$weight = 0;
+
+		$over = 0;
+		$overweight_shipping_amount = Setting::getFromName('overweight_shipping_amount') ?: 999;
+		foreach ($carts as $item) {
+			$variety = $item->variety;
+			$iweight = Setting::getFromName('defualt_product_weight') ? Setting::getFromName('defualt_product_weight') : 120;
+			if ($variety?->weight) {
+				$iweight = $variety->weight;
+			} elseif ($variety->product?->weight) {
+				$iweight = $variety->product->weight;
+			}
+			$weight = $weight + ($item->quantity * $iweight);
 
 
-            // calculate over weight
-            if($variety?->weight > $overweight_shipping_amount){
-                $over++;
-            }elseif($variety->product?->weight > $overweight_shipping_amount){
-                $over++;
-            }
-        }
-
-        return [$over, $weight];
-    }
-
-    private function getItemsWeight():array
-    {
-        return static::getCartsWeight($this->items);
-    }
+			\request()->merge(['orderWeight' => $weight]);
 
 
+			// calculate over weight
+			if ($variety?->weight > $overweight_shipping_amount) {
+				$over++;
+			} elseif ($variety->product?->weight > $overweight_shipping_amount) {
+				$over++;
+			}
+		}
 
-    public static function getShippableShippingsForFront(Customer $customer, $carts, ?Address $chosenAddress = null)
-    {
-        if ($chosenAddress) {
-            $shippings = Shipping::getShippableShippingsForAddress($chosenAddress);
-            foreach ($shippings as $shipping) {
-                $shipping->amount_showcase = (new ShippingCalculatorService($chosenAddress, $shipping, $customer, $carts))->calculate()['shipping_amount'];
-            }
-        } else {
-            $shippings = Shipping::query()->active()->get();
-            foreach ($shippings as $shipping)
-                $shipping->amount_showcase = $shipping->default_price;
-        }
-        return $shippings;
+		return [$over, $weight];
+	}
 
-    }
+	private function getItemsWeight(): array
+	{
+		return static::getCartsWeight($this->items);
+	}
 
 
+
+	public static function getShippableShippingsForFront(Customer $customer, $carts, ?Address $chosenAddress = null)
+	{
+		if ($chosenAddress) {
+			$orderAmount = $carts->sum(fn ($cart) => $cart->price * $cart->quantity);
+			$totalQuantity = $carts->sum('quantity');
+			$shippings = Shipping::getShippableShippingsForAddress($chosenAddress);
+			foreach ($shippings as $shipping) {
+				// $shipping->amount_showcase = (new ShippingCalculatorService($chosenAddress, $shipping, $customer, $carts))->calculate()['shipping_amount'];
+				$shipping->amount_showcase = $shipping->getPrice($chosenAddress->city, $orderAmount, $totalQuantity);
+			}
+		} else {
+			$shippings = Shipping::query()->active()->get();
+			foreach ($shippings as $shipping)
+				$shipping->amount_showcase = $shipping->default_price;
+		}
+		return $shippings;
+	}
 }

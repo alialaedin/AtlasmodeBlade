@@ -437,7 +437,7 @@
           v-text="product.final_price.base_amount">
         </s>
         <div class="d-flex gap-1 align-items-center">
-          <ins class="currency text-strong" v-text="product.final_price.amount"></ins>
+          <ins class="currency text-strong">@{{ product.final_price.amount }}</ins>
           <span class="">تومان</span>
         </div>
       </div>

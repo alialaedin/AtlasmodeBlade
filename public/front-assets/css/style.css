@@ -1861,6 +1861,9 @@
 .border-none {
   border: none;
 }
+.border-main-color {
+  border: var(--main-color-code) 1px solid;
+}
 
 .border-gray-300 {
   border: #e2e1e1 1px solid;
@@ -3987,6 +3990,8 @@ ul, ol, dd {
 
   --main-color-code: #2e165b;
   --second-color-code: #120632;
+  --price-range-color-code: #BE479C;
+  --available-mode-radio-code: #BE479C;
 
 }
 
@@ -15708,12 +15713,12 @@ ul, ol, dd {
 }
 @media only screen and (min-width: 640px) {
   .product-main-swiper .swiper-slide a img {
-    height: 400px;
+    max-height: 400px;
   }
 }
 @media only screen and (min-width: 768px) {
   .product-main-swiper .swiper-slide a img {
-    height: 470px;
+    max-height: 470px;
   }
 }
 .product-main-swiper .swiper-pagination {
@@ -15977,7 +15982,7 @@ ul, ol, dd {
   right: 0;
   position: absolute;
   border-radius: 5px;
-  background: black;
+  background: var(--price-range-color-code);
 }
 .modal-mobile-filter .price-range2 .range-input2 input {
   position: absolute;
@@ -16488,7 +16493,7 @@ input[type=range]::-webkit-slider-thumb {
   height: 14px;
   width: 14px;
   border-radius: 50%;
-  background: black;
+  background: var(--price-range-color-code);
   pointer-events: auto;
   -webkit-appearance: none;
 }
@@ -16498,7 +16503,7 @@ input[type=range]::-moz-range-thumb {
   width: 17px;
   border: none;
   border-radius: 50%;
-  background: black;
+  background: var(--price-range-color-code);
   pointer-events: auto;
   -moz-appearance: none;
 }
@@ -16551,7 +16556,7 @@ input[type=range]::-moz-range-thumb {
   right: 0;
   position: absolute;
   border-radius: 5px;
-  background: black;
+  background: var(--price-range-color-code);
 }
 .aside .price-range .range-input input {
   position: absolute;

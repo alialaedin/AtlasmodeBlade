@@ -176,7 +176,7 @@
             <div class="bg-white radius-large p-lg-4 d-flex flex-column justify-content-end">
               @foreach ($postComments as $comment)
                 <!-- User Name & Date -->
-                <div class="d-flex align-items-center gap-lg-3 justify-content-lg-end justify-content-between mb-2">
+                <div class="d-flex align-items-center gap-lg-3 justify-content-lg-start justify-content-between mb-2">
                   <div class="d-flex gap-1 align-items-center">
                     <span class="p-3 radius-medium bg-black">
                       <i class="icon-user icon-fs-medium-2 color-white"></i>
@@ -214,7 +214,7 @@
                   @endphp
                   <div class="d-flex flex-column bg-gray-100 p-4 mt-2">
                     <!-- User Name & Date -->
-                    <div class="d-flex align-items-center gap-lg-3 justify-content-lg-end justify-content-between mb-2">
+                    <div class="d-flex align-items-center gap-lg-3 justify-content-lg-start justify-content-between mb-2">
                       <div class="d-flex gap-1 align-items-center">
                         <span class="p-3 radius-medium bg-gray-600">
                           <i class="icon-user icon-fs-medium-2 color-white"></i>

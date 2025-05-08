@@ -264,7 +264,7 @@ class OrderValidationService
 		$this->properties->discount_amount = $this->getDiscountAmount() ?? 0;
 		$this->properties->discountOnItems = $this->getDiscountOnItems() ?? 0;
 		$this->properties->totalItemsAmount = $this->getTotalItemsAmount();
-		$this->properties->totalItemsAmountWithDiscount = $this->getTotalItemsAmount() + $this->properties->discountOnItems;
+		$this->properties->totalItemsAmountWithDiscount = $this->getTotalItemsAmount() - $this->properties->discountOnItems;
 		$this->properties->itemsCount = $this->byAdmin ? count($this->varieties) : $this->customer->carts->count();
 		$this->properties->itemsQuantity = $this->byAdmin ? collect($this->varieties)->sum('quantity') : $this->customer->carts->sum('quantity');
 		$this->properties->totalAmount = $this->getTotalAmount();
@@ -367,12 +367,12 @@ class OrderValidationService
 		if ($this->byAdmin) {
 			foreach ($this->varieties as $variety) {
 				$findVariety = Variety::query()->with(['product'])->find($variety['id']);
-				$totalAmount += $findVariety->final_price['amount'] * $variety['quantity'];
+				$totalAmount += $findVariety->final_price['base_amount'] * $variety['quantity'];
 			}
 		} else {
 			foreach ($this->customer->carts as $cart) {
 				$findVariety = Variety::query()->with(['product'])->find($cart->variety_id);
-				$totalAmount += $findVariety->final_price['amount'] * $cart->quantity;
+				$totalAmount += $findVariety->final_price['base_amount'] * $cart->quantity;
 			}
 		}
 		
@@ -385,7 +385,12 @@ class OrderValidationService
 			return $this->totalAmount;
 		}
 
-		return $this->totalAmount = $this->getTotalItemsAmount() + $this->getShippingAmount() - ($this->discountOnCoupon ?? 0) - ($this->discountOnOrder ?? 0);
+		return $this->totalAmount 
+			= $this->getTotalItemsAmount() 
+			+ $this->getShippingAmount() 
+			- ($this->discountOnCoupon ?? 0) 
+			- ($this->discountOnOrder ?? 0) 
+			- ($this->discountOnCoupon ?? 0);
 	}
 
 }

@@ -1,5 +1,5 @@
 @if ($specialCategories->isNotEmpty())
-<section class="categories mt-9">
+<section class="categories mt-8">
   <div class="swiper categories-swiper">
     <div class="swiper-wrapper">
       @foreach ($specialCategories as $category)

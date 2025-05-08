@@ -1,22 +1,18 @@
 @extends('front-layouts.master')
 
 @section('content')
-  <main id="main-home" class="main-home container-2xl px-4 px-lg-0 px-md-8 px-3xl-0 pb-12 mt-lg-3 mt-5">
+  <main id="main-home" class="main-home container-2xl px-4 px-lg-0 px-md-8 px-3xl-0 pb-12 mt-lg-3 mt-4">
     @include('home::includes.slider')
     @include('home::includes.special-categories')
     @include('home::includes.products')
+    @include('home::includes.advertise')
     @include('home::includes.home-categories-products')
-    {{-- @include('home::includes.advertise') --}}
     @include('home::includes.posts')
     @include('front-layouts.includes.mobile-menu')
   </main>
 @endsection
 
 @section('scripts')
-
-  {{-- <script>
-    mainPage()
-  </script> --}}
 
   <script src="{{ asset('assets/vue/vue3/vue.global.prod.js') }}"></script>
 
@@ -28,8 +24,6 @@
         this.handleProductSwiper();
         this.handleCategoriesProductSwiper();
         this.handleSpecialCategoriesSwiper();
-        // this.showInHomeCategories = this.showInHomeCategories.filter(c => c.products.length > 0);
-        console.log(this.showInHomeCategories);
       },  
       data() {
         return {
@@ -69,17 +63,14 @@
         },
         handleCategoriesProductSwiper() {
           new Swiper(".categories-products-swiper",{
-            slidesPerView:4,
+            slidesPerView: "6.3",
             freeMode: true,
-            spaceBetween:15,
-            autoplay:true,
             breakpoints:{
-              200: { slidesPerView: 1.5, spaceBetweenSlides: 10 },
-              360: { slidesPerView: 1.8, spaceBetweenSlides: 10 },
-              420: { slidesPerView: 2, spaceBetweenSlides: 10 },
-              640: { slidesPerView: 3, spaceBetweenSlides: 10 },
-              768: { slidesPerView:3.4, spaceBetweenSlides: 10 },
-              1024: { slidesPerView: 4, spaceBetweenSlides: 10 },
+              200: { slidesPerView: 2.5, spaceBetweenSlides: 10 },
+              360: { slidesPerView: 3.5, spaceBetweenSlides: 10 },
+              640: { slidesPerView: 4.3, spaceBetweenSlides: 10 },
+              768: { slidesPerView: 5.3, spaceBetweenSlides: 10 },
+              1024: { slidesPerView: 6.5, spaceBetweenSlides: 10 },
             }
           });
         },

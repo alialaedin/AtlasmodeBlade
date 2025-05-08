@@ -371,7 +371,7 @@
           <!-- Shipping Cost -->
           <div class="d-flex justify-content-between color-gray-600">
             <span class="text-medium-2 ">هزینه ارسال:</span>
-            <span class="text-medium-2 ">@{{ totalOrderAmounts.shippingAmount > 0 ? totalOrderAmounts.shippingAmount : 'رایگان' }}</span>
+            <span class="text-medium-2 ">@{{ totalOrderAmounts.shippingAmount > 0 ? totalOrderAmounts.shippingAmount.toLocaleString() : 'رایگان' }}</span>
           </div>
           <!-- Final Price -->
           <div class="d-flex justify-content-between">
@@ -415,7 +415,7 @@
           :checked="address.isSelected" 
           :value="address.id" 
           :id="'address-' + addressIndex"
-          @click="loadShippings"
+          @click="loadShippings(address.id)"
         />
         <label :for="'address-' + addressIndex" class="d-flex">
           <span class="text-medium item-city">@{{ address.city.name }}</span>
@@ -601,7 +601,7 @@
         </div>
         <div class="d-flex justify-content-end gap-1 text-medium">
           <span class="color-gray-600">هزینه ارسال:</span>
-          <span>@{{ shipping.amount_showcase == 0 ? 'رایگان' : shipping.amount_showcase }}</span>
+          <span>@{{ shipping.amount_showcase == 0 ? 'رایگان' : shipping.amount_showcase.toLocaleString() }}</span>
         </div>
       </div>
     </template>
@@ -653,11 +653,10 @@
         this.choosenAddress = this.addresses[0];
         this.choosenAddressId = this.choosenAddress.id;
       }
-      this.loadShippings();
+      this.loadShippings(this.choosenAddressId ?? null);
       this.activeLoginBtn();
       this.openSearchModal();
       this.hdanleModalOverlayClickOperation();
-      console.log(this.carts);
     },
     data() {
       return {
@@ -690,7 +689,7 @@
       choosenAddressId(newId, oldId) {
         this.choosenAddress = this.addresses.find(address => address.id == newId);  
         const oldAddress = this.addresses.find(address => address.id == oldId);  
-        const newAddress = this.addresses.find(address => address.id == newId);  
+        const newAddress = this.choosenAddress;
         if (oldAddress) oldAddress.isSelected = false; 
         if (newAddress) newAddress.isSelected = true;
       },
@@ -1052,10 +1051,12 @@
           document.querySelector('.change-edit-btn').classList.add('bg-purple-dark', 'color-white');  
         }, 100);  
       },
-      async loadShippings() {
+      async loadShippings(addressId = null) {
       
         const formData = new FormData();
-        formData.append('address_id', this.choosenAddressId);
+        if (addressId) {
+          formData.append('address_id', addressId);
+        }
         this.carts.forEach((cart, index) => {
           formData.append(`varieties[${index}][variety_id]`, cart.variety_id);
           formData.append(`varieties[${index}][quantity]`, cart.quantity);
@@ -1268,7 +1269,7 @@
         let shippingAmount = 0;
 
         this.carts.forEach(cart => {
-          totalItemsPrice += cart.price * cart.quantity;
+          totalItemsPrice += (cart.price + cart.discount_price) * cart.quantity;
           totalItemsDiscountPrice += cart.discount_price * cart.quantity;
         });
 
@@ -1288,24 +1289,15 @@
         
       },
       addresses() {
-        if (Object.keys(this.allAddresses).length === 0) return [];
-        return [
-          ...Object.entries(this.allAddresses).map(([index, address]) => {
-            return {
-              id: address.id,
-              address: address.address,
-              postalCode: address.postal_code,
-              firstName: address.first_name,
-              lastName: address.last_name,
-              mobile: address.mobile,
-              city: address.city,
-              cityId: address.city_id,
-              province: this.allProvinces.find(p => p.id == address.city.province_id),
-              isSelected: this.choosenAddressId == address.id,
-            }
-          })
-        ];
-      },
+        return Object.keys(this.allAddresses).length === 0
+          ? []
+          : Object.entries(this.allAddresses).map(([index, address]) => ({
+            ...address,
+            cityId: address.city_id,
+            province: this.allProvinces.find(p => p.id == address.city.province_id),
+            isSelected: this.choosenAddressId == address.id,
+          }));
+      }
     }
   }).mount("#main-content");
 
